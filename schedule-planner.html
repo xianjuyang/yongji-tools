@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="课程排班">
+<meta name="theme-color" content="#1a6b5a">
+<meta name="description" content="永汲教育 · 课程排班助手">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+<title>永汲教育 · 课程排班助手</title>
+<style>
+:root {
+  --pri:#1a6b5a; --pri-light:#e8f5f0; --pri-dark:#0f4a3e;
+  --blue:#2563eb; --blue-light:#eff6ff; --blue-bg:#dbeafe;
+  --green:#16a34a; --green-light:#f0fdf4; --green-bg:#d1fae5;
+  --amber:#d97706; --amber-bg:#fef3c7;
+  --purple:#7c3aed; --purple-bg:#ede9fe;
+  --night:#1e3a5f; --night-bg:#dbeafe;
+  --pink:#db2777; --pink-bg:#fce7f3;
+  --red:#dc2626; --red-light:#fef2f2;
+  --slate:#334155; --border:#e5e7eb; --bg:#f8fafb;
+  --card:#ffffff; --text:#1e293b; --muted:#94a3b8;
+  --radius:8px; --shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;
+}
+
+/* TOP BAR */
+.topbar{
+  background:var(--card);border-bottom:1px solid var(--border);
+  padding:0 16px;height:52px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:100;
+  box-shadow:var(--shadow);
+}
+.topbar .brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--pri-dark);}
+.topbar .brand .dot{
+  width:26px;height:26px;border-radius:5px;background:var(--pri);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;
+}
+.topbar .nav{display:flex;align-items:center;gap:6px;}
+.topbar .week-label{font-size:14px;font-weight:700;min-width:180px;text-align:center;}
+.topbar .actions{display:flex;gap:6px;align-items:center;}
+
+/* BUTTONS */
+.btn{
+  padding:7px 13px;border-radius:6px;border:none;font-size:12px;
+  font-weight:600;cursor:pointer;letter-spacing:0.3px;transition:all 0.15s;
+  white-space:nowrap;font-family:inherit;
+}
+.btn-pri{background:var(--pri);color:#fff;}
+.btn-pri:hover{background:var(--pri-dark);}
+.btn-outline{background:#fff;color:var(--pri);border:1.5px solid var(--pri);}
+.btn-outline:hover{background:var(--pri-light);}
+.btn-sm{padding:5px 10px;font-size:11px;border-radius:5px;}
+.btn-xs{padding:3px 8px;font-size:10px;border-radius:4px;}
+.btn-icon{
+  width:30px;height:30px;padding:0;display:inline-flex;align-items:center;
+  justify-content:center;border-radius:6px;border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;font-size:14px;color:var(--text);transition:all 0.15s;
+}
+.btn-icon:hover{background:#f1f5f9;}
+.btn-active{background:var(--pri-light)!important;border-color:var(--pri)!important;}
+
+/* SHIFT STRIP */
+.shift-strip{
+  display:flex;gap:0;margin:12px 16px 0;background:var(--card);
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+}
+.shift-strip .ss-label{
+  padding:8px 12px;font-size:11px;font-weight:700;color:var(--muted);
+  background:#f8fafc;display:flex;align-items:center;min-width:70px;
+  justify-content:center;border-right:1px solid var(--border);
+}
+.shift-strip .ss-day{
+  flex:1;text-align:center;padding:6px 4px;font-size:10px;cursor:pointer;
+  transition:background 0.12s;border-right:1px solid #f1f5f9;min-width:0;
+}
+.shift-strip .ss-day:hover{background:#f8fafc;}
+.shift-strip .ss-day .ss-dow{font-weight:600;font-size:10px;color:var(--text);}
+.shift-strip .ss-day .ss-shift{font-weight:700;font-size:11px;margin-top:1px;}
+.shift-strip .ss-day.weekend .ss-dow{color:var(--red);}
+
+/* MINI MONTH */
+.mini-month{
+  display:flex;gap:3px;margin:8px 16px;flex-wrap:wrap;align-items:center;
+}
+.mini-month .mm-label{font-size:10px;color:var(--muted);margin-right:4px;font-weight:600;}
+.mini-month .mm-day{
+  width:26px;height:26px;border-radius:5px;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:600;cursor:pointer;
+  background:#fff;border:1px solid var(--border);transition:all 0.12s;
+}
+.mini-month .mm-day:hover{background:var(--pri-light);border-color:var(--pri);}
+.mini-month .mm-day.active{background:var(--pri);color:#fff;border-color:var(--pri);}
+.mini-month .mm-day.weekend{color:#dc2626;}
+.mini-month .mm-day.today{border-color:var(--pri);box-shadow:0 0 0 1px var(--pri-light);}
+.mini-month .mm-day.has-class::after{
+  content:'';display:block;width:4px;height:4px;border-radius:50%;
+  background:var(--pri);position:absolute;bottom:2px;
+}
+
+/* MAIN GRID */
+.grid-container{
+  margin:8px 16px;background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;position:relative;
+}
+.grid-scroll{overflow-x:auto;overflow-y:visible;}
+
+.grid-table{border-collapse:collapse;width:100%;min-width:900px;table-layout:fixed;}
+.grid-table th,.grid-table td{border:1px solid #f1f5f9;}
+
+/* Header */
+.grid-table thead th{
+  padding:8px 4px;text-align:center;font-size:11px;font-weight:700;
+  background:#f8fafc;color:var(--text);position:sticky;top:0;z-index:2;
+}
+.grid-table thead th .dow{font-size:13px;}
+.grid-table thead th .date{font-size:10px;color:var(--muted);}
+.grid-table thead th.weekend .dow{color:var(--red);}
+.grid-table thead th.today{background:var(--pri-light);}
+.grid-table thead th.today .dow{color:var(--pri);}
+
+/* Time column */
+.grid-table .time-col{
+  width:56px;text-align:center;font-size:10px;font-weight:700;
+  color:var(--muted);background:#fafbfc;padding:2px 4px;
+  white-space:nowrap;letter-spacing:-0.2px;
+}
+
+/* Slot cells */
+.grid-table .slot-cell{
+  padding:0;height:28px;cursor:pointer;transition:all 0.1s;
+  text-align:center;vertical-align:middle;position:relative;
+}
+.grid-table .slot-cell:hover{filter:brightness(0.94);box-shadow:inset 0 0 0 1.5px rgba(0,0,0,0.15);}
+.grid-table .slot-cell .cell-inner{
+  width:100%;height:100%;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  padding:0 4px;
+}
+.slot-available{background:#fdfdfd;}
+.slot-offline{background:var(--green-bg);color:#065f46;}
+.slot-online{background:var(--blue-bg);color:#1e40af;}
+.slot-blocked{background:#f1f5f9;color:#cbd5e1;}
+
+/* Template marker */
+.cell-inner .tpl-dot{
+  width:5px;height:5px;border-radius:50%;flex-shrink:0;
+  margin-right:2px;opacity:0.6;
+}
+
+/* Drag selection */
+.slot-cell.selecting{box-shadow:inset 0 0 0 2px var(--pri)!important;}
+.slot-cell.range-hover{box-shadow:inset 0 0 0 1.5px rgba(26,107,90,0.4)!important;}
+
+/* SIDEBAR (Templates) */
+.sidebar-toggle{
+  position:fixed;right:0;top:50%;transform:translateY(-50%);
+  background:var(--pri);color:#fff;padding:12px 6px;border-radius:8px 0 0 8px;
+  cursor:pointer;font-size:12px;font-weight:700;z-index:50;
+  writing-mode:vertical-rl;letter-spacing:2px;
+}
+.sidebar{
+  position:fixed;right:0;top:52px;bottom:0;width:340px;
+  background:var(--card);border-left:1px solid var(--border);
+  z-index:90;transform:translateX(100%);transition:transform 0.2s;
+  display:flex;flex-direction:column;box-shadow:-4px 0 16px rgba(0,0,0,0.08);
+}
+.sidebar.open{transform:translateX(0);}
+.sidebar-header{
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sidebar-header h3{font-size:15px;font-weight:700;}
+.sidebar-body{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);}
+
+.tpl-card{
+  background:#f8fafc;border-radius:8px;padding:10px 12px;
+  border:1px solid var(--border);font-size:12px;
+}
+.tpl-card .tpl-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.tpl-card .tpl-name{font-weight:700;}
+.tpl-card .tpl-info{font-size:11px;color:#64748b;line-height:1.6;}
+.tpl-card .tpl-actions{display:flex;gap:4px;margin-top:8px;}
+
+/* POPOVER */
+.popover{
+  position:fixed;z-index:150;background:#fff;border-radius:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.18);padding:14px;width:240px;
+  display:none;
+}
+.popover .pop-title{font-size:12px;font-weight:700;margin-bottom:10px;color:var(--text);}
+.popover .pop-row{display:flex;gap:6px;margin-bottom:8px;align-items:center;}
+.popover .pop-row label{font-size:11px;font-weight:600;color:#64748b;min-width:36px;}
+.popover .pop-row input,.popover .pop-row select{
+  flex:1;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;
+  font-size:12px;font-family:inherit;outline:none;
+}
+.popover .pop-row input:focus,.popover .pop-row select:focus{border-color:var(--pri);}
+.popover .pop-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:4px;}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(15,23,42,0.4);
+  backdrop-filter:blur(2px);z-index:200;display:flex;
+  align-items:center;justify-content:center;
+}
+.modal{
+  background:#fff;border-radius:12px;width:520px;max-width:94vw;
+  max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-header h3{font-size:15px;font-weight:700;}
+.modal-body{padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+
+.form-row{display:flex;gap:8px;}
+.form-group{display:flex;flex-direction:column;gap:4px;flex:1;}
+.form-group label{font-size:11px;font-weight:600;color:#64748b;}
+.form-group input,.form-group select,.form-group textarea{
+  padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;
+  font-size:12px;font-family:inherit;outline:none;background:#fafbfc;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--pri);background:#fff;
+}
+.form-group textarea{resize:vertical;min-height:40px;}
+
+/* STATS ROW */
+.stats-row{
+  display:flex;gap:16px;flex-wrap:wrap;margin:8px 16px;padding:8px 14px;
+  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  font-size:11px;align-items:center;
+}
+.stats-row .stat-item{display:flex;align-items:center;gap:5px;font-weight:500;color:#64748b;}
+.stats-row .stat-item b{color:var(--text);}
+.stats-sep{width:1px;height:14px;background:var(--border);}
+
+/* TOAST */
+.toast-container{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+  z-index:300;display:flex;flex-direction:column;gap:8px;align-items:center;
+}
+.toast{
+  padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;
+  animation:toastIn 0.25s,toastOut 0.25s 1.5s forwards;
+  box-shadow:0 4px 16px rgba(0,0,0,0.15);pointer-events:none;
+}
+.toast-info{background:#1e293b;color:#fff;}
+.toast-ok{background:#065f46;color:#fff;}
+.toast-warn{background:#92400e;color:#fff;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastOut{from{opacity:1;}to{opacity:0;}}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .grid-table .time-col{width:40px;font-size:9px;}
+  .grid-table .slot-cell{height:24px;}
+  .grid-table .slot-cell .cell-inner{font-size:10px;}
+  .grid-table thead th{font-size:10px;}
+  .grid-table thead th .dow{font-size:11px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand"><div class="dot">永</div>课程排班助手</div>
+  <div class="nav">
+    <button class="btn-icon" onclick="prevWeek()" title="上一周">◀</button>
+    <span class="week-label" id="weekLabel">2026年7月 第1周</span>
+    <button class="btn-icon" onclick="nextWeek()" title="下一周">▶</button>
+    <button class="btn-icon" onclick="goThisWeek()" title="本周">📅</button>
+  </div>
+  <div class="actions">
+    <button class="btn btn-sm" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;" onclick="openShiftModal()">🗓️ 排班</button>
+    <button class="btn btn-sm btn-outline" onclick="copyPrevWeek()">📋 复制上周</button>
+    <button class="btn btn-sm btn-outline" onclick="clearWeek()">🗑️ 清空本周</button>
+    <button class="btn btn-sm btn-outline" onclick="exportWeek()">📥 导出</button>
+  </div>
+</div>
+
+<!-- PARTNER SHIFT STRIP -->
+<div class="shift-strip" id="shiftStrip"></div>
+
+<!-- MINI MONTH -->
+<div class="mini-month" id="miniMonth"></div>
+
+<!-- STATS -->
+<div class="stats-row" id="statsRow">
+  <span style="font-weight:700;color:var(--text);">📊 本周：</span>
+  <span class="stat-item">🏫 线下课 <b id="sOffline">0</b></span>
+  <span class="stat-item">💻 线上课 <b id="sOnline">0</b></span>
+  <span class="stat-item">📌 占用槽位 <b id="sUsed">0</b>/196</span>
+  <span class="stats-sep"></span>
+  <span class="stat-item">👤 文俊：<b id="sAvailable">0</b>天适合线下</span>
+  <span class="stats-sep"></span>
+  <span id="dragHint" style="font-size:10px;color:var(--muted);">💡 点击格子编辑 | Shift+点击多选 | 右键标记占用</span>
+</div>
+
+<!-- GRID -->
+<div class="grid-container">
+  <div class="grid-scroll">
+    <table class="grid-table" id="gridTable">
+      <thead id="gridHead"></thead>
+      <tbody id="gridBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- EDIT SLOT MODAL -->
+<div class="modal-overlay" id="editSlotModal" style="display:none;">
+  <div class="modal" style="width:380px;">
+    <div class="modal-header">
+      <h3 id="editSlotTitle">编辑时间槽</h3>
+      <button class="btn btn-xs btn-outline" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>类型</label>
+        <select id="editType">
+          <option value="offline">🏫 线下课</option>
+          <option value="online">💻 线上课</option>
+          <option value="blocked">🚫 占用</option>
+          <option value="">⬜ 清空</option>
+        </select>
+      </div>
+      <div class="form-group"><label>学生姓名</label>
+        <input id="editStudent" placeholder="输入学生姓名…">
+      </div>
+      <div style="font-size:11px;color:var(--muted);" id="editInfo"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sm" style="color:#dc2626;border:1px solid #fecaca;" onclick="deleteSlot()">🗑 删除</button>
+      <div style="flex:1;"></div>
+      <button class="btn btn-sm btn-outline" onclick="closeEditModal()">取消</button>
+      <button class="btn btn-sm btn-pri" onclick="saveEditModal()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATE SIDEBAR -->
+<div class="sidebar-toggle" onclick="toggleSidebar()" id="sidebarToggle">模板管理</div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h3>📋 固定排课模板</h3>
+    <button class="btn btn-xs btn-outline" onclick="toggleSidebar()">✕</button>
+  </div>
+  <div class="sidebar-body" id="sidebarBody"></div>
+  <div class="sidebar-footer">
+    <button class="btn btn-pri btn-sm" style="width:100%;" onclick="openAddTemplate()">＋ 新建模板</button>
+  </div>
+</div>
+
+<!-- TEMPLATE MODAL -->
+<div class="modal-overlay" id="tplModal" style="display:none;">
+  <div class="modal" style="width:480px;">
+    <div class="modal-header">
+      <h3 id="tplModalTitle">新建固定排课模板</h3>
+      <button class="btn btn-xs btn-outline" onclick="closeTplModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="tplEditId">
+      <div class="form-group"><label>模板名称</label><input id="tplName" placeholder="如：张三每周一三五"></div>
+      <div class="form-row">
+        <div class="form-group"><label>学生姓名</label><input id="tplStudent" placeholder="学生姓名"></div>
+        <div class="form-group"><label>课程类型</label><select id="tplType"><option value="offline">🏫 线下课</option><option value="online">💻 线上课</option></select></div>
+      </div>
+      <div class="form-group"><label>重复星期（可多选）</label>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;" id="tplWeekdays"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>开始时间槽</label><select id="tplSlotStart"></select></div>
+        <div class="form-group"><label>结束时间槽</label><select id="tplSlotEnd"></select></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);" id="tplPreview"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sm btn-outline" onclick="closeTplModal()">取消</button>
+      <button class="btn btn-sm btn-pri" onclick="saveTemplate()">保存模板</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHIFT MODAL -->
+<div class="modal-overlay" id="shiftModal" style="display:none;">
+  <div class="modal" style="width:700px;">
+    <div class="modal-header">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="btn-icon" onclick="shiftPrevMonth()" style="width:26px;height:26px;font-size:12px;">◀</button>
+        <h3>🗓️ 毛文俊排班 — <span id="shiftMonthLabel"></span></h3>
+        <button class="btn-icon" onclick="shiftNextMonth()" style="width:26px;height:26px;font-size:12px;">▶</button>
+      </div>
+      <button class="btn btn-xs btn-outline" onclick="closeShiftModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span style="font-size:12px;font-weight:600;">快速输入：</span>
+        <input id="shiftQuickInput" placeholder="如：1-5早 6休 7-12晚 13休…" style="flex:1;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;">
+        <button class="btn btn-xs btn-pri" onclick="parseShiftText()">解析</button>
+      </div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;" id="shiftBatchBtns"></div>
+      <div class="shift-grid" id="shiftGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+      <div style="font-size:11px;display:flex;gap:10px;flex-wrap:wrap;" id="shiftCounts"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-sm btn-outline" onclick="closeShiftModal()">完成</button></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ==================== TIME SLOTS ====================
+const BASE_MINUTES = 8 * 60 + 30; // 8:30
+const SLOT_DURATION = 25; // class minutes
+const BREAK_DURATION = 5;
+const CYCLE_MINUTES = SLOT_DURATION + BREAK_DURATION; // 30
+const TOTAL_SLOTS = 28; // 0-27, last: 22:00-22:25
+
+function slotTime(slotIndex) {
+  const startMin = BASE_MINUTES + slotIndex * CYCLE_MINUTES;
+  const endMin = startMin + SLOT_DURATION;
+  const sh = String(Math.floor(startMin / 60)).padStart(2,'0');
+  const sm = String(startMin % 60).padStart(2,'0');
+  const eh = String(Math.floor(endMin / 60)).padStart(2,'0');
+  const em = String(endMin % 60).padStart(2,'0');
+  return { start: sh + ':' + sm, end: eh + ':' + em, label: sh + ':' + sm + '-' + eh + ':' + em };
+}
+
+function getSlotOptions() {
+  const opts = [];
+  for (let i = 0; i < TOTAL_SLOTS; i++) {
+    const t = slotTime(i);
+    opts.push({ index: i, label: t.label });
+  }
+  return opts;
+}
+
+// ==================== DATA LAYER ====================
+const STORAGE_KEY = 'schedule_planner_v2';
+
+// Shift types and colors
+const SHIFT_TYPES = ['早','晚','夜','中','休','培训','会议','沙龙'];
+const SHIFT_COLORS = {
+  '早':  {bg:'#fef3c7',fg:'#92400e'},
+  '晚':  {bg:'#ede9fe',fg:'#5b21b6'},
+  '夜':  {bg:'#dbeafe',fg:'#1e3a5f'},
+  '中':  {bg:'#ccfbf1',fg:'#0f766e'},
+  '休':  {bg:'#e5e7eb',fg:'#6b7280'},
+  '培训':{bg:'#fce7f3',fg:'#9d174d'},
+  '会议':{bg:'#fee2e2',fg:'#991b1b'},
+  '沙龙':{bg:'#e0e7ff',fg:'#3730a3'},
+};
+// Days good for offline classes (partner available)
+const SHIFT_GOOD = ['休','早'];
+
+// slots: { '2026-07-06': { 3: {type:'offline', student:'张三', source:'manual'}, ... } }
+// templates: [{ id, name, student, type, weekdays:[0..6], slotStart, slotEnd, enabled:true }]
+// shifts: { '2026-07-01': '早', ... }
+let slots = {};
+let templates = [];
+let shifts = {};
+
+function loadData() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (raw) { slots = raw.slots || {}; templates = raw.templates || []; shifts = raw.shifts || {}; }
+  } catch(e) {}
+}
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ slots, templates, shifts }));
+}
+
+function genId() { return 'id' + Date.now() + '_' + Math.random().toString(36).slice(2,7); }
+
+// ==================== WEEK NAVIGATION ====================
+let weekStart = null; // Monday of current week (Date object)
+let shiftMonth = null;  // 'YYYY-MM' for shift modal, independent of week view
+
+function getMonday(d) {
+  const date = new Date(d);
+  const day = date.getDay(); // 0=Sun
+  const diff = day === 0 ? -6 : 1 - day; // Monday offset
+  date.setDate(date.getDate() + diff);
+  date.setHours(0,0,0,0);
+  return date;
+}
+
+function getWeekDates(monday) {
+  const dates = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(d.getDate() + i);
+    dates.push(d);
+  }
+  return dates;
+}
+
+function dateStr(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function getWeekNumber(d) {
+  // ISO week number approximation
+  const start = new Date(d.getFullYear(), 0, 1);
+  const days = Math.floor((d - start) / (1000*60*60*24));
+  return Math.ceil((days + start.getDay() + 1) / 7);
+}
+
+function getMonthWeekLabel(monday) {
+  const lastDay = new Date(monday);
+  lastDay.setDate(lastDay.getDate() + 6);
+  const m1 = monday.getMonth() + 1;
+  const m2 = lastDay.getMonth() + 1;
+  const y1 = monday.getFullYear();
+  const y2 = lastDay.getFullYear();
+  let monthPart;
+  if (y1 === y2 && m1 === m2) monthPart = y1 + '年' + m1 + '月';
+  else monthPart = y1 + '/' + m1 + ' - ' + y2 + '/' + m2;
+  const wn = getWeekNumber(monday);
+  return monthPart + ' 第' + wn + '周';
+}
+
+// ==================== GET SLOT ====================
+function getSlot(dateStr, slotIndex) {
+  // Check manual slot first (including cancelled markers)
+  if (slots[dateStr] && slots[dateStr][slotIndex] !== undefined) {
+    var s = slots[dateStr][slotIndex];
+    if (s.type === '') return null; // explicitly cancelled/cleared
+    return s;
+  }
+  // Check templates
+  const d = new Date(dateStr + 'T00:00:00');
+  const dow = d.getDay(); // 0=Sun
+  for (const tpl of templates) {
+    if (!tpl.enabled) continue;
+    if (!tpl.weekdays.includes(dow)) continue;
+    if (slotIndex >= tpl.slotStart && slotIndex <= tpl.slotEnd) {
+      return { type: tpl.type, student: tpl.student, source: 'template', tplId: tpl.id, tplName: tpl.name };
+    }
+  }
+  return null;
+}
+
+function setSlot(dateStr, slotIndex, data) {
+  if (!slots[dateStr]) slots[dateStr] = {};
+  if (data === null) {
+    // Check if a template would fill this slot — if so, write a cancel marker
+    var d = new Date(dateStr + 'T00:00:00');
+    var dow = d.getDay();
+    var hasTemplate = false;
+    for (var ti = 0; ti < templates.length; ti++) {
+      var tpl = templates[ti];
+      if (!tpl.enabled) continue;
+      if (!tpl.weekdays.includes(dow)) continue;
+      if (slotIndex >= tpl.slotStart && slotIndex <= tpl.slotEnd) { hasTemplate = true; break; }
+    }
+    if (hasTemplate) {
+      slots[dateStr][slotIndex] = { type: '', student: '', source: 'cancelled' };
+    } else {
+      delete slots[dateStr][slotIndex];
+      if (Object.keys(slots[dateStr]).length === 0) delete slots[dateStr];
+    }
+  } else if (data.type === '') {
+    slots[dateStr][slotIndex] = { type: '', student: '', source: 'manual' };
+  } else {
+    slots[dateStr][slotIndex] = { type: data.type, student: data.student || '', source: 'manual' };
+  }
+  saveData();
+}
+
+// ==================== RENDER ====================
+function renderAll() {
+  document.getElementById('weekLabel').textContent = getMonthWeekLabel(weekStart);
+  renderShiftStrip();
+  renderMiniMonth();
+  renderGrid();
+  renderStats();
+  renderTemplateList();
+}
+
+function renderShiftStrip() {
+  const dates = getWeekDates(weekStart);
+  const weekdays = ['日','一','二','三','四','五','六'];
+  const strip = document.getElementById('shiftStrip');
+  let html = '<div class="ss-label">毛文俊<br>排班</div>';
+  for (let i = 0; i < 7; i++) {
+    const ds = dateStr(dates[i]);
+    const shift = shifts[ds] || '';
+    const dow = dates[i].getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    const sc = SHIFT_COLORS[shift];
+    const shiftColor = sc ? 'color:' + sc.fg + ';' : '';
+    html += '<div class="ss-day' + (isWeekend ? ' weekend' : '') + '">';
+    html += '<div class="ss-dow">周' + weekdays[dow] + ' ' + (dates[i].getMonth()+1) + '/' + dates[i].getDate() + '</div>';
+    html += '<div class="ss-shift" style="' + shiftColor + '">' + (shift || '—') + '</div>';
+    html += '</div>';
+  }
+  strip.innerHTML = html;
+}
+
+function renderMiniMonth() {
+  // Show current month's days with dots for scheduled days, highlight current week
+  const monday = weekStart;
+  const monthStart = new Date(monday.getFullYear(), monday.getMonth(), 1);
+  const monthEnd = new Date(monday.getFullYear(), monday.getMonth() + 1, 0);
+  const daysInMonth = monthEnd.getDate();
+  const todayStr = dateStr(new Date());
+
+  const container = document.getElementById('miniMonth');
+  let html = '<span class="mm-label">📅 ' + monday.getFullYear() + '年' + (monday.getMonth()+1) + '月</span>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = dateStr(new Date(monday.getFullYear(), monday.getMonth(), d));
+    const date = new Date(monday.getFullYear(), monday.getMonth(), d);
+    const dow = date.getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    const isToday = ds === todayStr;
+
+    // Check if this day is in current week
+    const weekDates = getWeekDates(weekStart);
+    const inWeek = weekDates.some(wd => dateStr(wd) === ds);
+
+    // Check if has any class
+    let hasClass = false;
+    for (let si = 0; si < TOTAL_SLOTS; si++) {
+      if (getSlot(ds, si)) { hasClass = true; break; }
+    }
+
+    let cls = 'mm-day';
+    if (isWeekend) cls += ' weekend';
+    if (isToday) cls += ' today';
+    if (inWeek) cls += ' active';
+
+    html += '<div class="' + cls + '" onclick="jumpToDay(\'' + ds + '\')" title="' + ds + (hasClass ? ' 有课' : '') + '" style="position:relative;">';
+    html += d;
+    if (hasClass) html += '<span style="position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--pri);"></span>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function renderGrid() {
+  const dates = getWeekDates(weekStart);
+  const weekdays = ['日','一','二','三','四','五','六'];
+  const todayStr = dateStr(new Date());
+
+  // Header
+  let headHtml = '<tr><th style="width:56px;background:#f8fafc;"></th>';
+  for (let i = 0; i < 7; i++) {
+    const ds = dateStr(dates[i]);
+    const dow = dates[i].getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    const isToday = ds === todayStr;
+    let cls = '';
+    if (isWeekend) cls += ' weekend';
+    if (isToday) cls += ' today';
+    headHtml += '<th class="' + cls + '"><div class="dow">周' + weekdays[dow] + '</div><div class="date">' + (dates[i].getMonth()+1) + '/' + dates[i].getDate() + '</div></th>';
+  }
+  headHtml += '</tr>';
+  document.getElementById('gridHead').innerHTML = headHtml;
+
+  // Body
+  let bodyHtml = '';
+  for (let si = 0; si < TOTAL_SLOTS; si++) {
+    const t = slotTime(si);
+    bodyHtml += '<tr>';
+    bodyHtml += '<td class="time-col">' + t.label + '</td>';
+    for (let di = 0; di < 7; di++) {
+      const ds = dateStr(dates[di]);
+      const slot = getSlot(ds, si);
+      let cellCls = 'slot-cell';
+      let innerHtml = '';
+
+      if (slot) {
+        if (slot.type === 'offline') {
+          cellCls += ' slot-offline';
+          innerHtml = (slot.source === 'template' ? '<span class="tpl-dot" style="background:#065f46;"></span>' : '') + (slot.student || '线下');
+        } else if (slot.type === 'online') {
+          cellCls += ' slot-online';
+          innerHtml = (slot.source === 'template' ? '<span class="tpl-dot" style="background:#1e40af;"></span>' : '') + (slot.student || '线上');
+        } else if (slot.type === 'blocked') {
+          cellCls += ' slot-blocked';
+          innerHtml = '🚫';
+        }
+      } else {
+        cellCls += ' slot-available';
+      }
+
+      bodyHtml += '<td class="' + cellCls + '" data-date="' + ds + '" data-slot="' + si + '" onclick="onCellClick(event,\'' + ds + '\',' + si + ')" oncontextmenu="onCellRightClick(event,\'' + ds + '\',' + si + ')" style="cursor:pointer;">';
+      bodyHtml += '<div class="cell-inner">' + innerHtml + '</div>';
+      bodyHtml += '</td>';
+    }
+    bodyHtml += '</tr>';
+  }
+  document.getElementById('gridBody').innerHTML = bodyHtml;
+}
+
+function renderStats() {
+  const dates = getWeekDates(weekStart);
+  let cntOffline = 0, cntOnline = 0, cntUsed = 0, cntAvailableDays = 0;
+  for (let di = 0; di < 7; di++) {
+    const ds = dateStr(dates[di]);
+    const shift = shifts[ds] || '';
+    if (SHIFT_GOOD.includes(shift)) cntAvailableDays++;
+    for (let si = 0; si < TOTAL_SLOTS; si++) {
+      const slot = getSlot(ds, si);
+      if (slot) {
+        cntUsed++;
+        if (slot.type === 'offline') cntOffline++;
+        if (slot.type === 'online') cntOnline++;
+      }
+    }
+  }
+  document.getElementById('sOffline').textContent = cntOffline;
+  document.getElementById('sOnline').textContent = cntOnline;
+  document.getElementById('sUsed').textContent = cntUsed;
+  document.getElementById('sAvailable').textContent = cntAvailableDays;
+}
+
+// ==================== CELL INTERACTION ====================
+let lastClicked = null;
+
+function onCellClick(e, dateStr, slotIndex) {
+  e.preventDefault();
+  if (e.shiftKey && lastClicked) {
+    selectRange(lastClicked.dateStr, lastClicked.slotIndex, dateStr, slotIndex);
+    return;
+  }
+  lastClicked = { dateStr, slotIndex };
+  openEditModal(dateStr, slotIndex);
+}
+
+function onCellRightClick(e, dateStr, slotIndex) {
+  e.preventDefault();
+  const slot = getSlot(dateStr, slotIndex);
+  if (slot) {
+    setSlot(dateStr, slotIndex, null);
+    toast('已清空', 'info');
+  } else {
+    setSlot(dateStr, slotIndex, { type: 'blocked', student: '', source: 'manual' });
+    toast('已标记占用', 'info');
+  }
+  renderGrid();
+  renderStats();
+  renderMiniMonth();
+}
+
+function normalizeRange(ds1, si1, ds2, si2) {
+  const minDs = ds1 < ds2 ? ds1 : ds2;
+  const maxDs = ds1 < ds2 ? ds2 : ds1;
+  const minSi = Math.min(si1, si2);
+  const maxSi = Math.max(si1, si2);
+  return [minDs, maxDs, minSi, maxSi];
+}
+
+function selectRange(ds1, si1, ds2, si2) {
+  const [minDs, maxDs, minSi, maxSi] = normalizeRange(ds1, si1, ds2, si2);
+
+  // Collect all dates in range
+  const dates = getWeekDates(weekStart);
+  const rangeDates = [];
+  for (const d of dates) {
+    const ds = dateStr(d);
+    if (ds >= minDs && ds <= maxDs) rangeDates.push(ds);
+  }
+
+  const rangeSlots = [];
+  for (let si = minSi; si <= maxSi; si++) rangeSlots.push(si);
+
+  // Check if all cells are the same type
+  let allSame = true;
+  let firstType = null;
+  let firstStudent = null;
+  for (const ds of rangeDates) {
+    for (const si of rangeSlots) {
+      const slot = getSlot(ds, si);
+      const type = slot ? slot.type : '';
+      const student = slot ? slot.student : '';
+      if (firstType === null) { firstType = type; firstStudent = student; }
+      else if (type !== firstType || student !== firstStudent) { allSame = false; break; }
+    }
+    if (!allSame) break;
+  }
+
+  popoverTarget = {
+    dateStr: minDs,
+    slotIndex: minSi,
+    isRange: true,
+    rangeDates,
+    rangeSlots,
+    currentType: allSame ? firstType : '',
+    currentStudent: allSame ? (firstStudent || '') : ''
+  };
+
+  openEditModalForRange(t.rangeDates, t.rangeSlots, t.currentType || '', t.currentStudent || '');
+}
+
+// ==================== EDIT SLOT MODAL ====================
+let editTarget = null;
+
+function openEditModal(dateStr, slotIndex) {
+  var slot = getSlot(dateStr, slotIndex);
+  editTarget = { dateStr: dateStr, slotIndex: slotIndex, isRange: false };
+  document.getElementById('editSlotTitle').textContent = '编辑 ' + slotTime(slotIndex).label + ' | ' + dateStr;
+  document.getElementById('editType').value = slot ? slot.type : '';
+  document.getElementById('editStudent').value = slot ? (slot.student || '') : '';
+  document.getElementById('editInfo').textContent = '';
+  document.getElementById('editSlotModal').style.display = 'flex';
+  setTimeout(function(){ document.getElementById('editStudent').focus(); }, 100);
+}
+
+function openEditModalForRange(rangeDates, rangeSlots, curType, curStudent) {
+  editTarget = { isRange: true, rangeDates: rangeDates, rangeSlots: rangeSlots };
+  var st = slotTime(rangeSlots[0]), et = slotTime(rangeSlots[rangeSlots.length-1]);
+  document.getElementById('editSlotTitle').textContent = '批量编辑 ' + rangeDates.length + '天×' + rangeSlots.length + '槽 (' + st.start + '-' + et.end + ')';
+  document.getElementById('editType').value = curType || '';
+  document.getElementById('editStudent').value = curStudent || '';
+  document.getElementById('editInfo').textContent = '';
+  document.getElementById('editSlotModal').style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('editSlotModal').style.display = 'none';
+  editTarget = null;
+}
+
+function deleteSlot() {
+  if (!editTarget) return;
+  if (editTarget.isRange) {
+    var cnt = 0;
+    for (var i = 0; i < editTarget.rangeDates.length; i++) {
+      for (var j = 0; j < editTarget.rangeSlots.length; j++) {
+        setSlot(editTarget.rangeDates[i], editTarget.rangeSlots[j], null);
+        cnt++;
+      }
+    }
+    toast('已删除 ' + cnt + ' 个槽位', 'ok');
+  } else {
+    setSlot(editTarget.dateStr, editTarget.slotIndex, null);
+    toast('已删除', 'ok');
+  }
+  closeEditModal();
+  renderGrid(); renderStats(); renderMiniMonth();
+}
+
+function saveEditModal() {
+  if (!editTarget) return;
+  var type = document.getElementById('editType').value;
+  var student = document.getElementById('editStudent').value.trim();
+  if (editTarget.isRange) {
+    var cnt = 0;
+    for (var i = 0; i < editTarget.rangeDates.length; i++) {
+      for (var j = 0; j < editTarget.rangeSlots.length; j++) {
+        if (type === '') setSlot(editTarget.rangeDates[i], editTarget.rangeSlots[j], null);
+        else setSlot(editTarget.rangeDates[i], editTarget.rangeSlots[j], {type:type, student:student, source:'manual'});
+        cnt++;
+      }
+    }
+    toast('已批量更新 ' + cnt + ' 个槽位', 'ok');
+  } else {
+    if (type === '') setSlot(editTarget.dateStr, editTarget.slotIndex, null);
+    else setSlot(editTarget.dateStr, editTarget.slotIndex, {type:type, student:student, source:'manual'});
+    toast('已更新', 'ok');
+  }
+  closeEditModal();
+  renderGrid(); renderStats(); renderMiniMonth();
+}
+
+document.getElementById('editSlotModal').addEventListener('click', function(e) { if (e.target === this) closeEditModal(); });
+
+// ==================== WEEK OPERATIONS ====================
+function prevWeek() {
+  weekStart.setDate(weekStart.getDate() - 7);
+  renderAll();
+}
+function nextWeek() {
+  weekStart.setDate(weekStart.getDate() + 7);
+  renderAll();
+}
+function goThisWeek() {
+  weekStart = getMonday(new Date());
+  renderAll();
+}
+function jumpToDay(ds) {
+  weekStart = getMonday(new Date(ds + 'T00:00:00'));
+  renderAll();
+}
+
+function copyPrevWeek() {
+  const dates = getWeekDates(weekStart);
+  const prevMonday = new Date(weekStart);
+  prevMonday.setDate(prevMonday.getDate() - 7);
+  const prevDates = getWeekDates(prevMonday);
+
+  let count = 0;
+  for (let di = 0; di < 7; di++) {
+    const prevDs = dateStr(prevDates[di]);
+    const currDs = dateStr(dates[di]);
+    // Only copy manual slots (not template-generated)
+    if (slots[prevDs]) {
+      for (const [si, data] of Object.entries(slots[prevDs])) {
+        if (data.source === 'manual') {
+          setSlot(currDs, parseInt(si), { ...data, source: 'manual' });
+          count++;
+        }
+      }
+    }
+  }
+  if (count > 0) {
+    toast('已复制上周 ' + count + ' 个手动槽位', 'ok');
+  } else {
+    toast('上周没有手动设置的课程可复制', 'info');
+  }
+  renderAll();
+}
+
+function clearWeek() {
+  if (!confirm('确定清空本周所有手动设置的课程吗？\n（模板生成的课程不受影响）')) return;
+  const dates = getWeekDates(weekStart);
+  let count = 0;
+  for (const d of dates) {
+    const ds = dateStr(d);
+    if (slots[ds]) {
+      const keys = Object.keys(slots[ds]);
+      for (const k of keys) {
+        if (slots[ds][k].source === 'manual') {
+          delete slots[ds][k];
+          count++;
+        }
+      }
+      if (Object.keys(slots[ds]).length === 0) delete slots[ds];
+    }
+  }
+  saveData();
+  renderAll();
+  toast('已清空 ' + count + ' 个手动槽位', 'ok');
+}
+
+// ==================== TEMPLATES ====================
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function renderTemplateList() {
+  const container = document.getElementById('sidebarBody');
+  if (templates.length === 0) {
+    container.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px;">暂无固定排课模板<br><br>创建模板后，每周自动填充</div>';
+    return;
+  }
+  let html = '';
+  for (const tpl of templates) {
+    const weekdays = ['日','一','二','三','四','五','六'];
+    const daysStr = tpl.weekdays.map(function(d){ return '周' + weekdays[d]; }).join('、');
+    const startT = slotTime(tpl.slotStart);
+    const endT = slotTime(tpl.slotEnd);
+    html += '<div class="tpl-card" style="' + (tpl.enabled ? '' : 'opacity:0.5;') + '">';
+    html += '<div class="tpl-header">';
+    html += '<span class="tpl-name">' + (tpl.student || tpl.name) + '</span>';
+    html += '<span style="font-size:10px;padding:2px 6px;border-radius:4px;' + (tpl.type === 'offline' ? 'background:#d1fae5;color:#065f46;' : 'background:#dbeafe;color:#1e40af;') + '">' + (tpl.type === 'offline' ? '线下' : '线上') + '</span>';
+    html += '</div>';
+    html += '<div class="tpl-info">';
+    html += '📅 ' + daysStr + '<br>';
+    html += '🕐 ' + startT.start + ' - ' + endT.end + '（' + (tpl.slotEnd - tpl.slotStart + 1) + '节课）';
+    html += '</div>';
+    html += '<div class="tpl-actions">';
+    html += '<button class="btn btn-xs ' + (tpl.enabled ? 'btn-outline' : 'btn-pri') + '" onclick="toggleTemplate(\'' + tpl.id + '\')">' + (tpl.enabled ? '暂停' : '启用') + '</button>';
+    html += '<button class="btn btn-xs btn-outline" onclick="openEditTemplate(\'' + tpl.id + '\')">编辑</button>';
+    html += '<button class="btn btn-xs" style="color:#dc2626;border:1px solid #fecaca;" onclick="deleteTemplate(\'' + tpl.id + '\')">删除</button>';
+    html += '</div>';
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function openAddTemplate() {
+  document.getElementById('tplModalTitle').textContent = '新建固定排课模板';
+  document.getElementById('tplEditId').value = '';
+  document.getElementById('tplName').value = '';
+  document.getElementById('tplStudent').value = '';
+  document.getElementById('tplType').value = 'offline';
+  document.getElementById('tplSlotStart').value = '11'; // 14:00 default
+  document.getElementById('tplSlotEnd').value = '13';   // 14:55 default
+  renderTplWeekdayCheckboxes([]);
+  renderTplSlotSelects();
+  updateTplPreview();
+  document.getElementById('tplModal').style.display = 'flex';
+}
+
+function openEditTemplate(id) {
+  const tpl = templates.find(function(t){ return t.id === id; });
+  if (!tpl) return;
+  document.getElementById('tplModalTitle').textContent = '编辑固定排课模板';
+  document.getElementById('tplEditId').value = tpl.id;
+  document.getElementById('tplName').value = tpl.name || '';
+  document.getElementById('tplStudent').value = tpl.student || '';
+  document.getElementById('tplType').value = tpl.type;
+  document.getElementById('tplSlotStart').value = tpl.slotStart;
+  document.getElementById('tplSlotEnd').value = tpl.slotEnd;
+  renderTplWeekdayCheckboxes(tpl.weekdays);
+  renderTplSlotSelects();
+  updateTplPreview();
+  document.getElementById('tplModal').style.display = 'flex';
+}
+
+function closeTplModal() {
+  document.getElementById('tplModal').style.display = 'none';
+}
+
+function renderTplWeekdayCheckboxes(selected) {
+  const names = ['日','一','二','三','四','五','六'];
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const checked = selected.includes(i);
+    html += '<label class="wd-check" data-day="' + i + '" style="display:flex;align-items:center;gap:3px;font-size:11px;cursor:pointer;padding:5px 9px;border-radius:5px;border:1.5px solid ' + (checked ? 'var(--pri)' : 'var(--border)') + ';background:' + (checked ? 'var(--pri-light)' : '#fff') + ';">';
+    html += '<input type="checkbox" value="' + i + '" ' + (checked ? 'checked' : '') + ' style="display:none;">周' + names[i];
+    html += '</label>';
+  }
+  document.getElementById('tplWeekdays').innerHTML = html;
+
+  // Click handlers
+  var labels = document.querySelectorAll('#tplWeekdays .wd-check');
+  for (var j = 0; j < labels.length; j++) {
+    labels[j].addEventListener('click', function() {
+      var cb = this.querySelector('input');
+      cb.checked = !cb.checked;
+      if (cb.checked) {
+        this.style.borderColor = 'var(--pri)';
+        this.style.background = 'var(--pri-light)';
+      } else {
+        this.style.borderColor = 'var(--border)';
+        this.style.background = '#fff';
+      }
+      updateTplPreview();
+    });
+  }
+}
+
+function renderTplSlotSelects() {
+  const opts = getSlotOptions();
+  let optHtml = '';
+  for (const o of opts) { optHtml += '<option value="' + o.index + '">' + o.label + '</option>'; }
+  document.getElementById('tplSlotStart').innerHTML = optHtml;
+  document.getElementById('tplSlotEnd').innerHTML = optHtml;
+  // Set defaults
+  document.getElementById('tplSlotStart').value = document.getElementById('tplSlotStart').value || '11';
+  document.getElementById('tplSlotEnd').value = document.getElementById('tplSlotEnd').value || '13';
+}
+
+function getSelectedTplWeekdays() {
+  const boxes = document.querySelectorAll('#tplWeekdays input[type="checkbox"]');
+  const sel = [];
+  for (let i = 0; i < boxes.length; i++) {
+    if (boxes[i].checked) sel.push(parseInt(boxes[i].value));
+  }
+  return sel;
+}
+
+function updateTplPreview() {
+  const slotStart = parseInt(document.getElementById('tplSlotStart').value);
+  const slotEnd = parseInt(document.getElementById('tplSlotEnd').value);
+  const startT = slotTime(slotStart);
+  const endT = slotTime(slotEnd);
+  const weekdays = getSelectedTplWeekdays();
+  const names = ['日','一','二','三','四','五','六'];
+  const daysStr = weekdays.length > 0 ? weekdays.map(function(d){ return '周' + names[d]; }).join('、') : '未选择';
+  document.getElementById('tplPreview').textContent =
+    '⏱ ' + daysStr + ' | ' + startT.start + ' - ' + endT.end + ' | 共' + (slotEnd - slotStart + 1) + '节课';
+}
+
+// Update preview when slot selects change
+document.addEventListener('change', function(e) {
+  if (e.target.id === 'tplSlotStart' || e.target.id === 'tplSlotEnd') updateTplPreview();
+});
+
+function saveTemplate() {
+  const editId = document.getElementById('tplEditId').value;
+  const name = document.getElementById('tplName').value.trim();
+  const student = document.getElementById('tplStudent').value.trim();
+  const type = document.getElementById('tplType').value;
+  const slotStart = parseInt(document.getElementById('tplSlotStart').value);
+  const slotEnd = parseInt(document.getElementById('tplSlotEnd').value);
+  const weekdays = getSelectedTplWeekdays();
+
+  if (!student) { toast('请输入学生姓名', 'warn'); return; }
+  if (weekdays.length === 0) { toast('请选择至少一个星期', 'warn'); return; }
+  if (slotStart > slotEnd) { toast('开始时间不能晚于结束时间', 'warn'); return; }
+
+  const data = {
+    id: editId || genId(),
+    name: name || (student + '的固定课'),
+    student, type, weekdays, slotStart, slotEnd, enabled: true
+  };
+
+  if (editId) {
+    const idx = templates.findIndex(function(t){ return t.id === editId; });
+    if (idx >= 0) {
+      data.id = editId;
+      data.enabled = templates[idx].enabled;
+      templates[idx] = data;
+    }
+  } else {
+    templates.push(data);
+  }
+
+  saveData();
+  closeTplModal();
+  renderAll();
+  toast(editId ? '模板已更新' : '模板已创建', 'ok');
+}
+
+function toggleTemplate(id) {
+  const tpl = templates.find(function(t){ return t.id === id; });
+  if (tpl) {
+    tpl.enabled = !tpl.enabled;
+    saveData();
+    renderAll();
+    toast(tpl.enabled ? '模板已启用' : '模板已暂停', 'info');
+  }
+}
+
+function deleteTemplate(id) {
+  if (!confirm('确定删除此模板吗？')) return;
+  templates = templates.filter(function(t){ return t.id !== id; });
+  saveData();
+  renderAll();
+  toast('模板已删除', 'info');
+}
+
+// ==================== SHIFT MANAGEMENT ====================
+function openShiftModal() {
+  // Initialize shiftMonth from the current week (use the month that the week falls in, or next month if at month boundary)
+  // Default to showing the month that contains most of the current week
+  const dates = getWeekDates(weekStart);
+  let monthCounts = {};
+  for (const d of dates) {
+    const m = fmtMonth(d);
+    monthCounts[m] = (monthCounts[m] || 0) + 1;
+  }
+  // Pick the month with most days in current week
+  let bestMonth = fmtMonth(weekStart);
+  let bestCount = 0;
+  for (const [m, c] of Object.entries(monthCounts)) {
+    if (c > bestCount) { bestMonth = m; bestCount = c; }
+  }
+  shiftMonth = bestMonth;
+  document.getElementById('shiftModal').style.display = 'flex';
+  updateShiftModal();
+}
+
+function closeShiftModal() {
+  document.getElementById('shiftModal').style.display = 'none';
+}
+
+function shiftPrevMonth() {
+  if (!shiftMonth) return;
+  const [y, m] = shiftMonth.split('-').map(Number);
+  const d = new Date(y, m - 2, 1); // previous month
+  shiftMonth = fmtMonth(d);
+  updateShiftModal();
+}
+
+function shiftNextMonth() {
+  if (!shiftMonth) return;
+  const [y, m] = shiftMonth.split('-').map(Number);
+  const d = new Date(y, m, 1); // next month
+  shiftMonth = fmtMonth(d);
+  updateShiftModal();
+}
+
+function cycleShift(dateStr) {
+  const current = shifts[dateStr] || '';
+  const cycle = ['', ...SHIFT_TYPES];
+  const idx = cycle.indexOf(current);
+  const next = cycle[(idx + 1) % cycle.length];
+  if (next) shifts[dateStr] = next;
+  else delete shifts[dateStr];
+  saveData();
+}
+
+function updateShiftModal() {
+  const modal = document.getElementById('shiftModal');
+  if (modal.style.display === 'none') return;
+
+  if (!shiftMonth) shiftMonth = fmtMonth(new Date());
+  const [year, month] = shiftMonth.split('-').map(Number);
+  document.getElementById('shiftMonthLabel').textContent = year + '年' + month + '月';
+
+  // Render batch buttons
+  let btnHtml = '';
+  for (const t of SHIFT_TYPES) {
+    const sc = SHIFT_COLORS[t];
+    btnHtml += '<button class="btn btn-xs" style="background:' + sc.bg + ';color:' + sc.fg + ';" onclick="batchSetShift(\'' + t + '\')">全部' + t + '</button>';
+  }
+  btnHtml += '<button class="btn btn-xs btn-outline" onclick="batchSetShift(\'\')">清除</button>';
+  document.getElementById('shiftBatchBtns').innerHTML = btnHtml;
+
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const grid = document.getElementById('shiftGrid');
+  const weekdays = ['日','一','二','三','四','五','六'];
+
+  let html = '';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = dateStr(new Date(year, month - 1, d));
+    const shift = shifts[ds] || '';
+    const sc = SHIFT_COLORS[shift] || {bg:'#f8fafc',fg:'#cbd5e1'};
+    html += '<div style="text-align:center;padding:6px 3px;border-radius:5px;cursor:pointer;font-size:10px;font-weight:600;background:' + sc.bg + ';color:' + sc.fg + ';border:1px solid ' + (shift ? 'transparent' : 'var(--border)') + ';" onclick="cycleShift(\'' + ds + '\');updateShiftModal();renderAll();">';
+    html += '<div style="font-size:12px;">' + d + '</div>';
+    html += '<div>' + (shift || '—') + '</div>';
+    html += '</div>';
+  }
+  grid.innerHTML = html;
+
+  // Counts
+  let counts = {};
+  for (const t of SHIFT_TYPES) counts[t] = 0;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const s = shifts[dateStr(new Date(year, month-1, d))] || '';
+    if (counts[s] !== undefined) counts[s]++;
+  }
+  let cntHtml = '';
+  for (const t of SHIFT_TYPES) {
+    if (counts[t] > 0) {
+      const sc = SHIFT_COLORS[t];
+      cntHtml += '<span style="color:' + sc.fg + ';">' + t + ' <b>' + counts[t] + '</b></span> ';
+    }
+  }
+  document.getElementById('shiftCounts').innerHTML = cntHtml || '<span style="color:var(--muted);">暂无数据</span>';
+}
+
+function batchSetShift(type) {
+  if (!shiftMonth) return;
+  const [year, month] = shiftMonth.split('-').map(Number);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = dateStr(new Date(year, month - 1, d));
+    if (type) shifts[ds] = type; else delete shifts[ds];
+  }
+  saveData();
+  updateShiftModal();
+  renderAll();
+  toast('已批量设置', 'ok');
+}
+
+function parseShiftText() {
+  const text = document.getElementById('shiftQuickInput').value.trim();
+  if (!text) { toast('请输入排班文本', 'warn'); return; }
+  if (!shiftMonth) return;
+  const [year, month] = shiftMonth.split('-').map(Number);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const segs = text.split(/\s+/);
+  let count = 0;
+  for (const seg of segs) {
+    const shiftNames = SHIFT_TYPES.join('|');
+    const re = new RegExp('^(\\d+)(?:-(\\d+))?(' + shiftNames + ')$');
+    const m = seg.match(re);
+    if (!m) continue;
+    const start = parseInt(m[1]);
+    const end = m[2] ? parseInt(m[2]) : start;
+    const type = m[3];
+    for (let d = start; d <= end && d <= daysInMonth; d++) {
+      shifts[dateStr(new Date(year, month-1, d))] = type;
+      count++;
+    }
+  }
+  if (count === 0) toast('未识别到有效排班，格式：1-5早 6休 7-12晚', 'warn');
+  else { saveData(); updateShiftModal(); renderAll(); document.getElementById('shiftQuickInput').value = ''; toast('已设置 ' + count + ' 天排班', 'ok'); }
+}
+
+// ==================== EXPORT ====================
+function exportWeek() {
+  const dates = getWeekDates(weekStart);
+  let csv = '时间槽';
+  for (const d of dates) { csv += ',' + dateStr(d) + ' ' + ['日','一','二','三','四','五','六'][d.getDay()]; }
+  csv += '\n毛文俊排班';
+  for (const d of dates) { csv += ',' + (shifts[dateStr(d)] ? shifts[dateStr(d)] + '班' : ''); }
+  csv += '\n';
+  for (let si = 0; si < TOTAL_SLOTS; si++) {
+    const t = slotTime(si);
+    csv += t.label;
+    for (const d of dates) {
+      const slot = getSlot(dateStr(d), si);
+      if (slot) {
+        csv += ',' + (slot.type === 'offline' ? '线下' : slot.type === 'online' ? '线上' : '占用') + ':' + (slot.student || '');
+      } else {
+        csv += ',';
+      }
+    }
+    csv += '\n';
+  }
+  const BOM = '﻿';
+  const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '排班表_' + dateStr(weekStart) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('已导出', 'ok');
+}
+
+// ==================== TOAST ====================
+function toast(msg, type) {
+  type = type || 'info';
+  const container = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(function(){ el.remove(); }, 1800);
+}
+
+// ==================== KEYBOARD ====================
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowLeft') { prevWeek(); e.preventDefault(); }
+  if (e.key === 'ArrowRight') { nextWeek(); e.preventDefault(); }
+  if (e.key === 'Escape') {
+    closeEditModal();
+    closeTplModal();
+    closeShiftModal();
+  }
+  if (e.key === 't' && e.ctrlKey) { e.preventDefault(); toggleSidebar(); }
+});
+
+// ==================== MODAL CLICK OUTSIDE ====================
+document.getElementById('tplModal').addEventListener('click', function(e) { if (e.target === this) closeTplModal(); });
+document.getElementById('shiftModal').addEventListener('click', function(e) { if (e.target === this) closeShiftModal(); });
+
+// ==================== INIT ====================
+function prefillJulyShifts() {
+  // Clean up old June data
+  for (let d = 1; d <= 30; d++) {
+    delete shifts['2026-06-' + String(d).padStart(2,'0')];
+  }
+  const data = [
+    '培训','培训','早','晚','早','休','休','晚',
+    '会议','会议','会议',
+    '早','晚','早','晚','沙龙','沙龙','休','晚','早',
+    '休','休','休','休','休',
+    '晚','早','晚','早','中','晚'
+  ];
+  // July has 31 days
+  for (let i = 0; i < 31; i++) {
+    shifts['2026-07-' + String(i + 1).padStart(2,'0')] = data[i];
+  }
+  saveData();
+}
+
+function init() {
+  loadData();
+  prefillJulyShifts();
+  // Default to week containing July 1
+  weekStart = getMonday(new Date(2026, 6, 1)); // July 1, 2026
+  renderAll();
+
+  // Render slot selects for template modal
+  const opts = getSlotOptions();
+  let optHtml = '';
+  for (const o of opts) { optHtml += '<option value="' + o.index + '">' + o.label + '</option>'; }
+  document.getElementById('tplSlotStart').innerHTML = optHtml;
+  document.getElementById('tplSlotEnd').innerHTML = optHtml;
+  document.getElementById('tplSlotStart').value = '11';
+  document.getElementById('tplSlotEnd').value = '13';
+  renderTplWeekdayCheckboxes([]);
+  registerSW();
+}
+
+// ==================== PWA ====================
+function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  var swCode = [
+    'const CACHE = "schedule-v2";',
+    'const FILES = ["/"];',
+    'self.addEventListener("install", function(e){',
+    '  e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(FILES)}).then(function(){return self.skipWaiting()}));',
+    '});',
+    'self.addEventListener("activate", function(e){',
+    '  e.waitUntil(caches.keys().then(function(keys){return Promise.all(keys.filter(function(k){return k!==CACHE}).map(function(k){return caches.delete(k)}))}).then(function(){return self.clients.claim()}));',
+    '});',
+    'self.addEventListener("fetch", function(e){',
+    '  e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}));',
+    '});'
+  ].join('\n');
+  var blob = new Blob([swCode], {type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob), {scope:'/'}).catch(function(){});
+}
+
+// Inline manifest
+(function(){
+  var mc = {
+    name: '课程排班助手',
+    short_name: '排班助手',
+    description: '永汲教育课程排班工具',
+    start_url: location.href,
+    display: 'standalone',
+    orientation: 'any',
+    background_color: '#f8fafb',
+    theme_color: '#1a6b5a',
+    icons: [{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="32" fill="#1a6b5a"/><text x="96" y="128" font-size="100" text-anchor="middle" fill="white">📅</text></svg>'),sizes:'192x192',type:'image/svg+xml'}]
+  };
+  var link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = 'data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(mc))));
+  document.head.appendChild(link);
+
+  // Install prompt
+  var deferredPrompt;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    setTimeout(function(){
+      if (!deferredPrompt) return;
+      var banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;z-index:400;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);cursor:pointer;font-family:sans-serif;';
+      banner.innerHTML = '📲 <b>添加到桌面</b> 像App一样使用 <span style="opacity:0.7;font-size:11px;">点击安装</span>';
+      banner.onclick = function(){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(){ banner.remove(); }); };
+      document.body.appendChild(banner);
+      setTimeout(function(){ if(banner.parentNode) banner.remove(); }, 8000);
+    }, 2000);
+  });
+})();
+
+// Quick self-test
+try {
+  init();
+  document.title = '✅ 排班助手已就绪';
+  console.log('📅 课程排班助手 v2 已就绪');
+} catch(e) {
+  document.title = '❌ 错误: ' + e.message;
+  document.body.innerHTML = '<div style="padding:40px;color:red;font-size:18px;"><h2>脚本错误</h2><pre>' + e.message + '\\n\\n' + e.stack + '</pre></div>';
+  throw e;
+}
+</script>
+</body>
+</html>
