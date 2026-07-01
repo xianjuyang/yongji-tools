@@ -1,10 +1,9 @@
 <!DOCTYPE html><html lang="zh-CN"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="KET璇嶆眹">
-<meta name="theme-color" content="#1a6b5a"><link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>馃摉</text></svg>">
-<title>姘告辈鏁欒偛 路 KET璇嶆眹璁粌</title>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="KET词汇">
+<meta name="theme-color" content="#1a6b5a"><title>永汲教育 · KET词汇训练</title>
 <style>
-:root{--pri:#1a6b5a;--pri-light:#e8f5f0;--pri-dark:#0f4a3e;--blue:#2563eb;--blue-light:#eff6ff;--bg:#f8fafb;--card:#fff;--text:#1e293b;--muted:#94a3b8;--border:#e5e7eb;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.06);--red:#dc2626;--green:#16a34a;--amber:#d97706;--amber-light:#fffbeb}
+:root{--pri:#1a6b5a;--pri-light:#e8f5f0;--pri-dark:#0f4a3e;--bg:#f8fafb;--card:#fff;--text:#1e293b;--muted:#94a3b8;--border:#e5e7eb;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.06);--red:#dc2626;--green:#16a34a;--amber:#d97706}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 14px;height:50px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
@@ -13,7 +12,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg)
 .btn{padding:7px 13px;border-radius:6px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
 .btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:var(--pri-dark)}
 .btn-outline{background:#fff;color:var(--pri);border:1.5px solid var(--pri)}.btn-outline:hover{background:var(--pri-light)}
-.btn-sm{padding:5px 10px;font-size:11px}.btn-xs{padding:3px 8px;font-size:10px}
+.btn-sm{padding:5px 10px;font-size:11px}
 .layout{display:flex;height:calc(100vh - 50px)}
 .sidebar{width:250px;min-width:250px;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .sidebar-head{padding:10px 12px;border-bottom:1px solid var(--border)}
@@ -70,26 +69,25 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg)
 @media(max-width:768px){.sidebar{width:180px;min-width:180px}.main{padding:10px}.passage-card{padding:14px}.test-q .opts{grid-template-columns:1fr}}
 @media(max-width:560px){.layout{flex-direction:column}.sidebar{width:100%;min-width:0;max-height:180px;border-right:none;border-bottom:1px solid var(--border)}.main{height:auto}}
 </style></head><body>
-<div class="topbar"><div class="brand"><div class="dot">K</div>KET璇嶆眹璁粌 路 20璇濋</div>
-<div class="actions"><button class="btn btn-sm btn-outline" onclick="resetProgress()">馃攧 閲嶇疆杩涘害</button></div></div>
+<div class="topbar"><div class="brand"><div class="dot">K</div>KET词汇训练 · 20话题</div>
+<div class="actions"><button class="btn btn-sm btn-outline" onclick="resetProgress()">🔄 重置进度</button></div></div>
 <div class="layout">
-<div class="sidebar"><div class="sidebar-head"><input type="text" id="searchInput" placeholder="馃攳 鎼滅储鍗曡瘝鈥? oninput="onSearch(this.value)"></div><div class="sidebar-list" id="topicList"></div></div>
-<div class="main" id="mainContent"><div class="empty"><div class="icon">馃摉</div><h3>閫夋嫨涓€涓瘽棰樺紑濮嬪涔?/h3><p style="font-size:13px;color:var(--muted);">20涓瘽棰?路 800涓崟璇?路 姣忚鏂囩珷+娴嬭瘯</p></div></div>
+<div class="sidebar"><div class="sidebar-head"><input type="text" id="searchInput" placeholder="🔍 搜索单词…" oninput="onSearch(this.value)"></div><div class="sidebar-list" id="topicList"></div></div>
+<div class="main" id="mainContent"><div class="empty"><div class="icon">📖</div><h3>选择一个话题开始学习</h3><p style="font-size:13px;color:var(--muted);">20个话题 · 800个单词 · 每课文章+测试</p></div></div>
 </div>
 <div class="toast-container" id="toastContainer"></div>
-<script>
-var D=[],completed=JSON.parse(localStorage.getItem('ket2_progress')||'{}'),currentTopic=0,synth=window.speechSynthesis,speaking=false;
+<script>var D=[],completed=JSON.parse(localStorage.getItem('ket2_progress')||'{}'),currentTopic=0,synth=window.speechSynthesis,speaking=false;
 function T(t,u,w,p,q){D.push({t:t,u:u,w:w,p:p,q:q})}
 function saveProgress(){localStorage.setItem('ket2_progress',JSON.stringify(completed))}
 function toast(msg,type){type=type||'info';var c=document.getElementById('toastContainer'),el=document.createElement('div');el.className='toast toast-'+type;el.textContent=msg;c.appendChild(el);setTimeout(function(){el.remove()},1800)}
 function selectTopic(idx){currentTopic=idx;renderTopic(idx);document.getElementById('mainContent').scrollTop=0}
 function resetProgress(){if(!confirm('确定重置所有学习进度吗？'))return;completed={};saveProgress();renderSidebar();if(D.length>0)renderTopic(currentTopic);toast('进度已重置','info')}
 function onSearch(val){val=(val||'').trim().toLowerCase();renderSidebar(val)}
-function markDone(idx){completed['done_'+idx]=!completed['done_'+idx];saveProgress();renderSidebar();toast(completed['done_'+idx]?'已标记完成 ✅':'已取消标记','ok')}
+function markDone(idx){completed['done_'+idx]=!completed['done_'+idx];saveProgress();renderSidebar();renderTopic(idx);toast(completed['done_'+idx]?'已标记完成 ✅':'已取消标记','ok')}
 function toggleStar(idx,wi){var k='star_'+idx+'_'+wi;completed[k]=!completed[k];saveProgress();renderTopic(idx)}
 function speakWord(word){if(speaking){synth.cancel();speaking=false;return}var u=new SpeechSynthesisUtterance(word);u.lang='en-GB';u.rate=0.8;u.onend=function(){speaking=false};speaking=true;synth.speak(u)}
-function speakPassage(idx){if(speaking){synth.cancel();speaking=false;return}var t=D[idx],text=t.p.replace(/\*/g,''),u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.85;u.onend=function(){speaking=false};speaking=true;synth.speak(u);var b=document.getElementById('btnSpeak');if(b){b.textContent='⏹ 停止朗读';b.style.background='var(--red)'}setTimeout(function(){var b=document.getElementById('btnSpeak');if(b){b.textContent='🔊 朗读文章';b.style.background='var(--pri)'}},text.length*65)}
-function speakSlow(idx){if(speaking){synth.cancel();speaking=false;return}var t=D[idx],text=t.p.replace(/\*/g,''),u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=0.55;u.onend=function(){speaking=false};speaking=true;synth.speak(u)}
+function speakPassage(idx){if(speaking){synth.cancel();speaking=false;return}var t=D[idx],txt=t.p.replace(/\*/g,''),u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=0.85;u.onend=function(){speaking=false};speaking=true;synth.speak(u);var b=document.getElementById('btnSpeak');if(b){b.textContent='⏹ 停止';b.style.background='var(--red)'}setTimeout(function(){var b=document.getElementById('btnSpeak');if(b){b.textContent='🔊 朗读';b.style.background='var(--pri)'}},txt.length*65)}
+function speakSlow(idx){if(speaking){synth.cancel();speaking=false;return}var t=D[idx],txt=t.p.replace(/\*/g,''),u=new SpeechSynthesisUtterance(txt);u.lang='en-GB';u.rate=0.55;u.onend=function(){speaking=false};speaking=true;synth.speak(u)}
 
 function renderSidebar(filter){
   var list=document.getElementById('topicList'),html='',lastUnit='';
@@ -104,9 +102,7 @@ function renderSidebar(filter){
 }
 
 function renderTopic(idx){
-  var t=D[idx],main=document.getElementById('mainContent'),html='';
-  // Highlight vocab in passage
-  var vocabMap={};
+  var t=D[idx],main=document.getElementById('mainContent'),html='',vocabMap={};
   for(var i=0;i<t.w.length;i++){vocabMap[t.w[i][0].toLowerCase()]=true}
   var words=t.p.split(' '),passageHtml='';
   for(var wi=0;wi<words.length;wi++){
@@ -114,18 +110,15 @@ function renderTopic(idx){
     if(vocabMap[clean])passageHtml+='<span class="vw" onclick="speakWord(\''+clean.replace(/'/g,"\\'")+'\')">'+w+'</span> ';
     else passageHtml+=w+' ';
   }
-  // Passage card
   html+='<div class="passage-card"><div class="ptitle">📖 Topic '+(idx+1)+': '+t.t+'</div><div class="ptext">'+passageHtml+'</div>';
-  html+='<div class="passage-actions"><button class="btn btn-sm btn-pri" onclick="speakPassage('+idx+')" id="btnSpeak">🔊 朗读文章</button><button class="btn btn-sm btn-outline" onclick="speakSlow('+idx+')">🐢 慢速</button><button class="btn btn-sm btn-outline" onclick="markDone('+idx+')">✅ '+(completed['done_'+idx]?'取消完成':'标记完成')+'</button></div></div>';
-  // Word list
-  html+='<div class="words-card"><div class="whead"><h3>📝 本课词汇 ('+t.w.length+'个)</h3><span style="font-size:11px;color:var(--muted)">点击单词听发音 | ☆ 收藏</span></div>';
+  html+='<div class="passage-actions"><button class="btn btn-sm btn-pri" onclick="speakPassage('+idx+')" id="btnSpeak">🔊 朗读</button><button class="btn btn-sm btn-outline" onclick="speakSlow('+idx+')">🐢 慢速</button><button class="btn btn-sm btn-outline" onclick="markDone('+idx+')">✅ '+(completed['done_'+idx]?'取消完成':'标记完成')+'</button></div></div>';
+  html+='<div class="words-card"><div class="whead"><h3>📝 词汇 ('+t.w.length+'个)</h3><span style="font-size:11px;color:var(--muted)">点击单词听发音</span></div>';
   for(var i=0;i<t.w.length;i++){
     var w=t.w[i],sk='star_'+idx+'_'+i;
     html+='<div class="word-row" onclick="speakWord(\''+w[0].replace(/'/g,"\\'")+'\')"><span class="wn">'+(i+1)+'</span><span class="we">'+w[0]+'</span><span class="wt">'+w[2]+'</span><span class="wc">'+w[1]+'</span><span class="ws'+(completed[sk]?' liked':'')+'" onclick="event.stopPropagation();toggleStar('+idx+','+i+')">'+(completed[sk]?'★':'☆')+'</span></div>';
   }
   html+='</div>';
-  // Test
-  html+='<div class="test-card"><div class="theader"><h3>📝 词汇测试 (10题)</h3><button class="btn btn-sm btn-pri" onclick="startTest('+idx+')">🔄 重新测试</button></div><div id="testArea">'+buildTestHTML(idx)+'</div></div>';
+  html+='<div class="test-card"><div class="theader"><h3>📝 测试 (10题)</h3><button class="btn btn-sm btn-pri" onclick="startTest('+idx+')">🔄 重新测试</button></div><div id="testArea">'+buildTestHTML(idx)+'</div></div>';
   main.innerHTML=html;
 }
 
@@ -133,224 +126,102 @@ function buildTestHTML(idx){
   var t=D[idx],q=t.q,html='';
   for(var i=0;i<q.length;i++){
     var qi=q[i];
-    html+='<div class="test-q"><div class="qnum">第'+(i+1)+'题 · '+qi.type+'</div><div class="qtext">'+qi.question+'</div><div class="opts">';
-    for(var j=0;j<qi.opts.length;j++){
-      html+='<button class="opt" id="opt_'+i+'_'+j+'" onclick="checkAnswer('+idx+','+i+','+j+',this)">'+['A','B','C','D'][j]+'. '+qi.opts[j]+'</button>';
-    }
+    html+='<div class="test-q"><div class="qnum">'+(i+1)+'. '+qi.type+'</div><div class="qtext">'+qi.q+'</div><div class="opts">';
+    for(var j=0;j<qi.opts.length;j++){html+='<button class="opt" id="opt_'+i+'_'+j+'" onclick="checkAnswer('+idx+','+i+','+j+',this)">'+'ABCD'[j]+'. '+qi.opts[j]+'</button>'}
     html+='</div><div class="feedback" id="fb_'+i+'"></div></div>';
   }
   return html;
 }
 
 function startTest(idx){
-  // Shuffle questions
   var t=D[idx],shuffled=[];
   for(var i=0;i<t.q.length;i++)shuffled.push(i);
   for(var i=shuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),tmp=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=tmp}
-  // Rebuild test with shuffled questions
   var html='';
   for(var si=0;si<shuffled.length;si++){
     var i=shuffled[si],qi=t.q[i];
-    html+='<div class="test-q"><div class="qnum">第'+(si+1)+'题 · '+qi.type+'</div><div class="qtext">'+qi.question+'</div><div class="opts">';
-    for(var j=0;j<qi.opts.length;j++){
-      html+='<button class="opt" id="opt_'+i+'_'+j+'" onclick="checkAnswer('+idx+','+i+','+j+',this)">'+['A','B','C','D'][j]+'. '+qi.opts[j]+'</button>';
-    }
+    html+='<div class="test-q"><div class="qnum">'+(si+1)+'. '+qi.type+'</div><div class="qtext">'+qi.q+'</div><div class="opts">';
+    for(var j=0;j<qi.opts.length;j++){html+='<button class="opt" id="opt_'+i+'_'+j+'" onclick="checkAnswer('+idx+','+i+','+j+',this)">'+'ABCD'[j]+'. '+qi.opts[j]+'</button>'}
     html+='</div><div class="feedback" id="fb_'+i+'"></div></div>';
   }
   document.getElementById('testArea').innerHTML=html;
 }
 
 function checkAnswer(topicIdx,qIdx,optIdx,btn){
-  var t=D[topicIdx],qi=t.q[qIdx];
-  // Disable all options for this question
-  var opts=document.querySelectorAll('#opt_'+qIdx+'_0,#opt_'+qIdx+'_1,#opt_'+qIdx+'_2,#opt_'+qIdx+'_3');
+  var t=D[topicIdx],qi=t.q[qIdx],opts=document.querySelectorAll('#opt_'+qIdx+'_0,#opt_'+qIdx+'_1,#opt_'+qIdx+'_2,#opt_'+qIdx+'_3');
   for(var i=0;i<opts.length;i++){opts[i].disabled=true;opts[i].style.pointerEvents='none'}
   var fb=document.getElementById('fb_'+qIdx);
   if(optIdx===qi.answer){
     btn.classList.add('correct');fb.className='feedback correct';fb.textContent='✅ 正确！';
     completed['test_'+topicIdx+'_'+qIdx]=true;
   }else{
-    btn.classList.add('wrong');fb.className='feedback wrong';fb.textContent='❌ 错误。正确答案是 '+['A','B','C','D'][qi.answer]+'. '+qi.opts[qi.answer];
-    // Highlight correct answer
-    var correctBtn=document.getElementById('opt_'+qIdx+'_'+qi.answer);
-    if(correctBtn)correctBtn.classList.add('correct');
+    btn.classList.add('wrong');fb.className='feedback wrong';fb.textContent='❌ 错误。正确答案 '+qi.opts[qi.answer];
+    var cb=document.getElementById('opt_'+qIdx+'_'+qi.answer);if(cb)cb.classList.add('correct');
   }
   saveProgress();
-  // Update score
   var correct=0,total=0;
   for(var i=0;i<t.q.length;i++){if(completed['test_'+topicIdx+'_'+i])correct++;total++}
-  if(total===t.q.length){
-    var pct=Math.round(correct/total*100);
-    setTimeout(function(){toast('测试完成：'+correct+'/'+total+' ('+pct+'%)',pct>=80?'ok':'info')},500);
-  }
+  if(total===t.q.length){setTimeout(function(){toast('测试完成：'+correct+'/'+total+' ('+Math.round(correct/total*100)+'%)',correct>=8?'ok':'info')},500)}
 }
 
-function init(){
-  renderSidebar();
-  if(D.length>0)renderTopic(0);
-}
-// ==================== TOPIC DATA ====================
-// UNIT 1: PEOPLE & DAILY LIFE
-T('家人与朋友','人物与日常',
-[['family','家庭;家人','n'],['mother','母亲','n'],['father','父亲','n'],['parent','父母','n'],['child','孩子','n'],['baby','婴儿','n'],['brother','兄弟','n'],['sister','姐妹','n'],['son','儿子','n'],['daughter','女儿','n'],['grandmother','奶奶;外婆','n'],['grandfather','爷爷;外公','n'],['aunt','阿姨;姑姑','n'],['uncle','叔叔;舅舅','n'],['cousin','堂表兄妹','n'],['friend','朋友','n'],['neighbour','邻居','n'],['guest','客人','n'],['married','已婚的','adj'],['single','单身的','adj'],['young','年轻的','adj'],['old','老的;旧的','adj'],['together','一起','adv'],['live','居住','v'],['love','爱','v'],['care','关心','v'],['visit','拜访','v'],['invite','邀请','v'],['stay','待;停留','v'],['leave','离开','v'],['meet','遇见','v'],['know','认识;知道','v'],['remember','记住','v'],['introduce','介绍','v'],['smile','微笑','v'],['laugh','笑','v'],['kind','善良的','adj'],['friendly','友好的','adj'],['helpful','有帮助的','adj'],['special','特别的','adj']],
-"My *family* is not very big. I *live* with my *mother* and *father*. I have one *brother* and one *sister*. My *brother* is *young* but I am even *younger*. My *grandmother* and *grandfather**live* near our home and we *visit* them every weekend. My *aunt* and *uncle* sometimes come *together* with my *cousin*. We always have a wonderful time playing games. My best *friend* is also my *neighbour*. He is very *kind* and *friendly*. I *invite* him to my birthday party every year. All our *guests* *smile* and *laugh* together. I *love* my *family* and *friends* because they *care* about me.",
-[
-{q:'What does "neighbour" mean?',type:'英→中',opts:['邻居','同事','客人','亲戚'],answer:0},
-{q:'What does "invite" mean?',type:'英→中',opts:['离开','拜访','邀请','介绍'],answer:2},
-{q:'What does "guest" mean?',type:'英→中',opts:['朋友','邻居','家人','客人'],answer:3},
-{q:'What does "young" mean?',type:'英→中',opts:['老的','年轻的','善良的','特别的'],answer:1},
-{q:'哪个词表示"介绍"？',type:'中→英',opts:['invite','introduce','visit','remember'],answer:1},
-{q:'哪个词表示"友好的"？',type:'中→英',opts:['kind','special','helpful','friendly'],answer:3},
-{q:'哪个词表示"堂表兄妹"？',type:'中→英',opts:['brother','cousin','uncle','sister'],answer:1},
-{q:'The party is for close ___ and friends.',type:'填空',opts:['family','guests','neighbours','parents'],answer:0},
-{q:'I want to ___ you to my new friend.',type:'填空',opts:['meet','know','introduce','remember'],answer:2},
-{q:'My grandmother is very ___ to everyone.',type:'填空',opts:['young','married','kind','single'],answer:2}
-]),
+function init(){renderSidebar();if(D.length>0)renderTopic(0)}
+// KET 1500 Vocabulary Data - 60 Topics
+// Topic format: T('话题中文','单元分类',[['english','chinese','type'],...],'passage text')
+// *word* in passage = vocabulary word highlight
 
-T('描述人物','人物与日常',
-[['tall','高的','adj'],['short','矮的;短的','adj'],['beautiful','美丽的','adj'],['pretty','漂亮的','adj'],['handsome','英俊的','adj'],['strong','强壮的','adj'],['thin','瘦的','adj'],['heavy','重的;胖的','adj'],['blonde','金发的','adj'],['dark','深色的;暗的','adj'],['hair','头发','n'],['eyes','眼睛','n'],['glasses','眼镜','n'],['beard','胡须','n'],['voice','声音','n'],['clever','聪明的','adj'],['lazy','懒惰的','adj'],['quiet','安静的','adj'],['shy','害羞的','adj'],['serious','严肃的','adj'],['funny','有趣的','adj'],['brave','勇敢的','adj'],['honest','诚实的','adj'],['polite','有礼貌的','adj'],['describe','描述','v'],['look like','看起来像','phr'],['person','人','n'],['appearance','外貌','n'],['character','性格','n'],['wear','穿;戴','v'],['carry','携带','v'],['smile','微笑','n'],['describe','描述','v'],['seem','似乎','v'],['become','变成','v'],['grow','成长;变得','v'],['different','不同的','adj'],['similar','相似的','adj'],['same','相同的','adj'],['both','两者都','adj']],
-"My best friend is a *tall* and *pretty* girl. She has long dark *hair* and big *eyes*. She always *wears* *glasses* when reading. She is very *kind* and *polite* to everyone. Sometimes she is *shy* in front of strangers, but she loves to *smile* and *laugh* with *friends*. Her *voice* is soft and sweet. She is not *lazy* at all — she exercises every day to stay *strong*. People say she is *clever* because she gets good grades. She likes to *wear* *beautiful* dresses. Her *appearance* is quite different from her brother, who is *heavy* and has a *beard*. But they are *both* very *funny*!",
-[
-{q:'What does "handsome" mean?',type:'英→中',opts:['漂亮的','英俊的','强壮的','聪明的'],answer:1},
-{q:'What does "shy" mean?',type:'英→中',opts:['安静的','严肃的','害羞的','诚实的'],answer:2},
-{q:'What does "voice" mean?',type:'英→中',opts:['外貌','眼睛','头发','声音'],answer:3},
-{q:'What does "polite" mean?',type:'英→中',opts:['诚实的','有礼貌的','勇敢的','有趣的'],answer:1},
-{q:'哪个词表示"相似的"？',type:'中→英',opts:['same','different','similar','special'],answer:2},
-{q:'哪个词表示"外貌"？',type:'中→英',opts:['character','appearance','voice','hair'],answer:1},
-{q:'哪个词表示"强壮的"？',type:'中→英',opts:['heavy','thin','strong','tall'],answer:2},
-{q:'She has long dark ___ and big blue eyes.',type:'填空',opts:['hair','glasses','voice','beard'],answer:0},
-{q:'My brother is very ___ — he never does his homework.',type:'填空',opts:['clever','brave','lazy','polite'],answer:2},
-{q:'Can you ___ what your teacher looks like?',type:'填空',opts:['wear','describe','become','seem'],answer:1}
-]),
+// ====================== UNIT 1: PEOPLE & FAMILY (4 topics) ======================
+T('家庭成员','人物与家庭',[['family','家庭;家人','n'],['mother','母亲','n'],['father','父亲','n'],['parent','父母','n'],['child','孩子','n'],['children','孩子们','n'],['baby','婴儿','n'],['brother','兄弟','n'],['sister','姐妹','n'],['son','儿子','n'],['daughter','女儿','n'],['grandmother','奶奶;外婆','n'],['grandfather','爷爷;外公','n'],['aunt','阿姨;姑姑','n'],['uncle','叔叔;舅舅','n'],['cousin','堂表兄弟姐妹','n'],['husband','丈夫','n'],['wife','妻子','n'],['married','已婚的','adj'],['single','单身的','adj'],['relative','亲戚','n'],['together','一起','adv'],['love','爱','v'],['care','关心;照顾','v'],['grow','成长','v']], "My *family* is not very big. I live with my *mother* and *father*. I have one *brother* and one *sister*. My *brother* is older than me. My *sister* is still a *child*. Every weekend, we visit my *grandmother* and *grandfather*. They live near our home. My *aunt* and *uncle* sometimes come *together* with my *cousin*. We all *love* each other and *care* about our *family* very much."),
 
-T('感受与情绪','人物与日常',
-[['happy','快乐的','adj'],['sad','悲伤的','adj'],['angry','生气的','adj'],['excited','兴奋的','adj'],['worried','担心的','adj'],['afraid','害怕的','adj'],['surprised','惊讶的','adj'],['tired','累的','adj'],['bored','无聊的','adj'],['proud','自豪的','adj'],['nervous','紧张的','adj'],['calm','冷静的','adj'],['upset','难过的','adj'],['lonely','孤独的','adj'],['brave','勇敢的','adj'],['feel','感觉','v'],['enjoy','享受','v'],['hate','讨厌','v'],['cry','哭','v'],['worry','担心','v'],['hope','希望','v'],['wish','希望;祝愿','v'],['feeling','感觉','n'],['surprise','惊喜','n'],['fear','恐惧','n'],['joy','快乐','n'],['wonderful','精彩的','adj'],['terrible','可怕的','adj'],['strange','奇怪的','adj'],['relax','放松','v'],['mind','介意;头脑','v'],['care','在乎;关心','v'],['matter','重要;要紧','v'],['alone','独自','adv'],['perhaps','也许','adv'],['really','真正地','adv'],['quite','相当;很','adv'],['almost','几乎','adv'],['enough','足够','adj'],['too','太;也','adv']],
-"Yesterday I felt many different *feelings*. In the morning I was *excited* because it was Sports Day. But before the race, I felt very *nervous*. My friend told me to stay *calm* and not to *worry*. When I won the race, I felt so *proud* and *happy*! My parents were *surprised* by my medal. In the evening I was *tired* but not *bored* at all. I *really* *enjoy* being with my friends. Sometimes I feel *lonely* when I am *alone* at home, but my dog makes me *happy*. I *hate* feeling *sad* or *upset*. I *hope* tomorrow will be just as *wonderful* as today!",
-[
-{q:'What does "nervous" mean?',type:'英→中',opts:['兴奋的','紧张的','冷静的','难过的'],answer:1},
-{q:'What does "proud" mean?',type:'英→中',opts:['自豪的','快乐的','惊讶的','勇敢的'],answer:0},
-{q:'What does "lonely" mean?',type:'英→中',opts:['独自的','孤独的','无聊的','担心的'],answer:1},
-{q:'What does "upset" mean?',type:'英→中',opts:['生气的','害怕的','难过的','奇怪的'],answer:2},
-{q:'哪个词表示"享受"？',type:'中→英',opts:['feel','hope','enjoy','relax'],answer:2},
-{q:'哪个词表示"恐惧"？',type:'中→英',opts:['joy','fear','worry','mind'],answer:1},
-{q:'哪个词表示"放松"？',type:'中→英',opts:['relax','calm','rest','sleep'],answer:0},
-{q:'I am so ___ about the exam tomorrow.',type:'填空',opts:['excited','proud','worried','bored'],answer:2},
-{q:'The movie was ___ — I want to watch it again!',type:'填空',opts:['terrible','strange','wonderful','enough'],answer:2},
-{q:'Don''t ___ — everything will be fine.',type:'填空',opts:['cry','hate','mind','matter'],answer:0}
-]),
+T('描述人物','人物与家庭',[['tall','高的','adj'],['short','矮的;短的','adj'],['young','年轻的','adj'],['old','老的;旧的','adj'],['beautiful','美丽的','adj'],['pretty','漂亮的','adj'],['handsome','英俊的','adj'],['strong','强壮的','adj'],['thin','瘦的','adj'],['fat','胖的','adj'],['kind','善良的','adj'],['friendly','友好的','adj'],['funny','有趣的','adj'],['clever','聪明的','adj'],['lazy','懒惰的','adj'],['quiet','安静的','adj'],['serious','严肃的','adj'],['shy','害羞的','adj'],['smile','微笑','v'],['laugh','笑','v'],['hair','头发','n'],['eyes','眼睛','n'],['glasses','眼镜','n'],['voice','声音','n'],['describe','描述','v']], "My best friend is a *tall* and *pretty* girl. She has long dark *hair* and big *eyes*. She always wears *glasses* when reading. She is very *kind* and *friendly* to everyone. Sometimes she is *shy* in front of strangers, but she loves to *smile* and *laugh* with friends. People say she is *clever* because she gets good grades. She likes to wear *beautiful* dresses. Her *voice* is soft and sweet. I would *describe* her as the nicest person I know."),
 
-T('日常生活','人物与日常',
-[['wake up','醒来','phr'],['get up','起床','phr'],['sleep','睡觉','v'],['dream','梦;做梦','n'],['rest','休息','v'],['hurry','赶快','v'],['finish','完成','v'],['begin','开始','v'],['start','开始','v'],['arrive','到达','v'],['return','返回','v'],['wait','等待','v'],['bring','带来','v'],['take','拿走','v'],['put','放','v'],['give','给','v'],['get','得到','v'],['keep','保持','v'],['change','改变','v'],['early','早的','adj'],['late','晚的;迟到的','adj'],['quick','快的','adj'],['slow','慢的','adj'],['ready','准备好的','adj'],['busy','忙碌的','adj'],['free','空闲的;免费的','adj'],['morning','早晨','n'],['afternoon','下午','n'],['evening','傍晚','n'],['night','夜晚','n'],['today','今天','n'],['tomorrow','明天','n'],['yesterday','昨天','n'],['always','总是','adv'],['usually','通常','adv'],['sometimes','有时候','adv'],['never','从不','adv'],['often','经常','adv'],['again','再次','adv'],['already','已经','adv']],
-"I *usually* *get up* at seven o''clock in the *morning*. I *wake up* my little brother too. After breakfast I *leave* home and walk to school. I *arrive* at school *early*, before eight. Lessons *begin* at eight fifteen. After school I *return* home and *rest* for a while. Then I *start* my homework and try to *finish* before dinner. My mum *always* says don''t *hurry* when I eat too fast. Before I *sleep* at *night*, I like to read a book. I *never* stay up *late* because I have school *tomorrow*. I am *busy* on weekdays but *free* on weekends!",
-[
-{q:'What does "arrive" mean?',type:'英→中',opts:['离开','到达','返回','等待'],answer:1},
-{q:'What does "hurry" mean?',type:'英→中',opts:['休息','赶快','完成','开始'],answer:1},
-{q:'What does "often" mean?',type:'英→中',opts:['总是','通常','经常','从不'],answer:2},
-{q:'What does "ready" mean?',type:'英→中',opts:['忙碌的','空闲的','准备好的','早的'],answer:2},
-{q:'哪个词表示"返回"？',type:'中→英',opts:['arrive','leave','return','bring'],answer:2},
-{q:'哪个词表示"保持"？',type:'中→英',opts:['put','keep','give','take'],answer:1},
-{q:'哪个词表示"已经"？',type:'中→英',opts:['always','again','never','already'],answer:3},
-{q:'I ___ go to bed before 10 pm.',type:'填空',opts:['sometimes','never','usually','always'],answer:2},
-{q:'Please ___ your homework before dinner.',type:'填空',opts:['begin','finish','start','keep'],answer:1},
-{q:'Are you ___ for school? The bus is coming!',type:'填空',opts:['busy','free','ready','quick'],answer:2}
-]),
+T('感受与情绪','人物与家庭',[['happy','快乐的','adj'],['sad','悲伤的','adj'],['angry','生气的','adj'],['excited','兴奋的','adj'],['worried','担心的','adj'],['afraid','害怕的','adj'],['surprised','惊讶的','adj'],['tired','累的','adj'],['bored','无聊的','adj'],['proud','自豪的','adj'],['nervous','紧张的','adj'],['calm','冷静的','adj'],['upset','难过的','adj'],['lonely','孤独的','adj'],['brave','勇敢的','adj'],['feel','感觉','v'],['enjoy','享受','v'],['hate','讨厌;恨','v'],['cry','哭','v'],['worry','担心','v'],['hope','希望','v'],['wish','希望;祝愿','v'],['feeling','感觉;情感','n'],['surprise','惊喜','n'],['grin','咧嘴笑','v']], "Yesterday I felt many different *feelings*. In the morning I was *excited* because it was Sports Day. But before the race, I felt very *nervous*. My friend told me to stay *calm*. When I won the race, I felt so *proud* and *happy*! My parents were *surprised* by my medal. In the evening I was *tired* but not *bored* at all. I really *enjoy* being with my friends. Sometimes I *worry* about tests, but today I just felt *brave* and did my best."),
 
-// UNIT 2: HOME & FOOD
-T('家与房间','居家与饮食',
-[['room','房间','n'],['living room','客厅','n'],['bedroom','卧室','n'],['bathroom','浴室','n'],['kitchen','厨房','n'],['garden','花园','n'],['door','门','n'],['window','窗户','n'],['floor','地板','n'],['wall','墙','n'],['stairs','楼梯','n'],['table','桌子','n'],['chair','椅子','n'],['bed','床','n'],['sofa','沙发','n'],['desk','书桌','n'],['lamp','灯','n'],['carpet','地毯','n'],['curtain','窗帘','n'],['shelf','架子','n'],['wardrobe','衣柜','n'],['mirror','镜子','n'],['picture','画;照片','n'],['comfortable','舒适的','adj'],['bright','明亮的','adj'],['tidy','整洁的','adj'],['messy','凌乱的','adj'],['upstairs','楼上','adv'],['downstairs','楼下','adv'],['inside','在里面','adv'],['outside','在外面','adv'],['entrance','入口','n'],['roof','屋顶','n'],['ceiling','天花板','n'],['corner','角落','n'],['space','空间','n'],['move','移动;搬家','v'],['decorate','装饰','v'],['build','建造','v'],['own','拥有','v']],
-"My favorite *room* is my *bedroom*. It is not very big but it is *comfortable* and *bright*. There is a *bed* near the *window*. I have a wooden *desk* with a *lamp* on it. My books are on the *shelf* above the desk. There is a *wardrobe* for my clothes and a *mirror* on the *wall*. The *floor* has a soft *carpet*. I try to keep my room *tidy*, but sometimes it gets *messy* when I am busy. *Downstairs*, our *living room* has a big *sofa* and a coffee *table*. We have a small *garden* *outside* where my mum grows flowers. I love our home — every *corner* has a warm memory.",
-[
-{q:'What does "comfortable" mean?',type:'英→中',opts:['明亮的','整洁的','舒适的','凌乱的'],answer:2},
-{q:'What does "wardrobe" mean?',type:'英→中',opts:['书架','衣柜','书桌','镜子'],answer:1},
-{q:'What does "tidy" mean?',type:'英→中',opts:['整洁的','明亮的','舒适的','凌乱的'],answer:0},
-{q:'What does "ceiling" mean?',type:'英→中',opts:['地板','屋顶','天花板','墙壁'],answer:2},
-{q:'哪个词表示"楼下"？',type:'中→英',opts:['inside','outside','upstairs','downstairs'],answer:3},
-{q:'哪个词表示"空间"？',type:'中→英',opts:['room','space','corner','floor'],answer:1},
-{q:'哪个词表示"装饰"？',type:'中→英',opts:['build','move','decorate','own'],answer:2},
-{q:'Please put your books back on the ___.',type:'填空',opts:['shelf','wardrobe','desk','carpet'],answer:0},
-{q:'The room looks so ___ after you cleaned it!',type:'填空',opts:['messy','bright','tidy','comfortable'],answer:2},
-{q:'We have a beautiful ___ of our family on the wall.',type:'填空',opts:['mirror','curtain','picture','lamp'],answer:2}
-]),
+T('个人信息','人物与家庭',[['name','名字','n'],['age','年龄','n'],['birthday','生日','n'],['address','地址','n'],['phone','电话','n'],['number','号码;数字','n'],['email','电子邮件','n'],['country','国家','n'],['nationality','国籍','n'],['language','语言','n'],['hometown','家乡','n'],['live','居住','v'],['born','出生','adj'],['grow up','长大','phr'],['job','工作','n'],['hobby','爱好','n'],['introduce','介绍','v'],['meet','遇见','v'],['know','知道;认识','v'],['remember','记住','v'],['forget','忘记','v'],['information','信息','n'],['form','表格','n'],['passport','护照','n'],['interview','面试;采访','n']], "Let me *introduce* myself. My *name* is Li Hua. I am twelve years old. My *birthday* is on May 15th. I was *born* in Shanghai, so my *hometown* is Shanghai. I *live* with my parents in a flat. You can call my *phone* *number* if you want to *meet* me. I can speak two *languages*: Chinese and English. My *hobby* is playing basketball. I hope to *know* more friends from different *countries*. I will *remember* this day forever."),
+
+// ====================== UNIT 2: HOME & LIVING (4 topics) ======================
+T('房间与家具','居家生活',[['room','房间','n'],['living room','客厅','n'],['bedroom','卧室','n'],['bathroom','浴室','n'],['kitchen','厨房','n'],['garden','花园','n'],['door','门','n'],['window','窗户','n'],['floor','地板;楼层','n'],['wall','墙','n'],['stairs','楼梯','n'],['table','桌子','n'],['chair','椅子','n'],['bed','床','n'],['sofa','沙发','n'],['desk','书桌','n'],['lamp','灯','n'],['carpet','地毯','n'],['curtain','窗帘','n'],['shelf','架子','n'],['wardrobe','衣柜','n'],['mirror','镜子','n'],['picture','画;照片','n'],['comfortable','舒适的','adj'],['bright','明亮的','adj']], "My favorite *room* is my *bedroom*. It is not very big but it is *comfortable* and *bright*. There is a *bed* near the *window*. I have a wooden *desk* with a *lamp* on it. My books are on the *shelf* above the desk. There is a *wardrobe* for my clothes and a *mirror* on the *wall*. The *floor* has a soft *carpet*. Downstairs, our *living room* has a big *sofa* and a coffee *table*. I love sitting there and looking at the *picture* on the wall."),
+
+T('厨房与烹饪','居家生活',[['cook','烹饪','v'],['meal','一餐','n'],['breakfast','早餐','n'],['lunch','午餐','n'],['dinner','晚餐','n'],['plate','盘子','n'],['bowl','碗','n'],['cup','杯子','n'],['glass','玻璃杯','n'],['knife','刀','n'],['fork','叉子','n'],['spoon','勺子','n'],['pan','平底锅','n'],['pot','锅','n'],['fridge','冰箱','n'],['oven','烤箱','n'],['microwave','微波炉','n'],['wash','洗','v'],['clean','清洁','adj'],['taste','尝;味道','n'],['delicious','美味的','adj'],['fresh','新鲜的','adj'],['hot','热的;辣的','adj'],['boil','煮沸','v'],['cut','切','v']], "My mother loves to *cook* in the *kitchen*. Every morning she makes *breakfast* for us. I help her set the table with *plates*, *bowls*, *cups*, *forks* and *spoons*. For *lunch* I usually have rice and vegetables. *Dinner* is the biggest *meal* of the day. Mom uses a big *pot* to *boil* soup and a *pan* to fry fish. We keep meat and vegetables *fresh* in the *fridge*. After eating, I help *wash* the dishes. The food always *tastes* *delicious*!"),
+
+T('家居用品','居家生活',[['clock','钟','n'],['watch','手表','n'],['key','钥匙','n'],['telephone','电话','n'],['computer','电脑','n'],['television','电视','n'],['radio','收音机','n'],['camera','相机','n'],['battery','电池','n'],['plug','插头','n'],['light','灯;光线','n'],['heater','加热器','n'],['blanket','毯子','n'],['pillow','枕头','n'],['towel','毛巾','n'],['soap','肥皂','n'],['toothbrush','牙刷','n'],['toothpaste','牙膏','n'],['comb','梳子','n'],['brush','刷子','n'],['basket','篮子','n'],['box','盒子','n'],['rubbish','垃圾','n'],['machine','机器','n'],['switch','开关','n']], "Every morning I wake up and look at the *clock* on the wall. I use my *toothbrush* and *toothpaste* to clean my teeth. Then I brush my hair with a *comb*. Before leaving, I turn off the *television* and all the *lights*. I take my *telephone* and *keys* with me. At night, I use my *computer* to do homework. When it is cold, I turn on the *heater* and cover myself with a warm *blanket*. My *pillow* is very soft. I always put the *rubbish* in the *box* before sleeping."),
+
+T('日常生活','居家生活',[['wake up','醒来','phr'],['get up','起床','phr'],['sleep','睡觉','v'],['dream','梦;做梦','n'],['rest','休息','v'],['relax','放松','v'],['hurry','赶快','v'],['finish','完成','v'],['begin','开始','v'],['start','开始','v'],['come','来','v'],['go','去','v'],['leave','离开','v'],['arrive','到达','v'],['return','返回','v'],['stay','待;停留','v'],['wait','等待','v'],['carry','携带;搬运','v'],['bring','带来','v'],['take','拿走','v'],['put','放','v'],['give','给','v'],['get','得到','v'],['keep','保持;保留','v'],['change','改变','v']], "I usually *get up* at seven o'clock. I *wake up* my little brother too. After breakfast I *leave* home and walk to school. I *arrive* at school before eight. Lessons *begin* at eight fifteen. After school I *return* home and *rest* for a while. Then I *start* my homework and try to *finish* before dinner. My mum always says don't *hurry* when I eat too fast. Before I *sleep*, I like to read a book and *relax*. I always *keep* my room tidy before bed."),
+
+// ====================== UNIT 3: FOOD & DRINK (4 topics) ======================
+T('水果蔬菜','食物饮品',[['apple','苹果','n'],['banana','香蕉','n'],['orange','橙子','n'],['grape','葡萄','n'],['lemon','柠檬','n'],['strawberry','草莓','n'],['watermelon','西瓜','n'],['peach','桃子','n'],['pear','梨','n'],['mango','芒果','n'],['tomato','番茄','n'],['potato','土豆','n'],['carrot','胡萝卜','n'],['onion','洋葱','n'],['bean','豆子','n'],['pea','豌豆','n'],['corn','玉米','n'],['vegetable','蔬菜','n'],['fruit','水果','n'],['salad','沙拉','n'],['fresh','新鲜的','adj'],['sweet','甜的','adj'],['sour','酸的','adj'],['juice','果汁','n'],['healthy','健康的','adj']], "Eating *fruit* and *vegetables* is very *healthy*. My favorite *fruit* is *apple*. It is red and *sweet*. I also like *banana* and *orange*. In summer I love eating *watermelon* because it is so cool and *fresh*. My mother makes *salad* with *tomato*, *carrot*, *onion*, *corn* and *beans*. Sometimes she adds *lemon* *juice* which tastes a little *sour*. *Strawberries* and *grapes* are my sister's favorites. We should eat different kinds of *vegetables* every day to stay strong."),
+
+T('肉类与餐桌','食物饮品',[['meat','肉','n'],['chicken','鸡肉','n'],['beef','牛肉','n'],['pork','猪肉','n'],['fish','鱼','n'],['egg','蛋','n'],['sausage','香肠','n'],['ham','火腿','n'],['steak','牛排','n'],['soup','汤','n'],['salt','盐','n'],['pepper','胡椒','n'],['sauce','酱汁','n'],['oil','油','n'],['butter','黄油','n'],['cheese','奶酪','n'],['fry','油炸','v'],['grill','烧烤','v'],['roast','烤','v'],['bake','烘焙','v'],['smell','闻;气味','n'],['hungry','饿的','adj'],['thirsty','渴的','adj'],['full','饱的;满的','adj'],['menu','菜单','n']], "My dad is very good at cooking *meat*. He can *grill* the best *steak*. On Sundays he *roasts* *chicken* with vegetables. My mum makes wonderful *fish* *soup* with *salt* and *pepper*. I love *sausage* and *egg* for breakfast. Sometimes we have *ham* sandwiches with *butter* and *cheese*. When I smell the food cooking, I get very *hungry*! After a big meal, I feel *full*. The restaurant *menu* had many choices — I ordered pasta with tomato *sauce*."),
+
+T('饮料零食','食物饮品',[['drink','饮料;喝','n'],['water','水','n'],['milk','牛奶','n'],['tea','茶','n'],['coffee','咖啡','n'],['cola','可乐','n'],['lemonade','柠檬水','n'],['hot chocolate','热巧克力','n'],['snack','零食','n'],['biscuit','饼干','n'],['cake','蛋糕','n'],['bread','面包','n'],['rice','米饭','n'],['pasta','意大利面','n'],['noodle','面条','n'],['sandwich','三明治','n'],['burger','汉堡','n'],['chips','薯条','n'],['sugar','糖','n'],['chocolate','巧克力','n'],['sweet','糖果','n'],['ice cream','冰淇淋','n'],['pour','倒;倾倒','v'],['share','分享','v'],['order','点餐;命令','v']], "After school I usually feel *thirsty* and need a *drink*. My mum says I should *drink* more *water*. She does not let me drink too much *cola* because it has a lot of *sugar*. I love *milk* and sometimes *hot chocolate* in winter. For *snacks*, I enjoy a *biscuit* and a piece of *cake*. My favourite food is *pasta*, but my brother loves *burger* with *chips*. At weekends, we make *sandwiches* with *bread* and ham. I like to *pour* a cold glass of *lemonade* in summer. We *share* an *ice cream* as a treat."),
+
+T('餐厅用餐','食物饮品',[['restaurant','餐厅','n'],['cafe','咖啡馆','n'],['waiter','服务员','n'],['bill','账单','n'],['tip','小费','n'],['book','预订','v'],['serve','服务','v'],['pay','付款','v'],['cost','花费','v'],['price','价格','n'],['cheap','便宜的','adj'],['expensive','贵的','adj'],['free','免费的','adj'],['special','特别的;特价','adj'],['guest','客人','n'],['invite','邀请','v'],['party','聚会','n'],['celebrate','庆祝','v'],['empty','空的','adj'],['bottle','瓶子','n'],['plate','盘子','n'],['napkin','餐巾纸','n'],['seat','座位','n'],['meal','一餐','n'],['delicious','美味的','adj']], "Last Saturday, my parents took me to a nice *restaurant* to *celebrate* my birthday. A friendly *waiter* showed us to our *seat*. The *price* of the steak was quite *expensive*, but the pasta was *cheap*. My dad *paid* the *bill* and left a small *tip*. The waiter *served* us quickly and the food was *delicious*! I want to *invite* my friends and *book* a big table for a *party* next time. My mum brought a *bottle* of juice. There was a *special* cake — it was *free* for the birthday *guest*!"),
+
+// Topics 13-60 will continue in the next data file
+
 T('食物与烹饪','居家与饮食',
-[['cook','烹饪','v'],['meal','一餐','n'],['breakfast','早餐','n'],['lunch','午餐','n'],['dinner','晚餐','n'],['plate','盘子','n'],['bowl','碗','n'],['cup','杯子','n'],['glass','玻璃杯','n'],['knife','刀','n'],['fork','叉子','n'],['spoon','勺子','n'],['pan','平底锅','n'],['pot','锅','n'],['fridge','冰箱','n'],['oven','烤箱','n'],['wash','洗','v'],['clean','清洁','adj'],['taste','味道;尝','n'],['delicious','美味的','adj'],['fresh','新鲜的','adj'],['hot','热的;辣的','adj'],['cold','冷的','adj'],['boil','煮沸','v'],['cut','切','v'],['fry','油炸','v'],['grill','烧烤','v'],['roast','烤','v'],['bake','烘烤','v'],['smell','气味;闻','n'],['hungry','饥饿的','adj'],['thirsty','口渴的','adj'],['full','饱的;满的','adj'],['empty','空的','adj'],['raw','生的','adj'],['ripe','熟的','adj'],['salt','盐','n'],['sugar','糖','n'],['oil','油','n'],['butter','黄油','n']],
-"My mother loves to *cook* in the *kitchen*. Every morning she makes a wonderful *breakfast* for us. I help her set the *table* with *plates*, *bowls*, *cups*, *forks* and *spoons*. For *lunch* I usually have rice and vegetables. *Dinner* is the biggest *meal* of the day. Mom uses a big *pot* to *boil* soup and a *pan* to *fry* fish. On Sundays she *roasts* chicken in the *oven*. We keep vegetables *fresh* in the *fridge*. After eating, I help *wash* the dishes. The food always *tastes* *delicious*! When I smell something good from the kitchen, I get very *hungry*. I prefer *hot* food, but my sister likes *cold* dishes.",
-[
-{q:'What does "delicious" mean?',type:'英→中',opts:['新鲜的','热的','美味的','生的'],answer:2},
-{q:'What does "fridge" mean?',type:'英→中',opts:['烤箱','冰箱','锅','平底锅'],answer:1},
-{q:'What does "ripe" mean?',type:'英→中',opts:['生的','熟的','新鲜的','热的'],answer:1},
-{q:'What does "boil" mean?',type:'英→中',opts:['油炸','烘烤','烧烤','煮沸'],answer:3},
-{q:'哪个词表示"饥饿的"？',type:'中→英',opts:['thirsty','full','hungry','empty'],answer:2},
-{q:'哪个词表示"黄油"？',type:'中→英',opts:['oil','butter','salt','sugar'],answer:1},
-{q:'哪个词表示"气味"？',type:'中→英',opts:['taste','smell','fresh','meal'],answer:1},
-{q:'We need a ___ to cut the bread.',type:'填空',opts:['fork','spoon','knife','plate'],answer:2},
-{q:'The soup is too ___! I cannot eat it yet.',type:'填空',opts:['cold','hot','fresh','ripe'],answer:1},
-{q:'After the big meal, I was completely ___.',type:'填空',opts:['hungry','thirsty','full','empty'],answer:2}
-]),
+[['cook','烹饪','v'],['meal','一餐','n'],['breakfast','早餐','n'],['lunch','午餐','n'],['dinner','晚餐','n'],['plate','盘子','n'],['bowl','碗','n'],['cup','杯子','n'],['glass','玻璃杯','n'],['knife','刀','n'],['fork','叉子','n'],['spoon','勺子','n'],['pan','平底锅','n'],['pot','锅','n'],['fridge','冰箱','n'],['oven','烤箱','n'],['wash','洗','v'],['clean','清洁','adj'],['taste','味道;尝','n'],['delicious','美味的','adj'],['fresh','新鲜的','adj'],['hot','热的;辣的','adj'],['cold','冷的','adj'],['boil','煮沸','v'],['cut','切','v'],['fry','油炸','v'],['grill','烧烤','v'],['roast','烤','v'],['bake','烘烤','v'],['smell','气味;闻','n'],['hungry','饥饿的','adj'],['thirsty','口渴的','adj'],['full','饱的;满的','adj'],['empty','空的','adj'],['salt','盐','n'],['sugar','糖','n'],['oil','油','n'],['butter','黄油','n'],['cheese','奶酪','n'],['vegetable','蔬菜','n']],
+"My mother loves to *cook* in the *kitchen*. Every morning she makes a wonderful *breakfast*. I help her set the table with *plates*, *bowls*, *cups*, *forks* and *spoons*. For *lunch* I usually have rice and *vegetables*. *Dinner* is the biggest *meal* of the day. Mom uses a big *pot* to *boil* soup and a *pan* to *fry* fish. On Sundays she *roasts* chicken in the *oven*. We keep food *fresh* in the *fridge*. After eating, I help *wash* the dishes. The food always *tastes* *delicious*! When I *smell* something good, I get very *hungry*. I never leave the table *empty*.",
+[{q:'What does "delicious" mean?',type:'英→中',opts:['新鲜的','热的','美味的','生的'],answer:2},{q:'What does "fridge" mean?',type:'英→中',opts:['烤箱','冰箱','锅','平底锅'],answer:1},{q:'What does "boil" mean?',type:'英→中',opts:['油炸','烘烤','烧烤','煮沸'],answer:3},{q:'What does "fresh" mean?',type:'英→中',opts:['新鲜的','热的','冷的','美味的'],answer:0},{q:'哪个词表示"饥饿的"？',type:'中→英',opts:['thirsty','full','hungry','empty'],answer:2},{q:'哪个词表示"黄油"？',type:'中→英',opts:['oil','butter','salt','sugar'],answer:1},{q:'哪个词表示"气味"？',type:'中→英',opts:['taste','smell','fresh','meal'],answer:1},{q:'Please ___ the vegetables before cooking.',type:'填空',opts:['cut','wash','boil','fry'],answer:1},{q:'The soup is too ___! I cannot eat it yet.',type:'填空',opts:['cold','hot','fresh','salty'],answer:1},{q:'After the big dinner, I was completely ___.',type:'填空',opts:['hungry','thirsty','full','empty'],answer:2}]),
 
 T('外出用餐','居家与饮食',
-[['restaurant','餐厅','n'],['cafe','咖啡馆','n'],['waiter','服务员','n'],['waitress','女服务员','n'],['bill','账单','n'],['tip','小费','n'],['menu','菜单','n'],['book','预订','v'],['serve','服务','v'],['pay','付款','v'],['cost','花费','v'],['price','价格','n'],['cheap','便宜的','adj'],['expensive','贵的','adj'],['free','免费的','adj'],['special','特别的;特价','adj'],['party','聚会','n'],['celebrate','庆祝','v'],['bottle','瓶子','n'],['napkin','餐巾纸','n'],['seat','座位','n'],['table','餐桌','n'],['order','点餐','v'],['choose','选择','v'],['recommend','推荐','v'],['favourite','最喜欢的','adj'],['popular','受欢迎的','adj'],['crowded','拥挤的','adj'],['noisy','吵闹的','adj'],['quiet','安静的','adj'],['upstairs','楼上','adj'],['downstairs','楼下','adj'],['view','景色','n'],['atmosphere','气氛','n'],['enjoy','享受','v'],['complain','抱怨','v'],['change','零钱;改变','n'],['receipt','收据','n'],['credit card','信用卡','n'],['cash','现金','n']],
-"Last Saturday, my parents took me to a nice *restaurant* to *celebrate* my birthday. A friendly *waiter* showed us to our *seat* near the window with a beautiful *view*. The *atmosphere* was warm and the music was *quiet*. I looked at the *menu* and *chose* a pasta dish. My dad *ordered* steak which was quite *expensive*, but the pasta was *cheap*. The *waiter* *recommended* the chocolate cake for dessert. Dad *paid* the *bill* with his *credit card* and left a small *tip*. The waitress gave us a *receipt*. It was my *favourite* meal ever! I want to *book* a table again next month.",
-[
-{q:'What does "waiter" mean?',type:'英→中',opts:['厨师','服务员','顾客','经理'],answer:1},
-{q:'What does "expensive" mean?',type:'英→中',opts:['便宜的','免费的','贵的','特别的'],answer:2},
-{q:'What does "receipt" mean?',type:'英→中',opts:['账单','小费','菜单','收据'],answer:3},
-{q:'What does "crowded" mean?',type:'英→中',opts:['吵闹的','拥挤的','安静的','受欢迎的'],answer:1},
-{q:'哪个词表示"推荐"？',type:'中→英',opts:['order','choose','recommend','serve'],answer:2},
-{q:'哪个词表示"气氛"？',type:'中→英',opts:['view','atmosphere','crowded','noisy'],answer:1},
-{q:'哪个词表示"预订"？',type:'中→英',opts:['pay','order','serve','book'],answer:3},
-{q:'Could I see the ___, please? I want to order.',type:'填空',opts:['bill','menu','receipt','napkin'],answer:1},
-{q:'The restaurant was very ___ at lunchtime, so we had to wait.',type:'填空',opts:['quiet','noisy','crowded','cheap'],answer:2},
-{q:'We always ___ Chinese New Year with a big dinner.',type:'填空',opts:['celebrate','order','serve','enjoy'],answer:0}
-]),
+[['restaurant','餐厅','n'],['cafe','咖啡馆','n'],['waiter','服务员','n'],['bill','账单','n'],['tip','小费','n'],['menu','菜单','n'],['book','预订','v'],['serve','服务','v'],['pay','付款','v'],['cost','花费','v'],['price','价格','n'],['cheap','便宜的','adj'],['expensive','贵的','adj'],['free','免费的','adj'],['special','特别的;特价','adj'],['party','聚会','n'],['celebrate','庆祝','v'],['bottle','瓶子','n'],['napkin','餐巾纸','n'],['seat','座位','n'],['order','点餐','v'],['choose','选择','v'],['recommend','推荐','v'],['favourite','最喜欢的','adj'],['popular','受欢迎的','adj'],['crowded','拥挤的','adj'],['noisy','吵闹的','adj'],['quiet','安静的','adj'],['view','景色','n'],['atmosphere','气氛','n'],['enjoy','享受','v'],['complain','抱怨','v'],['change','零钱;改变','n'],['receipt','收据','n'],['credit card','信用卡','n'],['cash','现金','n'],['drink','饮料','n'],['dessert','甜点','n'],['starter','开胃菜','n'],['main course','主菜','n']],
+"Last Saturday, my parents took me to a nice *restaurant* to *celebrate* my birthday. A friendly *waiter* showed us to our *seat* near the window with a beautiful *view*. The *atmosphere* was warm and the music was *quiet*. I looked at the *menu* and *chose* a pasta for my *main course*. My dad *ordered* steak which was quite *expensive*, but the pasta was *cheap*. For *dessert*, the *waiter* *recommended* the chocolate cake. Dad *paid* the *bill* with his *credit card* and left a small *tip*. We also got a *receipt*. It was my *favourite* meal ever! Next time I want to *book* a table upstairs.",
+[{q:'What does "waiter" mean?',type:'英→中',opts:['厨师','服务员','顾客','经理'],answer:1},{q:'What does "expensive" mean?',type:'英→中',opts:['便宜的','免费的','贵的','特别的'],answer:2},{q:'What does "receipt" mean?',type:'英→中',opts:['账单','小费','菜单','收据'],answer:3},{q:'What does "crowded" mean?',type:'英→中',opts:['吵闹的','拥挤的','安静的','受欢迎的'],answer:1},{q:'哪个词表示"推荐"？',type:'中→英',opts:['order','choose','recommend','serve'],answer:2},{q:'哪个词表示"气氛"？',type:'中→英',opts:['view','atmosphere','noisy','party'],answer:1},{q:'哪个词表示"预订"？',type:'中→英',opts:['pay','order','serve','book'],answer:3},{q:'Could I see the ___, please? I want to order.',type:'填空',opts:['bill','menu','receipt','napkin'],answer:1},{q:'The restaurant was very ___ at lunchtime.',type:'填空',opts:['quiet','noisy','crowded','cheap'],answer:2},{q:'We always ___ Chinese New Year with a big dinner.',type:'填空',opts:['celebrate','order','serve','enjoy'],answer:0}]),
 
 T('购物与服饰','居家与饮食',
 [['shop','商店','n'],['supermarket','超市','n'],['market','市场','n'],['buy','买','v'],['sell','卖','v'],['pay','付款','v'],['spend','花费','v'],['save','节省;保存','v'],['money','钱','n'],['coin','硬币','n'],['note','纸币;笔记','n'],['price','价格','n'],['cost','费用','n'],['cheap','便宜的','adj'],['expensive','贵的','adj'],['receipt','收据','n'],['change','零钱','n'],['choose','选择','v'],['size','尺寸','n'],['try on','试穿','phr'],['fit','适合','v'],['clothes','衣服','n'],['shirt','衬衫','n'],['t-shirt','T恤','n'],['jacket','夹克','n'],['coat','外套','n'],['sweater','毛衣','n'],['dress','连衣裙','n'],['skirt','裙子','n'],['trousers','裤子','n'],['jeans','牛仔裤','n'],['shorts','短裤','n'],['sock','袜子','n'],['shoe','鞋','n'],['hat','帽子','n'],['scarf','围巾','n'],['glove','手套','n'],['pocket','口袋','n'],['button','纽扣','n'],['zip','拉链','n']],
-"I like going to the *supermarket* with my mum. We *buy* food for the week. I help her *choose* fruit and vegetables. She always checks the *price* before buying. If something is too *expensive*, she looks for a *cheaper* one. Last weekend, we also went to a *clothes* *shop*. I *tried on* a new *jacket* and a warm *sweater*. The *size* was perfect! I also got a new pair of *jeans* and some *socks*. My sister bought a beautiful *dress* for the party. My mum gave the shop assistant a *note* and got some *coins* as *change*. I always *save* some pocket *money* in my piggy bank.",
-[
-{q:'What does "supermarket" mean?',type:'英→中',opts:['市场','商店','超市','商场'],answer:2},
-{q:'What does "try on" mean?',type:'英→中',opts:['购买','试穿','选择','付款'],answer:1},
-{q:'What does "save" mean?',type:'英→中',opts:['花费','付款','节省','选择'],answer:2},
-{q:'What does "pocket" mean?',type:'英→中',opts:['纽扣','拉链','口袋','帽子'],answer:2},
-{q:'哪个词表示"尺寸"？',type:'中→英',opts:['price','size','fit','cost'],answer:1},
-{q:'哪个词表示"围巾"？',type:'中→英',opts:['scarf','glove','hat','coat'],answer:0},
-{q:'哪个词表示"花费(钱)"？',type:'中→英',opts:['buy','pay','spend','sell'],answer:2},
-{q:'The ___ of this jacket is too high.',type:'填空',opts:['size','price','money','note'],answer:1},
-{q:'It is cold outside — wear your ___ and scarf.',type:'填空',opts:['shorts','t-shirt','coat','dress'],answer:2},
-{q:'Does this skirt ___ me? It feels a bit small.',type:'填空',opts:['fit','try','choose','wear'],answer:0}
-]),
+"I like going to the *supermarket* with my mum. We *buy* food for the week. She always checks the *price* before buying. If something is too *expensive*, she looks for a *cheaper* one. Last weekend, we went to a *clothes* *shop*. I *tried on* a new *jacket* and a warm *sweater*. The *size* was perfect! I also got a pair of *jeans* and some *socks*. My sister bought a beautiful *dress* for a *party*. My mum gave the shop assistant a *note* and got some *coins* as *change*. I always *save* some pocket *money*. It is fun to *choose* what to *buy*!",
+[{q:'What does "supermarket" mean?',type:'英→中',opts:['市场','商店','超市','商场'],answer:2},{q:'What does "try on" mean?',type:'英→中',opts:['购买','试穿','选择','付款'],answer:1},{q:'What does "save" mean?',type:'英→中',opts:['花费','付款','节省','选择'],answer:2},{q:'What does "pocket" mean?',type:'英→中',opts:['纽扣','拉链','口袋','帽子'],answer:2},{q:'哪个词表示"尺寸"？',type:'中→英',opts:['price','size','fit','cost'],answer:1},{q:'哪个词表示"围巾"？',type:'中→英',opts:['scarf','glove','hat','coat'],answer:0},{q:'哪个词表示"花费(钱)"？',type:'中→英',opts:['buy','pay','spend','sell'],answer:2},{q:'The ___ of this jacket is too high.',type:'填空',opts:['size','price','money','note'],answer:1},{q:'It is cold outside — wear your ___ and scarf.',type:'填空',opts:['shorts','t-shirt','coat','dress'],answer:2},{q:'Does this skirt ___ me? It feels a bit small.',type:'填空',opts:['fit','try','choose','wear'],answer:0}]),
 
-// UNIT 3: SCHOOL & LEARNING
 T('学校科目','学校与学习',
 [['subject','科目','n'],['maths','数学','n'],['English','英语','n'],['science','科学','n'],['history','历史','n'],['geography','地理','n'],['music','音乐','n'],['art','美术','n'],['PE','体育','n'],['ICT','信息技术','n'],['language','语言','n'],['physics','物理','n'],['chemistry','化学','n'],['biology','生物','n'],['favourite','最喜欢的','adj'],['interesting','有趣的','adj'],['difficult','困难的','adj'],['easy','容易的','adj'],['important','重要的','adj'],['useful','有用的','adj'],['boring','无聊的','adj'],['learn','学习','v'],['study','学习;研究','v'],['teach','教','v'],['understand','理解','v'],['remember','记住','v'],['forget','忘记','v'],['explain','解释','v'],['mean','意思是','v'],['meaning','意思','n'],['example','例子','n'],['mistake','错误','n'],['correct','正确的','adj'],['wrong','错误的','adj'],['check','检查','v'],['improve','提高','v'],['practice','练习','n'],['skill','技能','n'],['knowledge','知识','n'],['education','教育','n']],
-"At school we have many *subjects*. My *favourite* *subject* is *science* because it is very *interesting* and *useful*. We *learn* about plants, animals and the human body. I also like *English* and *maths*. *History* is a little *difficult* for me because I need to *remember* many dates. I sometimes *forget* the names of important people. *Geography* is fun — we *study* about different countries. Our *art* teacher is very kind and she *teaches* us to draw. *PE* is *important* because it keeps us healthy. I think all *subjects* give us important *knowledge*. A good *education* helps us *improve* our *skills*.",
-[
-{q:'What does "subject" mean?',type:'英→中',opts:['项目','科目','主题','题目'],answer:1},
-{q:'What does "difficult" mean?',type:'英→中',opts:['容易的','有趣的','困难的','重要的'],answer:2},
-{q:'What does "explain" mean?',type:'英→中',opts:['理解','学习','教学','解释'],answer:3},
-{q:'What does "knowledge" mean?',type:'英→中',opts:['技能','知识','教育','练习'],answer:1},
-{q:'哪个词表示"提高"？',type:'中→英',opts:['learn','improve','practice','check'],answer:1},
-{q:'哪个词表示"错误"？',type:'中→英',opts:['mistake','example','meaning','skill'],answer:0},
-{q:'哪个词表示"无聊的"？',type:'中→英',opts:['difficult','easy','boring','useful'],answer:2},
-{q:'Can you ___ why the sky is blue?',type:'填空',opts:['learn','teach','explain','understand'],answer:2},
-{q:'I need more ___ before the piano exam.',type:'填空',opts:['practice','knowledge','skill','education'],answer:0},
-{q:'My answer was ___, but hers was wrong.',type:'填空',opts:['correct','difficult','easy','important'],answer:0}
-]),
+"At school we have many *subjects*. My *favourite* is *science* because it is *interesting* and *useful*. I also like *English* and *maths*. *History* is a little *difficult* because I need to *remember* many dates. I sometimes *forget* the names of important people. *Geography* is fun — we *study* about different countries. Our *art* teacher is kind and she *teaches* us to draw. *PE* is *important* because it keeps us healthy. When I make a *mistake*, my teacher helps me find the *correct* answer. I believe all *subjects* give us important *knowledge*. A good *education* helps us *improve* our *skills*.",
+[{q:'What does "subject" mean?',type:'英→中',opts:['项目','科目','主题','题目'],answer:1},{q:'What does "difficult" mean?',type:'英→中',opts:['容易的','有趣的','困难的','重要的'],answer:2},{q:'What does "explain" mean?',type:'英→中',opts:['理解','学习','教学','解释'],answer:3},{q:'What does "knowledge" mean?',type:'英→中',opts:['技能','知识','教育','练习'],answer:1},{q:'哪个词表示"提高"？',type:'中→英',opts:['learn','improve','practice','check'],answer:1},{q:'哪个词表示"错误"？',type:'中→英',opts:['mistake','example','meaning','skill'],answer:0},{q:'哪个词表示"无聊的"？',type:'中→英',opts:['difficult','easy','boring','useful'],answer:2},{q:'Can you ___ why the sky is blue?',type:'填空',opts:['learn','teach','explain','understand'],answer:2},{q:'I need more ___ before the piano exam.',type:'填空',opts:['practice','knowledge','skill','education'],answer:0},{q:'My answer was ___, but hers was wrong.',type:'填空',opts:['correct','difficult','easy','important'],answer:0}]),
 
 T('校园生活','学校与学习',
-[['school','学校','n'],['classroom','教室','n'],['teacher','老师','n'],['student','学生','n'],['classmate','同学','n'],['pupil','小学生','n'],['head teacher','校长','n'],['lesson','课','n'],['course','课程','n'],['bell','铃声','n'],['break','休息','n'],['lunchtime','午餐时间','n'],['homework','作业','n'],['exam','考试','n'],['test','测验','n'],['mark','分数','n'],['grade','成绩;年级','n'],['pass','通过','v'],['fail','不及格','v'],['answer','答案;回答','n'],['question','问题','n'],['ask','问','v'],['discuss','讨论','v'],['share','分享','v'],['help','帮助','v'],['listen','听','v'],['speak','说','v'],['write','写','v'],['read','读','v'],['draw','画','v'],['play','玩','v'],['rule','规则','n'],['uniform','校服','n'],['library','图书馆','n'],['playground','操场','n'],['notice','通知','n'],['prize','奖品','n'],['club','俱乐部','n'],['trip','旅行','n'],['report','报告;成绩单','n']],
-"Our *school* is big and has thirty *classrooms*. My *teacher* is very nice. When I have a *question*, I *ask* her and she *answers* patiently. There are twenty-five *students* in my class. My best *classmate* sits next to me and we often *discuss* ideas. When the *bell* rings, we have a *break* and *play* on the *playground*. During *lunchtime*, I *share* food with my friends. After school, I do my *homework*. We have a science *test* tomorrow, so I need to *study*. I hope I can *pass* the *exam* and get a good *grade*. I also *listen* carefully in *lessons* because the *rules* say we must pay attention. I am a member of the art *club* and I love school *trips*!",
-[
-{q:'What does "classmate" mean?',type:'英→中',opts:['老师','同学','朋友','学生'],answer:1},
-{q:'What does "break" mean?',type:'英→中',opts:['休息','铃声','课程','考试'],answer:0},
-{q:'What does "fail" mean?',type:'英→中',opts:['通过','不及格','回答','讨论'],answer:1},
-{q:'What does "playground" mean?',type:'英→中',opts:['教室','图书馆','操场','俱乐部'],answer:2},
-{q:'哪个词表示"讨论"？',type:'中→英',opts:['ask','answer','share','discuss'],answer:3},
-{q:'哪个词表示"校服"？',type:'中→英',opts:['uniform','notice','report','prize'],answer:0},
-{q:'哪个词表示"报告;成绩单"？',type:'中→英',opts:['notice','report','grade','mark'],answer:1},
-{q:'The ___ rang and all students ran to the playground.',type:'填空',opts:['break','bell','lesson','test'],answer:1},
-{q:'I hope to get a good ___ on my report this term.',type:'填空',opts:['mark','grade','exam','test'],answer:0},
-{q:'There is a ___ on the wall about the school trip.',type:'填空',opts:['report','rule','notice','prize'],answer:2}
-]),
+[['school','学校','n'],['classroom','教室','n'],['teacher','老师','n'],['student','学生','n'],['classmate','同学','n'],['pupil','小学生','n'],['head teacher','校长','n'],['lesson','课','n'],['bell','铃声','n'],['break','休息','n'],['lunchtime','午餐时间','n'],['homework','作业','n'],['exam','考试','n'],['test','测验','n'],['mark','分数','n'],['grade','成绩;年级','n'],['pass','通过','v'],['fail','不及格','v'],['answer','答案;回答','n'],['question','问题','n'],['ask','问','v'],['discuss','讨论','v'],['share','分享','v'],['help','帮助','v'],['listen','听','v'],['speak','说','v'],['write','写','v'],['read','读','v'],['draw','画','v'],['play','玩','v'],['rule','规则','n'],['uniform','校服','n'],['library','图书馆','n'],['playground','操场','n'],['notice','通知','n'],['prize','奖品','n'],['club','俱乐部','n'],['trip','旅行','n'],['report','报告;成绩单','n'],['course','课程','n']],
+"Our *school* is big and has thirty *classrooms*. My *teacher* is very nice. When I have a *question*, I *ask* her and she *answers* patiently. There are twenty-five *students* in my class. My best *classmate* sits next to me and we often *discuss* ideas. When the *bell* rings, we have a *break* and *play* on the *playground*. During *lunchtime*, I *share* food with my friends. After school, I do my *homework*. We have a science *test* tomorrow, so I need to *study*. I hope I can *pass* the *exam* and get a good *grade*. I *listen* carefully in *lessons* because the *rules* say we must. I am a member of the art *club* and I love school *trips*!",
+[{q:'What does "classmate" mean?',type:'英→中',opts:['老师','同学','朋友','学生'],answer:1},{q:'What does "break" mean?',type:'英→中',opts:['休息','铃声','课程','考试'],answer:0},{q:'What does "fail" mean?',type:'英→中',opts:['通过','不及格','回答','讨论'],answer:1},{q:'What does "playground" mean?',type:'英→中',opts:['教室','图书馆','操场','俱乐部'],answer:2},{q:'哪个词表示"讨论"？',type:'中→英',opts:['ask','answer','share','discuss'],answer:3},{q:'哪个词表示"校服"？',type:'中→英',opts:['uniform','notice','report','prize'],answer:0},{q:'哪个词表示"报告;成绩单"？',type:'中→英',opts:['notice','report','grade','mark'],answer:1},{q:'The ___ rang and all students ran outside.',type:'填空',opts:['break','bell','lesson','test'],answer:1},{q:'I hope to get a good ___ on my test.',type:'填空',opts:['mark','grade','exam','test'],answer:0},{q:'There is a ___ on the wall about the trip.',type:'填空',opts:['report','rule','notice','prize'],answer:2}])
 // Topics 11-15: School & Learning + Health & Activities
 
 T('学习与备考','学校与学习',
