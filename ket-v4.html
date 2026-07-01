@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KET词汇训练</title>
+<style>
+:root{--pri:#1a6b5a;--prl:#e8f5f0;--bg:#f8fafb;--card:#fff;--tx:#1e293b;--mu:#94a3b8;--bd:#e5e7eb;--gr:#16a34a;--rd:#dc2626}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--tx)}
+.topbar{background:var(--card);border-bottom:1px solid var(--bd);padding:0 14px;height:50px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.brand{font-size:14px;font-weight:700;color:var(--pri)}
+.btn{padding:8px 14px;border-radius:8px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-pri{background:var(--pri);color:#fff}.btn-out{background:#fff;color:var(--pri);border:1.5px solid var(--pri)}
+.layout{display:flex;height:calc(100vh - 50px)}
+.sidebar{width:200px;min-width:200px;background:var(--card);border-right:1px solid var(--bd);overflow-y:auto;padding:4px}
+.ti{padding:10px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;margin-bottom:1px}
+.ti:hover{background:#f1f5f9}.ti.on{background:var(--prl);color:var(--pri);font-weight:700}
+.ti .n{font-size:10px;color:var(--mu)}
+.main{flex:1;overflow-y:auto;padding:16px 20px}
+.passage{background:var(--card);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:16px 20px;margin-bottom:14px;border-left:4px solid var(--pri);font-size:15px;line-height:2.2;color:#475569}
+.passage b{color:var(--pri);background:var(--prl);padding:1px 4px;border-radius:3px;cursor:pointer}
+.passage b:hover{background:#cce8dc}
+.btns{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px;margin-bottom:14px}
+.wc{background:var(--card);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.04);transition:transform .1s}
+.wc:hover{transform:translateY(-1px)}.wc .em{font-size:30px;min-width:34px;text-align:center}
+.wc .en{font-weight:700;font-size:13px}.wc .cn{font-size:11px;color:var(--mu)}
+.test{text-align:center;background:var(--card);border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.test .big{font-size:80px;margin:16px}.test h3{font-size:15px;margin-bottom:6px}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:500px;margin:0 auto}
+.to{padding:14px;border:3px solid var(--bd);border-radius:12px;cursor:pointer;font-size:15px;font-weight:700;background:#fff}
+.to:hover{border-color:var(--pri);background:var(--prl)}
+.to.ok{border-color:var(--gr);background:#f0fdf4;color:#065f46}.to.no{border-color:var(--rd);background:#fef2f2;color:#991b1b}
+.score{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;display:none;align-items:center;justify-content:center}
+.score>div{background:#fff;border-radius:16px;padding:24px;max-width:400px;width:90%;text-align:center}
+.score .big{font-size:64px;margin-bottom:12px}
+.sect{font-size:10px;color:var(--mu);padding:8px 12px 2px;font-weight:700;letter-spacing:1px}
+@media(max-width:700px){.sidebar{width:130px;min-width:130px}.words{grid-template-columns:1fr 1fr}.tg{grid-template-columns:1fr}}
+@media(max-width:450px){.layout{flex-direction:column}.sidebar{width:100%;min-width:0;max-height:130px}}
+</style>
+</head>
+<body>
+<div class="topbar"><span class="brand">KET词汇训练</span><button class="btn btn-pri" id="btnTest" onclick="startTest()">图片测试</button></div>
+<div class="layout">
+<div class="sidebar" id="sidebar"></div>
+<div class="main" id="main"></div>
+</div>
+<div class="score" id="score"><div><div class="big" id="se"></div><h2 id="st"></h2><p id="sr" style="color:var(--mu);margin:8px 0 16px"></p><button class="btn btn-pri" onclick="document.getElementById('score').style.display='none'">继续</button></div></div>
+
+<!-- Data stored in HTML, JS reads from DOM -->
+<div id="_d" style="display:none">
+<!-- Topic 0 -->
+<div data-t="0" data-n="家人与朋友" data-u="人物与日常" data-p="My family is not very big. I live with my mother and father. I have one brother and one sister. My brother is young. My grandmother and grandfather live near us. We visit them every weekend. My aunt and uncle come together with my cousin. My best friend is my neighbour. He is kind and friendly. I invite him to my party. All our guests smile and laugh. I love my family because they care about me.">
+<div data-e="family" data-c="家庭;家人" data-i="👪" data-tp="n"></div>
+<div data-e="mother" data-c="母亲" data-i="👩" data-tp="n"></div>
+<div data-e="father" data-c="父亲" data-i="👨" data-tp="n"></div>
+<div data-e="parent" data-c="父亲/母亲" data-i="🧑" data-tp="n"></div>
+<div data-e="child" data-c="孩子" data-i="👧" data-tp="n"></div>
+<div data-e="baby" data-c="婴儿" data-i="👶" data-tp="n"></div>
+<div data-e="brother" data-c="兄弟" data-i="👦" data-tp="n"></div>
+<div data-e="sister" data-c="姐妹" data-i="👧" data-tp="n"></div>
+<div data-e="son" data-c="儿子" data-i="👦" data-tp="n"></div>
+<div data-e="daughter" data-c="女儿" data-i="👧" data-tp="n"></div>
+<div data-e="grandmother" data-c="奶奶;外婆" data-i="👵" data-tp="n"></div>
+<div data-e="grandfather" data-c="爷爷;外公" data-i="👴" data-tp="n"></div>
+<div data-e="aunt" data-c="阿姨;姑姑" data-i="👩" data-tp="n"></div>
+<div data-e="uncle" data-c="叔叔;舅舅" data-i="👨" data-tp="n"></div>
+<div data-e="cousin" data-c="堂表兄妹" data-i="👫" data-tp="n"></div>
+<div data-e="friend" data-c="朋友" data-i="🤝" data-tp="n"></div>
+<div data-e="neighbour" data-c="邻居" data-i="🏘" data-tp="n"></div>
+<div data-e="guest" data-c="客人" data-i="🎁" data-tp="n"></div>
+<div data-e="married" data-c="已婚的" data-i="💍" data-tp="adj"></div>
+<div data-e="single" data-c="单身的" data-i="👤" data-tp="adj"></div>
+<div data-e="young" data-c="年轻的" data-i="🌱" data-tp="adj"></div>
+<div data-e="old" data-c="年老的" data-i="👴" data-tp="adj"></div>
+<div data-e="together" data-c="一起" data-i="👥" data-tp="adv"></div>
+<div data-e="live" data-c="居住;生活" data-i="🏡" data-tp="v"></div>
+<div data-e="love" data-c="爱" data-i="❤" data-tp="v"></div>
+<div data-e="care" data-c="关心;照顾" data-i="💝" data-tp="v"></div>
+<div data-e="visit" data-c="拜访;参观" data-i="🏠" data-tp="v"></div>
+<div data-e="invite" data-c="邀请" data-i="✉" data-tp="v"></div>
+<div data-e="stay" data-c="停留;待" data-i="🛋" data-tp="v"></div>
+<div data-e="leave" data-c="离开" data-i="🚪" data-tp="v"></div>
+<div data-e="meet" data-c="遇见;见面" data-i="🤝" data-tp="v"></div>
+<div data-e="know" data-c="知道;认识" data-i="🧠" data-tp="v"></div>
+<div data-e="remember" data-c="记住" data-i="💭" data-tp="v"></div>
+<div data-e="introduce" data-c="介绍" data-i="💬" data-tp="v"></div>
+<div data-e="smile" data-c="微笑" data-i="😊" data-tp="v"></div>
+<div data-e="laugh" data-c="笑" data-i="😂" data-tp="v"></div>
+<div data-e="kind" data-c="善良的" data-i="💝" data-tp="adj"></div>
+<div data-e="friendly" data-c="友好的" data-i="😄" data-tp="adj"></div>
+<div data-e="helpful" data-c="乐于助人的" data-i="👍" data-tp="adj"></div>
+<div data-e="special" data-c="特别的" data-i="⭐" data-tp="adj"></div>
+</div>
+<!-- Topic 1 -->
+<div data-t="1" data-n="描述人物" data-u="人物与日常" data-p="My best friend is a tall and pretty girl. She has long dark hair and big eyes. She wears glasses when reading. She is very kind and polite. Sometimes she is shy, but she loves to smile and laugh with friends. Her voice is soft. She is not lazy at all. She exercises to stay strong. People say she is clever. Her appearance is different from her brother, who is heavy. But they are both very funny!">
+<div data-e="tall" data-c="高的" data-i="🦒" data-tp="adj"></div>
+<div data-e="short" data-c="矮的;短的" data-i="📏" data-tp="adj"></div>
+<div data-e="beautiful" data-c="美丽的" data-i="💐" data-tp="adj"></div>
+<div data-e="pretty" data-c="漂亮的" data-i="🌸" data-tp="adj"></div>
+<div data-e="handsome" data-c="英俊的" data-i="🌟" data-tp="adj"></div>
+<div data-e="strong" data-c="强壮的" data-i="💪" data-tp="adj"></div>
+<div data-e="thin" data-c="瘦的" data-i="〰" data-tp="adj"></div>
+<div data-e="heavy" data-c="重的;胖的" data-i="🏋" data-tp="adj"></div>
+<div data-e="hair" data-c="头发" data-i="💇" data-tp="n"></div>
+<div data-e="eyes" data-c="眼睛" data-i="👀" data-tp="n"></div>
+<div data-e="glasses" data-c="眼镜" data-i="👓" data-tp="n"></div>
+<div data-e="voice" data-c="声音" data-i="🗣" data-tp="n"></div>
+<div data-e="clever" data-c="聪明的" data-i="🧠" data-tp="adj"></div>
+<div data-e="lazy" data-c="懒惰的" data-i="🦥" data-tp="adj"></div>
+<div data-e="quiet" data-c="安静的" data-i="🤫" data-tp="adj"></div>
+<div data-e="shy" data-c="害羞的" data-i="😳" data-tp="adj"></div>
+<div data-e="funny" data-c="有趣的" data-i="🤣" data-tp="adj"></div>
+<div data-e="brave" data-c="勇敢的" data-i="🦁" data-tp="adj"></div>
+<div data-e="honest" data-c="诚实的" data-i="🤞" data-tp="adj"></div>
+<div data-e="polite" data-c="有礼貌的" data-i="🙇" data-tp="adj"></div>
+<div data-e="describe" data-c="描述" data-i="📝" data-tp="v"></div>
+<div data-e="appearance" data-c="外貌" data-i="🪞" data-tp="n"></div>
+<div data-e="different" data-c="不同的" data-i="🔀" data-tp="adj"></div>
+<div data-e="similar" data-c="相似的" data-i="🟰" data-tp="adj"></div>
+<div data-e="same" data-c="相同的" data-i="🟢" data-tp="adj"></div>
+<div data-e="both" data-c="两者都" data-i="✌" data-tp="adj"></div>
+<div data-e="person" data-c="人" data-i="🧑" data-tp="n"></div>
+<div data-e="wear" data-c="穿;戴" data-i="👕" data-tp="v"></div>
+<div data-e="carry" data-c="携带" data-i="🎒" data-tp="v"></div>
+<div data-e="become" data-c="变成" data-i="🔄" data-tp="v"></div>
+<div data-e="grow" data-c="成长;变得" data-i="🌳" data-tp="v"></div>
+<div data-e="change" data-c="改变" data-i="🔁" data-tp="v"></div>
+<div data-e="look" data-c="看" data-i="👁" data-tp="v"></div>
+<div data-e="listen" data-c="听" data-i="👂" data-tp="v"></div>
+<div data-e="touch" data-c="触摸" data-i="🖐" data-tp="v"></div>
+<div data-e="taste" data-c="尝" data-i="👅" data-tp="v"></div>
+<div data-e="think" data-c="思考" data-i="🤔" data-tp="v"></div>
+<div data-e="patient" data-c="耐心的" data-i="🧘" data-tp="adj"></div>
+<div data-e="confident" data-c="自信的" data-i="💪" data-tp="adj"></div>
+<div data-e="serious" data-c="严肃的" data-i="😐" data-tp="adj"></div>
+</div>
+<!-- Topic 2 -->
+<div data-t="2" data-n="感受与情绪" data-u="人物与日常" data-p="Yesterday I had many different feelings. In the morning I was excited for Sports Day. But before the race, I felt nervous. My friend said stay calm and do not worry. When I won, I felt so proud and happy! My parents were surprised. In the evening I was tired but not bored. I really enjoy being with friends. Sometimes I feel lonely when I am alone, but my dog makes me happy. I hate feeling sad or upset. I hope tomorrow is just as wonderful!">
+<div data-e="happy" data-c="快乐的" data-i="😊" data-tp="adj"></div>
+<div data-e="sad" data-c="悲伤的" data-i="😢" data-tp="adj"></div>
+<div data-e="angry" data-c="生气的" data-i="😡" data-tp="adj"></div>
+<div data-e="excited" data-c="兴奋的" data-i="🤩" data-tp="adj"></div>
+<div data-e="worried" data-c="担心的" data-i="😟" data-tp="adj"></div>
+<div data-e="afraid" data-c="害怕的" data-i="😨" data-tp="adj"></div>
+<div data-e="surprised" data-c="惊讶的" data-i="😲" data-tp="adj"></div>
+<div data-e="tired" data-c="累的" data-i="😴" data-tp="adj"></div>
+<div data-e="bored" data-c="无聊的" data-i="🥱" data-tp="adj"></div>
+<div data-e="proud" data-c="自豪的" data-i="🥳" data-tp="adj"></div>
+<div data-e="nervous" data-c="紧张的" data-i="😰" data-tp="adj"></div>
+<div data-e="calm" data-c="冷静的" data-i="😌" data-tp="adj"></div>
+<div data-e="upset" data-c="难过的" data-i="😞" data-tp="adj"></div>
+<div data-e="lonely" data-c="孤独的" data-i="🚶" data-tp="adj"></div>
+<div data-e="feel" data-c="感觉" data-i="🤲" data-tp="v"></div>
+<div data-e="enjoy" data-c="享受" data-i="😋" data-tp="v"></div>
+<div data-e="hate" data-c="讨厌;恨" data-i="👎" data-tp="v"></div>
+<div data-e="cry" data-c="哭" data-i="😭" data-tp="v"></div>
+<div data-e="worry" data-c="担心" data-i="😟" data-tp="v"></div>
+<div data-e="hope" data-c="希望" data-i="🙏" data-tp="v"></div>
+<div data-e="wish" data-c="希望;祝愿" data-i="🌠" data-tp="v"></div>
+<div data-e="wonderful" data-c="精彩的" data-i="👏" data-tp="adj"></div>
+<div data-e="terrible" data-c="可怕的" data-i="💀" data-tp="adj"></div>
+<div data-e="strange" data-c="奇怪的" data-i="🤨" data-tp="adj"></div>
+<div data-e="relax" data-c="放松" data-i="🧘" data-tp="v"></div>
+<div data-e="fear" data-c="恐惧" data-i="😱" data-tp="n"></div>
+<div data-e="joy" data-c="快乐" data-i="😄" data-tp="n"></div>
+<div data-e="surprise" data-c="惊喜" data-i="🎉" data-tp="n"></div>
+<div data-e="mind" data-c="介意;头脑" data-i="🤔" data-tp="v"></div>
+<div data-e="matter" data-c="重要;要紧" data-i="❗" data-tp="v"></div>
+<div data-e="perhaps" data-c="也许" data-i="🤷" data-tp="adv"></div>
+<div data-e="really" data-c="真正地" data-i="✅" data-tp="adv"></div>
+<div data-e="quite" data-c="相当;很" data-i="📊" data-tp="adv"></div>
+<div data-e="enough" data-c="足够的" data-i="👍" data-tp="adj"></div>
+<div data-e="alone" data-c="独自" data-i="🚶" data-tp="adv"></div>
+<div data-e="brave" data-c="勇敢的" data-i="🦸" data-tp="adj"></div>
+<div data-e="feeling" data-c="感觉;情感" data-i="💝" data-tp="n"></div>
+<div data-e="dream" data-c="梦;梦想" data-i="💤" data-tp="n"></div>
+<div data-e="free" data-c="空闲的;自由的" data-i="🕊" data-tp="adj"></div>
+<div data-e="ready" data-c="准备好的" data-i="👍" data-tp="adj"></div>
+</div>
+<!-- Topic 3 -->
+<div data-t="3" data-n="日常生活" data-u="人物与日常" data-p="I usually wake at seven in the morning. I wake my brother too. After breakfast I leave home and arrive at school early. Lessons begin at eight. In the afternoon, I return home and rest. Then I start homework and try to finish before dinner. My mum says do not hurry! Before I sleep at night, I read a book. I never stay up late. I am busy on weekdays but free on weekends. Today was great. I hope tomorrow is too!">
+<div data-e="morning" data-c="早晨" data-i="🌅" data-tp="n"></div>
+<div data-e="afternoon" data-c="下午" data-i="☀" data-tp="n"></div>
+<div data-e="evening" data-c="傍晚" data-i="🌆" data-tp="n"></div>
+<div data-e="night" data-c="夜晚" data-i="🌙" data-tp="n"></div>
+<div data-e="today" data-c="今天" data-i="📅" data-tp="n"></div>
+<div data-e="tomorrow" data-c="明天" data-i="🔜" data-tp="n"></div>
+<div data-e="yesterday" data-c="昨天" data-i="⏪" data-tp="n"></div>
+<div data-e="wake" data-c="醒来" data-i="⏰" data-tp="v"></div>
+<div data-e="sleep" data-c="睡觉" data-i="😴" data-tp="v"></div>
+<div data-e="rest" data-c="休息" data-i="🛋" data-tp="v"></div>
+<div data-e="hurry" data-c="赶快" data-i="🏃" data-tp="v"></div>
+<div data-e="finish" data-c="完成" data-i="✅" data-tp="v"></div>
+<div data-e="begin" data-c="开始" data-i="▶" data-tp="v"></div>
+<div data-e="start" data-c="开始" data-i="🚀" data-tp="v"></div>
+<div data-e="arrive" data-c="到达" data-i="🏁" data-tp="v"></div>
+<div data-e="return" data-c="返回" data-i="↩" data-tp="v"></div>
+<div data-e="wait" data-c="等待" data-i="⌛" data-tp="v"></div>
+<div data-e="bring" data-c="带来" data-i="📦" data-tp="v"></div>
+<div data-e="take" data-c="拿走" data-i="✋" data-tp="v"></div>
+<div data-e="put" data-c="放" data-i="📥" data-tp="v"></div>
+<div data-e="give" data-c="给" data-i="🎁" data-tp="v"></div>
+<div data-e="keep" data-c="保持" data-i="🔒" data-tp="v"></div>
+<div data-e="early" data-c="早的" data-i="🐓" data-tp="adj"></div>
+<div data-e="late" data-c="晚的" data-i="🦉" data-tp="adj"></div>
+<div data-e="quick" data-c="快的" data-i="⚡" data-tp="adj"></div>
+<div data-e="slow" data-c="慢的" data-i="🐢" data-tp="adj"></div>
+<div data-e="busy" data-c="忙碌的" data-i="🐝" data-tp="adj"></div>
+<div data-e="always" data-c="总是" data-i="💯" data-tp="adv"></div>
+<div data-e="usually" data-c="通常" data-i="📊" data-tp="adv"></div>
+<div data-e="sometimes" data-c="有时候" data-i="🎲" data-tp="adv"></div>
+<div data-e="never" data-c="从不" data-i="🚫" data-tp="adv"></div>
+<div data-e="often" data-c="经常" data-i="🔄" data-tp="adv"></div>
+<div data-e="again" data-c="再次" data-i="🔁" data-tp="adv"></div>
+<div data-e="already" data-c="已经" data-i="✔" data-tp="adv"></div>
+<div data-e="get" data-c="得到;变得" data-i="📨" data-tp="v"></div>
+<div data-e="go" data-c="去" data-i="🚶" data-tp="v"></div>
+<div data-e="come" data-c="来" data-i="🏠" data-tp="v"></div>
+<div data-e="leave" data-c="离开" data-i="🚪" data-tp="v"></div>
+<div data-e="stay" data-c="待;停留" data-i="🛋" data-tp="v"></div>
+<div data-e="work" data-c="工作" data-i="💼" data-tp="v"></div>
+</div>
+<!-- Topic 4 -->
+<div data-t="4" data-n="家与房间" data-u="居家与饮食" data-p="My favourite room is my bedroom. It is comfortable and bright. There is a bed near the window. I have a wooden desk with a lamp. Books are on the shelf. A wardrobe holds my clothes. There is a mirror on the wall. The floor has a soft carpet. I keep my room tidy, but sometimes it gets messy. Downstairs, the living room has a sofa and a coffee table. We have a small garden outside. I love every corner of our home.">
+<div data-e="room" data-c="房间" data-i="🚪" data-tp="n"></div>
+<div data-e="bedroom" data-c="卧室" data-i="🛏" data-tp="n"></div>
+<div data-e="bathroom" data-c="浴室" data-i="🛁" data-tp="n"></div>
+<div data-e="kitchen" data-c="厨房" data-i="🍳" data-tp="n"></div>
+<div data-e="garden" data-c="花园" data-i="🌻" data-tp="n"></div>
+<div data-e="door" data-c="门" data-i="🚪" data-tp="n"></div>
+<div data-e="window" data-c="窗户" data-i="🪟" data-tp="n"></div>
+<div data-e="floor" data-c="地板" data-i="🏠" data-tp="n"></div>
+<div data-e="wall" data-c="墙" data-i="🧱" data-tp="n"></div>
+<div data-e="stairs" data-c="楼梯" data-i="🪜" data-tp="n"></div>
+<div data-e="table" data-c="桌子" data-i="🪑" data-tp="n"></div>
+<div data-e="chair" data-c="椅子" data-i="💺" data-tp="n"></div>
+<div data-e="bed" data-c="床" data-i="🛏" data-tp="n"></div>
+<div data-e="sofa" data-c="沙发" data-i="🛋" data-tp="n"></div>
+<div data-e="desk" data-c="书桌" data-i="📝" data-tp="n"></div>
+<div data-e="lamp" data-c="灯" data-i="💡" data-tp="n"></div>
+<div data-e="shelf" data-c="架子" data-i="📚" data-tp="n"></div>
+<div data-e="comfortable" data-c="舒适的" data-i="😌" data-tp="adj"></div>
+<div data-e="bright" data-c="明亮的" data-i="☀" data-tp="adj"></div>
+<div data-e="tidy" data-c="整洁的" data-i="✨" data-tp="adj"></div>
+<div data-e="messy" data-c="凌乱的" data-i="💥" data-tp="adj"></div>
+<div data-e="upstairs" data-c="楼上" data-i="⬆" data-tp="adv"></div>
+<div data-e="downstairs" data-c="楼下" data-i="⬇" data-tp="adv"></div>
+<div data-e="inside" data-c="在里面" data-i="🏠" data-tp="adv"></div>
+<div data-e="outside" data-c="在外面" data-i="🌳" data-tp="adv"></div>
+<div data-e="corner" data-c="角落" data-i="📐" data-tp="n"></div>
+<div data-e="entrance" data-c="入口" data-i="🚶" data-tp="n"></div>
+<div data-e="roof" data-c="屋顶" data-i="🏠" data-tp="n"></div>
+<div data-e="space" data-c="空间" data-i="🌌" data-tp="n"></div>
+<div data-e="move" data-c="移动;搬家" data-i="📦" data-tp="v"></div>
+<div data-e="build" data-c="建造" data-i="🔨" data-tp="v"></div>
+<div data-e="own" data-c="拥有" data-i="🔑" data-tp="v"></div>
+<div data-e="picture" data-c="画;照片" data-i="🖼" data-tp="n"></div>
+<div data-e="curtain" data-c="窗帘" data-i="🪟" data-tp="n"></div>
+<div data-e="mirror" data-c="镜子" data-i="🪞" data-tp="n"></div>
+<div data-e="key" data-c="钥匙" data-i="🔑" data-tp="n"></div>
+<div data-e="light" data-c="灯;光线" data-i="💡" data-tp="n"></div>
+<div data-e="clock" data-c="钟" data-i="🕐" data-tp="n"></div>
+<div data-e="television" data-c="电视" data-i="📺" data-tp="n"></div>
+<div data-e="computer" data-c="电脑" data-i="💻" data-tp="n"></div>
+</div>
+<!-- Topic 5 -->
+<div data-t="5" data-n="食物与烹饪" data-u="居家与饮食" data-p="My mother loves to cook in the kitchen. Every morning she makes a wonderful breakfast. I help her set the table with plates and cups. For lunch I usually have rice and vegetables. Dinner is the biggest meal of the day. Mom uses a big pot to boil soup and a pan to fry fish. We keep food fresh in the fridge. After eating, I help wash the dishes. The food always tastes delicious! When I smell something good from the kitchen, I get very hungry. I never leave the table empty.">
+<div data-e="cook" data-c="烹饪" data-i="🍳" data-tp="v"></div>
+<div data-e="meal" data-c="一餐" data-i="🍽" data-tp="n"></div>
+<div data-e="breakfast" data-c="早餐" data-i="🥐" data-tp="n"></div>
+<div data-e="lunch" data-c="午餐" data-i="🍱" data-tp="n"></div>
+<div data-e="dinner" data-c="晚餐" data-i="🍲" data-tp="n"></div>
+<div data-e="plate" data-c="盘子" data-i="🍽" data-tp="n"></div>
+<div data-e="bowl" data-c="碗" data-i="🥣" data-tp="n"></div>
+<div data-e="cup" data-c="杯子" data-i="☕" data-tp="n"></div>
+<div data-e="glass" data-c="玻璃杯" data-i="🥛" data-tp="n"></div>
+<div data-e="knife" data-c="刀" data-i="🔪" data-tp="n"></div>
+<div data-e="fork" data-c="叉子" data-i="🍴" data-tp="n"></div>
+<div data-e="spoon" data-c="勺子" data-i="🥄" data-tp="n"></div>
+<div data-e="pan" data-c="平底锅" data-i="🍳" data-tp="n"></div>
+<div data-e="pot" data-c="锅" data-i="🥘" data-tp="n"></div>
+<div data-e="fridge" data-c="冰箱" data-i="❄" data-tp="n"></div>
+<div data-e="oven" data-c="烤箱" data-i="🔥" data-tp="n"></div>
+<div data-e="wash" data-c="洗" data-i="🧼" data-tp="v"></div>
+<div data-e="taste" data-c="味道;尝" data-i="👅" data-tp="n"></div>
+<div data-e="delicious" data-c="美味的" data-i="😋" data-tp="adj"></div>
+<div data-e="fresh" data-c="新鲜的" data-i="🌿" data-tp="adj"></div>
+<div data-e="hot" data-c="热的;辣的" data-i="🔥" data-tp="adj"></div>
+<div data-e="cold" data-c="冷的" data-i="🧊" data-tp="adj"></div>
+<div data-e="boil" data-c="煮沸" data-i="♨" data-tp="v"></div>
+<div data-e="cut" data-c="切" data-i="🔪" data-tp="v"></div>
+<div data-e="fry" data-c="油炸" data-i="🍳" data-tp="v"></div>
+<div data-e="grill" data-c="烧烤" data-i="🔥" data-tp="v"></div>
+<div data-e="roast" data-c="烤" data-i="🍗" data-tp="v"></div>
+<div data-e="bake" data-c="烘烤" data-i="🍞" data-tp="v"></div>
+<div data-e="smell" data-c="气味;闻" data-i="👃" data-tp="n"></div>
+<div data-e="hungry" data-c="饥饿的" data-i="😋" data-tp="adj"></div>
+<div data-e="thirsty" data-c="口渴的" data-i="💧" data-tp="adj"></div>
+<div data-e="full" data-c="饱的;满的" data-i="🈵" data-tp="adj"></div>
+<div data-e="empty" data-c="空的" data-i="🈳" data-tp="adj"></div>
+<div data-e="salt" data-c="盐" data-i="🧂" data-tp="n"></div>
+<div data-e="sugar" data-c="糖" data-i="🍬" data-tp="n"></div>
+<div data-e="oil" data-c="油" data-i="🫗" data-tp="n"></div>
+<div data-e="butter" data-c="黄油" data-i="🧈" data-tp="n"></div>
+<div data-e="cheese" data-c="奶酪" data-i="🧀" data-tp="n"></div>
+<div data-e="vegetable" data-c="蔬菜" data-i="🥬" data-tp="n"></div>
+<div data-e="fruit" data-c="水果" data-i="🍎" data-tp="n"></div>
+</div>
+<!-- Topic 6 -->
+<div data-t="6" data-n="饮品与零食" data-u="居家与饮食" data-p="After school I usually feel thirsty and need a drink. My mum says I should drink more water. She does not let me drink too much cola because it has a lot of sugar. I love milk and sometimes hot chocolate in winter. For snacks, I enjoy a biscuit and a piece of cake. My favourite food is pasta, but my brother loves burgers with chips. At weekends, we make sandwiches with bread and ham. I like to share an ice cream as a treat. We always have tea and coffee for the guests.">
+<div data-e="drink" data-c="饮料;喝" data-i="🥤" data-tp="n"></div>
+<div data-e="water" data-c="水" data-i="💧" data-tp="n"></div>
+<div data-e="milk" data-c="牛奶" data-i="🥛" data-tp="n"></div>
+<div data-e="tea" data-c="茶" data-i="🍵" data-tp="n"></div>
+<div data-e="coffee" data-c="咖啡" data-i="☕" data-tp="n"></div>
+<div data-e="cola" data-c="可乐" data-i="🥤" data-tp="n"></div>
+<div data-e="juice" data-c="果汁" data-i="🧃" data-tp="n"></div>
+<div data-e="lemonade" data-c="柠檬水" data-i="🍋" data-tp="n"></div>
+<div data-e="chocolate" data-c="巧克力" data-i="🍫" data-tp="n"></div>
+<div data-e="snack" data-c="零食" data-i="🍿" data-tp="n"></div>
+<div data-e="biscuit" data-c="饼干" data-i="🍪" data-tp="n"></div>
+<div data-e="cake" data-c="蛋糕" data-i="🎂" data-tp="n"></div>
+<div data-e="bread" data-c="面包" data-i="🍞" data-tp="n"></div>
+<div data-e="rice" data-c="米饭" data-i="🍚" data-tp="n"></div>
+<div data-e="pasta" data-c="意大利面" data-i="🍝" data-tp="n"></div>
+<div data-e="noodle" data-c="面条" data-i="🍜" data-tp="n"></div>
+<div data-e="sandwich" data-c="三明治" data-i="🥪" data-tp="n"></div>
+<div data-e="burger" data-c="汉堡" data-i="🍔" data-tp="n"></div>
+<div data-e="chips" data-c="薯条" data-i="🍟" data-tp="n"></div>
+<div data-e="sweet" data-c="糖果;甜的" data-i="🍬" data-tp="n"></div>
+<div data-e="ice cream" data-c="冰淇淋" data-i="🍦" data-tp="n"></div>
+<div data-e="jam" data-c="果酱" data-i="🫙" data-tp="n"></div>
+<div data-e="honey" data-c="蜂蜜" data-i="🍯" data-tp="n"></div>
+<div data-e="soup" data-c="汤" data-i="🥣" data-tp="n"></div>
+<div data-e="salad" data-c="沙拉" data-i="🥗" data-tp="n"></div>
+<div data-e="pie" data-c="派;馅饼" data-i="🥧" data-tp="n"></div>
+<div data-e="pizza" data-c="披萨" data-i="🍕" data-tp="n"></div>
+<div data-e="sausage" data-c="香肠" data-i="🌭" data-tp="n"></div>
+<div data-e="ham" data-c="火腿" data-i="🥓" data-tp="n"></div>
+<div data-e="chicken" data-c="鸡肉" data-i="🍗" data-tp="n"></div>
+<div data-e="beef" data-c="牛肉" data-i="🥩" data-tp="n"></div>
+<div data-e="pork" data-c="猪肉" data-i="🥩" data-tp="n"></div>
+<div data-e="fish" data-c="鱼" data-i="🐟" data-tp="n"></div>
+<div data-e="egg" data-c="蛋" data-i="🥚" data-tp="n"></div>
+<div data-e="bean" data-c="豆子" data-i="🫘" data-tp="n"></div>
+<div data-e="pea" data-c="豌豆" data-i="🟢" data-tp="n"></div>
+<div data-e="corn" data-c="玉米" data-i="🌽" data-tp="n"></div>
+<div data-e="mushroom" data-c="蘑菇" data-i="🍄" data-tp="n"></div>
+<div data-e="carrot" data-c="胡萝卜" data-i="🥕" data-tp="n"></div>
+<div data-e="onion" data-c="洋葱" data-i="🧅" data-tp="n"></div>
+</div>
+<!-- Topic 7 -->
+<div data-t="7" data-n="餐厅与用餐" data-u="居家与饮食" data-p="Last Saturday, my parents took me to a nice restaurant to celebrate my birthday. A friendly waiter showed us to our seat near the window with a beautiful view. I looked at the menu and chose a pasta dish. My dad ordered steak which was quite expensive, but the pasta was cheap. The waiter recommended the chocolate cake. Dad paid the bill and left a small tip. We all enjoyed the meal. The service was excellent. Next time I want to book a table upstairs.">
+<div data-e="restaurant" data-c="餐厅" data-i="🍽" data-tp="n"></div>
+<div data-e="cafe" data-c="咖啡馆" data-i="☕" data-tp="n"></div>
+<div data-e="waiter" data-c="服务员" data-i="🤵" data-tp="n"></div>
+<div data-e="bill" data-c="账单" data-i="🧾" data-tp="n"></div>
+<div data-e="tip" data-c="小费" data-i="💵" data-tp="n"></div>
+<div data-e="menu" data-c="菜单" data-i="📋" data-tp="n"></div>
+<div data-e="book" data-c="预订" data-i="📖" data-tp="v"></div>
+<div data-e="serve" data-c="服务" data-i="🤲" data-tp="v"></div>
+<div data-e="pay" data-c="付款" data-i="💳" data-tp="v"></div>
+<div data-e="cost" data-c="花费;费用" data-i="💰" data-tp="v"></div>
+<div data-e="price" data-c="价格" data-i="🏷" data-tp="n"></div>
+<div data-e="cheap" data-c="便宜的" data-i="🔽" data-tp="adj"></div>
+<div data-e="expensive" data-c="贵的" data-i="🔼" data-tp="adj"></div>
+<div data-e="order" data-c="点餐;命令" data-i="📝" data-tp="v"></div>
+<div data-e="choose" data-c="选择" data-i="👆" data-tp="v"></div>
+<div data-e="recommend" data-c="推荐" data-i="👍" data-tp="v"></div>
+<div data-e="favourite" data-c="最喜欢的" data-i="⭐" data-tp="adj"></div>
+<div data-e="popular" data-c="受欢迎的" data-i="🌟" data-tp="adj"></div>
+<div data-e="crowded" data-c="拥挤的" data-i="👥" data-tp="adj"></div>
+<div data-e="noisy" data-c="吵闹的" data-i="📢" data-tp="adj"></div>
+<div data-e="view" data-c="景色" data-i="🏞" data-tp="n"></div>
+<div data-e="seat" data-c="座位" data-i="💺" data-tp="n"></div>
+<div data-e="bottle" data-c="瓶子" data-i="🍾" data-tp="n"></div>
+<div data-e="napkin" data-c="餐巾纸" data-i="🧻" data-tp="n"></div>
+<div data-e="party" data-c="聚会" data-i="🎉" data-tp="n"></div>
+<div data-e="celebrate" data-c="庆祝" data-i="🎊" data-tp="v"></div>
+<div data-e="enjoy" data-c="享受" data-i="😊" data-tp="v"></div>
+<div data-e="share" data-c="分享" data-i="🤝" data-tp="v"></div>
+<div data-e="bring" data-c="带来" data-i="📦" data-tp="v"></div>
+<div data-e="check" data-c="检查;账单" data-i="✅" data-tp="v"></div>
+<div data-e="clear" data-c="清理;清楚的" data-i="🧹" data-tp="v"></div>
+<div data-e="close" data-c="关;近的" data-i="🔒" data-tp="v"></div>
+<div data-e="open" data-c="开;营业" data-i="🔓" data-tp="v"></div>
+<div data-e="agree" data-c="同意" data-i="🤝" data-tp="v"></div>
+<div data-e="decide" data-c="决定" data-i="🤔" data-tp="v"></div>
+<div data-e="prefer" data-c="更喜欢" data-i="👍" data-tp="v"></div>
+<div data-e="offer" data-c="提供" data-i="🤲" data-tp="v"></div>
+<div data-e="service" data-c="服务" data-i="🛎" data-tp="n"></div>
+<div data-e="excellent" data-c="优秀的" data-i="👏" data-tp="adj"></div>
+<div data-e="comfortable" data-c="舒适的" data-i="😌" data-tp="adj"></div>
+</div>
+<!-- Topic 8 -->
+<div data-t="8" data-n="购物与金钱" data-u="居家与饮食" data-p="I like going to the supermarket with my mum. We buy food for the week. She always checks the price before buying. If something is too expensive, she looks for a cheaper one. Last weekend, I saved my pocket money to buy a new toy. I also sold some old books at the school market. The shop assistant was very helpful. She gave us a receipt and the correct change. My dad uses his credit card to pay. I try to save coins in my money box.">
+<div data-e="shop" data-c="商店" data-i="🏪" data-tp="n"></div>
+<div data-e="supermarket" data-c="超市" data-i="🛒" data-tp="n"></div>
+<div data-e="market" data-c="市场" data-i="🏬" data-tp="n"></div>
+<div data-e="buy" data-c="买" data-i="🛍" data-tp="v"></div>
+<div data-e="sell" data-c="卖" data-i="💲" data-tp="v"></div>
+<div data-e="pay" data-c="付款" data-i="💳" data-tp="v"></div>
+<div data-e="spend" data-c="花费" data-i="💸" data-tp="v"></div>
+<div data-e="save" data-c="节省;保存" data-i="🏦" data-tp="v"></div>
+<div data-e="money" data-c="钱" data-i="💰" data-tp="n"></div>
+<div data-e="coin" data-c="硬币" data-i="🪙" data-tp="n"></div>
+<div data-e="note" data-c="纸币;笔记" data-i="💵" data-tp="n"></div>
+<div data-e="price" data-c="价格" data-i="🏷" data-tp="n"></div>
+<div data-e="cost" data-c="费用" data-i="💰" data-tp="n"></div>
+<div data-e="cheap" data-c="便宜的" data-i="🔽" data-tp="adj"></div>
+<div data-e="expensive" data-c="贵的" data-i="🔼" data-tp="adj"></div>
+<div data-e="receipt" data-c="收据" data-i="🧾" data-tp="n"></div>
+<div data-e="change" data-c="零钱;改变" data-i="🪙" data-tp="n"></div>
+<div data-e="choose" data-c="选择" data-i="👆" data-tp="v"></div>
+<div data-e="size" data-c="尺寸" data-i="📏" data-tp="n"></div>
+<div data-e="try" data-c="尝试;试穿" data-i="🔄" data-tp="v"></div>
+<div data-e="fit" data-c="适合" data-i="✅" data-tp="v"></div>
+<div data-e="cash" data-c="现金" data-i="💵" data-tp="n"></div>
+<div data-e="credit card" data-c="信用卡" data-i="💳" data-tp="n"></div>
+<div data-e="account" data-c="账户" data-i="📊" data-tp="n"></div>
+<div data-e="amount" data-c="数量" data-i="🔢" data-tp="n"></div>
+<div data-e="half" data-c="一半" data-i="💲" data-tp="n"></div>
+<div data-e="whole" data-c="整个" data-i="🟢" data-tp="adj"></div>
+<div data-e="percent" data-c="百分比" data-i="💯" data-tp="n"></div>
+<div data-e="pound" data-c="英镑;磅" data-i="💷" data-tp="n"></div>
+<div data-e="dollar" data-c="美元" data-i="💵" data-tp="n"></div>
+<div data-e="euro" data-c="欧元" data-i="💶" data-tp="n"></div>
+<div data-e="list" data-c="清单" data-i="📋" data-tp="n"></div>
+<div data-e="add" data-c="添加;加" data-i="➕" data-tp="v"></div>
+<div data-e="total" data-c="总计" data-i="🔢" data-tp="n"></div>
+<div data-e="extra" data-c="额外的" data-i="➕" data-tp="adj"></div>
+<div data-e="poor" data-c="贫穷的;可怜的" data-i="😔" data-tp="adj"></div>
+<div data-e="rich" data-c="富有的" data-i="💎" data-tp="adj"></div>
+<div data-e="borrow" data-c="借入" data-i="🤲" data-tp="v"></div>
+<div data-e="lend" data-c="借出" data-i="🤝" data-tp="v"></div>
+<div data-e="return" data-c="归还;返回" data-i="↩" data-tp="v"></div>
+</div>
+<!-- Topic 9 -->
+<div data-t="9" data-n="服装与颜色" data-u="学校与社会" data-p="Every morning I choose what clothes to wear. In winter, I put on a warm sweater and a thick coat. I also wear a scarf and gloves. In summer, I prefer to wear a light t-shirt and shorts. My school uniform is a white shirt and grey trousers. My mum bought me a new dress for the party. It has pretty buttons and a zip at the back. I keep my keys in my pocket. My favourite colour is blue. I think bright colours look best in summer.">
+<div data-e="clothes" data-c="衣服" data-i="👚" data-tp="n"></div>
+<div data-e="shirt" data-c="衬衫" data-i="👔" data-tp="n"></div>
+<div data-e="t-shirt" data-c="T恤" data-i="👕" data-tp="n"></div>
+<div data-e="jacket" data-c="夹克" data-i="🧥" data-tp="n"></div>
+<div data-e="coat" data-c="外套" data-i="🧥" data-tp="n"></div>
+<div data-e="sweater" data-c="毛衣" data-i="🧶" data-tp="n"></div>
+<div data-e="dress" data-c="连衣裙" data-i="👗" data-tp="n"></div>
+<div data-e="skirt" data-c="裙子" data-i="👗" data-tp="n"></div>
+<div data-e="trousers" data-c="裤子" data-i="👖" data-tp="n"></div>
+<div data-e="jeans" data-c="牛仔裤" data-i="👖" data-tp="n"></div>
+<div data-e="shorts" data-c="短裤" data-i="🩳" data-tp="n"></div>
+<div data-e="sock" data-c="袜子" data-i="🧦" data-tp="n"></div>
+<div data-e="shoe" data-c="鞋" data-i="👞" data-tp="n"></div>
+<div data-e="boot" data-c="靴子" data-i="👢" data-tp="n"></div>
+<div data-e="trainer" data-c="运动鞋" data-i="👟" data-tp="n"></div>
+<div data-e="hat" data-c="帽子" data-i="🧢" data-tp="n"></div>
+<div data-e="scarf" data-c="围巾" data-i="🧣" data-tp="n"></div>
+<div data-e="glove" data-c="手套" data-i="🧤" data-tp="n"></div>
+<div data-e="belt" data-c="腰带" data-i="🪢" data-tp="n"></div>
+<div data-e="pocket" data-c="口袋" data-i="👖" data-tp="n"></div>
+<div data-e="button" data-c="纽扣" data-i="🔘" data-tp="n"></div>
+<div data-e="zip" data-c="拉链" data-i="🔗" data-tp="n"></div>
+<div data-e="uniform" data-c="校服;制服" data-i="🎽" data-tp="n"></div>
+<div data-e="colour" data-c="颜色" data-i="🎨" data-tp="n"></div>
+<div data-e="red" data-c="红色" data-i="🔴" data-tp="n"></div>
+<div data-e="blue" data-c="蓝色" data-i="🔵" data-tp="n"></div>
+<div data-e="green" data-c="绿色" data-i="🟢" data-tp="n"></div>
+<div data-e="yellow" data-c="黄色" data-i="🟡" data-tp="n"></div>
+<div data-e="black" data-c="黑色" data-i="⚫" data-tp="n"></div>
+<div data-e="white" data-c="白色" data-i="⚪" data-tp="n"></div>
+<div data-e="pink" data-c="粉色" data-i="🩷" data-tp="n"></div>
+<div data-e="purple" data-c="紫色" data-i="🟣" data-tp="n"></div>
+<div data-e="brown" data-c="棕色" data-i="🟤" data-tp="n"></div>
+<div data-e="grey" data-c="灰色" data-i="🩶" data-tp="n"></div>
+<div data-e="orange" data-c="橙色" data-i="🟠" data-tp="n"></div>
+<div data-e="gold" data-c="金色" data-i="🥇" data-tp="n"></div>
+<div data-e="silver" data-c="银色" data-i="🥈" data-tp="n"></div>
+<div data-e="dark" data-c="深色的" data-i="🌑" data-tp="adj"></div>
+<div data-e="bright" data-c="明亮的" data-i="☀" data-tp="adj"></div>
+<div data-e="light" data-c="浅色的;轻的" data-i="💡" data-tp="adj"></div>
+</div>
+<!-- Topic 10 -->
+<div data-t="10" data-n="学校与科目" data-u="学校与社会" data-p="At school we have many subjects. My favourite is science because it is interesting and useful. We learn about plants, animals and the human body. I also like English and maths. History is a little difficult for me because I need to remember many dates. Geography is fun because we study about different countries. Our art teacher is very kind and she teaches us to draw well. PE is important because it keeps us healthy. I believe all subjects give us important knowledge for the future.">
+<div data-e="school" data-c="学校" data-i="🏫" data-tp="n"></div>
+<div data-e="subject" data-c="科目" data-i="📚" data-tp="n"></div>
+<div data-e="maths" data-c="数学" data-i="🔢" data-tp="n"></div>
+<div data-e="English" data-c="英语" data-i="🇬🇧" data-tp="n"></div>
+<div data-e="science" data-c="科学" data-i="🔬" data-tp="n"></div>
+<div data-e="history" data-c="历史" data-i="📜" data-tp="n"></div>
+<div data-e="geography" data-c="地理" data-i="🌍" data-tp="n"></div>
+<div data-e="music" data-c="音乐" data-i="🎵" data-tp="n"></div>
+<div data-e="art" data-c="美术" data-i="🎨" data-tp="n"></div>
+<div data-e="PE" data-c="体育" data-i="🏃" data-tp="n"></div>
+<div data-e="ICT" data-c="信息技术" data-i="💻" data-tp="n"></div>
+<div data-e="language" data-c="语言" data-i="🗣" data-tp="n"></div>
+<div data-e="physics" data-c="物理" data-i="⚛" data-tp="n"></div>
+<div data-e="chemistry" data-c="化学" data-i="🧪" data-tp="n"></div>
+<div data-e="biology" data-c="生物" data-i="🧬" data-tp="n"></div>
+<div data-e="interesting" data-c="有趣的" data-i="🤔" data-tp="adj"></div>
+<div data-e="difficult" data-c="困难的" data-i="😰" data-tp="adj"></div>
+<div data-e="easy" data-c="容易的" data-i="😊" data-tp="adj"></div>
+<div data-e="important" data-c="重要的" data-i="⭐" data-tp="adj"></div>
+<div data-e="useful" data-c="有用的" data-i="👍" data-tp="adj"></div>
+<div data-e="boring" data-c="无聊的" data-i="🥱" data-tp="adj"></div>
+<div data-e="learn" data-c="学习" data-i="📖" data-tp="v"></div>
+<div data-e="study" data-c="学习;研究" data-i="📚" data-tp="v"></div>
+<div data-e="teach" data-c="教" data-i="👩‍🏫" data-tp="v"></div>
+<div data-e="understand" data-c="理解" data-i="💡" data-tp="v"></div>
+<div data-e="remember" data-c="记住" data-i="🧠" data-tp="v"></div>
+<div data-e="forget" data-c="忘记" data-i="💨" data-tp="v"></div>
+<div data-e="explain" data-c="解释" data-i="💬" data-tp="v"></div>
+<div data-e="mean" data-c="意思是" data-i="❓" data-tp="v"></div>
+<div data-e="example" data-c="例子" data-i="📝" data-tp="n"></div>
+<div data-e="mistake" data-c="错误" data-i="❌" data-tp="n"></div>
+<div data-e="correct" data-c="正确的" data-i="✅" data-tp="adj"></div>
+<div data-e="wrong" data-c="错误的" data-i="❌" data-tp="adj"></div>
+<div data-e="answer" data-c="答案;回答" data-i="💬" data-tp="n"></div>
+<div data-e="question" data-c="问题" data-i="❓" data-tp="n"></div>
+<div data-e="practice" data-c="练习" data-i="✍" data-tp="n"></div>
+<div data-e="skill" data-c="技能" data-i="🛠" data-tp="n"></div>
+<div data-e="knowledge" data-c="知识" data-i="🧠" data-tp="n"></div>
+<div data-e="education" data-c="教育" data-i="🎓" data-tp="n"></div>
+<div data-e="improve" data-c="提高" data-i="📈" data-tp="v"></div>
+</div>
+<!-- Topic 11 -->
+<div data-t="11" data-n="学习与考试" data-u="学校与社会" data-p="Before a big test, I always prepare carefully. I read my textbook and review my notes. I use a dictionary to check words I do not know. My teacher says I should be careful and not make careless mistakes. I use a pen to write and a rubber to erase errors. Our classroom has a white board and a big screen. We are working on a group project about the environment. When I have a problem, I try to solve it myself first. I feel confident that I can succeed if I am hard-working. My mum says I should believe in myself.">
+<div data-e="classroom" data-c="教室" data-i="🏫" data-tp="n"></div>
+<div data-e="teacher" data-c="老师" data-i="👩‍🏫" data-tp="n"></div>
+<div data-e="student" data-c="学生" data-i="🧑‍🎓" data-tp="n"></div>
+<div data-e="classmate" data-c="同学" data-i="👫" data-tp="n"></div>
+<div data-e="pupil" data-c="小学生" data-i="👧" data-tp="n"></div>
+<div data-e="lesson" data-c="课" data-i="📖" data-tp="n"></div>
+<div data-e="course" data-c="课程" data-i="📚" data-tp="n"></div>
+<div data-e="bell" data-c="铃声" data-i="🔔" data-tp="n"></div>
+<div data-e="break" data-c="休息" data-i="☕" data-tp="n"></div>
+<div data-e="exam" data-c="考试" data-i="📝" data-tp="n"></div>
+<div data-e="test" data-c="测验" data-i="📄" data-tp="n"></div>
+<div data-e="mark" data-c="分数" data-i="💯" data-tp="n"></div>
+<div data-e="grade" data-c="成绩;年级" data-i="📊" data-tp="n"></div>
+<div data-e="pass" data-c="通过" data-i="✅" data-tp="v"></div>
+<div data-e="fail" data-c="不及格" data-i="❌" data-tp="v"></div>
+<div data-e="homework" data-c="作业" data-i="📝" data-tp="n"></div>
+<div data-e="project" data-c="项目;课题" data-i="📋" data-tp="n"></div>
+<div data-e="board" data-c="黑板;板" data-i="🖥" data-tp="n"></div>
+<div data-e="screen" data-c="屏幕" data-i="🖥" data-tp="n"></div>
+<div data-e="diary" data-c="日记" data-i="📔" data-tp="n"></div>
+<div data-e="dictionary" data-c="字典" data-i="📕" data-tp="n"></div>
+<div data-e="textbook" data-c="课本" data-i="📘" data-tp="n"></div>
+<div data-e="notebook" data-c="笔记本" data-i="📓" data-tp="n"></div>
+<div data-e="pen" data-c="钢笔" data-i="🖊" data-tp="n"></div>
+<div data-e="pencil" data-c="铅笔" data-i="✏" data-tp="n"></div>
+<div data-e="ruler" data-c="尺子" data-i="📏" data-tp="n"></div>
+<div data-e="rubber" data-c="橡皮" data-i="🧹" data-tp="n"></div>
+<div data-e="prepare" data-c="准备" data-i="🎒" data-tp="v"></div>
+<div data-e="review" data-c="复习" data-i="🔄" data-tp="v"></div>
+<div data-e="copy" data-c="抄写" data-i="📋" data-tp="v"></div>
+<div data-e="solve" data-c="解决" data-i="💡" data-tp="v"></div>
+<div data-e="create" data-c="创造" data-i="🎨" data-tp="v"></div>
+<div data-e="complete" data-c="完成" data-i="✅" data-tp="v"></div>
+<div data-e="succeed" data-c="成功" data-i="🏆" data-tp="v"></div>
+<div data-e="believe" data-c="相信" data-i="🤞" data-tp="v"></div>
+<div data-e="hard-working" data-c="勤奋的" data-i="💪" data-tp="adj"></div>
+<div data-e="careful" data-c="仔细的" data-i="🔍" data-tp="adj"></div>
+<div data-e="careless" data-c="粗心的" data-i="😅" data-tp="adj"></div>
+<div data-e="clever" data-c="聪明的" data-i="🧠" data-tp="adj"></div>
+<div data-e="bright" data-c="聪明的;明亮的" data-i="🌟" data-tp="adj"></div>
+</div>
+<!-- Topic 12 -->
+<div data-t="12" data-n="运动与比赛" data-u="学校与社会" data-p="I love playing sports, especially basketball. I am in the school team and our coach trains us every Tuesday. We had a big match last week against another school. I scored ten points and we won the game! All the players were happy. In summer, I go swimming almost every day. I can swim faster than my brother now. I also enjoy cycling in the park. It is important to play fair and never cheat. After exercise, I always stretch and breathe deeply. My goal is to win a medal in the school competition next month.">
+<div data-e="sport" data-c="运动" data-i="⚽" data-tp="n"></div>
+<div data-e="football" data-c="足球" data-i="⚽" data-tp="n"></div>
+<div data-e="basketball" data-c="篮球" data-i="🏀" data-tp="n"></div>
+<div data-e="tennis" data-c="网球" data-i="🎾" data-tp="n"></div>
+<div data-e="badminton" data-c="羽毛球" data-i="🏸" data-tp="n"></div>
+<div data-e="volleyball" data-c="排球" data-i="🏐" data-tp="n"></div>
+<div data-e="swimming" data-c="游泳" data-i="🏊" data-tp="n"></div>
+<div data-e="cycling" data-c="骑自行车" data-i="🚴" data-tp="n"></div>
+<div data-e="skating" data-c="滑冰" data-i="⛸" data-tp="n"></div>
+<div data-e="skiing" data-c="滑雪" data-i="⛷" data-tp="n"></div>
+<div data-e="surfing" data-c="冲浪" data-i="🏄" data-tp="n"></div>
+<div data-e="match" data-c="比赛" data-i="🏟" data-tp="n"></div>
+<div data-e="team" data-c="队伍" data-i="👥" data-tp="n"></div>
+<div data-e="player" data-c="运动员" data-i="🤾" data-tp="n"></div>
+<div data-e="coach" data-c="教练" data-i="👨‍🏫" data-tp="n"></div>
+<div data-e="win" data-c="赢" data-i="🏆" data-tp="v"></div>
+<div data-e="lose" data-c="输" data-i="😞" data-tp="v"></div>
+<div data-e="score" data-c="得分" data-i="🎯" data-tp="n"></div>
+<div data-e="goal" data-c="进球;目标" data-i="🥅" data-tp="n"></div>
+<div data-e="race" data-c="赛跑" data-i="🏃" data-tp="n"></div>
+<div data-e="competition" data-c="比赛" data-i="🏆" data-tp="n"></div>
+<div data-e="medal" data-c="奖牌" data-i="🥇" data-tp="n"></div>
+<div data-e="prize" data-c="奖品" data-i="🎁" data-tp="n"></div>
+<div data-e="train" data-c="训练;火车" data-i="🚆" data-tp="v"></div>
+<div data-e="throw" data-c="扔" data-i="🤾" data-tp="v"></div>
+<div data-e="catch" data-c="接住" data-i="🤲" data-tp="v"></div>
+<div data-e="kick" data-c="踢" data-i="🦶" data-tp="v"></div>
+<div data-e="hit" data-c="打;击中" data-i="👊" data-tp="v"></div>
+<div data-e="jump" data-c="跳" data-i="🦘" data-tp="v"></div>
+<div data-e="run" data-c="跑" data-i="🏃" data-tp="v"></div>
+<div data-e="swim" data-c="游泳" data-i="🏊" data-tp="v"></div>
+<div data-e="climb" data-c="爬" data-i="🧗" data-tp="v"></div>
+<div data-e="stretch" data-c="伸展" data-i="🧘" data-tp="v"></div>
+<div data-e="breathe" data-c="呼吸" data-i="🌬" data-tp="v"></div>
+<div data-e="fair" data-c="公平的" data-i="⚖" data-tp="adj"></div>
+<div data-e="cheat" data-c="作弊" data-i="😈" data-tp="v"></div>
+<div data-e="support" data-c="支持" data-i="📣" data-tp="v"></div>
+<div data-e="active" data-c="活跃的" data-i="🏃" data-tp="adj"></div>
+<div data-e="strong" data-c="强壮的" data-i="💪" data-tp="adj"></div>
+<div data-e="healthy" data-c="健康的" data-i="💚" data-tp="adj"></div>
+</div>
+<!-- Topic 13 -->
+<div data-t="13" data-n="爱好与休闲" data-u="学校与社会" data-p="I have many hobbies. My favourite is collecting stamps from different countries. I have stamps from over twenty countries now! My brother likes building model planes. We often play chess or board games together. It is great fun. When the weather is good, I fly my kite in the park. My mum enjoys gardening and she grows beautiful flowers. I want to join the art club at school next term. Hobbies help me relax after studying. On weekends I have more free time. I never feel bored because there is always something interesting to do!">
+<div data-e="hobby" data-c="爱好" data-i="🎯" data-tp="n"></div>
+<div data-e="collect" data-c="收集" data-i="📦" data-tp="v"></div>
+<div data-e="stamp" data-c="邮票" data-i="📮" data-tp="n"></div>
+<div data-e="model" data-c="模型" data-i="🚂" data-tp="n"></div>
+<div data-e="puzzle" data-c="拼图" data-i="🧩" data-tp="n"></div>
+<div data-e="chess" data-c="国际象棋" data-i="♟" data-tp="n"></div>
+<div data-e="board game" data-c="桌游" data-i="🎲" data-tp="n"></div>
+<div data-e="toy" data-c="玩具" data-i="🧸" data-tp="n"></div>
+<div data-e="doll" data-c="玩偶" data-i="🪆" data-tp="n"></div>
+<div data-e="kite" data-c="风筝" data-i="🪁" data-tp="n"></div>
+<div data-e="gardening" data-c="园艺" data-i="🌱" data-tp="n"></div>
+<div data-e="cooking" data-c="烹饪" data-i="🍳" data-tp="n"></div>
+<div data-e="sewing" data-c="缝纫" data-i="🧵" data-tp="n"></div>
+<div data-e="knitting" data-c="编织" data-i="🧶" data-tp="n"></div>
+<div data-e="craft" data-c="手工" data-i="✂" data-tp="n"></div>
+<div data-e="painting" data-c="绘画" data-i="🎨" data-tp="n"></div>
+<div data-e="photography" data-c="摄影" data-i="📷" data-tp="n"></div>
+<div data-e="club" data-c="俱乐部" data-i="🏛" data-tp="n"></div>
+<div data-e="join" data-c="加入" data-i="🤝" data-tp="v"></div>
+<div data-e="member" data-c="成员" data-i="👤" data-tp="n"></div>
+<div data-e="fun" data-c="乐趣" data-i="😄" data-tp="n"></div>
+<div data-e="relax" data-c="放松" data-i="😌" data-tp="v"></div>
+<div data-e="indoor" data-c="室内的" data-i="🏠" data-tp="adj"></div>
+<div data-e="outdoor" data-c="户外的" data-i="🌳" data-tp="adj"></div>
+<div data-e="creative" data-c="有创意的" data-i="💡" data-tp="adj"></div>
+<div data-e="practise" data-c="练习" data-i="🔄" data-tp="v"></div>
+<div data-e="activity" data-c="活动" data-i="🎯" data-tp="n"></div>
+<div data-e="interest" data-c="兴趣" data-i="⭐" data-tp="n"></div>
+<div data-e="free time" data-c="空闲时间" data-i="🕐" data-tp="n"></div>
+<div data-e="weekend" data-c="周末" data-i="📅" data-tp="n"></div>
+<div data-e="holiday" data-c="假期" data-i="🏖" data-tp="n"></div>
+<div data-e="spend" data-c="度过;花费" data-i="⏳" data-tp="v"></div>
+<div data-e="camp" data-c="露营" data-i="🏕" data-tp="v"></div>
+<div data-e="fish" data-c="钓鱼" data-i="🎣" data-tp="v"></div>
+<div data-e="sail" data-c="航行" data-i="⛵" data-tp="v"></div>
+<div data-e="walk" data-c="走;散步" data-i="🚶" data-tp="v"></div>
+<div data-e="exercise" data-c="锻炼" data-i="🏋" data-tp="n"></div>
+<div data-e="park" data-c="公园" data-i="🏞" data-tp="n"></div>
+<div data-e="beach" data-c="海滩" data-i="🏖" data-tp="n"></div>
+<div data-e="swing" data-c="秋千;摇摆" data-i="🎠" data-tp="n"></div>
+</div>
+<!-- Topic 14 -->
+<div data-t="14" data-n="音乐与艺术" data-u="学校与社会" data-p="I am learning to play the piano. It is a wonderful instrument. My sister plays the violin and my brother plays the drum. We want to form a band one day. I also like to sing songs in my free time. Our school held a concert last month. It was amazing! I enjoy drawing and painting too. I use crayons and a brush to create colourful pictures. Last week, our class went to an art museum to see famous paintings. I love the theatre and hope to be an actor one day.">
+<div data-e="piano" data-c="钢琴" data-i="🎹" data-tp="n"></div>
+<div data-e="guitar" data-c="吉他" data-i="🎸" data-tp="n"></div>
+<div data-e="violin" data-c="小提琴" data-i="🎻" data-tp="n"></div>
+<div data-e="drum" data-c="鼓" data-i="🥁" data-tp="n"></div>
+<div data-e="instrument" data-c="乐器" data-i="🎺" data-tp="n"></div>
+<div data-e="band" data-c="乐队" data-i="🎤" data-tp="n"></div>
+<div data-e="concert" data-c="音乐会" data-i="🎵" data-tp="n"></div>
+<div data-e="song" data-c="歌曲" data-i="🎶" data-tp="n"></div>
+<div data-e="sing" data-c="唱歌" data-i="🎤" data-tp="v"></div>
+<div data-e="dance" data-c="跳舞" data-i="💃" data-tp="v"></div>
+<div data-e="draw" data-c="画" data-i="✍" data-tp="v"></div>
+<div data-e="paint" data-c="画;涂色" data-i="🎨" data-tp="v"></div>
+<div data-e="artist" data-c="艺术家" data-i="👨‍🎨" data-tp="n"></div>
+<div data-e="actor" data-c="演员" data-i="🎭" data-tp="n"></div>
+<div data-e="museum" data-c="博物馆" data-i="🏛" data-tp="n"></div>
+<div data-e="gallery" data-c="画廊" data-i="🖼" data-tp="n"></div>
+<div data-e="theatre" data-c="剧院" data-i="🎭" data-tp="n"></div>
+<div data-e="cinema" data-c="电影院" data-i="🎬" data-tp="n"></div>
+<div data-e="film" data-c="电影" data-i="🎥" data-tp="n"></div>
+<div data-e="show" data-c="演出;展示" data-i="🎪" data-tp="n"></div>
+<div data-e="stage" data-c="舞台" data-i="🎭" data-tp="n"></div>
+<div data-e="audience" data-c="观众" data-i="👥" data-tp="n"></div>
+<div data-e="ticket" data-c="票" data-i="🎫" data-tp="n"></div>
+<div data-e="programme" data-c="节目;计划" data-i="📺" data-tp="n"></div>
+<div data-e="radio" data-c="收音机" data-i="📻" data-tp="n"></div>
+<div data-e="news" data-c="新闻" data-i="📰" data-tp="n"></div>
+<div data-e="advertisement" data-c="广告" data-i="📢" data-tp="n"></div>
+<div data-e="famous" data-c="著名的" data-i="⭐" data-tp="adj"></div>
+<div data-e="popular" data-c="受欢迎的" data-i="🌟" data-tp="adj"></div>
+<div data-e="modern" data-c="现代的" data-i="🏙" data-tp="adj"></div>
+<div data-e="classic" data-c="经典的" data-i="🏛" data-tp="adj"></div>
+<div data-e="traditional" data-c="传统的" data-i="🏯" data-tp="adj"></div>
+<div data-e="talent" data-c="才华" data-i="⭐" data-tp="n"></div>
+<div data-e="competition" data-c="比赛" data-i="🏆" data-tp="n"></div>
+<div data-e="winner" data-c="获胜者" data-i="🥇" data-tp="n"></div>
+<div data-e="group" data-c="组;团体" data-i="👥" data-tp="n"></div>
+<div data-e="magazine" data-c="杂志" data-i="📔" data-tp="n"></div>
+<div data-e="newspaper" data-c="报纸" data-i="📰" data-tp="n"></div>
+<div data-e="comic" data-c="漫画" data-i="📚" data-tp="n"></div>
+<div data-e="card" data-c="卡片" data-i="🃏" data-tp="n"></div>
+</div>
+<!-- Topic 15 -->
+<div data-t="15" data-n="旅行与交通" data-u="世界探索" data-p="Last summer holiday, my family went on a trip to Beijing. We took a train from the station near our home. The journey was about three hours. I looked out of the window at the fields and mountains. In Beijing, we visited many famous places. We took a taxi to the hotel and used the underground to travel around the city. I bought a map and some postcards. We also took a boat on the lake. It was the best trip ever! Next year, I want to fly on an aeroplane to another country.">
+<div data-e="travel" data-c="旅行" data-i="✈" data-tp="v"></div>
+<div data-e="trip" data-c="旅行;出行" data-i="🧳" data-tp="n"></div>
+<div data-e="journey" data-c="旅程" data-i="🗺" data-tp="n"></div>
+<div data-e="holiday" data-c="假期" data-i="🏖" data-tp="n"></div>
+<div data-e="visit" data-c="参观;拜访" data-i="🏛" data-tp="v"></div>
+<div data-e="station" data-c="车站" data-i="🚉" data-tp="n"></div>
+<div data-e="airport" data-c="机场" data-i="🛫" data-tp="n"></div>
+<div data-e="aeroplane" data-c="飞机" data-i="✈" data-tp="n"></div>
+<div data-e="train" data-c="火车" data-i="🚆" data-tp="n"></div>
+<div data-e="bus" data-c="公交车" data-i="🚌" data-tp="n"></div>
+<div data-e="taxi" data-c="出租车" data-i="🚕" data-tp="n"></div>
+<div data-e="bicycle" data-c="自行车" data-i="🚲" data-tp="n"></div>
+<div data-e="car" data-c="汽车" data-i="🚗" data-tp="n"></div>
+<div data-e="underground" data-c="地铁" data-i="🚇" data-tp="n"></div>
+<div data-e="boat" data-c="船" data-i="🚤" data-tp="n"></div>
+<div data-e="ship" data-c="轮船" data-i="🚢" data-tp="n"></div>
+<div data-e="helicopter" data-c="直升机" data-i="🚁" data-tp="n"></div>
+<div data-e="ambulance" data-c="救护车" data-i="🚑" data-tp="n"></div>
+<div data-e="ticket" data-c="票" data-i="🎫" data-tp="n"></div>
+<div data-e="passenger" data-c="乘客" data-i="🧳" data-tp="n"></div>
+<div data-e="driver" data-c="司机" data-i="👨‍✈" data-tp="n"></div>
+<div data-e="pilot" data-c="飞行员" data-i="👨‍✈" data-tp="n"></div>
+<div data-e="map" data-c="地图" data-i="🗺" data-tp="n"></div>
+<div data-e="postcard" data-c="明信片" data-i="📬" data-tp="n"></div>
+<div data-e="suitcase" data-c="行李箱" data-i="🧳" data-tp="n"></div>
+<div data-e="passport" data-c="护照" data-i="📕" data-tp="n"></div>
+<div data-e="cross" data-c="穿过;十字路口" data-i="🚸" data-tp="v"></div>
+<div data-e="turn" data-c="转弯;轮流" data-i="↩" data-tp="v"></div>
+<div data-e="straight" data-c="直的;直走" data-i="➡" data-tp="adv"></div>
+<div data-e="left" data-c="左边" data-i="⬅" data-tp="n"></div>
+<div data-e="right" data-c="右边" data-i="➡" data-tp="n"></div>
+<div data-e="traffic" data-c="交通" data-i="🚦" data-tp="n"></div>
+<div data-e="distance" data-c="距离" data-i="📏" data-tp="n"></div>
+<div data-e="kilometre" data-c="公里" data-i="🛣" data-tp="n"></div>
+<div data-e="mile" data-c="英里" data-i="🛤" data-tp="n"></div>
+<div data-e="direction" data-c="方向" data-i="🧭" data-tp="n"></div>
+<div data-e="arrive" data-c="到达" data-i="🏁" data-tp="v"></div>
+<div data-e="depart" data-c="出发" data-i="🚀" data-tp="v"></div>
+<div data-e="miss" data-c="错过;想念" data-i="😢" data-tp="v"></div>
+<div data-e="catch" data-c="赶上;抓住" data-i="🏃" data-tp="v"></div>
+</div>
+<!-- Topic 16 -->
+<div data-t="16" data-n="城市与建筑" data-u="世界探索" data-p="I live in a big city with many tall buildings and busy streets. There is traffic everywhere, especially in the morning. Near my home there is a beautiful park where children play. There is also a museum and a library. I sometimes go to the cinema with my friends. The hospital is next to the police station. Our city has a famous bridge over the river. At night, all the lights make the city look amazing. I like walking through the town centre and looking at the shops. My dream is to live in a quiet village one day.">
+<div data-e="city" data-c="城市" data-i="🏙" data-tp="n"></div>
+<div data-e="town" data-c="城镇" data-i="🏘" data-tp="n"></div>
+<div data-e="village" data-c="村庄" data-i="🏡" data-tp="n"></div>
+<div data-e="street" data-c="街道" data-i="🛣" data-tp="n"></div>
+<div data-e="road" data-c="路" data-i="🛤" data-tp="n"></div>
+<div data-e="bridge" data-c="桥" data-i="🌉" data-tp="n"></div>
+<div data-e="building" data-c="建筑" data-i="🏢" data-tp="n"></div>
+<div data-e="park" data-c="公园" data-i="🏞" data-tp="n"></div>
+<div data-e="museum" data-c="博物馆" data-i="🏛" data-tp="n"></div>
+<div data-e="cinema" data-c="电影院" data-i="🎬" data-tp="n"></div>
+<div data-e="theatre" data-c="剧院" data-i="🎭" data-tp="n"></div>
+<div data-e="hotel" data-c="酒店" data-i="🏨" data-tp="n"></div>
+<div data-e="bank" data-c="银行" data-i="🏦" data-tp="n"></div>
+<div data-e="post office" data-c="邮局" data-i="🏤" data-tp="n"></div>
+<div data-e="police station" data-c="警察局" data-i="🚔" data-tp="n"></div>
+<div data-e="hospital" data-c="医院" data-i="🏥" data-tp="n"></div>
+<div data-e="library" data-c="图书馆" data-i="📚" data-tp="n"></div>
+<div data-e="supermarket" data-c="超市" data-i="🛒" data-tp="n"></div>
+<div data-e="restaurant" data-c="餐厅" data-i="🍽" data-tp="n"></div>
+<div data-e="church" data-c="教堂" data-i="⛪" data-tp="n"></div>
+<div data-e="castle" data-c="城堡" data-i="🏰" data-tp="n"></div>
+<div data-e="centre" data-c="中心" data-i="🏙" data-tp="n"></div>
+<div data-e="area" data-c="区域" data-i="🗺" data-tp="n"></div>
+<div data-e="place" data-c="地方" data-i="📍" data-tp="n"></div>
+<div data-e="address" data-c="地址" data-i="🏠" data-tp="n"></div>
+<div data-e="countryside" data-c="乡下" data-i="🌾" data-tp="n"></div>
+<div data-e="field" data-c="田野" data-i="🌾" data-tp="n"></div>
+<div data-e="farm" data-c="农场" data-i="🚜" data-tp="n"></div>
+<div data-e="factory" data-c="工厂" data-i="🏭" data-tp="n"></div>
+<div data-e="office" data-c="办公室" data-i="🏢" data-tp="n"></div>
+<div data-e="car park" data-c="停车场" data-i="🅿" data-tp="n"></div>
+<div data-e="traffic light" data-c="红绿灯" data-i="🚦" data-tp="n"></div>
+<div data-e="crossing" data-c="十字路口" data-i="🚸" data-tp="n"></div>
+<div data-e="sign" data-c="标志" data-i="🪧" data-tp="n"></div>
+<div data-e="noise" data-c="噪音" data-i="📢" data-tp="n"></div>
+<div data-e="quiet" data-c="安静的" data-i="🤫" data-tp="adj"></div>
+<div data-e="busy" data-c="繁忙的" data-i="🏃" data-tp="adj"></div>
+<div data-e="crowded" data-c="拥挤的" data-i="👥" data-tp="adj"></div>
+<div data-e="safe" data-c="安全的" data-i="🛡" data-tp="adj"></div>
+<div data-e="dangerous" data-c="危险的" data-i="⚠" data-tp="adj"></div>
+</div>
+<!-- Topic 17 -->
+<div data-t="17" data-n="天气与季节" data-u="世界探索" data-p="The weather changes with each season. In spring, the weather is warm and flowers bloom. Sometimes it is rainy but the rain helps plants grow. In summer, it is often hot and sunny. I love summer holidays! In autumn, the wind blows and leaves fall. It becomes cool and cloudy. In winter, it gets very cold and sometimes it snows. The snow covers everything in white. I check the weather forecast every morning before school. When thunder and lightning come, I stay inside where it is safe and dry.">
+<div data-e="weather" data-c="天气" data-i="🌤" data-tp="n"></div>
+<div data-e="sunny" data-c="晴朗的" data-i="☀" data-tp="adj"></div>
+<div data-e="cloudy" data-c="多云的" data-i="☁" data-tp="adj"></div>
+<div data-e="rainy" data-c="下雨的" data-i="🌧" data-tp="adj"></div>
+<div data-e="windy" data-c="有风的" data-i="💨" data-tp="adj"></div>
+<div data-e="snowy" data-c="下雪的" data-i="🌨" data-tp="adj"></div>
+<div data-e="foggy" data-c="有雾的" data-i="🌫" data-tp="adj"></div>
+<div data-e="stormy" data-c="暴风雨的" data-i="⛈" data-tp="adj"></div>
+<div data-e="hot" data-c="热的" data-i="🔥" data-tp="adj"></div>
+<div data-e="warm" data-c="温暖的" data-i="🌡" data-tp="adj"></div>
+<div data-e="cool" data-c="凉爽的" data-i="😎" data-tp="adj"></div>
+<div data-e="cold" data-c="冷的" data-i="🥶" data-tp="adj"></div>
+<div data-e="wet" data-c="湿的" data-i="💧" data-tp="adj"></div>
+<div data-e="dry" data-c="干的" data-i="🏜" data-tp="adj"></div>
+<div data-e="rain" data-c="雨;下雨" data-i="🌧" data-tp="n"></div>
+<div data-e="snow" data-c="雪;下雪" data-i="❄" data-tp="n"></div>
+<div data-e="wind" data-c="风" data-i="💨" data-tp="n"></div>
+<div data-e="cloud" data-c="云" data-i="☁" data-tp="n"></div>
+<div data-e="storm" data-c="暴风雨" data-i="⛈" data-tp="n"></div>
+<div data-e="lightning" data-c="闪电" data-i="⚡" data-tp="n"></div>
+<div data-e="thunder" data-c="雷声" data-i="⛈" data-tp="n"></div>
+<div data-e="rainbow" data-c="彩虹" data-i="🌈" data-tp="n"></div>
+<div data-e="temperature" data-c="温度" data-i="🌡" data-tp="n"></div>
+<div data-e="degree" data-c="度" data-i="°" data-tp="n"></div>
+<div data-e="season" data-c="季节" data-i="🍂" data-tp="n"></div>
+<div data-e="spring" data-c="春天" data-i="🌸" data-tp="n"></div>
+<div data-e="summer" data-c="夏天" data-i="☀" data-tp="n"></div>
+<div data-e="autumn" data-c="秋天" data-i="🍂" data-tp="n"></div>
+<div data-e="winter" data-c="冬天" data-i="⛄" data-tp="n"></div>
+<div data-e="forecast" data-c="预报" data-i="📊" data-tp="n"></div>
+<div data-e="shine" data-c="照耀" data-i="☀" data-tp="v"></div>
+<div data-e="blow" data-c="吹" data-i="💨" data-tp="v"></div>
+<div data-e="freeze" data-c="结冰" data-i="🥶" data-tp="v"></div>
+<div data-e="melt" data-c="融化" data-i="💧" data-tp="v"></div>
+<div data-e="ice" data-c="冰" data-i="🧊" data-tp="n"></div>
+<div data-e="air" data-c="空气" data-i="🌬" data-tp="n"></div>
+<div data-e="sky" data-c="天空" data-i="🌌" data-tp="n"></div>
+<div data-e="sun" data-c="太阳" data-i="☀" data-tp="n"></div>
+<div data-e="moon" data-c="月亮" data-i="🌙" data-tp="n"></div>
+<div data-e="star" data-c="星星" data-i="⭐" data-tp="n"></div>
+</div>
+<!-- Topic 18 -->
+<div data-t="18" data-n="动物与自然" data-u="世界探索" data-p="I love animals and nature. We have two pets at home, a dog called Max and a cat called Mimi. My dog is very friendly but my cat is more independent. In the forest near my house, I can see many birds and sometimes rabbits. Last summer, we went to a mountain and saw a beautiful lake. I also visited the zoo and saw elephants, lions, tigers and monkeys. The ocean is home to amazing creatures like whales and sharks. We must protect the environment from pollution. Every tree and plant is important for our planet.">
+<div data-e="animal" data-c="动物" data-i="🐾" data-tp="n"></div>
+<div data-e="bird" data-c="鸟" data-i="🐦" data-tp="n"></div>
+<div data-e="cat" data-c="猫" data-i="🐱" data-tp="n"></div>
+<div data-e="dog" data-c="狗" data-i="🐕" data-tp="n"></div>
+<div data-e="fish" data-c="鱼" data-i="🐟" data-tp="n"></div>
+<div data-e="horse" data-c="马" data-i="🐴" data-tp="n"></div>
+<div data-e="rabbit" data-c="兔子" data-i="🐰" data-tp="n"></div>
+<div data-e="snake" data-c="蛇" data-i="🐍" data-tp="n"></div>
+<div data-e="insect" data-c="昆虫" data-i="🐛" data-tp="n"></div>
+<div data-e="butterfly" data-c="蝴蝶" data-i="🦋" data-tp="n"></div>
+<div data-e="elephant" data-c="大象" data-i="🐘" data-tp="n"></div>
+<div data-e="lion" data-c="狮子" data-i="🦁" data-tp="n"></div>
+<div data-e="tiger" data-c="老虎" data-i="🐯" data-tp="n"></div>
+<div data-e="monkey" data-c="猴子" data-i="🐵" data-tp="n"></div>
+<div data-e="whale" data-c="鲸鱼" data-i="🐋" data-tp="n"></div>
+<div data-e="shark" data-c="鲨鱼" data-i="🦈" data-tp="n"></div>
+<div data-e="pet" data-c="宠物" data-i="🐶" data-tp="n"></div>
+<div data-e="wild" data-c="野生的" data-i="🦁" data-tp="adj"></div>
+<div data-e="dangerous" data-c="危险的" data-i="⚠" data-tp="adj"></div>
+<div data-e="gentle" data-c="温顺的" data-i="🐑" data-tp="adj"></div>
+<div data-e="nature" data-c="自然" data-i="🌿" data-tp="n"></div>
+<div data-e="forest" data-c="森林" data-i="🌲" data-tp="n"></div>
+<div data-e="river" data-c="河" data-i="🏞" data-tp="n"></div>
+<div data-e="lake" data-c="湖" data-i="🏞" data-tp="n"></div>
+<div data-e="mountain" data-c="山" data-i="⛰" data-tp="n"></div>
+<div data-e="ocean" data-c="海洋" data-i="🌊" data-tp="n"></div>
+<div data-e="sea" data-c="海" data-i="🌊" data-tp="n"></div>
+<div data-e="flower" data-c="花" data-i="🌸" data-tp="n"></div>
+<div data-e="tree" data-c="树" data-i="🌳" data-tp="n"></div>
+<div data-e="plant" data-c="植物" data-i="🌱" data-tp="n"></div>
+<div data-e="grass" data-c="草" data-i="🌿" data-tp="n"></div>
+<div data-e="leaf" data-c="叶子" data-i="🍃" data-tp="n"></div>
+<div data-e="environment" data-c="环境" data-i="🌍" data-tp="n"></div>
+<div data-e="protect" data-c="保护" data-i="🛡" data-tp="v"></div>
+<div data-e="save" data-c="拯救;节省" data-i="💾" data-tp="v"></div>
+<div data-e="pollution" data-c="污染" data-i="🏭" data-tp="n"></div>
+<div data-e="clean" data-c="清洁的" data-i="🧹" data-tp="adj"></div>
+<div data-e="dirty" data-c="脏的" data-i="💩" data-tp="adj"></div>
+<div data-e="die" data-c="死亡" data-i="💀" data-tp="v"></div>
+<div data-e="hunt" data-c="打猎;寻找" data-i="🏹" data-tp="v"></div>
+</div>
+<!-- Topic 19 -->
+<div data-t="19" data-n="科技与沟通" data-u="世界探索" data-p="I use my computer every day after school. I go online to search for information and send emails to my friends. Sometimes we chat on mobile phones or share photos and videos. I like to download music and play games, but my parents limit my screen time. I also watch films and programmes on television. My dad reads the newspaper online. He says you should not believe everything you see in advertisements. I type my homework on the keyboard and save it. My mum takes beautiful photos with her camera.">
+<div data-e="computer" data-c="电脑" data-i="💻" data-tp="n"></div>
+<div data-e="internet" data-c="互联网" data-i="🌐" data-tp="n"></div>
+<div data-e="website" data-c="网站" data-i="🖥" data-tp="n"></div>
+<div data-e="email" data-c="电子邮件" data-i="📧" data-tp="n"></div>
+<div data-e="message" data-c="消息" data-i="💬" data-tp="n"></div>
+<div data-e="phone" data-c="电话" data-i="📱" data-tp="n"></div>
+<div data-e="mobile" data-c="手机" data-i="📱" data-tp="n"></div>
+<div data-e="keyboard" data-c="键盘" data-i="⌨" data-tp="n"></div>
+<div data-e="mouse" data-c="鼠标" data-i="🖱" data-tp="n"></div>
+<div data-e="printer" data-c="打印机" data-i="🖨" data-tp="n"></div>
+<div data-e="camera" data-c="相机" data-i="📷" data-tp="n"></div>
+<div data-e="video" data-c="视频" data-i="📹" data-tp="n"></div>
+<div data-e="photo" data-c="照片" data-i="📸" data-tp="n"></div>
+<div data-e="television" data-c="电视" data-i="📺" data-tp="n"></div>
+<div data-e="online" data-c="在线的" data-i="🌐" data-tp="adj"></div>
+<div data-e="search" data-c="搜索" data-i="🔍" data-tp="v"></div>
+<div data-e="download" data-c="下载" data-i="⬇" data-tp="v"></div>
+<div data-e="upload" data-c="上传" data-i="⬆" data-tp="v"></div>
+<div data-e="send" data-c="发送" data-i="📤" data-tp="v"></div>
+<div data-e="receive" data-c="收到" data-i="📥" data-tp="v"></div>
+<div data-e="share" data-c="分享" data-i="🔗" data-tp="v"></div>
+<div data-e="chat" data-c="聊天" data-i="💬" data-tp="v"></div>
+<div data-e="call" data-c="打电话;叫" data-i="📞" data-tp="v"></div>
+<div data-e="text" data-c="发短信;文本" data-i="💬" data-tp="v"></div>
+<div data-e="click" data-c="点击" data-i="👆" data-tp="v"></div>
+<div data-e="type" data-c="打字" data-i="⌨" data-tp="v"></div>
+<div data-e="save" data-c="保存" data-i="💾" data-tp="v"></div>
+<div data-e="delete" data-c="删除" data-i="🗑" data-tp="v"></div>
+<div data-e="password" data-c="密码" data-i="🔐" data-tp="n"></div>
+<div data-e="screen" data-c="屏幕" data-i="🖥" data-tp="n"></div>
+<div data-e="file" data-c="文件" data-i="📄" data-tp="n"></div>
+<div data-e="app" data-c="应用程序" data-i="📲" data-tp="n"></div>
+<div data-e="robot" data-c="机器人" data-i="🤖" data-tp="n"></div>
+<div data-e="machine" data-c="机器" data-i="⚙" data-tp="n"></div>
+<div data-e="battery" data-c="电池" data-i="🔋" data-tp="n"></div>
+<div data-e="plug" data-c="插头" data-i="🔌" data-tp="n"></div>
+<div data-e="switch" data-c="开关" data-i="🔛" data-tp="n"></div>
+<div data-e="digital" data-c="数字的" data-i="💻" data-tp="adj"></div>
+<div data-e="technology" data-c="技术" data-i="🔧" data-tp="n"></div>
+<div data-e="information" data-c="信息" data-i="ℹ" data-tp="n"></div>
+</div>
+<!-- Topic 20 -->
+<div data-t="20" data-n="工作与职业" data-u="世界探索" data-p="When I grow up, I want to be a doctor. I think it is an important job because doctors help sick people and save lives. My mum is a teacher and my dad is an engineer. He works in a big company and has many colleagues. His boss is very kind. Every morning he goes to the office. My aunt is a musician and my uncle is an artist. Whatever job I choose, I will work hard to achieve my dream. I believe the future is full of possibilities.">
+<div data-e="job" data-c="工作" data-i="💼" data-tp="n"></div>
+<div data-e="doctor" data-c="医生" data-i="👨‍⚕" data-tp="n"></div>
+<div data-e="teacher" data-c="老师" data-i="👩‍🏫" data-tp="n"></div>
+<div data-e="nurse" data-c="护士" data-i="👩‍⚕" data-tp="n"></div>
+<div data-e="police officer" data-c="警察" data-i="👮" data-tp="n"></div>
+<div data-e="firefighter" data-c="消防员" data-i="👨‍🚒" data-tp="n"></div>
+<div data-e="pilot" data-c="飞行员" data-i="👨‍✈" data-tp="n"></div>
+<div data-e="chef" data-c="厨师" data-i="👨‍🍳" data-tp="n"></div>
+<div data-e="engineer" data-c="工程师" data-i="👷" data-tp="n"></div>
+<div data-e="scientist" data-c="科学家" data-i="👩‍🔬" data-tp="n"></div>
+<div data-e="artist" data-c="艺术家" data-i="👨‍🎨" data-tp="n"></div>
+<div data-e="musician" data-c="音乐家" data-i="👩‍🎤" data-tp="n"></div>
+<div data-e="actor" data-c="演员" data-i="🎭" data-tp="n"></div>
+<div data-e="writer" data-c="作家" data-i="✍" data-tp="n"></div>
+<div data-e="reporter" data-c="记者" data-i="🎤" data-tp="n"></div>
+<div data-e="farmer" data-c="农民" data-i="👨‍🌾" data-tp="n"></div>
+<div data-e="driver" data-c="司机" data-i="👨‍✈" data-tp="n"></div>
+<div data-e="manager" data-c="经理" data-i="👨‍💼" data-tp="n"></div>
+<div data-e="secretary" data-c="秘书" data-i="👩‍💼" data-tp="n"></div>
+<div data-e="assistant" data-c="助手" data-i="🤝" data-tp="n"></div>
+<div data-e="worker" data-c="工人" data-i="👷" data-tp="n"></div>
+<div data-e="earn" data-c="挣钱" data-i="💰" data-tp="v"></div>
+<div data-e="work" data-c="工作" data-i="💼" data-tp="v"></div>
+<div data-e="retire" data-c="退休" data-i="👴" data-tp="v"></div>
+<div data-e="office" data-c="办公室" data-i="🏢" data-tp="n"></div>
+<div data-e="company" data-c="公司" data-i="🏢" data-tp="n"></div>
+<div data-e="factory" data-c="工厂" data-i="🏭" data-tp="n"></div>
+<div data-e="meeting" data-c="会议" data-i="🤝" data-tp="n"></div>
+<div data-e="colleague" data-c="同事" data-i="👥" data-tp="n"></div>
+<div data-e="boss" data-c="老板" data-i="👨‍💼" data-tp="n"></div>
+<div data-e="interview" data-c="面试" data-i="🤝" data-tp="n"></div>
+<div data-e="experience" data-c="经验" data-i="📋" data-tp="n"></div>
+<div data-e="future" data-c="未来" data-i="🔮" data-tp="n"></div>
+<div data-e="dream" data-c="梦想" data-i="💭" data-tp="n"></div>
+<div data-e="hope" data-c="希望" data-i="🙏" data-tp="v"></div>
+<div data-e="plan" data-c="计划" data-i="📋" data-tp="n"></div>
+<div data-e="achieve" data-c="实现" data-i="🎯" data-tp="v"></div>
+<div data-e="successful" data-c="成功的" data-i="🏆" data-tp="adj"></div>
+<div data-e="possible" data-c="可能的" data-i="🤔" data-tp="adj"></div>
+<div data-e="idea" data-c="想法" data-i="💡" data-tp="n"></div>
+</div>
+</div>
+<script>
+// Read data from DOM — Chinese stays in HTML, JS only reads text
+var TP=[],cur=0,TPD=document.getElementById('_d');
+var topics=TPD.querySelectorAll('[data-t]');
+for(var i=0;i<topics.length;i++){
+  var t=topics[i];
+  var words=[];
+  var wEls=t.querySelectorAll('[data-e]');
+  for(var j=0;j<wEls.length;j++){
+    var w=wEls[j];
+    words.push({e:w.dataset.e,c:w.dataset.c,i:w.dataset.i,tp:w.dataset.tp});
+  }
+  TP.push({n:t.dataset.n,u:t.dataset.u,p:t.dataset.p,w:words});
+}
+TPD.remove(); // clean up hidden data
+
+var syn=window.speechSynthesis,sp=false;
+function speak(wd){if(sp){syn.cancel();sp=false;return}var u=new SpeechSynthesisUtterance(wd);u.lang='en-GB';u.rate=0.8;u.onend=function(){sp=false};sp=true;syn.speak(u)}
+function speakP(i){if(sp){syn.cancel();sp=false;return}var u=new SpeechSynthesisUtterance(TP[i].p);u.lang='en-GB';u.rate=0.85;u.onend=function(){sp=false};sp=true;syn.speak(u)}
+function speakS(i){if(sp){syn.cancel();sp=false;return}var u=new SpeechSynthesisUtterance(TP[i].p);u.lang='en-GB';u.rate=0.55;u.onend=function(){sp=false};sp=true;syn.speak(u)}
+
+function rSide(){var h='',lastU='';for(var i=0;i<TP.length;i++){var t=TP[i];if(t.u!==lastU){h+='<div class="sect">'+t.u+'</div>';lastU=t.u}h+='<div class="ti'+(i===cur?' on':'')+'" onclick="show('+i+')">'+(i+1)+'. '+t.n+'<span class="n">'+t.w.length+'词</span></div>'}document.getElementById('sidebar').innerHTML=h}
+
+function show(i){
+  cur=i;rSide();
+  var t=TP[i],h='';
+  // Highlight vocab words in passage
+  var passage=t.p;
+  for(var j=0;j<t.w.length;j++){
+    var w=t.w[j].e;
+    var re=new RegExp('\\b('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')\\b','gi');
+    passage=passage.replace(re,'<b>$1</b>');
+  }
+  h+='<div class="passage">'+passage+'<div class="btns"><button class="btn btn-pri" onclick="speakP('+i+')">朗读文章</button><button class="btn btn-out" onclick="speakS('+i+')">慢速朗读</button></div></div>';
+  h+='<div class="words">';
+  for(var j=0;j<t.w.length;j++){
+    var w=t.w[j];
+    h+='<div class="wc" onclick="speak(\''+w.e+'\')"><span class="em">'+w.i+'</span><div><div class="en">'+w.e+' <small style="color:var(--mu)">'+w.tp+'</small></div><div class="cn">'+w.c+'</div></div></div>';
+  }
+  h+='</div>';
+  document.getElementById('main').innerHTML=h;
+  document.getElementById('btnTest').style.display='block';
+}
+
+var TW=[],ti=0,ts=0;
+function startTest(){var t=TP[cur];TW=t.w.slice().sort(function(){return Math.random()-0.5}).slice(0,10);ti=0;ts=0;showQ()}
+function showQ(){if(ti>=TW.length){var p=Math.round(ts/TW.length*100);document.getElementById('se').textContent=p>=80?'🎉':p>=60?'👍':'💪';document.getElementById('st').textContent='测试完成';document.getElementById('sr').textContent='得分 '+ts+'/'+TW.length+' ('+p+'%)';document.getElementById('score').style.display='flex';return}var c=TW[ti],ws=[];while(ws.length<3){var r=TP[cur].w[Math.floor(Math.random()*TP[cur].w.length)];if(r.e!==c.e&&!ws.some(function(x){return x.e===r.e}))ws.push(r)}var opts=[c,ws[0],ws[1],ws[2]].sort(function(){return Math.random()-0.5});var h='<div class="test"><h3>图片测试 ('+(ti+1)+'/10)</h3><div class="big">'+c.i+'</div><p style="color:var(--mu);font-size:14px">这个图对应哪个单词？</p><div class="tg">';for(var i=0;i<opts.length;i++){h+='<div class="to" onclick="check(\''+opts[i].e+'\',\''+c.e+'\')" id="to'+i+'">'+opts[i].e+'</div>'}h+='</div></div>';document.getElementById('main').innerHTML=h;document.getElementById('btnTest').style.display='none'}
+function check(ans,cor){for(var i=0;i<4;i++){var o=document.getElementById('to'+i);if(!o)continue;o.style.pointerEvents='none';if(o.textContent.trim()===cor)o.classList.add('ok')}if(ans===cor)ts++;else{for(var i=0;i<4;i++){var o=document.getElementById('to'+i);if(o&&o.textContent.trim()===ans)o.classList.add('no')}}ti++;setTimeout(showQ,ans===cor?700:1400)}
+
+// Init
+alert('Found '+TP.length+' topics, '+(TP.length>0?TP[0].w.length:0)+' words each');
+show(0);
+</script>
+</body>
+</html>
