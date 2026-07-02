@@ -2,7 +2,11 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1a6b5a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KET词汇">
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIktFVOWtl+axoeiurenu4CIsCiAgInNob3J0X25hbWUiOiAiS0VU6K+N5rGHIiwKICAic3RhcnRfdXJsIjogImtldC12NC5odG1sIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjhmYWZiIiwKICAidGhlbWVfY29sb3IiOiAiIzFhNmI1YSIsCiAgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCclM0UlM0N0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nOTAnJWUxJTlGJTkzJTk2PC90ZXh0JTNFPC9zdmclM0UiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjogImltYWdlL3N2Zyt4bWwifV19">
 <title>KET词汇训练</title>
 <style>
 :root{--pri:#1a6b5a;--prl:#e8f5f0;--bg:#f8fafb;--card:#fff;--tx:#1e293b;--mu:#94a3b8;--bd:#e5e7eb;--gr:#16a34a;--rd:#dc2626}
@@ -1006,6 +1010,12 @@ function check(ans,cor){for(var i=0;i<4;i++){var o=document.getElementById('to'+
 // Init
 alert('Found '+TP.length+' topics, '+(TP.length>0?TP[0].w.length:0)+' words each');
 show(0);
+
+// PWA Service Worker
+if('serviceWorker' in navigator){
+  var sw='self.addEventListener("install",function(e){e.waitUntil(caches.open("ket-v1").then(function(c){return c.addAll([location.href])}).then(function(){return self.skipWaiting()}))});self.addEventListener("fetch",function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}))})';
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'/'}).catch(function(){});
+}
 </script>
 </body>
 </html>
