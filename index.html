@@ -2,59 +2,213 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1a6b5a">
-<title>永汲教育 · 在线工具</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#2C2416">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="井说英语">
+<meta name="description" content="井说英语 · 永汲教育旗下少儿英语口语品牌。取自易经井卦,让孩子像井水般汲取知识,自信开口。KET备考·口语表达·英文思辨。">
+<title>井说英语 · 永汲教育</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
-    background: #f8fafb; min-height:100vh;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .container {
-    text-align:center; padding:40px 24px; max-width:400px; width:100%;
-  }
-  .logo {
-    width:72px; height:72px; border-radius:18px; background:#1a6b5a;
-    display:flex; align-items:center; justify-content:center;
-    color:#fff; font-size:32px; font-weight:800; margin:0 auto 16px;
-  }
-  h1 { font-size:22px; color:#1e293b; margin-bottom:8px; }
-  .sub { font-size:13px; color:#94a3b8; margin-bottom:32px; }
-  .card {
-    display:block; background:#fff; border-radius:12px; padding:20px;
-    margin-bottom:14px; text-decoration:none; color:inherit;
-    box-shadow:0 1px 3px rgba(0,0,0,0.06); transition:all 0.15s;
-    text-align:left;
-  }
-  .card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.1); transform:translateY(-1px); }
-  .card .icon { font-size:32px; margin-bottom:8px; }
-  .card .title { font-size:16px; font-weight:700; color:#1e293b; }
-  .card .desc { font-size:12px; color:#94a3b8; margin-top:4px; }
+:root{--ink:#2C2416;--water:#d4e8e0;--paper:#f5f4f1;--gold:#c8963e;--stone:#8b7e6a;--warm:#f0ebe0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei','Noto Serif SC',serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.8}
+img,video{max-width:100%;height:auto;display:block}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1100px;margin:0 auto;position:sticky;top:0;z-index:100;background:var(--paper)}
+nav .logo-img{height:40px}
+nav .nav-links{display:flex;gap:24px;list-style:none}
+nav .nav-links a{text-decoration:none;color:var(--ink);font-size:13px;letter-spacing:1px;font-weight:500;transition:color .2s}
+nav .nav-links a:hover{color:var(--gold)}
+@media(max-width:640px){nav .nav-links{display:none}}
+
+/* SECTIONS */
+section{padding:72px 24px;max-width:900px;margin:0 auto}
+.section-label{font-size:12px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;text-align:center}
+.section-title{font-family:'Noto Serif SC','STSong','Songti SC',serif;font-size:30px;font-weight:400;text-align:center;letter-spacing:2px;margin-bottom:40px}
+.section-title .accent{color:var(--gold)}
+
+/* HERO */
+.hero-wrap{display:flex;align-items:center;gap:40px;max-width:1000px;margin:0 auto;padding:40px 24px 64px}
+.hero-text{flex:1}
+.hero-text h1{font-family:'Noto Serif SC','STSong',serif;font-size:42px;font-weight:400;line-height:1.3;letter-spacing:3px;margin-bottom:16px}
+.hero-text h1 .en{font-family:'Georgia',serif;font-style:italic;color:var(--gold);display:block;font-size:24px;letter-spacing:1px;margin-top:4px}
+.hero-text .sub{font-size:15px;color:var(--stone);line-height:2;margin-bottom:24px}
+.hero-visual{flex:1;text-align:center}
+.hero-visual img{border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.08)}
+@media(max-width:768px){.hero-wrap{flex-direction:column;text-align:center}.hero-text h1{font-size:30px}}
+
+/* VIDEO */
+.video-section{background:var(--ink);color:var(--paper);padding:72px 24px;text-align:center}
+.video-section .section-label{color:var(--gold)}
+.video-section .section-title{color:var(--paper)}
+.video-wrap{max-width:700px;margin:0 auto;border-radius:12px;overflow:hidden;box-shadow:0 12px 60px rgba(0,0,0,.3)}
+.video-wrap video{width:100%}
+
+/* FEATURES */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.feature-card{background:#fff;border-radius:12px;padding:32px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.04);transition:transform .2s}
+.feature-card:hover{transform:translateY(-2px)}
+.feature-card .f-icon{font-size:40px;margin-bottom:16px}
+.feature-card h4{font-size:17px;margin-bottom:8px;letter-spacing:1px}
+.feature-card p{font-size:13px;color:var(--stone)}
+
+/* COURSE */
+.course-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.course-card{background:#fff;border-radius:12px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,.04);border-top:3px solid var(--gold)}
+.course-card .age-tag{display:inline-block;font-size:11px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.course-card h4{font-size:18px;margin-bottom:10px;letter-spacing:1px}
+.course-card p{font-size:13px;color:var(--stone);margin-bottom:6px}
+.course-card .highlight{font-size:12px;color:var(--gold);font-weight:600;margin-top:8px}
+
+/* ABOUT */
+.about-block{text-align:center;max-width:640px;margin:0 auto}
+.about-block p{font-size:15px;color:var(--stone);line-height:2.2;margin-bottom:16px}
+.about-block .yching{display:inline-block;font-size:24px;color:var(--gold);margin-top:8px;letter-spacing:2px}
+
+/* BRAND STORY */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;max-width:800px;margin:0 auto}
+.story-grid .story-img img{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.story-grid .story-text h4{font-size:18px;margin-bottom:12px;letter-spacing:1px}
+.story-grid .story-text p{font-size:14px;color:var(--stone);line-height:2}
+@media(max-width:640px){.story-grid{grid-template-columns:1fr}.story-grid .story-img{order:-1}}
+
+/* CTA */
+.cta-section{background:var(--gold);color:#fff;text-align:center;padding:60px 24px}
+.cta-section h2{font-family:'Noto Serif SC',serif;font-size:26px;font-weight:400;margin-bottom:12px}
+.cta-section p{font-size:14px;margin-bottom:20px;opacity:.9}
+.cta-qr img{width:140px;border-radius:8px;margin-top:16px}
+.cta-qr .qr-label{font-size:12px;margin-top:8px;opacity:.8}
+
+/* FOOTER */
+footer{text-align:center;padding:32px 24px;font-size:12px;color:var(--stone);letter-spacing:1px}
+footer a{color:var(--stone)}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="logo">永</div>
-  <h1>永汲教育 · 在线工具</h1>
-  <p class="sub">添加到手机桌面，像 App 一样使用</p>
 
-  <a href="schedule-planner.html" class="card">
-    <div class="icon">📅</div>
-    <div class="title">课程排班助手</div>
-    <div class="desc">时间槽周视图排课 · 毛文俊排班 · 固定模板</div>
-  </a>
+<nav>
+  <img src="logo.png" alt="永汲教育" class="logo-img">
+  <ul class="nav-links">
+    <li><a href="#about">关于我们</a></li>
+    <li><a href="#courses">课程体系</a></li>
+    <li><a href="#video">教学展示</a></li>
+    <li><a href="#contact">联系我们</a></li>
+  </ul>
+</nav>
 
-  <a href="student-system.html" class="card">
-    <div class="icon">🎓</div>
-    <div class="title">学员管理系统</div>
-    <div class="desc">学员信息 · 上课记录 · 月度导出</div>
-  </a>
-
-  <p style="font-size:11px;color:#cbd5e1;margin-top:24px;">
-    永汲教育 · Well Talk
-  </p>
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero-text">
+    <h1>井说英语<span class="en">Well Talk</span></h1>
+    <p class="sub">取自易经井卦 — 井养而不穷<br>知识如井水，源源不断<br>让孩子在汲取中自信开口</p>
+  </div>
+  <div class="hero-visual">
+    <img src="hero.png" alt="井说英语品牌视觉">
+  </div>
 </div>
+
+<!-- VIDEO -->
+<div class="video-section" id="video">
+  <div class="section-label">TEACHING DEMO</div>
+  <h2 class="section-title">课堂实录</h2>
+  <div class="video-wrap">
+    <video src="promo.mp4" controls playsinline poster="hero.png"></video>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="about">
+  <div class="section-label">WHY US</div>
+  <h2 class="section-title">为什么选择<span class="accent">井说英语</span></h2>
+  <div class="features">
+    <div class="feature-card">
+      <div class="f-icon">📖</div>
+      <h4>有根的教育</h4>
+      <p>源自易经井卦,不是快餐培训,是陪孩子汲取一生的语言活水</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">🗣️</div>
+      <h4>开口即表达</h4>
+      <p>不刷题,不死记,从模仿到创造,让每个孩子找到自己的声音</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">🌍</div>
+      <h4>中式底蕴,国际视野</h4>
+      <p>KET备考+文化思辨,既有扎实功底,也有走向世界的自信</p>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section id="courses">
+  <div class="section-label">COURSES</div>
+  <h2 class="section-title">课程体系</h2>
+  <div class="course-grid">
+    <div class="course-card">
+      <div class="age-tag">3-6 岁</div>
+      <h4>🌊 幼儿英语启蒙</h4>
+      <p>自然拼读 + 绘本阅读</p>
+      <p>建立语感,在故事中爱上英语</p>
+      <p class="highlight">关键词：兴趣·输入·模仿</p>
+    </div>
+    <div class="course-card">
+      <div class="age-tag">7-12 岁</div>
+      <h4>💬 少儿口语表达</h4>
+      <p>情景对话 + 主题演讲 + KET备考</p>
+      <p>从模仿到创造,自信开口</p>
+      <p class="highlight">关键词：表达·自信·输出</p>
+    </div>
+    <div class="course-card">
+      <div class="age-tag">11-15 岁</div>
+      <h4>🏆 辩论与高阶思辨</h4>
+      <p>逻辑思辨 + 即兴表达 + 英文辩论</p>
+      <p>培养有观点的表达者</p>
+      <p class="highlight">关键词：思辨·立场·影响力</p>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND STORY -->
+<section>
+  <div class="section-label">BRAND STORY</div>
+  <h2 class="section-title">品牌故事</h2>
+  <div class="story-grid">
+    <div class="story-img">
+      <img src="hero.png" alt="井说英语">
+    </div>
+    <div class="story-text">
+      <h4>一口井，一种声音</h4>
+      <p>「永汲」出自易经第四十八卦——井卦。古人说"改邑不改井"：城市可以变迁，但井的位置不变。我们对教育的信念也是如此——无论外面的风向如何变化，让孩子真正学会表达、爱上表达，是我们不变的心。</p>
+      <p style="margin-top:12px">「井说」——从井中汲取,在口中说出。<br>每个孩子都是一口待发掘的井，我们的使命是帮他们找到属于自己的声音。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-block">
+  <div class="section-label">FOUNDER</div>
+  <h2 class="section-title">关于<span class="accent">永汲教育</span></h2>
+  <p>永汲教育科技有限责任公司，专注6-15岁儿童英语口语教育。<br>我们相信语言不是背出来的，是说出来的；不是灌进去的，是长出来的。<br>用心上好每一堂课，认真对待每一个孩子。</p>
+  <div class="yching">䷯ 水风井 · 井养而不穷</div>
+</section>
+
+<!-- CONTACT -->
+<div class="cta-section" id="contact">
+  <h2>预约试听课</h2>
+  <p>让孩子体验一次不一样的英语学习</p>
+  <p style="font-size:18px;font-weight:700;letter-spacing:1px">📞 联系我们</p>
+  <p style="font-size:13px;opacity:.8;margin-top:4px">咨询电话 · 课程介绍 · 预约体验</p>
+  <div class="cta-qr">
+    <img src="qrcode.jpg" alt="公众号二维码">
+    <div class="qr-label">关注公众号，了解更多</div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 永汲教育科技有限责任公司 · 井说英语 Well Talk<br>
+  <a href="https://beian.miit.gov.cn">ICP备案中</a>
+</footer>
+
 </body>
 </html>
