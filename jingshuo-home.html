@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>井说 Well Talk — 定制化英语提升</title>
+<style>
+  :root {
+    --paper: #faf8f4;
+    --ink: #3a322e;
+    --ink-soft: #8a7e74;
+    --ink-faint: #c4bab0;
+    --orange: #e87a3e;
+    --gold: #c89840;
+    --serif: 'Noto Serif SC', 'Source Han Serif SC', 'STSong', 'Songti SC', serif;
+    --sans: 'PingFang SC', 'Noto Sans SC', 'Heiti SC', -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Nav — 极轻 */
+  .nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 48px;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,248,244,0.6); backdrop-filter: blur(8px);
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 18px; font-weight: 900;
+    letter-spacing: 0.08em; color: var(--ink);
+  }
+  .nav-logo em { font-style: normal; color: var(--orange); }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a {
+    color: var(--ink-soft); text-decoration: none; font-size: 13px;
+    font-weight: 400; letter-spacing: 0.04em; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--orange); }
+
+  /* Hero — 大留白 */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 160px 48px 100px;
+  }
+  .hero-inner { max-width: 560px; }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.16em; color: var(--orange);
+    margin-bottom: 32px; font-weight: 400;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(42px, 6vw, 68px);
+    font-weight: 900; line-height: 1.18;
+    letter-spacing: -0.01em; margin-bottom: 28px;
+  }
+  .hero h1 .accent { color: var(--orange); }
+  .hero p {
+    font-size: 16px; color: var(--ink-soft); line-height: 2;
+    max-width: 400px; margin-bottom: 48px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; padding: 14px 32px;
+    border-radius: 100px; font-size: 14px; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.03em;
+    transition: all 0.3s; border: 1px solid var(--ink-soft);
+    background: transparent; color: var(--ink); font-family: var(--sans); cursor: pointer;
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-fill { background: var(--orange); color: #fff; border-color: var(--orange); }
+  .btn-fill:hover { background: #d45a1e; border-color: #d45a1e; }
+
+  /* ===== 特色 — 极小内容岛 ===== */
+  section { padding: 0 48px; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; max-width: 1100px; margin: 0 auto 120px; }
+  .feat {
+    padding: 48px 32px; border-top: 1px solid var(--ink-faint);
+    transition: border-color 0.4s;
+  }
+  .feat:hover { border-top-color: var(--orange); }
+  .feat .feat-num { font-size: 11px; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 24px; }
+  .feat h3 { font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 14px; color: var(--ink); }
+  .feat p { font-size: 13px; color: var(--ink-soft); line-height: 2; }
+
+  /* ===== 服务 ===== */
+  .services-head { text-align: center; margin: 0 auto 64px; max-width: 500px; }
+  .services-head .label { font-size: 11px; letter-spacing: 0.14em; color: var(--orange); margin-bottom: 16px; }
+  .services-head h2 { font-family: var(--serif); font-size: clamp(28px, 4vw, 40px); font-weight: 900; color: var(--ink); }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto 120px; }
+  .svc { text-align: left; }
+  .svc .svc-icon { font-size: 32px; margin-bottom: 16px; opacity: 0.7; }
+  .svc h3 { font-family: var(--serif); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .svc p { font-size: 13px; color: var(--ink-soft); line-height: 2; }
+
+  /* ===== CTA ===== */
+  .cta { text-align: center; padding: 100px 48px 120px; max-width: 440px; margin: 0 auto; }
+  .cta h2 { font-family: var(--serif); font-size: 28px; font-weight: 900; margin-bottom: 16px; }
+  .cta p { font-size: 14px; color: var(--ink-soft); margin-bottom: 36px; line-height: 2; }
+
+  /* Footer */
+  footer { text-align: center; padding: 32px 48px 48px; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em; }
+
+  @media (max-width: 768px) {
+    .nav { padding: 20px 24px; } .nav-links { display: none; }
+    .hero { padding: 120px 24px 80px; }
+    section { padding: 0 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">井说<em>·</em>Well Talk</div>
+  <ul class="nav-links">
+    <li><a href="#features">理念</a></li>
+    <li><a href="#services">服务</a></li>
+    <li><a href="#cta">开始</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">CUSTOMIZED ENGLISH MASTERY</div>
+    <h1>不只是学英语<br>学会用英语<span class="accent">思考和表达</span></h1>
+    <p>每个学生都不一样。井说拒绝流水线课程，为每个人找到最合适的英语老师。</p>
+    <div style="display:flex;gap:14px;">
+      <a href="#cta" class="btn btn-fill">预约水平测试</a>
+      <a href="#services" class="btn">了解服务</a>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="features-grid">
+    <div class="feat"><div class="feat-num">01</div><h3>英语是技能，不是知识</h3><p>游泳在水中学会，英语在真实使用中掌握。不是背规则，是做演讲。</p></div>
+    <div class="feat"><div class="feat-num">02</div><h3>没有标准的学生</h3><p>就没有标准的方案。一切围绕一个人展开——教师匹配、课程设计、进度节奏。</p></div>
+    <div class="feat"><div class="feat-num">03</div><h3>汲取智慧，表达世界</h3><p>老师创造场景：演讲台、辩论席、讨论桌。学生在真实交流中自然习得语言。</p></div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="services-head">
+    <div class="label">WHAT WE OFFER</div>
+    <h2>覆盖英语学习的每一个阶段</h2>
+  </div>
+  <div class="services-grid">
+    <div class="svc"><div class="svc-icon">🎤</div><h3>演讲 & 辩论</h3><p>PF辩论 · NSDA备赛 · 公共演讲。学思辨，学表达。</p></div>
+    <div class="svc"><div class="svc-icon">📝</div><h3>KET / PET / FCE</h3><p>科学评估 → 定制方案。不刷题，提升真实能力。</p></div>
+    <div class="svc"><div class="svc-icon">🌍</div><h3>IELTS / TOEFL / SAT</h3><p>留学标化一对一，听说读写精准提分。</p></div>
+    <div class="svc"><div class="svc-icon">📚</div><h3>K-12 通用英语</h3><p>原版阅读 + 输出训练。告别哑巴英语。</p></div>
+    <div class="svc"><div class="svc-icon">💼</div><h3>成人商务英语</h3><p>学了就能用。邮件、会议、跨文化沟通。</p></div>
+    <div class="svc"><div class="svc-icon">✨</div><h3>不确定选什么？</h3><p>免费水平测试，了解真实水平，获得定制建议。</p></div>
+  </div>
+</section>
+
+<section class="cta" id="cta">
+  <h2>找到最适合你的英语老师</h2>
+  <p>免费水平测试 → 匹配教师 → 开始学习</p>
+  <a href="#" class="btn btn-fill">预约免费测试</a>
+</section>
+
+<footer>井说 Well Talk · 永汲教育咨询 © 2026</footer>
+
+</body>
+</html>

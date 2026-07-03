@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>井说 Well Talk · C方向</title>
+<style>
+  :root {
+    --white: #fefefe;
+    --ink: #1a1a1a;
+    --orange: #e87a3e;
+    --blue: #4a90b8;
+    --gold: #c89840;
+    --sans: 'PingFang SC','Noto Sans SC','Heiti SC',-apple-system,sans-serif;
+    --geo: 'Futura','Avenir Next','Century Gothic','PingFang SC',sans-serif;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: var(--sans);
+    background: var(--white);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Nav */
+  .nav {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:24px 48px; position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(254,254,254,0.8); backdrop-filter:blur(6px);
+    border-bottom:2px solid var(--ink);
+  }
+  .nav-logo {
+    font-family:var(--geo); font-size:20px; font-weight:800;
+    letter-spacing:-0.02em; color:var(--ink);
+  }
+  .nav-logo .dot { color:var(--orange); }
+  .nav-links { display:flex; gap:36px; list-style:none; }
+  .nav-links a {
+    color:var(--ink); text-decoration:none; font-size:13px;
+    font-weight:600; letter-spacing:0.02em; opacity:0.5; transition:opacity 0.2s;
+  }
+  .nav-links a:hover { opacity:1; }
+
+  /* Hero */
+  .hero {
+    min-height:100vh; display:flex; align-items:center;
+    padding:160px 48px 100px; position:relative; overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute;
+    width:600px; height:600px; border-radius:50%;
+    background:var(--orange); opacity:0.06;
+    top:-200px; right:-200px; pointer-events:none;
+  }
+  .hero::after {
+    content:''; position:absolute;
+    width:300px; height:300px;
+    border:3px solid var(--blue); opacity:0.12;
+    bottom:-60px; left:10%; pointer-events:none;
+  }
+  .hero-inner { max-width:580px; position:relative; z-index:2; }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:10px;
+    padding:8px 20px; border:2px solid var(--ink);
+    font-size:11px; font-weight:700; letter-spacing:0.1em;
+    margin-bottom:40px;
+  }
+  .hero-badge::before { content:''; width:8px; height:8px; background:var(--orange); }
+  .hero h1 {
+    font-family:var(--geo); font-size:clamp(48px,7vw,80px);
+    font-weight:900; line-height:1.05; letter-spacing:-0.03em;
+    margin-bottom:24px;
+  }
+  .hero h1 .accent { color:var(--orange); }
+  .hero p {
+    font-size:17px; line-height:1.8; max-width:420px;
+    margin-bottom:40px; opacity:0.6;
+  }
+  .btn {
+    display:inline-flex; align-items:center; padding:16px 34px;
+    font-size:14px; font-weight:700; letter-spacing:0.04em;
+    text-decoration:none; transition:all 0.25s;
+    font-family:var(--geo); cursor:pointer; border:none;
+  }
+  .btn-fill {
+    background:var(--ink); color:var(--white);
+  }
+  .btn-fill:hover { background:var(--orange); }
+  .btn-out {
+    background:transparent; color:var(--ink);
+    border:2px solid var(--ink); margin-left:12px;
+  }
+  .btn-out:hover { background:var(--ink); color:var(--white); }
+
+  /* Stats — 几何色块 */
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); max-width:1100px; margin:0 auto; padding:0 48px 80px; }
+  .stat { padding:32px 0; border-top:3px solid var(--ink); }
+  .stat .val { font-family:var(--geo); font-size:56px; font-weight:900; letter-spacing:-0.04em; line-height:1; }
+  .stat .val.orange { color:var(--orange); }
+  .stat .val.blue { color:var(--blue); }
+  .stat .lbl { font-size:12px; font-weight:600; letter-spacing:0.06em; margin-top:8px; opacity:0.4; }
+
+  /* Section title */
+  .sec-head { text-align:left; max-width:1100px; margin:0 auto 56px; padding:0 48px; }
+  .sec-head .tag { display:inline-block; padding:4px 16px; background:var(--ink); color:var(--white); font-size:11px; font-weight:700; letter-spacing:0.1em; margin-bottom:16px; }
+  .sec-head h2 { font-family:var(--geo); font-size:clamp(32px,5vw,48px); font-weight:900; letter-spacing:-0.03em; }
+
+  /* Services — 不对称网格 */
+  .services-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; max-width:1100px; margin:0 auto 100px; padding:0 48px; }
+  .svc {
+    padding:48px 36px; background:var(--white);
+    border:2px solid transparent; transition:border-color 0.3s;
+  }
+  .svc:hover { border-color:var(--ink); }
+  .svc .svc-mark {
+    width:40px; height:4px; background:var(--orange); margin-bottom:20px;
+  }
+  .svc:nth-child(2) .svc-mark { background:var(--blue); }
+  .svc:nth-child(3) .svc-mark { background:var(--gold); }
+  .svc:nth-child(4) .svc-mark { background:var(--orange); }
+  .svc:nth-child(5) .svc-mark { background:var(--blue); }
+  .svc:nth-child(6) .svc-mark { background:var(--ink); }
+  .svc h3 { font-family:var(--geo); font-size:22px; font-weight:800; margin-bottom:8px; }
+  .svc p { font-size:13px; opacity:0.5; line-height:1.8; }
+
+  /* CTA */
+  .cta { position:relative; max-width:800px; margin:0 auto 120px; padding:80px 48px; text-align:center; }
+  .cta::before {
+    content:''; position:absolute; inset:0;
+    background:var(--orange); opacity:0.04;
+  }
+  .cta h2 { font-family:var(--geo); font-size:clamp(28px,4vw,40px); font-weight:900; position:relative; }
+  .cta p { font-size:15px; opacity:0.5; margin:16px 0 32px; position:relative; }
+
+  footer { text-align:center; padding:32px 48px 48px; font-size:11px; font-weight:600; letter-spacing:0.08em; opacity:0.25; }
+
+  @media (max-width:768px) {
+    .nav { padding:16px 20px; } .nav-links { display:none; }
+    .hero { padding:120px 20px 80px; }
+    .stats { grid-template-columns:1fr 1fr; padding:0 20px 60px; }
+    .services-grid { grid-template-columns:1fr; padding:0 20px; }
+    .sec-head { padding:0 20px; }
+    .btn-out { margin-left:0; margin-top:10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">井说<span class="dot">·</span>Well Talk</div>
+  <ul class="nav-links">
+    <li><a href="#services">服务</a></li>
+    <li><a href="#approach">理念</a></li>
+    <li><a href="#cta">开始</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">定制化英语提升</div>
+    <h1>不只学英语<br>学会用英语<span class="accent">思考和表达</span></h1>
+    <p>每个学生都不一样。从演讲辩论到考试冲刺——我们为每个人匹配最合适的英语老师。</p>
+    <a href="#cta" class="btn btn-fill">预约免费水平测试</a>
+    <a href="#services" class="btn btn-out">了解服务</a>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><div class="val orange">20-30</div><div class="lbl">严选教师</div></div>
+  <div class="stat"><div class="val">5+</div><div class="lbl">学习阶段</div></div>
+  <div class="stat"><div class="val blue">1:1</div><div class="lbl">精准匹配</div></div>
+  <div class="stat"><div class="val">50%</div><div class="lbl">输出练习占比</div></div>
+</div>
+
+<section id="services">
+  <div class="sec-head">
+    <div class="tag">SERVICES</div>
+    <h2>覆盖英语学习的每个阶段</h2>
+  </div>
+  <div class="services-grid">
+    <div class="svc"><div class="svc-mark"></div><h3>演讲 & 辩论</h3><p>PF · NSDA · 公共演讲。不光学语言，学的是思辨与自信。</p></div>
+    <div class="svc"><div class="svc-mark"></div><h3>KET / PET / FCE</h3><p>科学评估 → 定制方案 → 专项突破。不刷题。</p></div>
+    <div class="svc"><div class="svc-mark"></div><h3>IELTS / TOEFL / SAT</h3><p>听说读写四位一体，精准提分。</p></div>
+    <div class="svc"><div class="svc-mark"></div><h3>K-12 通用英语</h3><p>原版阅读 + 输出训练。告别哑巴英语。</p></div>
+    <div class="svc"><div class="svc-mark"></div><h3>成人商务英语</h3><p>邮件 · 会议 · 跨文化沟通。学了就能用。</p></div>
+    <div class="svc"><div class="svc-mark"></div><h3>不确定选什么？</h3><p>免费水平测试，获得定制化学习建议。</p></div>
+  </div>
+</section>
+
+<section class="cta" id="cta">
+  <h2>找到最适合你的英语老师</h2>
+  <p>免费水平测试 → 精准匹配教师 → 开始定制学习</p>
+  <a href="#" class="btn btn-fill" style="background:var(--orange)">预约免费测试</a>
+</section>
+
+<footer>井说 Well Talk · 永汲教育咨询 © 2026</footer>
+
+</body>
+</html>

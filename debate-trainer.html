@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PF辩论教学 · Well Talk 永汲教育</title>
+<style>
+:root{--pri:#1e3a5f;--pri-light:#e8eef5;--gold:#c9a84c;--gold-light:#fdf6e3;--bg:#f4f5f7;--card:#fff;--text:#1e293b;--muted:#94a3b8;--red:#dc2626;--green:#16a34a;--pro-color:#2563eb;--con-color:#dc2626;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.container{max-width:720px;margin:0 auto;padding:16px 14px 40px}
+.page-header{text-align:center;padding:20px 0 6px}
+.page-header .logo{display:inline-flex;align-items:center;gap:8px;font-size:20px;font-weight:800;color:var(--pri);letter-spacing:2px}
+.page-header .logo .dot{width:32px;height:32px;border-radius:50%;background:var(--pri);display:flex;align-items:center;justify-content:center;position:relative}
+.page-header .logo .dot::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.45)}
+.page-header .logo .dot::after{content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:#f0d78c}
+.page-header .sub{font-size:12px;color:var(--muted);letter-spacing:1px;margin-top:4px}
+.section-title{font-size:15px;font-weight:700;color:var(--text);margin:20px 0 10px;letter-spacing:1px}
+.topic-card{background:var(--card);border-radius:var(--radius);padding:20px 18px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow);margin-bottom:12px;border:2px solid transparent;position:relative;overflow:hidden}
+.topic-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1);border-color:var(--pri)}
+.topic-card .t-num{font-size:11px;color:var(--gold);font-weight:700;letter-spacing:2px;margin-bottom:6px}
+.topic-card .t-name{font-size:17px;font-weight:700;color:var(--pri);margin-bottom:4px}
+.topic-card .t-name small{font-size:12px;color:var(--muted);font-weight:400}
+.topic-card .t-sides{font-size:12px;color:var(--muted);margin-top:6px;display:flex;gap:10px}
+.topic-card .t-sides span{padding:3px 10px;border-radius:12px;font-weight:600;font-size:11px}
+.side-pro{background:#dbeafe;color:var(--pro-color)}
+.side-con{background:#fee2e2;color:var(--con-color)}
+.coin-section{background:var(--card);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);text-align:center;margin:16px 0}
+.coin-section h3{font-size:15px;color:var(--pri);margin-bottom:4px;letter-spacing:1px}
+.coin-section .coin-desc{font-size:12px;color:var(--muted);margin-bottom:16px}
+.coin-container{perspective:600px;width:100px;height:100px;margin:0 auto 16px;cursor:pointer;position:relative}
+.coin{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .1s}
+.coin.flipping{animation:flipCoin 1.6s ease-out}
+.coin .coin-face{position:absolute;width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;backface-visibility:hidden;border:4px solid var(--gold)}
+.coin .coin-front{background:linear-gradient(135deg,#fef9e7,#fde68a);color:var(--gold);transform:rotateY(0deg)}
+.coin .coin-back{background:linear-gradient(135deg,#e8eef5,#93c5fd);color:var(--pri);transform:rotateY(180deg)}
+.coin .coin-label{font-size:9px;position:absolute;bottom:18px;letter-spacing:2px;font-weight:400}
+@keyframes flipCoin{0%{transform:rotateY(0) rotateX(0)}25%{transform:rotateY(360deg) rotateX(15deg)}50%{transform:rotateY(720deg) rotateX(0)}75%{transform:rotateY(1080deg) rotateX(-10deg)}100%{transform:rotateY(1440deg) rotateX(0)}}
+.coin-result{font-size:14px;font-weight:700;color:var(--pri);margin-top:8px;letter-spacing:0.5px;min-height:20px}
+.coin-result .winner{color:var(--gold);font-weight:800}
+.btn-coin{background:var(--gold);color:#fff;border:none;padding:10px 24px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:inherit;transition:all .15s}
+.btn-coin:hover{background:#b8942e;transform:scale(1.03)}
+.btn-coin:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.debate-view{display:none}
+.debate-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.debate-topbar .back-btn{background:#fff;border:1.5px solid var(--pri);color:var(--pri);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;letter-spacing:0.5px}
+.debate-topbar .back-btn:hover{background:var(--pri-light)}
+.debate-topbar .debate-title{font-size:14px;font-weight:700;color:var(--pri);letter-spacing:0.5px;flex:1;text-align:center;min-width:140px}
+.side-selector{display:flex;gap:6px;background:#e5e7eb;border-radius:18px;padding:3px}
+.side-btn{flex:1;padding:7px 14px;border-radius:15px;border:none;background:none;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;letter-spacing:0.5px;color:var(--muted);transition:all .15s;white-space:nowrap}
+.side-btn.active-pro{background:var(--pro-color);color:#fff}
+.side-btn.active-con{background:var(--con-color);color:#fff}
+.phase-flow{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.phase-dot{flex-shrink:0;padding:6px 12px;border-radius:14px;font-size:10px;font-weight:600;letter-spacing:0.5px;background:#e5e7eb;color:var(--muted);cursor:pointer;transition:all .15s;border:none;font-family:inherit;white-space:nowrap}
+.phase-dot.current{background:var(--gold);color:#fff;box-shadow:0 2px 8px rgba(201,168,76,.4)}
+.phase-dot.done{background:#d1fae5;color:var(--green)}
+.timer-box{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:16px;background:var(--card);border-radius:var(--radius);padding:10px 16px;box-shadow:var(--shadow)}
+.timer-display{font-size:36px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:2px;color:var(--pri)}
+.timer-display.warning{color:var(--gold);animation:pulse 1s infinite}
+.timer-display.danger{color:var(--red);animation:pulse .5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.timer-label{font-size:11px;color:var(--muted);letter-spacing:1px}
+.timer-btns{display:flex;gap:6px}
+.timer-btn{padding:6px 12px;border-radius:12px;border:none;cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;letter-spacing:0.5px;transition:all .15s}
+.timer-btn.start{background:#d1fae5;color:var(--green)}
+.timer-btn.start:hover{background:#bbf7d0}
+.timer-btn.pause{background:#fef3c7;color:#92400e}
+.timer-btn.pause:hover{background:#fde68a}
+.timer-btn.reset{background:#f1f5f9;color:var(--muted)}
+.timer-btn.reset:hover{background:#e5e7eb}
+.content-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 18px;margin-bottom:14px}
+.content-card .phase-title{font-size:16px;font-weight:700;color:var(--pri);letter-spacing:0.5px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.content-card .phase-title .badge{font-size:10px;padding:3px 8px;border-radius:10px;color:#fff;font-weight:600}
+.content-card .phase-title .badge.pro-badge{background:var(--pro-color)}
+.content-card .phase-title .badge.con-badge{background:var(--con-color)}
+.content-card .phase-instruction{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.hidden-content{background:#f8fafc;border:2px dashed #e5e7eb;border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:10px}
+.hidden-content:hover{border-color:var(--pri);background:var(--pri-light)}
+.hidden-content .lock-icon{font-size:28px;margin-bottom:4px}
+.hidden-content .lock-text{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:0.5px}
+.hidden-content .lock-hint{font-size:10px;color:var(--muted);margin-top:2px}
+.revealed-content{background:#f8fafc;border:2px solid #d1fae5;border-radius:10px;padding:16px;line-height:1.9;font-size:14px;display:none}
+.revealed-content .speech-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--gold);margin-bottom:4px;text-transform:uppercase}
+.revealed-content .zh-translation{margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb;color:var(--muted);font-size:13px;line-height:1.8}
+.question-card{background:#fefce8;border:1.5px solid #fde68a;border-radius:10px;padding:14px;margin-bottom:10px}
+.question-card .q-num{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:4px}
+.question-card .q-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:10px}
+.question-card .q-answer-toggle{background:none;border:1px dashed var(--gold);color:var(--gold);padding:6px 14px;border-radius:12px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;letter-spacing:0.5px;transition:all .15s}
+.question-card .q-answer-toggle:hover{background:var(--gold-light);border-style:solid}
+.question-card .q-answer{display:none;margin-top:10px;padding:10px 12px;background:#fff;border-radius:8px;font-size:13px;line-height:1.7;border-left:3px solid var(--green)}
+.question-card .q-answer .ans-label{font-size:10px;font-weight:700;color:var(--green);letter-spacing:1px;margin-bottom:4px}
+.scoring-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.scoring-row .score-label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px}
+.star-rating{display:flex;gap:4px}
+.star-btn{background:none;border:none;font-size:22px;cursor:pointer;transition:all .1s;padding:2px;opacity:.3}
+.star-btn:hover{opacity:.7;transform:scale(1.2)}
+.star-btn.selected{opacity:1}
+.score-confirmed{font-size:11px;font-weight:700;color:var(--green);display:none;letter-spacing:0.5px}
+.score-summary{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;text-align:center;margin-top:16px;display:none}
+.score-summary h3{font-size:14px;color:var(--pri);margin-bottom:8px}
+.score-summary .total-score{font-size:28px;font-weight:800;color:var(--gold);letter-spacing:1px}
+.score-summary .score-detail{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6}
+.rules-card{background:var(--pri-light);border-radius:var(--radius);padding:16px;margin-bottom:16px;font-size:12px;line-height:1.8}
+.rules-card h4{font-size:13px;color:var(--pri);margin-bottom:6px;letter-spacing:1px}
+.rules-table{width:100%;font-size:11px}
+.rules-table td{padding:4px 8px;border-bottom:1px solid #d1dbe8}
+.rules-table td:first-child{font-weight:700;color:var(--pri);white-space:nowrap}
+.btn{padding:12px 28px;border-radius:25px;border:none;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:inherit;transition:all .15s}
+.btn-pri{background:var(--pri);color:#fff}
+.btn-pri:hover{background:#152c4a}
+.btn-outline{background:#fff;color:var(--pri);border:2px solid var(--pri)}
+.btn-outline:hover{background:var(--pri-light)}
+@media print{body{background:#fff}.debate-topbar,.timer-box,.timer-btns,.back-btn,.scoring-row,.btn-coin,.coin-section,.side-selector,.phase-flow{display:none!important}.hidden-content{display:none!important}.revealed-content{display:block!important}.question-card .q-answer{display:block!important}}
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+
+  <!-- ====== HOME VIEW ====== -->
+  <div id="homeView">
+    <div class="page-header">
+      <div class="logo"><div class="dot"></div>PF辩论教学</div>
+      <div class="sub">Public Forum Debate · 公共论坛辩论训练</div>
+    </div>
+
+    <div class="rules-card">
+      <h4>📋 PF辩论流程速查</h4>
+      <table class="rules-table">
+        <tr><td>① 正方立论</td><td>4分钟 · 提出核心论点+论据</td></tr>
+        <tr><td>② 反方立论</td><td>4分钟 · 提出反对论点+反驳正方</td></tr>
+        <tr><td>③ 交叉质询</td><td>3分钟 · 双方直接问答，暴露逻辑弱点</td></tr>
+        <tr><td>④ 正方反驳</td><td>4分钟 · 逐条驳斥反方立论</td></tr>
+        <tr><td>⑤ 反方反驳</td><td>4分钟 · 逐条驳斥正方论点+巩固立场</td></tr>
+        <tr><td>⑥ 正方总结</td><td>2分钟 · 归纳核心冲突+呼吁投票</td></tr>
+        <tr><td>⑦ 反方总结</td><td>2分钟 · 归纳核心冲突+呼吁投票</td></tr>
+      </table>
+    </div>
+
+    <div class="coin-section">
+      <h3>🪙 抛硬币决定优先选择权</h3>
+      <p class="coin-desc">点击硬币抛掷 · 获胜方可优先选择正/反方立场</p>
+      <div class="coin-container" id="coinContainer" onclick="flipCoin()">
+        <div class="coin" id="coin">
+          <div class="coin-face coin-front">正<div class="coin-label">SIDE</div></div>
+          <div class="coin-face coin-back">反<div class="coin-label">SIDE</div></div>
+        </div>
+      </div>
+      <div class="coin-result" id="coinResult"></div>
+      <button class="btn-coin" id="coinBtn" onclick="flipCoin()">🪙 抛硬币</button>
+    </div>
+
+    <div class="section-title">选择辩题开始训练</div>
+
+    <div class="topic-card" onclick="openDebate('topic1')">
+      <div class="t-num">DEBATE 1</div>
+      <div class="t-name">Should AI be used in school classrooms? <small>人工智能应该被用于学校课堂吗？</small></div>
+      <div class="t-sides"><span class="side-pro">正方 PRO · 应该</span><span class="side-con">反方 CON · 不应该</span></div>
+    </div>
+
+    <div class="topic-card" onclick="openDebate('topic2')">
+      <div class="t-num">DEBATE 2</div>
+      <div class="t-name">Should short-video platforms be banned for teenagers? <small>短视频平台应该对青少年禁用吗？</small></div>
+      <div class="t-sides"><span class="side-pro">正方 PRO · 应该</span><span class="side-con">反方 CON · 不应该</span></div>
+    </div>
+  </div>
+
+  <!-- ====== DEBATE VIEW ====== -->
+  <div class="debate-view" id="debateView">
+    <div class="debate-topbar">
+      <button class="back-btn" onclick="goHome()">← 返回首页</button>
+      <span class="debate-title" id="debateTitle"></span>
+      <div class="side-selector" id="sideSelector">
+        <button class="side-btn" id="sideProBtn" onclick="setStudentSide('pro')">🟦 正方视角</button>
+        <button class="side-btn" id="sideConBtn" onclick="setStudentSide('con')">🟥 反方视角</button>
+      </div>
+    </div>
+    <div class="phase-flow" id="phaseFlow"></div>
+    <div class="timer-box">
+      <div><div class="timer-display" id="timerDisplay">4:00</div><div class="timer-label" id="timerPhaseLabel">正方立论</div></div>
+      <div class="timer-btns">
+        <button class="timer-btn start" id="timerStart" onclick="toggleTimer()">▶ 开始</button>
+        <button class="timer-btn reset" onclick="resetTimer()">↺ 重置</button>
+      </div>
+    </div>
+    <div id="phaseContent"></div>
+    <div class="score-summary" id="scoreSummary">
+      <h3>📊 本场得分</h3>
+      <div class="total-score" id="totalScore">-</div>
+      <div class="score-detail" id="scoreDetail"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ====== HIDDEN SPEECH DATA (DO NOT EDIT STRUCTURE) ====== -->
+<div style="display:none">
+<div id="data_t1_pc_en">Honorable judges, respected opponents, my teammates and I firmly believe that &lt;strong&gt;AI should be used in school classrooms&lt;/strong&gt;. Our reasons are as follows.<br><br>&lt;strong&gt;First, AI provides personalised learning.&lt;/strong&gt; Every student learns at a different pace and in a different style. AI-powered tools can analyse a student's strengths and weaknesses and then offer customised exercises and explanations. For example, if a student struggles with multiplication, an AI system can automatically generate more practice problems focused on that specific skill.<br><br>&lt;strong&gt;Second, AI can reduce the burden on teachers.&lt;/strong&gt; Teachers spend countless hours on grading papers and preparing lesson materials. AI can handle much of this repetitive work, freeing teachers to focus on what they do best: inspiring students and giving one-on-one guidance. A study published by EdTech Magazine found that AI grading tools can cut a teacher's grading time by nearly 40%.<br><br>&lt;strong&gt;Third, AI can make education more accessible.&lt;/strong&gt; In rural areas where qualified teachers are scarce, AI teaching assistants can help bridge the gap. Students can ask questions at any time, even when a human teacher is not available.<br><br>For these reasons, we strongly support using AI in school classrooms. Thank you.</div>
+<div id="data_t1_pc_zh">第一，AI能提供个性化学习。每个学生的学习节奏和学习风格各不相同。AI驱动的工具可以分析学生的优势和薄弱点，进而提供量身定制的练习和讲解。<br><br>第二，AI可以减轻教师的负担。教师花费大量时间批改作业和准备教学材料。AI可以处理大量重复性工作，让教师专注于启发学生和提供一对一指导。<br><br>第三，AI可以让教育更加普及。在合格教师稀缺的乡村地区，AI教学助手可以帮助弥合差距。学生可以随时提问，即使没有人类教师在旁边。</div>
+
+<div id="data_t1_cc_en">Honorable judges, respected opponents, we firmly oppose the use of AI in school classrooms, and here is why.<br><br>&lt;strong&gt;First, AI creates over-reliance and weakens critical thinking.&lt;/strong&gt; When students know that an AI tool can instantly give them the answer, they are less likely to work through problems on their own. This erodes essential skills like reasoning, problem-solving and patience. We are not building thinkers; we are building button-pushers.<br><br>&lt;strong&gt;Second, AI cannot replace human connection.&lt;/strong&gt; Education is not just about transmitting information; it's about mentorship, empathy and emotional support. A machine—no matter how advanced—cannot comfort a frustrated student, cannot detect hidden sadness, and cannot inspire passion through its own life story.<br><br>&lt;strong&gt;Third, there are serious concerns about data privacy and equity.&lt;/strong&gt; AI systems collect vast amounts of student data. Where does that data go? Who protects it? And if only wealthy schools can afford advanced AI tools, the gap between rich and poor students will widen even further.<br><br>For these reasons, we firmly believe that AI should not be used in school classrooms. Thank you.</div>
+<div id="data_t1_cc_zh">第一，AI会导致过度依赖并削弱批判性思维。当学生知道AI工具可以立即给出答案时，他们就不太愿意自己独立解决问题了。这会侵蚀推理、解决问题和耐心等基本能力。<br><br>第二，AI无法取代人与人的连接。教育不仅仅是传递信息，它还关乎指导、共情和情感支持。一台机器无法安慰一个沮丧的学生，无法察觉隐藏的悲伤，也无法用自己的生命故事去激发热情。<br><br>第三，关于数据隐私和公平性存在严重担忧。AI系统收集大量学生数据。如果只有富裕的学校能负担先进AI工具，贫富学生之间的差距将进一步扩大。</div>
+
+<div id="data_t1_pr_en">Thank you. I'd like to respond to three of the Con team's key points.<br><br>&lt;strong&gt;First, on "over-reliance."&lt;/strong&gt; The Con team assumes that if AI is present, teachers will disappear. That is a straw man. In reality, AI is a teaching assistant, not a replacement. The teacher still guides the class, assigns work and evaluates progress. AI simply handles the repetitive parts.<br><br>&lt;strong&gt;Second, on "human connection."&lt;/strong&gt; We absolutely agree that human connection is vital — and that is precisely why we support AI. By taking over mundane tasks, AI frees up more time for teachers to have that human connection. The real threat to connection is a teacher too exhausted to speak.<br><br>&lt;strong&gt;Third, on "data privacy."&lt;/strong&gt; Regulations can and do exist. Finland and South Korea, for example, have strict education data protection laws that govern the use of AI in schools. The existence of a risk does not mean we should abandon the technology; it means we should regulate it properly. Thank you.</div>
+<div id="data_t1_pr_zh">第一，关于"过度依赖"。反方假设AI出现后教师会消失——这是稻草人谬误。实际上，AI是教学助手，而非替代者。教师仍然主导课堂、布置作业、评估进展。AI只处理重复性部分。<br><br>第二，关于"人与人连接"。我们完全赞同人与人连接至关重要——而这恰恰是我们支持AI的原因。AI接手繁琐任务后，反而为教师腾出更多时间进行这种连接。<br><br>第三，关于"数据隐私"。法规可以存在并且确实存在。风险的存在并不意味着放弃技术，而是意味着恰当地进行监管。</div>
+
+<div id="data_t1_cr_en">Thank you. Allow me to challenge the Pro team's core arguments.<br><br>&lt;strong&gt;First, on "efficiency."&lt;/strong&gt; The Pro team keeps saying AI saves time. But a rushed education is not a better education. Some of the most valuable learning happens in the struggle — the moment when a student erases a wrong answer and tries again. When AI steps in to "help," it often removes that productive struggle.<br><br>&lt;strong&gt;Second, on "accessibility."&lt;/strong&gt; The Pro team romanticises AI for rural schools. But these schools often lack even basic internet and electricity. How can we talk about fancy AI tools when children don't have a chalkboard? Money spent on AI licences could instead be used to hire real teachers or buy textbooks.<br><br>&lt;strong&gt;Third, on "personalisation."&lt;/strong&gt; Personalised learning sounds wonderful, but what it often means in practice is a student staring at a screen alone for hours, clicking through automated exercises. That is not education — that is a digital version of factory-style worksheet drills. We need less screen time for children, not more. Thank you.</div>
+<div id="data_t1_cr_zh">第一，关于"效率"。正方反复说AI节省时间。但仓促的教育不是更好的教育。最有价值的学习恰恰发生在挣扎过程中——学生擦掉错误答案再试一次的那个瞬间。<br><br>第二，关于"可及性"。正方将AI浪漫化地想象成乡村学校的救星。但这些学校连基本网络和电力都常常欠缺。花在AI许可上的钱，完全可以用来聘请真正的教师或购买教科书。<br><br>第三，关于"个性化"。听起来美妙，但实际操作中往往意味着学生一个人盯着屏幕数小时点头自动练习题——那不是教育，那是流水线式练习题的数字版本。</div>
+
+<div id="data_t1_ps_en">Thank you. This debate has centred on three questions: Can AI make learning better? Can it support teachers? And can we manage the risks?<br><br>On learning: AI adapts to how each student learns, giving extra help where it's needed most. On teachers: AI doesn't replace teachers — it frees them. A teacher who spends less time grading is a teacher who spends more time teaching. On risks: every new technology presents challenges, from the printing press to the Internet. We don't ban them — we build good rules around them. The same should apply to AI.<br><br>The Con side has raised thoughtful concerns, and we respect them. But those concerns are arguments for careful implementation, not for a blanket ban. The classroom should be a place where students learn to use the tools of their future. AI is one of those tools. We ask you to vote Pro. Thank you.</div>
+<div id="data_t1_ps_zh">本场辩论围绕三个问题：AI能让学习变得更好吗？它能支持教师吗？我们能管理好风险吗？<br><br>关于学习：AI适应每个学生的学习方式。关于教师：AI不取代教师——它解放教师。关于风险：每项新技术都会带来挑战。我们不禁止它们——我们为它们建立良好的规则。对AI同样该如此。<br><br>反方的关切恰恰是主张审慎实施的论据，而非一概禁止的理由。课堂应是学生学会使用未来工具的地方。AI就是其中之一。</div>
+
+<div id="data_t1_cs_en">Thank you. The Pro team asks for careful implementation. But we have seen time and again what happens when technology rushes into classrooms before we are ready: tablets that gather dust, laptops that become toys, software that is licensed but never trained on.<br><br>The core question is not "Is AI interesting?" — it is "Does AI make education better for children today?" And on that question, the Pro side has failed to provide convincing evidence. What they describe is a utopian promise, not today's classroom reality.<br><br>Meanwhile, the costs are real: less human interaction, more screen time, more data collection, and more inequality. We do not need AI to teach kindness, to model patience, or to recognise the hidden struggles behind a child's silence. For that, we need real teachers. Vote Con. Thank you.</div>
+<div id="data_t1_cs_zh">核心问题不是"AI有趣吗"——而是"AI让今天的孩子们接受的教育真的更好了吗？"在这一点上，正方未能提供令人信服的证据。他们描述的是乌托邦式的承诺，而非当今课堂的现实。<br><br>代价是真实存在的：更少人际互动、更多屏幕时间、更多数据收集和更多不平等。我们不需要AI来教善良、来示范耐心、来识别孩子沉默背后隐藏的挣扎。对此，我们需要真正的教师。请投反方。</div>
+
+<!-- Topic 2 speeches -->
+<div id="data_t2_pc_en">Honorable judges, respected opponents, we stand in firm support of the resolution: &lt;strong&gt;short-video platforms should be banned for teenagers.&lt;/strong&gt;<br><br>&lt;strong&gt;First and most importantly, the addictive design of these platforms destroys teenagers' attention span and academic performance.&lt;/strong&gt; A 2023 study published in Frontiers in Psychology found that heavy short-video users showed significantly lower sustained-attention scores than non-users. These apps are engineered by thousands of the world's smartest engineers to keep users scrolling — and the adolescent brain simply does not have the self-regulation to resist.<br><br>&lt;strong&gt;Second, the mental-health toll is undeniable.&lt;/strong&gt; Research from the University of Pennsylvania has linked social media consumption to increased rates of anxiety, depression and loneliness among young people. Teenagers constantly compare their real lives to the curated, filtered highlight reels on these platforms — a comparison they can never win.<br><br>&lt;strong&gt;Third, the content is largely unregulated and often inappropriate.&lt;/strong&gt; Despite age-rating systems, a teenager can easily access violent videos, dangerous challenges and explicit material. The platforms' own moderation reports admit that millions of harmful videos slip through every month.<br><br>When a product harms children at scale and the industry fails to self-regulate, government has both the right and the duty to step in. A ban is the clearest and most effective measure. Thank you.</div>
+<div id="data_t2_pc_zh">第一，这些平台令人上瘾的设计摧毁了青少年的注意力和学业表现。2023年《心理学前沿》研究发现，重度短视频用户的持续性注意力得分显著低于非使用者。<br><br>第二，对心理健康的损害不可否认。宾夕法尼亚大学研究将社交媒体消费与年轻人焦虑、抑郁和孤独率的上升联系起来。<br><br>第三，内容基本不受监管且常常不适宜。平台自己的审查报告承认，每月有数百万条有害视频漏网。<br><br>当一款产品大规模伤害儿童而行业自律失败时，政府既有权利也有责任介入。禁令是最清晰、最有效的措施。</div>
+
+<div id="data_t2_cc_en">Honorable judges, respected opponents, we strongly oppose a ban on short-video platforms for teenagers. Such a ban is both impractical and counterproductive.<br><br>&lt;strong&gt;First, a ban treats the symptom, not the cause.&lt;/strong&gt; Teenagers have always sought distraction and entertainment. Before short-video platforms, there were comic books, television and video games — each was once blamed for "ruining the youth." Banning one form of media does nothing to address the deeper issues: why are teenagers bored, stressed and seeking escape in the first place?<br><br>&lt;strong&gt;Second, short-video platforms are not inherently harmful — they are powerful tools that can educate and inspire.&lt;/strong&gt; Countless teachers and science communicators use short-video platforms to share knowledge. During the pandemic, many students relied on educational short videos to supplement their learning. A ban would cut off a valuable supplement to formal education, especially for students in resource-poor areas.<br><br>&lt;strong&gt;Third, a ban cannot be effectively enforced in the digital age.&lt;/strong&gt; Teenagers will simply use VPNs, borrow their parents' accounts, or migrate to other platforms. Prohibition has never worked for alcohol, drugs or digital content. What works is education — teaching digital literacy, time management and critical thinking.<br><br>We do not need a ban. We need responsible parenting, better school guidance and smarter regulation. Vote Con. Thank you.</div>
+<div id="data_t2_cc_zh">第一，禁令治标不治本。青少年从来都在寻求消遣和娱乐。在短视频之前，有漫画书、电视和电子游戏——每一项都曾被指责"毁掉年轻一代"。<br><br>第二，短视频平台并非本质上有害——它们是强大的工具，可以教育和启发。无数教师和科普工作者使用短视频平台分享知识。<br><br>第三，禁令根本无法有效执行。青少年只会使用VPN、借用父母账号或转向其他平台。真正奏效的是教育——教授数字素养、时间管理和批判性思维。</div>
+
+<div id="data_t2_pr_en">Thank you. The Con team relies on three arguments that collapse under scrutiny.<br><br>&lt;strong&gt;First, the "neutral tool" argument.&lt;/strong&gt; A hammer is a neutral tool; a short-video platform is not. It uses behavioural data, A/B testing and variable rewards to maximise watch time — all features explicitly designed to override user autonomy. Calling it neutral ignores its entire business model.<br><br>&lt;strong&gt;Second, the "education will suffice" claim.&lt;/strong&gt; We've been trying media literacy education for twenty years. Has it worked? Obesity rates are up, teen anxiety is at an all-time high, and reading scores are declining. The evidence does not support the claim that education alone can counter the combined power of algorithmic design and corporate profit motives.<br><br>&lt;strong&gt;Third, the "enforcement is impossible" argument.&lt;/strong&gt; This is a defeatist position. Many countries have already implemented age verification on certain platforms. Germany requires parental consent for social media use under 16. China's youth-mode restrictions have measurably reduced screen time for millions of students. Enforcement is difficult, but not impossible. Thank you.</div>
+<div id="data_t2_pr_zh">第一，"中性工具"的论点。榔头是中性工具；短视频平台不是。它利用行为数据、A/B测试和可变奖励来最大化观看时长——这些功能都是刻意设计来凌驾于用户自主权之上的。<br><br>第二，"教育就够了"的说法。我们尝试媒介素养教育已有二十年。见效了吗？肥胖率上升，青少年焦虑达到历史最高，阅读成绩下降。<br><br>第三，"执行不可能"的论点。这是一种失败主义立场。许多国家已经在平台上实施了年龄验证。执行困难，但并非不可能。</div>
+
+<div id="data_t2_cr_en">Thank you. Let me directly address the Pro team's latest claims.<br><br>&lt;strong&gt;First, the Pro side points to China's youth-mode regulation, but that is precisely our argument: regulation — not a total ban — is what works.&lt;/strong&gt; Youth-mode limits screen time without removing access to beneficial content. If the Pro side is now endorsing regulation rather than a ban, then we are actually in agreement.<br><br>&lt;strong&gt;Second, on media literacy.&lt;/strong&gt; Media literacy hasn't failed — it has never been systematically funded. Most schools offer zero hours of digital-literacy instruction per year. A 2022 Stanford study showed that a six-hour digital-literacy course significantly improved students' ability to distinguish real news from fake content.<br><br>&lt;strong&gt;Third, on "addictive design."&lt;/strong&gt; Yes, these platforms are designed to be engaging. So are novels, films and symphony concerts. Intense engagement is not itself a pathology. The question is whether it crosses into harm — and that depends on dosage and context, which a ban treats with a sledgehammer rather than a scalpel. Thank you.</div>
+<div id="data_t2_cr_zh">第一，正方提到了中国的青少年模式监管，但这恰恰是我们的论点：监管——而非全面禁止——才是有效之道。青少年模式在限制屏幕时间的同时并未移除获取有益内容的渠道。<br><br>第二，媒介素养并没有失败——它从未被系统性地资助过。2022年斯坦福研究显示，一门六小时数字素养课程显著提高了学生辨别真新闻与假内容的能力。<br><br>第三，关于"成瘾设计"。小说、电影和交响音乐会也被设计得引人入胜。强烈投入本身并不是病态——问题在于是否越界造成伤害，这取决于剂量和情境。</div>
+
+<div id="data_t2_ps_en">Thank you. Let me bring this debate back to first principles.<br><br>The question before us is simple: should we, as a society, allow an industry to profit from the documented harm of children?<br><br>The evidence is overwhelming. These platforms shorten attention spans. They worsen mental health. They expose minors to dangerous and inappropriate content. And they have been engineered to be as addictive as possible.<br><br>The Con team says: "educate." But we have been educating — and the problem is getting worse. They say: "regulate." But we have spent years waiting for platforms to self-regulate, and they have not delivered.<br><br>A temporary, targeted ban on teenagers' use of short-video platforms protects the most vulnerable members of society while giving us time to build better systems. We can always lift a ban when conditions improve. But we cannot undo the years of lost learning and stolen attention that a generation has already suffered. Vote Pro. Thank you.</div>
+<div id="data_t2_ps_zh">我们面前的问题很简单：我们是否应该允许一个行业从已被记录在案的儿童伤害中获利？<br><br>证据是压倒性的。反方说"教育"——但我们一直在教育，问题却愈发严重。他们说"监管"——但我们等平台自律等了多年，它们并未兑现。<br><br>一项暂时性的、针对青少年的禁令保护了社会最脆弱的成员，同时给予我们时间来建立更好的体系。我们随时可以在情况改善后解除禁令。请投正方。</div>
+
+<div id="data_t2_cs_en">Thank you. The Pro side has made an emotional case, but emotion is not a substitute for sound policy.<br><br>Here is what they have not answered: What will teenagers do instead? A ban does not create better alternatives — it just creates a vacuum. And in a vacuum, teenagers will find something else, potentially more harmful, to fill it.<br><br>Here is what they have conceded: they now admit that education can work — they just haven't funded it. They now admit that regulation is possible — they just haven't tried it seriously. So why jump to the most extreme, most restrictive, most freedom-limiting solution before we have genuinely tried the alternatives?<br><br>We stand for a balanced approach: stronger age-verification systems, mandatory digital-literacy courses in every school, transparent algorithmic auditing, and parental-control tools that actually work. This approach respects teenagers' intelligence, protects their safety and preserves their access to the educational, creative and community-building aspects of these platforms.<br><br>A ban is no solution at all. It is an admission of defeat — and we refuse to be defeated. Vote Con. Thank you.</div>
+<div id="data_t2_cs_zh">正方做了一个情感充沛的论述，但情感不能替代良策。<br><br>他们没有回答：青少年会转而做什么？禁令不会创造更好的替代方案——它只是制造了一个真空。<br><br>他们承认教育确实可以起作用——他们只是没有资助。他们承认监管是可能的——他们只是没有认真尝试。那为什么要先跳到最极端的方案？<br><br>我们主张平衡之道：更强的年龄验证体系，每所学校必修的数字素养课程，透明的算法审计，以及真正有效的家长控制工具。请投反方。</div>
+</div>
+
+<script>
+// Helper: get speech data from hidden HTML elements
+function S(id){ var el=document.getElementById(id); return el?el.innerHTML:''; }
+
+// ==================== DEBATE DATA ====================
+var DEBATES = {
+  topic1: {
+    title: 'Should AI be used in school classrooms?',
+    titleZh: '人工智能应该被用于学校课堂吗？',
+    phases: [
+      {id:'pc', name:'① 正方立论', sub:'Pro Constructive', side:'pro', time:240,
+       instruction:'请学生先思考：如果你是<strong>正方</strong>，你会提出哪些核心论点支持AI进入课堂？给学生2-3分钟准备，然后点击下方查看正方立论原文。',
+       speechEN: S('data_t1_pc_en'), speechZH: S('data_t1_pc_zh')},
+      {id:'cc', name:'② 反方立论', sub:'Con Constructive', side:'con', time:240,
+       instruction:'请学生先思考：如果你是<strong>反方</strong>，你会如何反对AI进入课堂？给学生2-3分钟准备，然后点击下方查看反方立论原文。',
+       speechEN: S('data_t1_cc_en'), speechZH: S('data_t1_cc_zh')},
+      {id:'cf', name:'③ 交叉质询', sub:'Crossfire', side:'both', time:180,
+       instruction:'交叉质询环节。根据学生当前选择的立场，展示对方提出的质询问题。让学生<strong>逐题回答</strong>，老师评分后点击查看最佳答案。',
+       isCrossfire: true,
+       questionsPro: [
+         {q:"You argue AI provides personalised learning — but doesn't this mean students spend more time alone staring at screens rather than interacting with teachers and peers?", a:"AI is a teaching assistant, not a replacement. By handling repetitive tasks, AI actually frees up more time for teachers to provide that human interaction. The real threat to connection is a teacher too exhausted from grading to engage meaningfully with students."},
+         {q:"If AI gives students instant answers, how do we prevent them from losing the ability to think critically and solve problems independently?", a:"AI can be programmed to guide rather than give answers — using Socratic questioning, hints, and step-by-step scaffolding. The goal is not to replace thinking but to support it, just as a tutor would."},
+         {q:"AI systems collect vast amounts of student data. Where does that data go? Who protects it? And isn't this especially dangerous for minors?", a:"Regulations can and do exist. Finland and South Korea have strict education data protection laws governing AI in schools. The existence of a risk doesn't mean we should abandon the technology — it means we should regulate it properly."}
+       ],
+       questionsCon: [
+         {q:"You mentioned that AI weakens critical thinking. But don't calculators also exist in classrooms, and haven't they been accepted as useful tools rather than threats to thinking?", a:"A calculator is a simple tool; it doesn't pretend to teach. AI, however, promises to \"personalise\" learning in ways that often replace the student's own effort. That is a very different scale of intervention."},
+         {q:"What about the argument that AI can help disabled students — for example, speech-to-text tools for those who cannot write by hand?", a:"That is a valid concern, but we are talking about general classroom use, not assistive technology for disability. We support AI for accessibility needs as a special case, not as a mainstream teaching tool."},
+         {q:"On the data privacy point — don't schools already collect student data with traditional management systems? Why is AI any worse?", a:"Traditional school data is usually limited to grades and attendance. AI collects behavioural data — how a student reads, how long they hesitate on a question, even voice samples. That is far more invasive and much harder to regulate."}
+       ]},
+      {id:'pr', name:'④ 正方反驳', sub:'Pro Rebuttal', side:'pro', time:240,
+       instruction:'请学生先思考：作为<strong>正方</strong>，你如何逐条驳斥反方立论中的论点？然后点击查看正方反驳原文。',
+       speechEN: S('data_t1_pr_en'), speechZH: S('data_t1_pr_zh')},
+      {id:'cr', name:'⑤ 反方反驳', sub:'Con Rebuttal', side:'con', time:240,
+       instruction:'请学生先思考：作为<strong>反方</strong>，你如何逐条驳斥正方的核心论点？然后点击查看反方反驳原文。',
+       speechEN: S('data_t1_cr_en'), speechZH: S('data_t1_cr_zh')},
+      {id:'ps', name:'⑥ 正方总结', sub:'Pro Summary', side:'pro', time:120,
+       instruction:'请学生先思考：作为<strong>正方</strong>，你如何在2分钟内归纳全场核心冲突并呼吁投票？然后点击查看正方总结原文。',
+       speechEN: S('data_t1_ps_en'), speechZH: S('data_t1_ps_zh')},
+      {id:'cs', name:'⑦ 反方总结', sub:'Con Summary', side:'con', time:120,
+       instruction:'请学生先思考：作为<strong>反方</strong>，你如何在2分钟内归纳全场核心冲突并呼吁投票？然后点击查看反方总结原文。',
+       speechEN: S('data_t1_cs_en'), speechZH: S('data_t1_cs_zh')}
+    ]
+  },
+  topic2: {
+    title: 'Should short-video platforms be banned for teenagers?',
+    titleZh: '短视频平台应该对青少年禁用吗？',
+    phases: [
+      {id:'pc', name:'① 正方立论', sub:'Pro Constructive', side:'pro', time:240,
+       instruction:'请学生先思考：如果你是<strong>正方</strong>，你会提出哪些核心论点支持禁用短视频平台？给学生2-3分钟准备，然后点击下方查看正方立论原文。',
+       speechEN: S('data_t2_pc_en'), speechZH: S('data_t2_pc_zh')},
+      {id:'cc', name:'② 反方立论', sub:'Con Constructive', side:'con', time:240,
+       instruction:'请学生先思考：如果你是<strong>反方</strong>，你会如何反对禁用短视频平台？给学生2-3分钟准备，然后点击下方查看反方立论原文。',
+       speechEN: S('data_t2_cc_en'), speechZH: S('data_t2_cc_zh')},
+      {id:'cf', name:'③ 交叉质询', sub:'Crossfire', side:'both', time:180,
+       instruction:'交叉质询环节。根据学生当前选择的立场，展示对方提出的质询问题。让学生<strong>逐题回答</strong>，老师评分后点击查看最佳答案。',
+       isCrossfire: true,
+       questionsPro: [
+         {q:"A ban treats the symptom, not the cause. Teenagers have always sought entertainment — before short-video platforms there were comic books, TV and video games. Shouldn't we address why they're bored and stressed instead of just banning one platform?", a:"The difference is scale and design. Comic books and TV were not engineered by thousands of AI engineers using behavioural data to be maximally addictive. When a product causes documented harm at scale — shortened attention spans, increased anxiety — government has both the right and duty to step in."},
+         {q:"How would you enforce such a ban? Teenagers can easily use VPNs or borrow their parents' accounts. Prohibition has never worked for alcohol or drugs — why would it work for digital content?", a:"Enforcement is difficult but not impossible. Germany requires parental consent for under-16s. China's youth-mode restrictions have measurably reduced screen time for millions. A ban sends the strongest possible signal and gives schools and parents a clear mandate. Perfection isn't the standard — reduction of harm is."},
+         {q:"What about the educational content on these platforms? Countless teachers and science communicators use them to share knowledge. Wouldn't a ban cut off a valuable learning resource for students in resource-poor areas?", a:"Educational content exists on many platforms — YouTube, websites, educational apps — that don't use the same addictive algorithms. We're not banning all video content; we're banning a specific, algorithmically-engineered format designed to maximise engagement at the expense of wellbeing."}
+       ],
+       questionsCon: [
+         {q:"You said education is better than a ban, but how exactly do you teach a 14-year-old to resist an algorithm designed by a billion-dollar company to be irresistible?", a:"The same way we teach teenagers to resist peer pressure and say no to cigarettes — with consistent guidance and honest discussion. Prohibition doesn't teach self-control; it just delays exposure without building skills. A 2022 Stanford study showed that even a six-hour digital-literacy course significantly improved students' ability to distinguish real from fake content."},
+         {q:"These platforms destroy attention spans — a 2023 study shows heavy users have significantly lower sustained-attention scores. If a product harms children at scale, doesn't the government have a duty to act?", a:"The government does have a duty to act — through regulation, not prohibition. Youth-mode limits, mandatory screen-time caps and digital-literacy courses are more targeted solutions. A ban uses a sledgehammer where a scalpel is needed."},
+         {q:"You say 'regulate, don\\'t ban,' but the industry has failed to self-regulate for years. What makes you think they'll change now?", a:"Precisely because self-regulation has failed, we need government-imposed regulation with teeth — mandatory algorithmic transparency, independent auditing and strict age-verification requirements. This is different from self-regulation; it's enforced by law with real penalties. A ban just creates a black market; regulation shapes the market."}
+       ]},
+      {id:'pr', name:'④ 正方反驳', sub:'Pro Rebuttal', side:'pro', time:240,
+       instruction:'请学生先思考：作为<strong>正方</strong>，你如何逐条驳斥反方立论中的论点？然后点击查看正方反驳原文。',
+       speechEN: S('data_t2_pr_en'), speechZH: S('data_t2_pr_zh')},
+      {id:'cr', name:'⑤ 反方反驳', sub:'Con Rebuttal', side:'con', time:240,
+       instruction:'请学生先思考：作为<strong>反方</strong>，你如何逐条驳斥正方的核心论点？然后点击查看反方反驳原文。',
+       speechEN: S('data_t2_cr_en'), speechZH: S('data_t2_cr_zh')},
+      {id:'ps', name:'⑥ 正方总结', sub:'Pro Summary', side:'pro', time:120,
+       instruction:'请学生先思考：作为<strong>正方</strong>，你如何在2分钟内归纳全场核心冲突并呼吁投票？然后点击查看正方总结原文。',
+       speechEN: S('data_t2_ps_en'), speechZH: S('data_t2_ps_zh')},
+      {id:'cs', name:'⑦ 反方总结', sub:'Con Summary', side:'con', time:120,
+       instruction:'请学生先思考：作为<strong>反方</strong>，你如何在2分钟内归纳全场核心冲突并呼吁投票？然后点击查看反方总结原文。',
+       speechEN: S('data_t2_cs_en'), speechZH: S('data_t2_cs_zh')}
+    ]
+  }
+};
+
+// ==================== STATE ====================
+var currentDebate = null;
+var currentPhaseIndex = 0;
+var studentSide = 'pro';
+var timerSeconds = 240;
+var timerRunning = false;
+var timerInterval = null;
+var timerRemaining = 240;
+var scores = {};
+var revealedContent = {};
+
+// ==================== COIN FLIP ====================
+var coinFlipping = false;
+
+function flipCoin(){
+  if(coinFlipping) return;
+  coinFlipping = true;
+  var coin = document.getElementById('coin');
+  var btn = document.getElementById('coinBtn');
+  var result = document.getElementById('coinResult');
+
+  coin.classList.remove('flipping');
+  void coin.offsetWidth;
+  coin.classList.add('flipping');
+  btn.disabled = true;
+  result.innerHTML = '';
+
+  setTimeout(function(){
+    coinFlipping = false;
+    btn.disabled = false;
+    var side = Math.random() < 0.5 ? '正面' : '反面';
+    result.innerHTML = '🪙 结果：<span class="winner">' + side + '</span> — 获胜方可优先选择立场！';
+    if(side === '正面'){
+      coin.style.transform = 'rotateY(0deg)';
+    }else{
+      coin.style.transform = 'rotateY(180deg)';
+    }
+  }, 1650);
+}
+
+// ==================== DEBATE NAVIGATION ====================
+function openDebate(topicId){
+  currentDebate = DEBATES[topicId];
+  currentPhaseIndex = 0;
+  studentSide = 'pro';
+  scores = {};
+  revealedContent = {};
+  timerRunning = false;
+  if(timerInterval) clearInterval(timerInterval);
+
+  document.getElementById('homeView').style.display = 'none';
+  document.getElementById('debateView').style.display = 'block';
+  document.getElementById('debateTitle').textContent = currentDebate.title;
+
+  updateSideButtons();
+  renderPhaseFlow();
+  loadPhase();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goHome(){
+  if(timerInterval) clearInterval(timerInterval);
+  timerRunning = false;
+  document.getElementById('homeView').style.display = 'block';
+  document.getElementById('debateView').style.display = 'none';
+  currentDebate = null;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function setStudentSide(side){
+  studentSide = side;
+  updateSideButtons();
+  loadPhase();
+}
+
+function updateSideButtons(){
+  var proBtn = document.getElementById('sideProBtn');
+  var conBtn = document.getElementById('sideConBtn');
+  proBtn.className = 'side-btn' + (studentSide === 'pro' ? ' active-pro' : '');
+  conBtn.className = 'side-btn' + (studentSide === 'con' ? ' active-con' : '');
+}
+
+// ==================== PHASE FLOW ====================
+function renderPhaseFlow(){
+  var flow = document.getElementById('phaseFlow');
+  flow.innerHTML = currentDebate.phases.map(function(p,i){
+    var cls = 'phase-dot';
+    if(i === currentPhaseIndex) cls += ' current';
+    else if(i < currentPhaseIndex) cls += ' done';
+    return '<button class="' + cls + '" onclick="jumpToPhase(' + i + ')">' + p.name.slice(0,2) + '</button>';
+  }).join('');
+}
+
+function jumpToPhase(index){
+  currentPhaseIndex = index;
+  if(timerInterval) clearInterval(timerInterval);
+  timerRunning = false;
+  renderPhaseFlow();
+  loadPhase();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ==================== TIMER ====================
+function toggleTimer(){
+  if(timerRunning){ pauseTimer(); }else{ startTimer(); }
+}
+
+function startTimer(){
+  timerRunning = true;
+  document.getElementById('timerStart').textContent = '⏸ 暂停';
+  document.getElementById('timerStart').className = 'timer-btn pause';
+  timerInterval = setInterval(function(){
+    timerRemaining--;
+    updateTimerDisplay();
+    if(timerRemaining <= 0){ pauseTimer(); }
+  }, 1000);
+}
+
+function pauseTimer(){
+  timerRunning = false;
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+  document.getElementById('timerStart').textContent = '▶ 开始';
+  document.getElementById('timerStart').className = 'timer-btn start';
+}
+
+function resetTimer(){
+  pauseTimer();
+  timerRemaining = timerSeconds;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay(){
+  var mins = Math.floor(timerRemaining / 60);
+  var secs = timerRemaining % 60;
+  var display = document.getElementById('timerDisplay');
+  display.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  display.classList.remove('warning','danger');
+  if(timerRemaining <= 30) display.classList.add('danger');
+  else if(timerRemaining <= 60) display.classList.add('warning');
+}
+
+// ==================== LOAD PHASE ====================
+function loadPhase(){
+  var phase = currentDebate.phases[currentPhaseIndex];
+  timerSeconds = phase.time;
+  timerRemaining = phase.time;
+  updateTimerDisplay();
+  document.getElementById('timerPhaseLabel').textContent = phase.sub;
+
+  document.getElementById('timerStart').textContent = '▶ 开始';
+  document.getElementById('timerStart').className = 'timer-btn start';
+  if(timerInterval) clearInterval(timerInterval);
+  timerRunning = false;
+
+  var container = document.getElementById('phaseContent');
+  var isRevealed = revealedContent[phase.id];
+  var sideBadgeBg = phase.side==='pro'?'var(--pro-color)':(phase.side==='con'?'var(--con-color)':'var(--muted)');
+  var sideBadgeTxt = phase.side==='pro'?'PRO':(phase.side==='con'?'CON':'BOTH');
+  var badgeClass = (phase.side==='pro'?'pro-badge':(phase.side==='con'?'con-badge':''));
+
+  var html = '<div class="content-card"><div class="phase-title">' + phase.name + ' <span class="badge ' + badgeClass + '" style="background:' + sideBadgeBg + '">' + sideBadgeTxt + '</span></div><div class="phase-instruction">' + phase.instruction + '</div>';
+
+  if(phase.isCrossfire){
+    var questions = studentSide === 'pro' ? phase.questionsPro : phase.questionsCon;
+    var qLabel = studentSide === 'pro' ? '反方(Con) → 正方(Pro) 的质询' : '正方(Pro) → 反方(Con) 的质询';
+    var qHint = studentSide === 'pro' ? '以下问题是反方对正方观点的质疑，请以正方立场回答' : '以下问题是正方对反方观点的质疑，请以反方立场回答';
+    html += '<div style="font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:0.5px">💬 ' + qLabel + '</div><div style="font-size:11px;color:var(--gold);margin-bottom:10px;font-weight:600">📌 ' + qHint + '</div>';
+
+    for(var i = 0; i < questions.length; i++){
+      var item = questions[i];
+      var qKey = phase.id + '_q' + i;
+      var qScore = scores[qKey] || 0;
+
+      html += '<div class="question-card"><div class="q-num">QUESTION ' + (i+1) + '</div><div class="q-text">' + item.q + '</div><button class="q-answer-toggle" id="qToggle' + qKey + '" onclick="toggleAnswer(\'' + qKey + '\')">🔓 点击查看最佳答案</button><div class="q-answer" id="qAnswer' + qKey + '"><div class="ans-label">✅ 最佳答案 (Model Answer)</div>' + item.a + '</div><div class="scoring-row"><span class="score-label">📝 评分：</span><div class="star-rating" id="stars' + qKey + '">';
+      for(var s = 1; s <= 5; s++){
+        html += '<button class="star-btn' + (qScore >= s ? ' selected' : '') + '" onclick="setScore(\'' + qKey + '\',' + s + ')">⭐</button>';
+      }
+      html += '</div><span class="score-confirmed" id="scoreOk' + qKey + '" style="display:' + (qScore > 0 ? 'inline' : 'none') + '">✓ ' + qScore + '/5</span></div></div>';
+    }
+  } else {
+    if(isRevealed){
+      html += '<div class="revealed-content" style="display:block" id="revealed' + phase.id + '"><div class="speech-label">📜 MODEL SPEECH — ENGLISH</div>' + phase.speechEN + '<div class="zh-translation"><strong>中文对照：</strong><br>' + phase.speechZH + '</div></div>';
+      html += '<div class="hidden-content" id="hidden' + phase.id + '" style="display:none" onclick="revealSpeech(\'' + phase.id + '\')"><div class="lock-icon">🔓</div><div class="lock-text">已显示原文</div><div class="lock-hint">点击可重新隐藏</div></div>';
+    } else {
+      html += '<div class="hidden-content" id="hidden' + phase.id + '" onclick="revealSpeech(\'' + phase.id + '\')"><div class="lock-icon">🔒</div><div class="lock-text">点击查看原文 (Model Speech)</div><div class="lock-hint">💡 先让学生独立思考准备，再点击展示</div></div>';
+      html += '<div class="revealed-content" id="revealed' + phase.id + '"><div class="speech-label">📜 MODEL SPEECH — ENGLISH</div>' + phase.speechEN + '<div class="zh-translation"><strong>中文对照：</strong><br>' + phase.speechZH + '</div></div>';
+    }
+  }
+
+  html += '</div>';
+
+  html += '<div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">';
+  if(currentPhaseIndex > 0){
+    html += '<button class="btn btn-outline" style="font-size:12px;padding:8px 18px" onclick="jumpToPhase(' + (currentPhaseIndex-1) + ')">← 上一环节</button>';
+  }
+  if(currentPhaseIndex < currentDebate.phases.length - 1){
+    html += '<button class="btn btn-pri" style="font-size:12px;padding:8px 18px" onclick="jumpToPhase(' + (currentPhaseIndex+1) + ')">下一环节 →</button>';
+  }
+  html += '<button class="btn btn-outline" style="font-size:12px;padding:8px 18px;color:var(--muted)" onclick="showScoreSummary()">📊 查看得分</button></div>';
+
+  container.innerHTML = html;
+  renderPhaseFlow();
+  updateTimerDisplay();
+}
+
+function revealSpeech(phaseId){
+  revealedContent[phaseId] = !revealedContent[phaseId];
+  loadPhase();
+}
+
+function toggleAnswer(qKey){
+  var answerDiv = document.getElementById('qAnswer'+qKey);
+  var toggleBtn = document.getElementById('qToggle'+qKey);
+  if(answerDiv.style.display === 'block'){
+    answerDiv.style.display = 'none';
+    toggleBtn.textContent = '🔓 点击查看最佳答案';
+    toggleBtn.style.borderColor = 'var(--gold)';
+    toggleBtn.style.color = 'var(--gold)';
+  } else {
+    answerDiv.style.display = 'block';
+    toggleBtn.textContent = '🔒 隐藏最佳答案';
+    toggleBtn.style.borderColor = 'var(--green)';
+    toggleBtn.style.color = 'var(--green)';
+  }
+}
+
+function setScore(qKey, star){
+  scores[qKey] = star;
+  var starsDiv = document.getElementById('stars'+qKey);
+  if(starsDiv){
+    var btns = starsDiv.querySelectorAll('.star-btn');
+    for(var i = 0; i < btns.length; i++){
+      if(i < star) btns[i].classList.add('selected');
+      else btns[i].classList.remove('selected');
+    }
+  }
+  var okSpan = document.getElementById('scoreOk'+qKey);
+  if(okSpan){
+    okSpan.style.display = 'inline';
+    okSpan.textContent = '✓ ' + star + '/5';
+  }
+}
+
+function showScoreSummary(){
+  var summaryDiv = document.getElementById('scoreSummary');
+  var totalEl = document.getElementById('totalScore');
+  var detailEl = document.getElementById('scoreDetail');
+  var keys = Object.keys(scores);
+  if(keys.length === 0){
+    summaryDiv.style.display = 'block';
+    totalEl.textContent = '—';
+    detailEl.textContent = '暂无评分记录';
+    return;
+  }
+  var total = 0;
+  for(var i = 0; i < keys.length; i++){ total += scores[keys[i]]; }
+  var max = keys.length * 5;
+  summaryDiv.style.display = 'block';
+  totalEl.textContent = total + ' / ' + max;
+  var parts = [];
+  for(var j = 0; j < keys.length; j++){ parts.push('Q: ' + scores[keys[j]] + '/5'); }
+  detailEl.textContent = parts.join(' · ');
+  summaryDiv.scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

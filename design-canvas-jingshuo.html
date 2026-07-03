@@ -1,0 +1,591 @@
+<!doctype html>
+<!--
+  井说 Well Talk · 交互式设计方向画布
+  四种风格方向，并排对比。点击任一单元格进入全屏预览。
+  基于 claude-design skill 的 Design Canvas 模式。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>井说 Well Talk · 设计方向画布</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f1ec;
+  --card-bg: #fff;
+  --text: #1a1a1a;
+  --text-soft: #6b6359;
+  --border: #ddd8cf;
+  --orange: #e87a3e;
+  --gold: #d4a040;
+  --cream: #f5efe5;
+}
+
+html, body {
+  margin: 0; padding: 0;
+  font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Page Header ===== */
+.page-header {
+  max-width: 1440px; margin: 0 auto;
+  padding: 56px 48px 40px;
+  display: grid; grid-template-columns: 1fr auto; gap: 32px;
+  align-items: end;
+}
+.page-header h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 36px; font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.page-header h1 .dot { color: var(--orange); }
+.page-header .meta {
+  text-align: right; font-size: 12px; color: var(--text-soft);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ===== Toolbar ===== */
+.toolbar {
+  max-width: 1440px; margin: 0 auto;
+  padding: 0 48px 32px;
+  display: flex; gap: 12px; flex-wrap: wrap;
+  align-items: center;
+}
+.toolbar .label {
+  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-soft); margin-right: 8px; font-weight: 600;
+}
+.toolbar button {
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  font-size: 13px; cursor: pointer; border-radius: 100px;
+  font-family: inherit; color: var(--text);
+  transition: all 0.2s;
+}
+.toolbar button:hover { border-color: #aaa; }
+.toolbar button.active {
+  background: var(--text); color: #fff; border-color: var(--text);
+}
+.toolbar button.fav {
+  border-color: var(--orange); color: var(--orange);
+}
+.toolbar button.fav.active {
+  background: var(--orange); color: #fff;
+}
+
+/* ===== Canvas Grid ===== */
+.canvas {
+  max-width: 1440px; margin: 0 auto;
+  padding: 0 48px 80px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+.canvas.single-col { grid-template-columns: 1fr; max-width: 900px; }
+
+/* ===== Cell ===== */
+.cell {
+  background: var(--card-bg);
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.05);
+  transition: box-shadow 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+.cell:hover {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 16px 40px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+.cell.selected {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* Cell header */
+.cell-head {
+  padding: 16px 22px; border-bottom: 1px solid #eee;
+  display: flex; align-items: center; gap: 12px;
+}
+.cell-head .tag {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 3px;
+  background: #f4f1ec; color: #6b6359; font-weight: 600;
+  white-space: nowrap;
+}
+.cell-head h3 {
+  font-size: 14px; font-weight: 600; margin: 0;
+  white-space: nowrap;
+}
+.cell-head .why {
+  font-size: 11px; color: var(--text-soft);
+  margin-left: auto; text-align: right;
+  line-height: 1.3;
+}
+.cell-head .pick-btn {
+  margin-left: 8px; padding: 5px 14px;
+  border-radius: 100px; border: 1px solid var(--orange);
+  background: transparent; color: var(--orange);
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  font-family: inherit; white-space: nowrap;
+  transition: all 0.2s;
+}
+.cell-head .pick-btn:hover {
+  background: var(--orange); color: #fff;
+}
+
+/* Cell body */
+.cell-body {
+  aspect-ratio: 16 / 10;
+  position: relative; overflow: hidden;
+}
+
+/* ============ DIRECTION A: Kenya Hara 空美学 ============ */
+.dir-a {
+  background: #faf8f4; color: #3a322e;
+  padding: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif SC', serif;
+}
+.dir-a-inner {
+  text-align: center; max-width: 320px; padding: 24px;
+}
+.dir-a .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--orange); margin: 0 auto 24px;
+}
+.dir-a .eyebrow {
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 9px; letter-spacing: 0.3em;
+  color: var(--orange); margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.dir-a h2 {
+  font-size: 28px; font-weight: 300; line-height: 1.3;
+  letter-spacing: 0.02em; color: #3a322e;
+  margin-bottom: 12px;
+}
+.dir-a h2 b { font-weight: 700; }
+.dir-a .sub {
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 11px; color: #8a7e74; line-height: 1.6;
+}
+
+/* ============ DIRECTION B: Bauhaus Geometric ============ */
+.dir-b {
+  background: #fefefe; color: #1a1a1a;
+  padding: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  position: relative; overflow: hidden;
+}
+.dir-b::before {
+  content: ''; position: absolute;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: var(--orange); opacity: 0.05;
+  top: -60px; right: -60px;
+}
+.dir-b::after {
+  content: ''; position: absolute;
+  width: 100px; height: 100px;
+  border: 2px solid var(--gold); opacity: 0.12;
+  bottom: -30px; left: -30px;
+}
+.dir-b-inner { position: relative; z-index: 2; padding: 24px; }
+.dir-b .badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border: 2px solid #1a1a1a;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+.dir-b .badge::before {
+  content: ''; width: 6px; height: 6px; background: var(--orange);
+}
+.dir-b h2 {
+  font-size: 32px; font-weight: 900; line-height: 1.05;
+  letter-spacing: -0.03em; max-width: 350px;
+}
+.dir-b h2 span { color: var(--orange); }
+.dir-b .line {
+  width: 40px; height: 3px; background: #1a1a1a; margin-top: 16px;
+}
+
+/* ============ DIRECTION C: Swiss Editorial ============ */
+.dir-c {
+  background: #f9f7f2; color: #1a1a1a;
+  padding: 0;
+  display: grid; grid-template-rows: auto 1fr auto;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+}
+.dir-c-inner { padding: 28px 32px; display: grid; grid-template-rows: auto 1fr auto; height: 100%; }
+.dir-c .masthead {
+  display: flex; justify-content: space-between;
+  font-size: 8px; letter-spacing: 0.25em;
+  text-transform: uppercase; color: #8a7e74; font-weight: 600;
+}
+.dir-c h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 34px; line-height: 0.98; letter-spacing: -0.02em;
+  font-weight: 500; margin: auto 0; max-width: 340px;
+}
+.dir-c h2 em { font-style: normal; color: var(--orange); }
+.dir-c .foot {
+  display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px;
+}
+.dir-c .foot p {
+  font-size: 10px; color: #8a7e74; margin: 0; line-height: 1.5; max-width: 240px;
+}
+.dir-c .cta {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  font-weight: 600; border-top: 1px solid #1a1a1a; padding-top: 4px; white-space: nowrap;
+}
+
+/* ============ DIRECTION D: Editorial Magazine ============ */
+.dir-d {
+  background: #1e1b18; color: #f0e9dd;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+}
+.dir-d-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  padding: 28px 32px; width: 100%; height: 100%;
+}
+.dir-d .left { display: grid; grid-template-rows: auto 1fr auto; }
+.dir-d .issue {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 10px; letter-spacing: 0.08em; color: var(--gold);
+}
+.dir-d .deck {
+  font-family: 'Noto Serif SC', serif; font-weight: 400;
+  font-size: 26px; line-height: 1.05; letter-spacing: -0.01em;
+  margin-top: 8px;
+}
+.dir-d .deck em { font-style: normal; color: var(--orange); }
+.dir-d .byline {
+  font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: #8a7c68; margin-top: auto;
+}
+.dir-d .right {
+  background: #2a2420; border-radius: 3px;
+  display: grid; place-items: center; padding: 18px;
+}
+.dir-d .pull {
+  font-family: 'Noto Serif SC', serif; font-weight: 300;
+  font-size: 16px; line-height: 1.4;
+  border-left: 2px solid var(--gold); padding-left: 14px;
+  color: #f0e9dd;
+}
+.dir-d .pull cite {
+  display: block; margin-top: 10px;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  font-size: 9px; font-style: normal; color: #8a7c68;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ===== Decision panel ===== */
+.decision-bar {
+  max-width: 1440px; margin: 0 auto;
+  padding: 0 48px 60px;
+  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+}
+.decision-bar .question {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px; font-weight: 600;
+}
+.decision-bar button.pick-final {
+  padding: 12px 28px;
+  border-radius: 100px;
+  background: var(--orange); color: #fff;
+  border: none; font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.2s;
+}
+.decision-bar button.pick-final:hover { background: #d45a1e; }
+.decision-bar button.pick-outline {
+  padding: 12px 28px; border-radius: 100px;
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border);
+  font-size: 14px; cursor: pointer; font-family: inherit;
+}
+.decision-bar button.pick-outline:hover { border-color: #aaa; }
+
+/* ===== Feedback toast ===== */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  background: #1a1a1a; color: #fff;
+  padding: 12px 28px; border-radius: 100px;
+  font-size: 14px; font-weight: 500;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 999;
+}
+.toast.show { opacity: 1; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .canvas { grid-template-columns: 1fr; padding: 0 20px 60px; }
+  .page-header { padding: 32px 20px 24px; grid-template-columns: 1fr; }
+  .page-header .meta { text-align: left; }
+  .toolbar { padding: 0 20px 24px; }
+  .decision-bar { padding: 0 20px 48px; }
+  .dir-d-inner { grid-template-columns: 1fr; gap: 12px; }
+  .dir-d .right { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Page Header ===== -->
+<header class="page-header">
+  <div>
+    <h1>井说<span class="dot">·</span>Well Talk — 设计方向画布</h1>
+  </div>
+  <div class="meta">Design Direction Canvas · 四方向对比</div>
+</header>
+
+<!-- ===== Toolbar: filters ===== -->
+<div class="toolbar">
+  <span class="label">筛选：</span>
+  <button class="active" onclick="filterAll(this)">全部</button>
+  <button onclick="toggleFav(this)">⭐ 已收藏</button>
+  <span style="margin-left:16px;font-size:12px;color:var(--text-soft);">
+    点击卡片选中，悬停查看详情
+  </span>
+</div>
+
+<!-- ===== Canvas ===== -->
+<main class="canvas" id="canvas">
+
+  <!-- Direction A: Kenya Hara -->
+  <section class="cell" data-id="a" data-style="minimal">
+    <div class="cell-head">
+      <span class="tag">A</span>
+      <h3>空美学 · Kenya Hara</h3>
+      <span class="why">极简雅致 · 适合教育/文化品牌</span>
+      <button class="pick-btn" onclick="event.stopPropagation(); pick('a')">选这个</button>
+    </div>
+    <div class="cell-body dir-a" onclick="selectCell(this.closest('.cell'))">
+      <div class="dir-a-inner">
+        <div class="dot"></div>
+        <div class="eyebrow">CUSTOMIZED ENGLISH MASTERY</div>
+        <h2>不只是学英语<br>学会用英语<b>思考和表达</b></h2>
+        <div class="sub">定制化英语提升 · 为每个人找到最适合的老师</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Direction B: Bauhaus Geometric -->
+  <section class="cell" data-id="b" data-style="geometric">
+    <div class="cell-head">
+      <span class="tag">B</span>
+      <h3>包豪斯 · Bauhaus</h3>
+      <span class="why">几何现代 · 适合国际化/科技感</span>
+      <button class="pick-btn" onclick="event.stopPropagation(); pick('b')">选这个</button>
+    </div>
+    <div class="cell-body dir-b" onclick="selectCell(this.closest('.cell'))">
+      <div class="dir-b-inner">
+        <div class="badge">定制化英语提升</div>
+        <h2>不只学英语<br>学会用英语<span>思考和表达</span></h2>
+        <div class="line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Direction C: Swiss Editorial -->
+  <section class="cell" data-id="c" data-style="editorial">
+    <div class="cell-head">
+      <span class="tag">C</span>
+      <h3>瑞士编辑 · Swiss Editorial</h3>
+      <span class="why">结构严谨 · 适合专业/学术品牌</span>
+      <button class="pick-btn" onclick="event.stopPropagation(); pick('c')">选这个</button>
+    </div>
+    <div class="cell-body dir-c" onclick="selectCell(this.closest('.cell'))">
+      <div class="dir-c-inner">
+        <div class="masthead">
+          <span>井说 · Well Talk</span>
+          <span>Est. 2026</span>
+        </div>
+        <h2>不只学英语<br>学会用英语<em>思考和表达</em></h2>
+        <div class="foot">
+          <p>每个学生都不一样。井说拒绝流水线课程，为每个人找到最合适的英语老师。</p>
+          <div class="cta">预约水平测试 →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Direction D: Editorial Magazine -->
+  <section class="cell" data-id="d" data-style="magazine">
+    <div class="cell-head">
+      <span class="tag">D</span>
+      <h3>杂志编辑 · Editorial Magazine</h3>
+      <span class="why">叙事温暖 · 适合故事驱动/高端品牌</span>
+      <button class="pick-btn" onclick="event.stopPropagation(); pick('d')">选这个</button>
+    </div>
+    <div class="cell-body dir-d" onclick="selectCell(this.closest('.cell'))">
+      <div class="dir-d-inner">
+        <div class="left">
+          <div class="issue">井说 Well Talk · N° 01</div>
+          <div class="deck">不只学英语<br>学会用英语<em>思考和表达</em></div>
+          <div class="byline">定制化英语提升</div>
+        </div>
+        <div class="right">
+          <blockquote class="pull">
+            "每个学生都不一样<br>没有标准的方案"
+            <cite>— 井说教育理念</cite>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== Decision Bar ===== -->
+<div class="decision-bar" id="decisionBar" style="display:none;">
+  <span class="question">已选 <strong id="pickedName">—</strong>，是否以此为基础深化设计？</span>
+  <button class="pick-final" onclick="finalize()">✓ 确认，开始深化</button>
+  <button class="pick-outline" onclick="clearPick()">重新选择</button>
+  <button class="pick-outline" onclick="blend()">🔀 混合两个方向</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== State =====
+let pickedDir = null;
+let pickedSecond = null;
+let favorites = new Set();
+
+// ===== Cell selection =====
+function selectCell(cell) {
+  document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected'));
+  cell.classList.add('selected');
+}
+
+// ===== Pick a direction =====
+function pick(id) {
+  const cell = document.querySelector(`[data-id="${id}"]`);
+  const name = cell.querySelector('h3').textContent;
+
+  if (!pickedDir) {
+    pickedDir = id;
+    cell.style.outline = '3px solid var(--orange)';
+    cell.style.outlineOffset = '2px';
+    document.getElementById('pickedName').textContent = name;
+    document.getElementById('decisionBar').style.display = 'flex';
+    showToast('已选择 ' + name + ' · 可选择第二个方向进行混合');
+  } else if (pickedDir === id) {
+    // Deselect
+    clearPick();
+  } else if (!pickedSecond) {
+    pickedSecond = id;
+    cell.style.outline = '3px solid var(--gold)';
+    cell.style.outlineOffset = '2px';
+    document.getElementById('pickedName').textContent =
+      document.querySelector(`[data-id="${pickedDir}"] h3`).textContent +
+      ' + ' + name;
+    showToast('已选择两个方向 · 可以混合或分别查看');
+  }
+}
+
+function clearPick() {
+  pickedDir = null;
+  pickedSecond = null;
+  document.querySelectorAll('.cell').forEach(c => {
+    c.style.outline = '';
+    c.style.outlineOffset = '';
+  });
+  document.getElementById('decisionBar').style.display = 'none';
+  showToast('已清除选择');
+}
+
+// ===== Finalize =====
+function finalize() {
+  const name = document.getElementById('pickedName').textContent;
+  showToast('✓ 已确认：' + name + ' · 正在生成完整首页…');
+  // Will trigger deeper design workflow
+  setTimeout(() => {
+    const cells = document.querySelectorAll('.cell');
+    if (pickedSecond) {
+      // Keep both selected cells, hide others
+      cells.forEach(c => {
+        if (c.dataset.id !== pickedDir && c.dataset.id !== pickedSecond) {
+          c.style.opacity = '0.2';
+          c.style.pointerEvents = 'none';
+        }
+      });
+    } else {
+      cells.forEach(c => {
+        if (c.dataset.id !== pickedDir) {
+          c.style.opacity = '0.2';
+          c.style.pointerEvents = 'none';
+        }
+      });
+    }
+  }, 600);
+}
+
+// ===== Blend =====
+function blend() {
+  if (!pickedDir || !pickedSecond) {
+    showToast('请先选择两个方向再混合');
+    return;
+  }
+  const n1 = document.querySelector(`[data-id="${pickedDir}"] h3`).textContent;
+  const n2 = document.querySelector(`[data-id="${pickedSecond}"] h3`).textContent;
+  showToast('🔀 正在混合：' + n1 + ' × ' + n2 + '…');
+}
+
+// ===== Filter =====
+function filterAll(btn) {
+  document.querySelectorAll('.toolbar button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.cell').forEach(c => c.style.display = '');
+  document.getElementById('canvas').classList.remove('single-col');
+}
+
+function toggleFav(btn) {
+  btn.classList.toggle('active');
+  if (btn.classList.contains('active')) {
+    document.querySelectorAll('.cell').forEach(c => {
+      if (!favorites.has(c.dataset.id)) c.style.display = 'none';
+    });
+    document.getElementById('canvas').classList.add('single-col');
+  } else {
+    document.querySelectorAll('.cell').forEach(c => c.style.display = '');
+  }
+}
+
+// ===== Toast =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ===== Keyboard =====
+document.addEventListener('keydown', e => {
+  const map = { '1': 'a', '2': 'b', '3': 'c', '4': 'd' };
+  if (map[e.key] && !e.metaKey && !e.ctrlKey && document.activeElement === document.body) {
+    pick(map[e.key]);
+  }
+  if (e.key === '0') clearPick();
+  if (e.key === 'Enter' && pickedDir) finalize();
+});
+
+// ===== Init =====
+console.log('🎨 井说 Well Talk · 设计方向画布已就绪');
+console.log('  键盘快捷键: 1/2/3/4 选择方向, 0 清除, Enter 确认');
+console.log('  点击"选这个"选择方向, 可选两个进行混合');
+</script>
+
+</body>
+</html>
