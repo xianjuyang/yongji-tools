@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>话题1 · 国际机场全流程</title>
 <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f0f4ff;-webkit-tap-highlight-color:transparent}
 .top{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;text-align:center;padding:16px 12px}.top h1{font-size:1.2em}.top p{font-size:.78em;opacity:.85}
@@ -42,12 +42,14 @@
 .hr button{font-size:.68em;padding:5px 8px;min-height:28px}
 .right{padding:10px 8px}
 }
-</style></head><body>
+</style></head><body><noscript><div style="padding:40px;text-align:center;font-size:18px;font-family:sans-serif">请启用JavaScript来使用此工具 ✈️</div></noscript>
 <div class="top"><h1>✈️ 话题 1 · 国际机场全流程</h1><p>Airport — 值机·安检·登机·机上·入境·求助</p></div>
 <div style="padding:8px 16px;background:#fff;border-bottom:1px solid #ddd"><a href="index.html" style="color:#1a73e8;font-weight:600;text-decoration:none">🏠 话题总览</a> &nbsp;|&nbsp; <span style="font-size:.78em;color:#888">绿色虚线框 = 礼貌表达参考 | 蓝色 = 工作人员 | 灰色 = 你来回应</span></div>
 <div class="bar" id="sb"></div><div class="main"><div class="left" id="co"></div><div class="right" id="wp"></div></div>
 <div class="nb"><a class="np" href="index.html">🏠 总览</a><a class="nn" href="topic2-hotel.html">话题2 →</a></div>
 <script>
+// Browser compatibility polyfills
+if(!Element.prototype.closest){Element.prototype.closest=function(s){var el=this;while(el){if(el.matches(s))return el;el=el.parentElement}return null}}
 var S=[
 {title:"值机柜台",sub:"Check-in",words:[["passport","护照"],["boarding pass","登机牌"],["luggage","行李"],["carry-on","手提行李"],["excess baggage","超重行李"],["window seat","靠窗座位"],["gate","登机口"],["terminal","航站楼"],["departure","出发"],["on schedule","准时"],["aisle","过道"],["upgrade","升舱"],["schedule","时刻表"],["confirmation","确认"],["e-ticket","电子票"],["itinerary","行程"]],
 conv:[
@@ -126,7 +128,7 @@ conv:[
 ["u","One last thing — is there <b class=kw>luggage storage</b> here? I want to explore before checking in.","最后一件事——这有行李寄存吗？我想入住前先逛逛。"],
 ["s","Yes, near the station entrance. 8 pounds per bag for 24 hours. Enjoy London!","有的，火车站入口附近。每件行李24小时8英镑。享受伦敦！"]]}];
 
-var cur=0;function spk(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+var cur=0;function spk(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
 function bn(){var h='';for(var i=0;i<S.length;i++)h+='<button class="'+(i===0?'sel':'')+'" data-sc="'+i+'">'+S[i].title+'</button>';document.getElementById('sb').innerHTML=h;document.getElementById('sb').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){cur=parseInt(e.target.getAttribute('data-sc'));document.querySelectorAll('.bar button').forEach(function(b,j){b.className=j===cur?'sel':''});r()}})}
 function r(){var s=S[cur];var h='<h2>📍 '+s.title+'</h2><div class="sub">'+s.sub+' &mdash; '+s.conv.length+'轮 | '+s.words.length+'词</div>';
 for(var i=0;i<s.conv.length;i++){var t=s.conv[i],id='t'+i;

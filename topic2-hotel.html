@@ -18,12 +18,14 @@
 .right{width:275px;flex-shrink:0;background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.05);align-self:start;position:sticky;top:8px;max-height:90vh;overflow-y:auto}.right h3{color:#c0392b;font-size:.88em;margin-bottom:8px;border-bottom:2px solid #ffe0c4;padding-bottom:6px}
 .wrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;cursor:pointer;font-size:.78em}.wrow:hover{background:#fff8f0}.wrow .en{font-weight:600}.wrow .cn{color:#888;font-size:.7em}
 .nb{display:flex;justify-content:center;gap:12px;padding:14px}.nb a{padding:8px 18px;border-radius:10px;text-decoration:none;font-weight:600;font-size:.88em}.np{background:#fff;color:#e67e22;border:2px solid #e67e22}.nn{background:#e67e22;color:#fff}.nn:hover{background:#c0392b}
-</style></head><body>
+</style></head><body><noscript><div style="padding:40px;text-align:center;font-size:18px;font-family:sans-serif">请启用JavaScript来使用此工具 ✈️</div></noscript>
 <div class="top"><h1>🏨 话题 2 · 酒店与服务</h1><p>Hotel & Services — 入住·房间·服务·设施·投诉·退房</p></div>
 <div style="padding:8px 16px;background:#fff;border-bottom:1px solid #ddd"><a href="index.html" style="color:#e67e22;font-weight:600;text-decoration:none">🏠 话题总览</a></div>
 <div class="bar" id="sb"></div><div class="main"><div class="left" id="co"></div><div class="right" id="wp"></div></div>
 <div class="nb"><a class="np" href="topic1-airport.html">← 话题1</a><a class="nn" href="topic3-restaurant.html">话题3 →</a></div>
 <script>
+// Browser compatibility polyfills
+if(!Element.prototype.closest){Element.prototype.closest=function(s){var el=this;while(el){if(el.matches(s))return el;el=el.parentElement}return null}}
 var S=[
 {title:"前台入住",sub:"Check-in",words:[["reservation","预订"],["passport","护照"],["deposit","押金"],["key card","房卡"],["lobby","大堂"],["room rate","房价"],["check-out","退房"],["elevator","电梯"],["non-smoking","无烟"],["king-size bed","特大床"],["complimentary","免费"],["concierge","礼宾部"],["luggage","行李"],["wake-up call","叫醒服务"],["registration","登记"],["incidental charges","杂费"]],
 conv:[["r","Good evening! I have a <b class=kw>reservation</b> under the name Chen. I booked a deluxe room for five nights.","晚上好！我用Chen的名字预订了。订了五晚豪华房。"],
@@ -75,7 +77,7 @@ conv:[["r","Good morning! I would like to <b class=kw>check-out</b>. Room 1208. 
 ["s","Of course. <b class=kw>Luggage storage</b> is complimentary. The <b class=kw>bellman</b> will tag your bags.","当然。行李寄存免费。行李员会给您行李贴标签。"],
 ["u","And could you call me a taxi? How much is the <b class=kw>fare</b> to the airport?","能帮我叫出租车吗？到机场多少钱？"],
 ["s","A taxi takes about 45 minutes and costs around 70 pounds. It has been a pleasure having you — safe travels!","出租车约45分钟，约70英镑。能接待您是荣幸——一路平安！"]]}];
-var cur=0;function spk(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+var cur=0;function spk(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
 function bn(){var h='';for(var i=0;i<S.length;i++)h+='<button class="'+(i===0?'sel':'')+'" data-sc="'+i+'">'+S[i].title+'</button>';document.getElementById('sb').innerHTML=h;document.getElementById('sb').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){cur=parseInt(e.target.getAttribute('data-sc'));document.querySelectorAll('.bar button').forEach(function(b,j){b.className=j===cur?'sel':''});r()}})}
 function r(){var s=S[cur];var h='<h2>📍 '+s.title+'</h2><div class="sub">'+s.sub+' &mdash; '+s.conv.length+'轮 | '+s.words.length+'词</div>';
 for(var i=0;i<s.conv.length;i++){var t=s.conv[i],id='t'+i;if(t[0]==='r'){h+='<div class="turn-r" data-en="'+t[1].replace(/\"/g,'&quot;')+'"><span class="sp">📖 礼貌表达（参考）</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div>'}else if(t[0]==='s'){h+='<div class="turn-sf" data-en="'+t[1].replace(/\"/g,'&quot;')+'"><div class="av">💼</div><div class="bb"><span class="sp">工作人员</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div></div>'}else{h+='<div class="turn-st"><div class="av">🎓</div><div class="bb"><span class="sp">你来说</span><span style="color:#999;font-size:.7em"> 先试着说，想不出再点提示</span><div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文提示</button><button data-a="en" data-i="'+id+'">🔤 英文答案</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">💬 '+t[2]+'</div><div class="ab" id="en'+id+'">✅ '+t[1]+'</div></div></div>'}}document.getElementById('co').innerHTML=h;
