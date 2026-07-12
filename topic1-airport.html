@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>话题1 · 国际机场全流程</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f0f4ff;-webkit-tap-highlight-color:transparent}
+.top{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;text-align:center;padding:16px 12px}.top h1{font-size:1.2em}.top p{font-size:.78em;opacity:.85}
+.bar{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:#fff;border-bottom:1px solid #ddd;overflow-x:auto;-webkit-overflow-scrolling:touch}.bar button{padding:9px 14px;border-radius:8px;border:2px solid #ddd;cursor:pointer;font-size:.82em;font-weight:600;white-space:nowrap;min-height:40px}.bar button:hover{border-color:#1a73e8;color:#1a73e8}.bar button.sel{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.main{display:flex;gap:16px;max-width:1350px;margin:0 auto;padding:12px}
+.left{flex:1;min-width:0;background:#fff;border-radius:12px;padding:16px 14px;box-shadow:0 1px 8px rgba(0,0,0,.05)}.left h2{color:#1a73e8;font-size:1.1em;margin-bottom:4px}.left .sub{color:#888;font-size:.78em;margin-bottom:12px}
+.turn-r{background:#f0fdf4;border:1px dashed #4caf50;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:.85em;line-height:1.5}
+.turn-r .sp{font-size:.65em;color:#4caf50;font-weight:700;margin-bottom:2px;display:block}
+.turn-sf{display:flex;gap:8px;margin-bottom:8px;padding:6px;border-radius:10px;background:#e8f0fe;margin-right:10px}
+.turn-st{display:flex;gap:8px;margin-bottom:8px;padding:6px;border-radius:10px;background:#f5f5f5;margin-left:10px;justify-content:flex-end}
+.turn .av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.turn-sf .av{background:#1a73e8;color:#fff}.turn-st .av{background:#4caf50;color:#fff;order:2}
+.turn .bb{max-width:75%;padding:8px 12px;border-radius:12px;font-size:.85em;line-height:1.5}
+.turn-sf .bb{background:#d4e4ff;border-radius:4px 12px 12px 12px}.turn-st .bb{background:#e0e0e0;border-radius:12px 4px 12px 12px;order:1}
+.turn .bb .sp{font-size:.65em;color:#888;display:block;margin-bottom:1px}
+.hr{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}.hr button{padding:5px 10px;border-radius:4px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:.72em;min-height:30px}.hr button:hover{background:#eee}.hr button:active{background:#d4e4ff}
+.ab{display:none;margin-top:4px;padding:6px 10px;background:#fffde7;border-radius:6px;font-size:.8em;border:1px solid #ffcc02;line-height:1.5}.ab.show{display:block}
+.right{width:275px;flex-shrink:0;background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.05);align-self:start;position:sticky;top:8px;max-height:90vh;overflow-y:auto}.right h3{color:#0d47a1;font-size:.88em;margin-bottom:8px;border-bottom:2px solid #d4e4ff;padding-bottom:6px}
+.wrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;cursor:pointer;font-size:.8em;min-height:36px;align-items:center}.wrow:hover{background:#f0f4ff}.wrow:active{background:#d4e4ff}.wrow .en{font-weight:600}.wrow .cn{color:#888;font-size:.72em}
+.nb{display:flex;justify-content:center;gap:12px;padding:14px}.nb a{padding:10px 22px;border-radius:10px;text-decoration:none;font-weight:600;font-size:.9em;min-height:44px;display:flex;align-items:center}.np{background:#fff;color:#1a73e8;border:2px solid #1a73e8}.nn{background:#1a73e8;color:#fff}.nn:hover{background:#0d47a1}
+
+/* ========== 移动端适配 ========== */
+@media(max-width:768px){
+.top{padding:12px 10px}.top h1{font-size:1.05em}.top p{font-size:.72em}
+.bar{gap:5px;padding:8px 10px}.bar button{padding:8px 11px;font-size:.76em;min-height:38px;border-radius:6px}
+.main{flex-direction:column;gap:10px;padding:8px}
+.left{padding:12px 10px;border-radius:10px}.left h2{font-size:1em}.left .sub{font-size:.74em}
+.turn-sf{margin-right:0;gap:6px}.turn-st{margin-left:0;gap:6px}
+.turn .av{width:26px;height:26px;font-size:12px}
+.turn .bb{max-width:82%;font-size:.82em;padding:7px 10px}
+.turn-r{font-size:.82em;padding:8px 10px}
+.hr button{padding:6px 10px;font-size:.7em;min-height:32px}
+.right{width:100%;position:static;max-height:none;border-radius:10px;padding:12px}.right h3{font-size:.85em}
+.wrow{font-size:.78em;padding:7px 0;min-height:40px}.wrow .cn{font-size:.7em}
+.nb{padding:10px;gap:10px}.nb a{font-size:.85em;padding:10px 18px;min-height:42px}
+}
+@media(max-width:480px){
+.top h1{font-size:.95em}.top p{font-size:.68em}
+.bar button{font-size:.72em;padding:7px 9px;min-height:34px}
+.left{padding:10px 8px}.turn .bb{max-width:88%;font-size:.78em;padding:6px 8px}
+.hr button{font-size:.68em;padding:5px 8px;min-height:28px}
+.right{padding:10px 8px}
+}
+</style></head><body>
+<div class="top"><h1>✈️ 话题 1 · 国际机场全流程</h1><p>Airport — 值机·安检·登机·机上·入境·求助</p></div>
+<div style="padding:8px 16px;background:#fff;border-bottom:1px solid #ddd"><a href="index.html" style="color:#1a73e8;font-weight:600;text-decoration:none">🏠 话题总览</a> &nbsp;|&nbsp; <span style="font-size:.78em;color:#888">绿色虚线框 = 礼貌表达参考 | 蓝色 = 工作人员 | 灰色 = 你来回应</span></div>
+<div class="bar" id="sb"></div><div class="main"><div class="left" id="co"></div><div class="right" id="wp"></div></div>
+<div class="nb"><a class="np" href="index.html">🏠 总览</a><a class="nn" href="topic2-hotel.html">话题2 →</a></div>
+<script>
+var S=[
+{title:"值机柜台",sub:"Check-in",words:[["passport","护照"],["boarding pass","登机牌"],["luggage","行李"],["carry-on","手提行李"],["excess baggage","超重行李"],["window seat","靠窗座位"],["gate","登机口"],["terminal","航站楼"],["departure","出发"],["on schedule","准时"],["aisle","过道"],["upgrade","升舱"],["schedule","时刻表"],["confirmation","确认"],["e-ticket","电子票"],["itinerary","行程"]],
+conv:[
+["r","Good morning! I have a reservation for flight CA981 to London. Here is my <b class=kw>passport</b>.","早上好！我预订了飞伦敦的CA981航班。这是我的护照。"],
+["s","Thank you. Let me pull up your booking. Do you have any <b class=kw>luggage</b> to check in today?","谢谢。我查一下您的预订。今天有行李要托运吗？"],
+["u","Yes, I have one suitcase to check in. What is the baggage allowance?","是的，有一个行李箱要托运。行李限额是多少？"],
+["s","23 kilograms. Let me weigh it... It is 27 kg — 4 kg overweight, I am afraid.","23公斤。称一下……27公斤，恐怕超了4公斤。"],
+["u","Oh no! How much is the <b class=kw>excess baggage</b> fee? Could I move some items to my <b class=kw>carry-on</b> instead?","糟糕！超重费是多少？我能把一些东西移到手提行李里吗？"],
+["s","45 dollars per kilogram. And yes, you can rearrange — take your time.","每公斤45美元。可以重新整理——慢慢来。"],
+["u","Thank you. Could I have a <b class=kw>window seat</b>, please? And is the flight <b class=kw>on schedule</b>?","谢谢。能给我靠窗座位吗？航班准时吗？"],
+["s","Yes, seat 27A is a window seat. The flight departs at 15:15 from Gate B12 — on schedule.","有的，27A靠窗。航班15:15准时从B12登机口出发。"],
+["u","Perfect! Which <b class=kw>terminal</b> should I go to? And what time does boarding start?","太好了！我应该去哪个航站楼？几点开始登机？"],
+["s","Terminal 2. Boarding begins at 14:30. I recommend arriving at the gate by 14:00.","T2航站楼。14:30开始登机。建议14:00前到登机口。"]]},
+
+{title:"安检通关",sub:"Security Check",words:[["tray","托盘"],["laptop","笔记本电脑"],["scanner","扫描仪"],["liquid","液体"],["belt","腰带"],["jacket","外套"],["metal detector","金属探测门"],["hand sanitizer","洗手液"],["prescription medicine","处方药"],["electronics","电子设备"],["alarm","警报"],["prohibited","禁止"],["inspection","检查"],["plastic bag","密封袋"],["pat-down","手检"],["confiscate","没收"]],
+conv:[
+["r","Which line should I join? Do I need to take out my <b class=kw>laptop</b> and tablet?","我应该排哪条队？需要把笔记本电脑和平板拿出来吗？"],
+["s","Any line is fine. Yes, please take out all <b class=kw>electronics</b> larger than a phone and put them in separate <b class=kw>tray</b>s.","哪条队都行。是的，请把所有大于手机的电子设备拿出，分开放入托盘。"],
+["u","Should I also empty my pockets? I have keys, coins, and my phone.","口袋也要清空吗？我有钥匙、硬币和手机。"],
+["s","Yes, everything metallic goes in the <b class=kw>tray</b>. Also empty your water bottle.","是的，所有金属物品放托盘。水瓶也要倒空。"],
+["u","I have a small <b class=kw>hand sanitizer</b> — about 50ml. Is that allowed? And my <b class=kw>prescription medicine</b>?","我有一小瓶洗手液——大约50毫升。可以带吗？还有处方药？"],
+["s","Under 100ml is fine — put it in the clear <b class=kw>plastic bag</b>. Medication is exempt — just declare it.","100毫升以下没问题——放进透明密封袋。药物不受限制——申报一下即可。"],
+["u","I am wearing a <b class=kw>belt</b> with a metal buckle. Should I take it off?","我系着金属扣腰带。要取下来吗？"],
+["s","Yes, <b class=kw>belt</b> and <b class=kw>jacket</b> off please. Boots too if they have thick soles.","是的，腰带和外套请取下来。厚底靴子也要脱。"],
+["u","All done. Where do I collect my things after the <b class=kw>scanner</b>?","好了。扫描后去哪取东西？"],
+["s","They come out the other end. Have a good flight!","从另一端出来。旅途愉快！"]]},
+
+{title:"登机口候机",sub:"Boarding Gate",words:[["boarding","登机"],["delay","延误"],["connecting flight","转机"],["transfer desk","转机柜台"],["zone","区域"],["priority","优先"],["free Wi-Fi","免费无线网"],["power outlet","电源插座"],["announcement","广播"],["departure lounge","候机厅"],["display screen","显示屏"],["final call","最后召集"],["standby","候补"],["overbooked","超售"],["complimentary","免费的"],["push notification","推送通知"]],
+conv:[
+["r","Excuse me, has <b class=kw>boarding</b> started for flight CA981 to London?","打扰一下，飞伦敦的CA981开始登机了吗？"],
+["s","Not yet. There is a 30-minute <b class=kw>delay</b> due to a technical check. We apologize for the inconvenience.","还没。因为技术检查延误30分钟。对此不便深表歉意。"],
+["u","A 30-minute <b class=kw>delay</b>? Will I still make my <b class=kw>connecting flight</b> in Dubai?","延误30分钟？我在迪拜的转机还能赶上吗？"],
+["s","You should be fine — the layover is two hours. If you miss it, go to the <b class=kw>transfer desk</b> and they will rebook you for free.","应该没问题——中转停留两小时。如果赶不上，去转机柜台可以免费改签。"],
+["u","Which boarding <b class=kw>zone</b> am I in? I see different zones on other passengers' passes.","我在哪个登机区域？我看到其他旅客登机牌上有不同区域。"],
+["s","You are in Zone B. We board Zone A first — that is <b class=kw>priority</b> and first class.","你在B区。A区先登——那是优先和头等舱。"],
+["u","Is there <b class=kw>free Wi-Fi</b> here at the gate? I need to check my emails.","登机口有免费Wi-Fi吗？我需要查邮件。"],
+["s","Yes, connect to AirportFreeWiFi. <b class=kw>Power outlet</b>s are by the windows.","有的，连接AirportFreeWiFi。电源插座在窗边。"],
+["u","Great, thank you! I will grab a coffee and wait for my zone to be called.","太好了，谢谢！我去买杯咖啡，等叫我的区域。"]]},
+
+{title:"机上服务",sub:"Onboard Service",words:[["overhead compartment","行李舱"],["blanket","毛毯"],["vegetarian","素食"],["pillow","枕头"],["takeoff","起飞"],["USB port","USB接口"],["armrest","扶手"],["meal","餐食"],["flight attendant","空乘"],["landing","着陆"],["seatbelt","安全带"],["headphones","耳机"],["recline","倾斜"],["turbulence","颠簸"],["lavatory","洗手间"],["window shade","遮光板"]],
+conv:[
+["r","Excuse me, could you help me put my bag in the <b class=kw>overhead compartment</b>? It seems a bit too big.","打扰一下，能帮我把包放进行李舱吗？好像有点太大了。"],
+["s","Of course! Let me rotate it sideways. There — it fits perfectly now.","当然！横过来放。好了——完美放进去。"],
+["u","Thank you! I would like a <b class=kw>blanket</b>, please. It feels quite cold in here.","谢谢！我想要一条毯子。这里面感觉挺冷的。"],
+["s","I will bring one right away. There is also a <b class=kw>pillow</b> in the seat pocket if you need it.","马上拿来。座椅口袋里还有枕头，需要的话可以用。"],
+["u","What <b class=kw>meal</b> options do you have? I would prefer a <b class=kw>vegetarian</b> meal if possible.","有什么餐食选择？如果可能的话我想要素食。"],
+["s","We have <b class=kw>vegetarian</b> pasta and a vegan stir-fry. Which would you like? I will mark your preference.","我们有素食意面和纯素炒菜。您要哪个？我标注您的偏好。"],
+["u","The <b class=kw>vegetarian</b> pasta sounds good. Also, could I have some orange juice?","素食意面听起来不错。还有，能给我来点橙汁吗？"],
+["s","Of course. Dinner will be served about one hour after <b class=kw>takeoff</b>.","当然。起飞后约一小时供晚餐。"],
+["u","Is there a <b class=kw>USB port</b> at my seat? My phone battery is getting low.","我座位有USB充电口吗？手机电量不多了。"],
+["s","Yes, under the <b class=kw>armrest</b>. There is also a universal power outlet. Enjoy your flight!","有的，扶手下方。还有万能电源插座。旅途愉快！"]]},
+
+{title:"入境审查",sub:"Immigration",words:[["arrival card","入境卡"],["purpose of visit","访问目的"],["return ticket","返程机票"],["accommodation","住宿"],["declare","申报"],["fingerprint","指纹"],["baggage claim","行李提取"],["passport control","护照检查"],["visa","签证"],["customs","海关"],["quarantine","检疫"],["biometric","生物识别"],["entry clearance","入境许可"],["work permit","工作许可"],["permanent resident","永久居民"],["invitation letter","邀请函"]],
+conv:[
+["r","Good morning. Here is my <b class=kw>passport</b> and <b class=kw>arrival card</b>.","早上好。这是我的护照和入境卡。"],
+["s","Thank you. What is the <b class=kw>purpose of visit</b>? And how long will you be staying?","谢谢。您此行的目的是什么？打算停留多久？"],
+["u","I am here for tourism. I will stay for ten days. I have a <b class=kw>return ticket</b> on the 25th.","我来旅游。待十天。我有25号的返程机票。"],
+["s","Where will you be staying during your visit? Do you have <b class=kw>accommodation</b> arranged?","您在此期间住哪里？安排住宿了吗？"],
+["u","I have booked a hotel near Tower Bridge. Here is the reservation confirmation.","我在塔桥附近订了酒店。这是预订确认。"],
+["s","Good. Do you have anything to <b class=kw>declare</b>? Food, plants, or large amounts of cash?","好的。有需要申报的吗？食品、植物或大额现金？"],
+["u","Nothing to <b class=kw>declare</b>. Just my personal belongings and about 500 pounds in cash.","没有需要申报的。只有个人物品和大约五百英镑现金。"],
+["s","Alright. I need to take your photograph and <b class=kw>fingerprint</b>s — standard procedure.","好的。需要拍张照和录指纹——标准程序。"],
+["u","Of course. Is that everything? Thank you — where do I collect my luggage?","当然。就这些了吗？谢谢——去哪取行李？"],
+["s","<b class=kw>Baggage claim</b> is straight ahead. Welcome to the UK — enjoy your stay!","行李提取在前面直走。欢迎来到英国——祝您愉快！"]]},
+
+{title:"机场求助",sub:"Help Desk",words:[["SIM card","手机卡"],["currency exchange","货币兑换"],["exchange rate","汇率"],["ground transportation","地面交通"],["luggage storage","行李寄存"],["express train","快线"],["taxi stand","出租车站"],["lower level","下层"],["public Wi-Fi","公共无线网"],["information desk","问讯处"],["shuttle bus","接驳巴士"],["train station","火车站"],["subway","地铁"],["one-way ticket","单程票"],["lost and found","失物招领"],["wheelchair accessible","无障碍通道"]],
+conv:[
+["r","Excuse me, where can I buy a local <b class=kw>SIM card</b>? I need data for maps and messages.","打扰一下，哪里能买本地手机卡？我需要流量看地图和发消息。"],
+["s","There is an electronics shop near Gate 3. They have prepaid plans from all major providers.","3号门附近有家电子商店。各大运营商都有预付套餐。"],
+["u","Thank you! Also, where can I exchange money? What is the <b class=kw>exchange rate</b> today?","谢谢！还有，哪里能换钱？今天汇率多少？"],
+["s","The <b class=kw>currency exchange</b> counter is to your left. Today's rate is about 0.78 pounds per dollar. But ATMs often give a better rate.","货币兑换柜台在左边。今天汇率约1美元兑0.78英镑。但ATM通常更划算。"],
+["u","Good to know. How do I get to central London? Is the train faster than a taxi?","了解了。怎么去伦敦市中心？火车比出租车快吗？"],
+["s","The <b class=kw>express train</b> takes 25 minutes and costs 22 pounds. A taxi takes about an hour and costs around 80 pounds.","快线火车25分钟22英镑。出租车约一小时，大约80英镑。"],
+["u","The train sounds better. Where is the <b class=kw>train station</b> from here?","火车听起来更好。从这去火车站怎么走？"],
+["s","Follow the signs for <b class=kw>ground transportation</b>. The station entrance is on the <b class=kw>lower level</b>.","跟着地面交通标志走。火车站入口在楼下。"],
+["u","One last thing — is there <b class=kw>luggage storage</b> here? I want to explore before checking in.","最后一件事——这有行李寄存吗？我想入住前先逛逛。"],
+["s","Yes, near the station entrance. 8 pounds per bag for 24 hours. Enjoy London!","有的，火车站入口附近。每件行李24小时8英镑。享受伦敦！"]]}];
+
+var cur=0;function spk(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function bn(){var h='';for(var i=0;i<S.length;i++)h+='<button class="'+(i===0?'sel':'')+'" data-sc="'+i+'">'+S[i].title+'</button>';document.getElementById('sb').innerHTML=h;document.getElementById('sb').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){cur=parseInt(e.target.getAttribute('data-sc'));document.querySelectorAll('.bar button').forEach(function(b,j){b.className=j===cur?'sel':''});r()}})}
+function r(){var s=S[cur];var h='<h2>📍 '+s.title+'</h2><div class="sub">'+s.sub+' &mdash; '+s.conv.length+'轮 | '+s.words.length+'词</div>';
+for(var i=0;i<s.conv.length;i++){var t=s.conv[i],id='t'+i;
+if(t[0]==='r'){h+='<div class="turn-r"><span class="sp">📖 礼貌表达（参考）</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div>'}
+else if(t[0]==='s'){h+='<div class="turn-sf"><div class="av">💼</div><div class="bb"><span class="sp">工作人员</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div></div>'}
+else{h+='<div class="turn-st"><div class="av">🎓</div><div class="bb"><span class="sp">你来说</span><span style="color:#999;font-size:.7em"> 先试着说，想不出再点提示</span><div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文提示</button><button data-a="en" data-i="'+id+'">🔤 英文答案</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">💬 '+t[2]+'</div><div class="ab" id="en'+id+'">✅ '+t[1]+'</div></div></div>'}
+}document.getElementById('co').innerHTML=h;
+document.getElementById('co').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var a=b.getAttribute('data-a'),i=b.getAttribute('data-i');if(a==='cn'){var el=document.getElementById('cn'+i);if(el)el.classList.toggle('show')}else if(a==='en'){var el=document.getElementById('en'+i);if(el)el.classList.toggle('show')}else if(a==='sp'){var enEl=document.getElementById('en'+i);var txt=enEl?enEl.textContent.replace('✅ ','').trim():'';if(txt)spk(txt.replace(/<[^>]+>/g,''));else{var cnEl=document.getElementById('cn'+i);var t2=cnEl?cnEl.textContent:'?';spk(t2)}}});
+var wh='<h3>📝 核心词汇（'+s.words.length+'个）<br><small style="font-weight:normal;color:#888">点击听发音</small></h3>';for(var k=0;k<s.words.length;k++){wh+='<div class="wrow"><div><span class="en">'+s.words[k][0]+'</span><br><span class="cn">'+s.words[k][1]+'</span></div></div>'}document.getElementById('wp').innerHTML=wh;document.getElementById('wp').addEventListener('click',function(e){var r=e.target.closest('.wrow');if(r){var w=r.querySelector('.en').textContent;spk(w)}})}
+bn();r();</script></body></html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>话题4 · 交通出行</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f0fff0}
+.top{background:linear-gradient(135deg,#16a34a,#166534);color:#fff;text-align:center;padding:15px}.top h1{font-size:1.5em}.top p{font-size:.82em;opacity:.85}
+.bar{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;background:#fff;border-bottom:1px solid #ddd;overflow-x:auto}.bar button{padding:7px 12px;border-radius:8px;border:2px solid #ddd;cursor:pointer;font-size:.8em;font-weight:600;white-space:nowrap}.bar button:hover{border-color:#16a34a;color:#16a34a}.bar button.sel{background:#16a34a;color:#fff;border-color:#16a34a}
+.main{display:flex;gap:16px;max-width:1350px;margin:0 auto;padding:16px}@media(max-width:900px){.main{flex-direction:column}}
+.left{flex:1;min-width:0;background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.05)}.left h2{color:#16a34a;font-size:1.15em;margin-bottom:4px}.left .sub{color:#888;font-size:.8em;margin-bottom:12px}
+.turn-r{background:#f0fdf4;border:1px dashed #4caf50;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:.85em;line-height:1.45}.turn-r .sp{font-size:.65em;color:#4caf50;font-weight:700;margin-bottom:2px;display:block}
+.turn-sf{display:flex;gap:10px;margin-bottom:7px;padding:6px;border-radius:10px;background:#f0fff0;margin-right:16px}
+.turn-st{display:flex;gap:10px;margin-bottom:7px;padding:6px;border-radius:10px;background:#f5f5f5;margin-left:16px;justify-content:flex-end}
+.turn .av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.turn-sf .av{background:#16a34a;color:#fff}.turn-st .av{background:#4caf50;color:#fff;order:2}
+.turn .bb{max-width:75%;padding:8px 12px;border-radius:12px;font-size:.85em;line-height:1.45}
+.turn-sf .bb{background:#d4f0d4;border-radius:4px 12px 12px 12px}.turn-st .bb{background:#e0e0e0;border-radius:12px 4px 12px 12px;order:1}.turn .bb .sp{font-size:.65em;color:#888;display:block;margin-bottom:1px}
+.hr{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}.hr button{padding:3px 8px;border-radius:4px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:.68em}.hr button:hover{background:#eee}
+.ab{display:none;margin-top:3px;padding:6px 10px;background:#fffde7;border-radius:6px;font-size:.8em;border:1px solid #ffcc02;line-height:1.4}.ab.show{display:block}
+.right{width:275px;flex-shrink:0;background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.05);align-self:start;position:sticky;top:8px;max-height:90vh;overflow-y:auto}.right h3{color:#166534;font-size:.88em;margin-bottom:8px;border-bottom:2px solid #d4f0d4;padding-bottom:6px}
+.wrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;cursor:pointer;font-size:.78em}.wrow:hover{background:#f0fff0}.wrow .en{font-weight:600}.wrow .cn{color:#888;font-size:.7em}
+.nb{display:flex;justify-content:center;gap:12px;padding:14px}.nb a{padding:8px 18px;border-radius:10px;text-decoration:none;font-weight:600;font-size:.88em}.np{background:#fff;color:#16a34a;border:2px solid #16a34a}.nn{background:#16a34a;color:#fff}.nn:hover{background:#166534}</style></head><body>
+<div class="top"><h1>🚇 话题 4 · 交通出行</h1><p>Transportation — 问路·公交·出租·租车·火车·巴士</p></div>
+<div style="padding:8px 16px;background:#fff;border-bottom:1px solid #ddd"><a href="index.html" style="color:#16a34a;font-weight:600;text-decoration:none">🏠 话题总览</a></div>
+<div class="bar" id="sb"></div><div class="main"><div class="left" id="co"></div><div class="right" id="wp"></div></div>
+<div class="nb"><a class="np" href="topic3-restaurant.html">← 话题3</a><a class="nn" href="topic5-shopping.html">话题5 →</a></div>
+<script>
+var S=[{title:"问路指路",sub:"Directions",words:[["straight ahead","直走"],["turn left","左转"],["traffic light","红绿灯"],["landmark","地标"],["block","街区"],["shortcut","捷径"],["roundabout","环岛"],["within walking distance","步行可达"],["pedestrian crossing","人行横道"],["intersection","十字路口"],["signpost","路标"],["dead end","死胡同"],["opposite","对面"],["corner","拐角"],["direction","方向"],["turn right","右转"]],
+conv:[["r","Excuse me, how do I get to the British Museum? Is it <b class=kw>within walking distance</b> from here?","打扰一下，去大英博物馆怎么走？从这步行能到吗？"],
+["s","Yes, about a 15-minute walk. Go <b class=kw>straight ahead</b> for two <b class=kw>block</b>s, then <b class=kw>turn left</b> at the <b class=kw>traffic light</b>. You will see a tall red building — that is your <b class=kw>landmark</b>.","能，大约步行15分钟。直走两个街区，到红绿灯左转。你会看到一栋红色高楼——那是地标。"],
+["u","Two blocks straight, then left at the light, and the red building means I am close. Is there a <b class=kw>shortcut</b> through that park?","两街区直走，红绿灯左转，看到红楼就到了。穿过那个公园有捷径吗？"],
+["s","Yes! Follow the <b class=kw>signpost</b> that says Museum Quarter. That saves about five minutes.","有！跟着标有'博物馆区'的路标走。大约省五分钟。"],
+["u","Great! If I see a <b class=kw>roundabout</b>, does that mean I have gone too far?","太好了！如果看到环岛，说明我走过了吗？"],
+["s","Exactly, then you have passed it. There is no <b class=kw>dead end</b> — just follow the signs.","没错，那就走过了。没有死胡同——跟着路标走就行。"]]},
+{title:"公共交通",sub:"Public Transit",words:[["platform","站台"],["one-way ticket","单程票"],["return ticket","往返票"],["fare","票价"],["transfer","换乘"],["rush hour","高峰期"],["route map","线路图"],["ticket machine","售票机"],["direct","直达"],["next train","下一班车"],["subway","地铁"],["bus stop","公交站"],["timetable","时刻表"],["validation","验票"],["delay","延误"],["top up","充值"]],
+conv:[["r","Excuse me, which <b class=kw>platform</b> for the train to King's Cross? And how much is a <b class=kw>one-way ticket</b>?","打扰一下，去国王十字的车在哪个站台？单程票多少钱？"],
+["s","<b class=kw>Platform</b> 3. A <b class=kw>one-way ticket</b> is 4 pounds. You can buy it from the <b class=kw>ticket machine</b> or tap your card at the gate.","3号站台。单程票4英镑。可以在售票机买，也可以在闸机刷卡。"],
+["u","I will tap my card — that is easier. Do I need to <b class=kw>transfer</b> anywhere, or is it <b class=kw>direct</b>?","我刷卡——更方便。需要换乘吗，还是直达？"],
+["s","<b class=kw>Direct</b> to King's Cross — no <b class=kw>transfer</b> needed. The <b class=kw>next train</b> is in 5 minutes. Avoid <b class=kw>rush hour</b> — the trains get very crowded.","直达国王十字——不用换乘。下一班5分钟后到。避开高峰期——车会很挤。"],
+["u","Good to know! Where can I get a <b class=kw>route map</b>? I might need it later.","了解了！哪里能拿线路图？可能后面需要。"],
+["s","Free at any station — just pick one up near the <b class=kw>ticket machine</b>s. Enjoy your ride!","任何站都免费——售票机旁边拿就行。乘车愉快！"]]},
+{title:"出租车",sub:"Taxi",words:[["meter","计价器"],["trunk","后备箱"],["seatbelt","安全带"],["keep the change","不用找了"],["receipt","收据"],["drop off","下车"],["fare estimate","预估车费"],["pickup","上车"],["taxi stand","出租车站"],["license plate","车牌号"],["destination","目的地"],["hail a cab","打车"],["uber","网约车"],["surge pricing","高峰加价"],["address","地址"],["tip","小费"]],
+conv:[["r","Taxi! Can you take me to Tower Bridge, please? How much will it cost?","出租车！能送我去塔桥吗？大概多少钱？"],
+["s","About 25 pounds. I will run the <b class=kw>meter</b>, so it will be exact. Traffic is not too bad right now.","大约25英镑。我打表，会精确计费。现在交通不太堵。"],
+["u","Sounds good. Could you put my suitcase in the <b class=kw>trunk</b>? And do you take credit cards?","好的。能帮我把行李箱放后备箱吗？你收信用卡吗？"],
+["s","Sure! And yes, card machine is right here. Fasten your <b class=kw>seatbelt</b>, please.","当然！可以，刷卡机在这里。请系好安全带。"],
+["u","Can you <b class=kw>drop off</b> near the Tower entrance, not the main road? I have heavy bags.","能让我在塔入口附近下车，不是主路上吗？我行李很重。"],
+["s","The closest <b class=kw>drop-off</b> is about 200 meters from the entrance. Is that okay?","最近落客点离入口约200米。可以吗？"],
+["u","That is fine. Here is 30 pounds — <b class=kw>keep the change</b>. And could I have a <b class=kw>receipt</b>?","没问题。这是30英镑——不用找了。能打张收据吗？"],
+["s","Thank you! Here is your <b class=kw>receipt</b>. Enjoy the Tower — it is magnificent!","谢谢！这是收据。参观愉快——伦敦塔非常壮观！"]]},
+{title:"租车自驾",sub:"Car Rental",words:[["rental car","租车"],["driver license","驾照"],["International Driving Permit","国际驾照"],["automatic","自动挡"],["manual","手动挡"],["insurance","保险"],["full tank","满油"],["GPS","导航"],["mileage","里程"],["roadside assistance","道路救援"],["pick up","取车"],["drop off","还车"],["deposit","押金"],["contract","合同"],["scratch","划痕"],["reservation","预订"]],
+conv:[["r","Hello, I have a <b class=kw>reservation</b> under the name Chen. I booked a compact car for three days.","你好，我用Chen的名字预订了。订了三天紧凑型车。"],
+["s","Yes, Mr. Chen. May I see your <b class=kw>driver license</b> and <b class=kw>International Driving Permit</b>? Do you prefer <b class=kw>automatic</b> or <b class=kw>manual</b>?","有，陈先生。请出示驾照和国际驾照。要自动挡还是手动挡？"],
+["u","<b class=kw>Automatic</b>, please. Does the price include <b class=kw>insurance</b>? And what about <b class=kw>GPS</b>?","自动挡。价格含保险吗？GPS呢？"],
+["s","Basic <b class=kw>insurance</b> is included. <b class=kw>GPS</b> is an extra 10 dollars per day. Full coverage is available for 25 dollars per day.","基础保险已含。GPS每天加10美元。全险每天25美元。"],
+["u","I will take the <b class=kw>GPS</b> and full coverage — better safe than sorry. Do I need to return it with a <b class=kw>full tank</b>?","GPS和全险都要——安全第一。还车需要满油吗？"],
+["s","Yes, return it with a <b class=kw>full tank</b> or we charge for the fuel. Here are the keys — the car is in bay 14. Enjoy your drive!","是的，满油还车否则收油费。钥匙给您——车在14号车位。一路顺风！"]]},
+{title:"火车旅行",sub:"Train Travel",words:[["departure","出发"],["arrival","到达"],["platform","站台"],["first class","一等座"],["standard class","标准座"],["seat reservation","座位预订"],["ticket inspector","检票员"],["dining car","餐车"],["luggage rack","行李架"],["on time","准时"],["train station","火车站"],["delay","延误"],["window seat","靠窗"],["aisle","过道"],["connecting train","接续列车"],["seat number","座位号"]],
+conv:[["r","Excuse me, is this the 10 AM train to Edinburgh? What <b class=kw>platform</b> does it leave from?","打扰，这是10点去爱丁堡的车吗？从哪个站台出发？"],
+["s","Yes, <b class=kw>platform</b> 8. It departs <b class=kw>on time</b> — boarding starts in 15 minutes. Do you have a <b class=kw>seat reservation</b>?","是的，8号站台。准时发车——15分钟后登车。您预订座位了吗？"],
+["u","No <b class=kw>seat reservation</b> — I have a <b class=kw>standard class</b> ticket. Can I sit anywhere?","没订座位——我有标准座票。可以随便坐吗？"],
+["s","Yes, any empty seat in the <b class=kw>standard class</b> carriages. The <b class=kw>ticket inspector</b> will check your ticket after <b class=kw>departure</b>.","可以，标准车厢任意空座。发车后检票员会查票。"],
+["u","Thank you! Where can I put my large suitcase? Is there a <b class=kw>dining car</b> on this train?","谢谢！大行李箱放哪？车上有餐车吗？"],
+["s","<b class=kw>Luggage rack</b> near the doors. The <b class=kw>dining car</b> is in coach C — they serve coffee and sandwiches. Have a good trip!","行李架在门旁边。餐车在C车厢——有咖啡和三明治。旅途愉快！"]]},
+{title:"长途巴士",sub:"Coach",words:[["coach","长途大巴"],["book online","在线订"],["boarding","登车"],["luggage compartment","行李舱"],["rest stop","休息站"],["overnight bus","夜班车"],["ticket counter","售票处"],["discount","折扣"],["air conditioning","空调"],["Wi-Fi","无线网"],["bus terminal","巴士总站"],["cancellation","退票"],["senior","长者"],["travel pass","通票"],["reclining seat","可调座椅"],["onboard restroom","车载厕所"]],
+conv:[["r","Hi, I <b class=kw>book online</b> a ticket for the <b class=kw>coach</b> to Oxford. Here is my confirmation.","你好，我在线预订了去牛津的大巴。这是确认信息。"],
+["s","Got it. The <b class=kw>coach</b> leaves from bay 5. <b class=kw>Boarding</b> starts in 10 minutes.","好的。大巴5号站台出发。10分钟后登车。"],
+["u","Can I put my large bag in the <b class=kw>luggage compartment</b> underneath? And does the <b class=kw>coach</b> have <b class=kw>Wi-Fi</b>?","大包能放下面行李舱吗？车上有Wi-Fi吗？"],
+["s","Yes, the driver will open the <b class=kw>luggage compartment</b>. And yes, free <b class=kw>Wi-Fi</b> onboard. There is also an <b class=kw>onboard restroom</b>.","可以，司机会开行李舱。有，车上免费Wi-Fi，也有车载厕所。"],
+["u","Is there a <b class=kw>rest stop</b> along the way? It is a two-hour journey, right?","沿途有休息站吗？差不多两小时路程对吧？"],
+["s","One <b class=kw>rest stop</b> halfway — you can buy snacks there. Yes, about two hours. Enjoy the ride!","中途一个休息站——可以买零食。是的，约两小时。一路顺风！"]]}];
+var cur=0;function spk(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function bn(){var h='';for(var i=0;i<S.length;i++)h+='<button class="'+(i===0?'sel':'')+'" data-sc="'+i+'">'+S[i].title+'</button>';document.getElementById('sb').innerHTML=h;document.getElementById('sb').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){cur=parseInt(e.target.getAttribute('data-sc'));document.querySelectorAll('.bar button').forEach(function(b,j){b.className=j===cur?'sel':''});r()}})}
+function r(){var s=S[cur];var h='<h2>📍 '+s.title+'</h2><div class="sub">'+s.sub+' &mdash; '+s.conv.length+'轮 | '+s.words.length+'词</div>';
+for(var i=0;i<s.conv.length;i++){var t=s.conv[i],id='t'+i;if(t[0]==='r'){h+='<div class="turn-r"><span class="sp">📖 礼貌表达（参考）</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div>'}else if(t[0]==='s'){h+='<div class="turn-sf"><div class="av">💼</div><div class="bb"><span class="sp">工作人员</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div></div>'}else{h+='<div class="turn-st"><div class="av">🎓</div><div class="bb"><span class="sp">你来说</span><span style="color:#999;font-size:.7em"> 先试着说，想不出再点提示</span><div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文提示</button><button data-a="en" data-i="'+id+'">🔤 英文答案</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">💬 '+t[2]+'</div><div class="ab" id="en'+id+'">✅ '+t[1]+'</div></div></div>'}}document.getElementById('co').innerHTML=h;
+document.getElementById('co').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var a=b.getAttribute('data-a'),i=b.getAttribute('data-i');if(a==='cn'){var el=document.getElementById('cn'+i);if(el)el.classList.toggle('show')}else if(a==='en'){var el=document.getElementById('en'+i);if(el)el.classList.toggle('show')}else if(a==='sp'){var enEl=document.getElementById('en'+i);var txt=enEl?enEl.textContent.replace('✅ ','').trim():'';if(txt)spk(txt.replace(/<[^>]+>/g,''));else{var cnEl=document.getElementById('cn'+i);if(cnEl)spk(cnEl.textContent)}}});
+var wh='<h3>📝 核心词汇（'+s.words.length+'个）<br><small style="font-weight:normal;color:#888">点击听发音</small></h3>';for(var k=0;k<s.words.length;k++){wh+='<div class="wrow"><div><span class="en">'+s.words[k][0]+'</span><br><span class="cn">'+s.words[k][1]+'</span></div></div>'}document.getElementById('wp').innerHTML=wh;document.getElementById('wp').addEventListener('click',function(e){var r=e.target.closest('.wrow');if(r){var w=r.querySelector('.en').textContent;spk(w)}})}
+bn();r();</script></body></html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>话题2 · 酒店与服务</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:#fff8f0}
+.top{background:linear-gradient(135deg,#e67e22,#c0392b);color:#fff;text-align:center;padding:15px}.top h1{font-size:1.5em}.top p{font-size:.82em;opacity:.85}
+.bar{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;background:#fff;border-bottom:1px solid #ddd;overflow-x:auto}.bar button{padding:7px 12px;border-radius:8px;border:2px solid #ddd;cursor:pointer;font-size:.8em;font-weight:600;white-space:nowrap}.bar button:hover{border-color:#e67e22;color:#e67e22}.bar button.sel{background:#e67e22;color:#fff;border-color:#e67e22}
+.main{display:flex;gap:16px;max-width:1350px;margin:0 auto;padding:16px}@media(max-width:900px){.main{flex-direction:column}}
+.left{flex:1;min-width:0;background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.05)}.left h2{color:#e67e22;font-size:1.15em;margin-bottom:4px}.left .sub{color:#888;font-size:.8em;margin-bottom:12px}
+.turn-r{background:#f0fdf4;border:1px dashed #4caf50;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:.85em;line-height:1.45}.turn-r .sp{font-size:.65em;color:#4caf50;font-weight:700;margin-bottom:2px;display:block}
+.turn-sf{display:flex;gap:10px;margin-bottom:7px;padding:6px;border-radius:10px;background:#fff3e8;margin-right:16px}
+.turn-st{display:flex;gap:10px;margin-bottom:7px;padding:6px;border-radius:10px;background:#f5f5f5;margin-left:16px;justify-content:flex-end}
+.turn .av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.turn-sf .av{background:#e67e22;color:#fff}.turn-st .av{background:#4caf50;color:#fff;order:2}
+.turn .bb{max-width:75%;padding:8px 12px;border-radius:12px;font-size:.85em;line-height:1.45}
+.turn-sf .bb{background:#ffe0c4;border-radius:4px 12px 12px 12px}.turn-st .bb{background:#e0e0e0;border-radius:12px 4px 12px 12px;order:1}
+.turn .bb .sp{font-size:.65em;color:#888;display:block;margin-bottom:1px}
+.hr{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}.hr button{padding:3px 8px;border-radius:4px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:.68em}.hr button:hover{background:#eee}
+.ab{display:none;margin-top:3px;padding:6px 10px;background:#fffde7;border-radius:6px;font-size:.8em;border:1px solid #ffcc02;line-height:1.4}.ab.show{display:block}
+.right{width:275px;flex-shrink:0;background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 8px rgba(0,0,0,.05);align-self:start;position:sticky;top:8px;max-height:90vh;overflow-y:auto}.right h3{color:#c0392b;font-size:.88em;margin-bottom:8px;border-bottom:2px solid #ffe0c4;padding-bottom:6px}
+.wrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;cursor:pointer;font-size:.78em}.wrow:hover{background:#fff8f0}.wrow .en{font-weight:600}.wrow .cn{color:#888;font-size:.7em}
+.nb{display:flex;justify-content:center;gap:12px;padding:14px}.nb a{padding:8px 18px;border-radius:10px;text-decoration:none;font-weight:600;font-size:.88em}.np{background:#fff;color:#e67e22;border:2px solid #e67e22}.nn{background:#e67e22;color:#fff}.nn:hover{background:#c0392b}
+</style></head><body>
+<div class="top"><h1>🏨 话题 2 · 酒店与服务</h1><p>Hotel & Services — 入住·房间·服务·设施·投诉·退房</p></div>
+<div style="padding:8px 16px;background:#fff;border-bottom:1px solid #ddd"><a href="index.html" style="color:#e67e22;font-weight:600;text-decoration:none">🏠 话题总览</a></div>
+<div class="bar" id="sb"></div><div class="main"><div class="left" id="co"></div><div class="right" id="wp"></div></div>
+<div class="nb"><a class="np" href="topic1-airport.html">← 话题1</a><a class="nn" href="topic3-restaurant.html">话题3 →</a></div>
+<script>
+var S=[
+{title:"前台入住",sub:"Check-in",words:[["reservation","预订"],["passport","护照"],["deposit","押金"],["key card","房卡"],["lobby","大堂"],["room rate","房价"],["check-out","退房"],["elevator","电梯"],["non-smoking","无烟"],["king-size bed","特大床"],["complimentary","免费"],["concierge","礼宾部"],["luggage","行李"],["wake-up call","叫醒服务"],["registration","登记"],["incidental charges","杂费"]],
+conv:[["r","Good evening! I have a <b class=kw>reservation</b> under the name Chen. I booked a deluxe room for five nights.","晚上好！我用Chen的名字预订了。订了五晚豪华房。"],
+["s","Let me look that up... Yes, Mr. Chen. May I see your <b class=kw>passport</b> and a credit card for the <b class=kw>deposit</b>?","我查一下……有的，陈先生。请出示护照和用于押金的信用卡。"],
+["u","Here you are. How much is the <b class=kw>deposit</b>? And what time is <b class=kw>check-out</b>?","给你。押金多少？退房几点？"],
+["s","The <b class=kw>deposit</b> is 100 dollars. <b class=kw>Check-out</b> is at 11 AM. Your <b class=kw>room rate</b> includes <b class=kw>complimentary</b> breakfast from 7 to 10 AM.","押金100美元。退房上午11点。房价含免费早餐，7点到10点。"],
+["u","Great! Is there Wi-Fi in the room? Could you give me a <b class=kw>wake-up call</b> at 7 AM tomorrow? I have an early meeting.","太好了！房间有Wi-Fi吗？明早7点能给我叫醒服务吗？我有个早会。"],
+["s","Yes, free Wi-Fi. I will arrange the <b class=kw>wake-up call</b> now. Here is your <b class=kw>key card</b> — room 1208 on the 12th floor. The <b class=kw>elevator</b> is through the <b class=kw>lobby</b>. Enjoy your stay!","有免费Wi-Fi。现在安排叫醒。这是房卡——12楼1208。电梯穿过大堂。入住愉快！"]]},
+{title:"房间设施",sub:"Room Amenities",words:[["air conditioning","空调"],["thermostat","温控器"],["mini-bar","迷你吧"],["safe box","保险箱"],["wardrobe","衣柜"],["balcony","阳台"],["power outlet","电源插座"],["hair dryer","吹风机"],["ironing board","熨衣板"],["toiletries","洗浴用品"],["blackout curtains","遮光窗帘"],["pillow","枕头"],["hot water","热水"],["remote control","遥控器"],["free Wi-Fi","免费无线网"],["room service menu","客房服务菜单"]],
+conv:[["r","Hello, I just checked into room 1208. How do I adjust the <b class=kw>air conditioning</b>? The room feels a bit too warm.","你好，我刚入住1208。怎么调空调？房间感觉有点热。"],
+["s","The <b class=kw>thermostat</b> is on the wall next to the door. Press the down arrow to cool the room.","温控器在门旁边的墙上。按向下箭头降温。"],
+["u","Thanks! Also, is the <b class=kw>mini-bar</b> included in the room price or is it extra?","谢谢！还有，迷你吧含在房价里还是另外收费？"],
+["s","The <b class=kw>mini-bar</b> items are charged separately. There is a price list inside the fridge.","迷你吧物品另外收费。冰箱里有价目表。"],
+["u","Where can I find the <b class=kw>hair dryer</b>? And are there extra <b class=kw>pillow</b>s?","吹风机在哪？有额外的枕头吗？"],
+["s","The <b class=kw>hair dryer</b> is in the bathroom drawer. I can send extra <b class=kw>pillow</b>s right away.","吹风机在浴室抽屉里。我可以马上送额外枕头到您房间。"],
+["u","That would be great. One more thing — the <b class=kw>hot water</b> in the shower is not working properly.","太好了。还有一件事——淋浴热水不太对。"],
+["s","I apologize for that! I will send a technician to check it immediately.","抱歉！我马上派技术员检查。"]]},
+{title:"客房服务",sub:"Room Service",words:[["room service","客房送餐"],["menu","菜单"],["order","点餐"],["delivery","送餐"],["tray charge","托盘费"],["continental breakfast","欧陆早餐"],["freshly squeezed","鲜榨的"],["beverage","饮品"],["cutlery","餐具"],["vegetarian","素食"],["condiments","调味品"],["complimentary","赠送的"],["around the clock","全天候"],["all-day dining","全日供餐"],["late-night snack","深夜小食"],["in-room dining","房内用餐"]],
+conv:[["r","Hello, I would like to <b class=kw>order</b> dinner from the <b class=kw>room service</b> <b class=kw>menu</b>. Is it too late?","你好，我想从客房服务菜单点晚餐。太晚了吗？"],
+["s","Not at all! We have <b class=kw>all-day dining</b> until 11 PM. What would you like?","完全不会！全日供餐到晚上11点。您想点什么？"],
+["u","I will have the grilled chicken. Does it come with any side dishes?","我要烤鸡。带配菜吗？"],
+["s","Yes, it comes with mashed potatoes and vegetables. Would you like a starter or a <b class=kw>beverage</b>?","是的，配土豆泥和蔬菜。要前菜或饮品吗？"],
+["u","Just a glass of <b class=kw>freshly squeezed</b> orange juice. How long will the <b class=kw>delivery</b> take?","只要一杯鲜榨橙汁。送餐要多久？"],
+["s","About 25 minutes. There is a small <b class=kw>tray charge</b> of 5 dollars. We will bring <b class=kw>cutlery</b> and <b class=kw>condiments</b>.","约25分钟。有5美元托盘费。我们会带餐具和调味品。"],
+["u","That is fine. Oh, does the chicken contain any nuts? I am allergic to nuts.","没问题。哦，鸡肉含坚果吗？我对坚果过敏。"],
+["s","No nuts at all. I will mark your allergy on the <b class=kw>order</b>. Your meal will be with you shortly!","完全不含。我会在订单上标记您的过敏信息。餐食马上到！"]]},
+{title:"酒店设施",sub:"Facilities",words:[["fitness center","健身中心"],["swimming pool","游泳池"],["spa","水疗中心"],["sauna","桑拿"],["massage","按摩"],["business center","商务中心"],["meeting room","会议室"],["laundry service","洗衣服务"],["dry cleaning","干洗"],["airport shuttle","机场班车"],["tour desk","旅游服务台"],["currency exchange","货币兑换"],["valet parking","代客泊车"],["heated pool","恒温泳池"],["steam room","蒸汽房"],["lounge","休息室"]],
+conv:[["r","Good morning! Is there a <b class=kw>swimming pool</b> in the hotel? And a <b class=kw>fitness center</b>?","早上好！酒店有游泳池吗？还有健身中心？"],
+["s","Yes, the <b class=kw>swimming pool</b> is on the rooftop — it is a <b class=kw>heated pool</b>. The <b class=kw>fitness center</b> is on the third floor, open 24 hours.","有，游泳池在楼顶——恒温的。健身中心在三楼，24小时开放。"],
+["u","Can I book a <b class=kw>massage</b> at the <b class=kw>spa</b>? I have had a long flight and my back is sore.","能在水疗中心预约按摩吗？长途飞行后背很酸。"],
+["s","Of course! I can book you for 3 PM — a 60-minute deep tissue <b class=kw>massage</b> for 80 dollars.","当然！可以约下午3点——60分钟深层组织按摩，80美元。"],
+["u","Perfect. Also, I need <b class=kw>laundry service</b> — this suit needs <b class=kw>dry cleaning</b>. How long does it take?","完美。还有，我需要洗衣服务——这套西装要干洗。多久能好？"],
+["s","Standard <b class=kw>laundry service</b> takes 24 hours. Express service is available — same day return.","标准洗衣24小时。加急服务当天可取。"],
+["u","And does the hotel have an <b class=kw>airport shuttle</b>? I need to get to Heathrow on Friday morning.","酒店有机场班车吗？我周五早上要去希思罗。"],
+["s","Yes, the <b class=kw>airport shuttle</b> runs every 30 minutes and costs 25 dollars. Would you like me to book it?","有，每30分钟一班，25美元。要帮您预订吗？"]]},
+{title:"投诉处理",sub:"Complaints",words:[["complaint","投诉"],["noise","噪音"],["malfunction","故障"],["room change","换房"],["discount","折扣"],["manager","经理"],["maintenance","维修"],["technician","技术员"],["immediately","立即"],["apologize","道歉"],["compensation","赔偿"],["feedback","反馈意见"],["upgrade","升级"],["service recovery","服务补救"],["follow up","跟进"],["guest relations","宾客关系"]],
+conv:[["r","I am sorry, but there is a lot of <b class=kw>noise</b> coming from the room next door. I cannot sleep.","很抱歉，但隔壁房间传来很大的噪音。我睡不着。"],
+["s","I sincerely <b class=kw>apologize</b>! I will send security <b class=kw>immediately</b>. Would you like me to arrange a <b class=kw>room change</b>?","非常抱歉！我马上派保安。需要帮您安排换房吗？"],
+["u","Yes, a <b class=kw>room change</b> would be great if possible. Also, the air conditioning is making a strange rattling sound.","是的，如果可能的话换房最好。还有，空调发出奇怪的嘎嘎声。"],
+["s","I will send a <b class=kw>technician</b> for the AC and prepare a new room for you right away. As <b class=kw>compensation</b>, I would like to offer you a 20 percent <b class=kw>discount</b>.","我派技术员检查空调，马上给您准备新房。作为赔偿，今晚房费八折。"],
+["u","Thank you, I appreciate the quick response. That is very fair.","谢谢，感谢快速响应。这很公道。"],
+["s","Thank you for your understanding. The bellman will be at your door in five minutes to help you move.","感谢您的理解。行李员五分钟内到门口帮您搬。"]]},
+{title:"退房离店",sub:"Check-out",words:[["check-out","退房"],["bill","账单"],["receipt","收据"],["settle","结算"],["credit card","信用卡"],["itemized","明细"],["dispute","质疑"],["luggage storage","行李寄存"],["bellman","行李员"],["taxi stand","出租车站"],["fare","车费"],["loyalty program","会员"],["feedback form","反馈表"],["return visit","再次入住"],["hospitality","款待"],["invoice","发票"]],
+conv:[["r","Good morning! I would like to <b class=kw>check-out</b>. Room 1208. Could I see the <b class=kw>itemized</b> <b class=kw>bill</b> first?","早上好！我要退房。1208房。能先看一下明细账单吗？"],
+["s","Of course. Here it is. The total is 892 dollars, including the room rate, room service, and laundry.","当然。给您。总计892美元，含房费、客房送餐和洗衣。"],
+["u","Everything looks correct. Please <b class=kw>settle</b> the <b class=kw>bill</b> on my <b class=kw>credit card</b>.","看起来没问题。请用信用卡结账。"],
+["s","Processing now... Done! Here is your <b class=kw>receipt</b>. Would you like a printed <b class=kw>invoice</b> as well?","正在处理……好了！这是收据。还需要打印发票吗？"],
+["u","Yes, please. Could you also store my <b class=kw>luggage</b> for a few hours? My flight is not until this evening.","是的，请打印。还能寄存行李几小时吗？航班要到晚上。"],
+["s","Of course. <b class=kw>Luggage storage</b> is complimentary. The <b class=kw>bellman</b> will tag your bags.","当然。行李寄存免费。行李员会给您行李贴标签。"],
+["u","And could you call me a taxi? How much is the <b class=kw>fare</b> to the airport?","能帮我叫出租车吗？到机场多少钱？"],
+["s","A taxi takes about 45 minutes and costs around 70 pounds. It has been a pleasure having you — safe travels!","出租车约45分钟，约70英镑。能接待您是荣幸——一路平安！"]]}];
+var cur=0;function spk(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function bn(){var h='';for(var i=0;i<S.length;i++)h+='<button class="'+(i===0?'sel':'')+'" data-sc="'+i+'">'+S[i].title+'</button>';document.getElementById('sb').innerHTML=h;document.getElementById('sb').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){cur=parseInt(e.target.getAttribute('data-sc'));document.querySelectorAll('.bar button').forEach(function(b,j){b.className=j===cur?'sel':''});r()}})}
+function r(){var s=S[cur];var h='<h2>📍 '+s.title+'</h2><div class="sub">'+s.sub+' &mdash; '+s.conv.length+'轮 | '+s.words.length+'词</div>';
+for(var i=0;i<s.conv.length;i++){var t=s.conv[i],id='t'+i;if(t[0]==='r'){h+='<div class="turn-r"><span class="sp">📖 礼貌表达（参考）</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div>'}else if(t[0]==='s'){h+='<div class="turn-sf"><div class="av">💼</div><div class="bb"><span class="sp">工作人员</span>'+t[1]+'<div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文翻译</button><button data-a="sp" data-i="'+id+'">🔊</button></div><div class="ab" id="cn'+id+'">'+t[2]+'</div></div></div>'}else{h+='<div class="turn-st"><div class="av">🎓</div><div class="bb"><span class="sp">你来说</span><span style="color:#999;font-size:.7em"> 先试着说，想不出再点提示</span><div class="hr"><button data-a="cn" data-i="'+id+'">💡 中文提示</button><button data-a="en" data-i="'+id+'">🔤 英文答案</button><button data-a="sp" data-i="'+id+'">🔊 朗读</button></div><div class="ab" id="cn'+id+'">💬 '+t[2]+'</div><div class="ab" id="en'+id+'">✅ '+t[1]+'</div></div></div>'}}document.getElementById('co').innerHTML=h;
+document.getElementById('co').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var a=b.getAttribute('data-a'),i=b.getAttribute('data-i');if(a==='cn'){var el=document.getElementById('cn'+i);if(el)el.classList.toggle('show')}else if(a==='en'){var el=document.getElementById('en'+i);if(el)el.classList.toggle('show')}else if(a==='sp'){var enEl=document.getElementById('en'+i);var txt=enEl?enEl.textContent.replace('✅ ','').trim():'';if(txt)spk(txt.replace(/<[^>]+>/g,''));else{var cnEl=document.getElementById('cn'+i);if(cnEl)spk(cnEl.textContent)}}});
+var wh='<h3>📝 核心词汇（'+s.words.length+'个）<br><small style="font-weight:normal;color:#888">点击听发音</small></h3>';for(var k=0;k<s.words.length;k++){wh+='<div class="wrow"><div><span class="en">'+s.words[k][0]+'</span><br><span class="cn">'+s.words[k][1]+'</span></div></div>'}document.getElementById('wp').innerHTML=wh;document.getElementById('wp').addEventListener('click',function(e){var r=e.target.closest('.wrow');if(r){var w=r.querySelector('.en').textContent;spk(w)}})}
+bn();r();</script></body></html>
