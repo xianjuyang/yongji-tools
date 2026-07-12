@@ -235,7 +235,7 @@ function renderRules(cat) {
   document.getElementById('content').innerHTML = '<h2 class="category-title">'+cat+'</h2>' +
   RULES.filter(r=>r.cat===cat).map(r=>`
     <div class="rule-card">
-      <h3>${r.title} <button class="read-btn" style="font-size:.8em;padding:6px 12px" onclick="event.stopPropagation();speak(`${r.eg[0].w}`)">🔊 听示范发音</button></h3>
+      <h3>${r.title} <button class="read-btn" style="font-size:.8em;padding:6px 12px" onclick="event.stopPropagation();speak('${r.eg[0].w}')">🔊 听示范发音</button></h3>
       <p class="desc">${r.desc}</p>
       <div class="examples">${r.eg.map(e=>`<button class="example-btn" onclick="event.stopPropagation();speak('${e.w}')"><span>🔊</span><span class="word">${e.w}</span><span class="ipa">${e.i}</span><span style="color:#718096;font-size:.85em">${e.m}</span></button>`).join('')}</div>
     </div>`).join('');
