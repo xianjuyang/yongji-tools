@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自然拼读规则大全 — Phonics</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f0f4ff;color:#2d3748;line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+header{text-align:center;padding:40px 20px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-radius:16px;margin-bottom:24px}
+header h1{font-size:2em;margin-bottom:8px}
+header p{opacity:.9}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;position:sticky;top:10px;z-index:100}
+.tab{padding:10px 18px;background:#fff;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:.9em;font-weight:600;transition:all .2s;white-space:nowrap}
+.tab:hover{background:#667eea;color:#fff;border-color:#667eea}
+.tab.active{background:#667eea;color:#fff;border-color:#667eea}
+.rule-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid #667eea}
+.rule-card h3{color:#667eea;font-size:1.2em;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.desc{color:#4a5568;margin-bottom:12px;font-size:.95em}
+.examples{display:flex;flex-wrap:wrap;gap:8px}
+.example-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#f7fafc;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:.95em;transition:all .2s}
+.example-btn:hover{background:#667eea;color:#fff;border-color:#667eea}
+.example-btn .word{font-weight:600}
+.example-btn .ipa{color:#a0aec0;font-size:.8em}
+.reading-passage{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.reading-passage h3{color:#764ba2;margin-bottom:12px}
+.level{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:600;margin:0 0 12px 8px}
+.level.easy{background:#c6f6d5;color:#276749}
+.level.medium{background:#fefcbf;color:#975a16}
+.level.hard{background:#fed7d7;color:#9b2c2c}
+.passage-text{font-size:1.15em;line-height:2.2;margin:16px 0;padding:16px;background:#f7fafc;border-radius:8px}
+.passage-text span{cursor:pointer;padding:2px 5px;border-radius:4px;transition:all .2s}
+.passage-text span:hover{background:#667eea;color:#fff}
+.read-btn{padding:10px 24px;background:#764ba2;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:1em;font-weight:600;transition:all .2s}
+.read-btn:hover{background:#667eea}
+.search-box{width:100%;padding:14px 20px;border:2px solid #e2e8f0;border-radius:12px;font-size:1em;margin-bottom:20px;outline:none}
+.search-box:focus{border-color:#667eea}
+.category-title{font-size:1.3em;color:#4a5568;margin:20px 0 12px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+@media(max-width:768px){.tabs{overflow-x:auto;flex-wrap:nowrap}.tab{font-size:.8em;padding:8px 12px}header h1{font-size:1.4em}.example-btn{font-size:.85em}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <h1>🔤 英语自然拼读规则大全</h1>
+  <p>Phonics Rules — 点击任意单词即可听到纯正发音 <span class="offline-badge">📴 离线可用</span></p>
+</header>
+
+<input class="search-box" id="search" placeholder="🔍 搜索规则或单词...">
+
+<div class="tabs" id="tabs"></div>
+<div id="content"></div>
+</div>
+
+<script>
+// ============ 完整自然拼读规则库 ============
+const RULES = [
+// === 短元音 ===
+{cat:'短元音',title:'a /æ/ — 短元音',desc:'嘴巴张大，舌尖抵下齿，短促有力。英语中最常见的短元音之一。',eg:[
+  {w:'cat',i:'/kæt/',m:'猫'},{w:'hat',i:'/hæt/',m:'帽子'},{w:'map',i:'/mæp/',m:'地图'},{w:'bag',i:'/bæg/',m:'包'},{w:'bat',i:'/bæt/',m:'球棒'},{w:'fan',i:'/fæn/',m:'风扇'},{w:'sad',i:'/sæd/',m:'伤心的'},{w:'jam',i:'/dʒæm/',m:'果酱'},{w:'cap',i:'/kæp/',m:'帽子'},{w:'man',i:'/mæn/',m:'男人'}
+]},
+{cat:'短元音',title:'e /e/ — 短元音',desc:'嘴型扁平，舌尖抵下齿。声音短而清晰，类似中文"诶"的短音。',eg:[
+  {w:'bed',i:'/bed/',m:'床'},{w:'red',i:'/red/',m:'红色'},{w:'pen',i:'/pen/',m:'笔'},{w:'leg',i:'/leg/',m:'腿'},{w:'ten',i:'/ten/',m:'十'},{w:'wet',i:'/wet/',m:'湿的'},{w:'egg',i:'/eg/',m:'鸡蛋'},{w:'net',i:'/net/',m:'网'},{w:'men',i:'/men/',m:'男人们'},{w:'pet',i:'/pet/',m:'宠物'}
+]},
+{cat:'短元音',title:'i /ɪ/ — 短元音',desc:'嘴唇微微张开，舌尖抵下齿，短而轻。不是"衣"的长音。',eg:[
+  {w:'pig',i:'/pɪg/',m:'猪'},{w:'sit',i:'/sɪt/',m:'坐'},{w:'big',i:'/bɪg/',m:'大'},{w:'fish',i:'/fɪʃ/',m:'鱼'},{w:'ship',i:'/ʃɪp/',m:'船'},{w:'milk',i:'/mɪlk/',m:'牛奶'},{w:'gift',i:'/gɪft/',m:'礼物'},{w:'swim',i:'/swɪm/',m:'游泳'},{w:'chip',i:'/tʃɪp/',m:'薯片'},{w:'win',i:'/wɪn/',m:'赢'}
+]},
+{cat:'短元音',title:'o /ɒ/ — 短元音',desc:'嘴巴张大呈圆形，舌头后缩。美式英语更接近 /ɑː/。',eg:[
+  {w:'dog',i:'/dɒg/',m:'狗'},{w:'hot',i:'/hɒt/',m:'热的'},{w:'box',i:'/bɒks/',m:'盒子'},{w:'top',i:'/tɒp/',m:'顶部'},{w:'frog',i:'/frɒg/',m:'青蛙'},{w:'shop',i:'/ʃɒp/',m:'商店'},{w:'clock',i:'/klɒk/',m:'钟'},{w:'stop',i:'/stɒp/',m:'停止'},{w:'fox',i:'/fɒks/',m:'狐狸'},{w:'pot',i:'/pɒt/',m:'锅'}
+]},
+{cat:'短元音',title:'u /ʌ/ — 短元音',desc:'嘴巴微张，舌头中部抬起。像中文"啊"但舌位更高更前。',eg:[
+  {w:'cup',i:'/kʌp/',m:'杯子'},{w:'sun',i:'/sʌn/',m:'太阳'},{w:'bus',i:'/bʌs/',m:'公车'},{w:'run',i:'/rʌn/',m:'跑'},{w:'bug',i:'/bʌg/',m:'虫子'},{w:'mud',i:'/mʌd/',m:'泥'},{w:'duck',i:'/dʌk/',m:'鸭子'},{w:'jump',i:'/dʒʌmp/',m:'跳'},{w:'hut',i:'/hʌt/',m:'小屋'},{w:'gum',i:'/gʌm/',m:'口香糖'}
+]},
+
+// === Magic E ===
+{cat:'Magic E',title:'a_e → /eɪ/ (长a)',desc:'词尾不发音的 e 让前面的元音"说自己的名字"。a 读作字母本音 /eɪ/（"诶"）。',eg:[
+  {w:'cake',i:'/keɪk/',m:'蛋糕'},{w:'game',i:'/geɪm/',m:'游戏'},{w:'lake',i:'/leɪk/',m:'湖'},{w:'name',i:'/neɪm/',m:'名字'},{w:'face',i:'/feɪs/',m:'脸'},{w:'tape',i:'/teɪp/',m:'胶带'},{w:'grape',i:'/greɪp/',m:'葡萄'},{w:'plate',i:'/pleɪt/',m:'盘子'},{w:'whale',i:'/weɪl/',m:'鲸鱼'},{w:'snake',i:'/sneɪk/',m:'蛇'}
+]},
+{cat:'Magic E',title:'i_e → /aɪ/ (长i)',desc:'i + 辅音 + e → /aɪ/（"爱"），i 说出自己的名字。',eg:[
+  {w:'bike',i:'/baɪk/',m:'自行车'},{w:'five',i:'/faɪv/',m:'五'},{w:'kite',i:'/kaɪt/',m:'风筝'},{w:'time',i:'/taɪm/',m:'时间'},{w:'rice',i:'/raɪs/',m:'米饭'},{w:'slide',i:'/slaɪd/',m:'滑梯'},{w:'smile',i:'/smaɪl/',m:'微笑'},{w:'drive',i:'/draɪv/',m:'开车'},{w:'like',i:'/laɪk/',m:'喜欢'},{w:'white',i:'/waɪt/',m:'白色'}
+]},
+{cat:'Magic E',title:'o_e → /əʊ/ (长o)',desc:'o + 辅音 + e → /əʊ/（"欧"），o 说出自己的名字。',eg:[
+  {w:'home',i:'/həʊm/',m:'家'},{w:'rope',i:'/rəʊp/',m:'绳子'},{w:'note',i:'/nəʊt/',m:'笔记'},{w:'bone',i:'/bəʊn/',m:'骨头'},{w:'rose',i:'/rəʊz/',m:'玫瑰'},{w:'hope',i:'/həʊp/',m:'希望'},{w:'stone',i:'/stəʊn/',m:'石头'},{w:'globe',i:'/gləʊb/',m:'地球'},{w:'nose',i:'/nəʊz/',m:'鼻子'},{w:'close',i:'/kləʊz/',m:'关闭'}
+]},
+{cat:'Magic E',title:'u_e → /juː/ 或 /uː/',desc:'u + 辅音 + e。多数发 /juː/（"优"），在 ch/j/l/r 后发 /uː/（"乌"）。',eg:[
+  {w:'cube',i:'/kjuːb/',m:'立方体'},{w:'mule',i:'/mjuːl/',m:'骡子'},{w:'tune',i:'/tjuːn/',m:'曲调'},{w:'cute',i:'/kjuːt/',m:'可爱'},{w:'flute',i:'/fluːt/',m:'长笛'},{w:'rude',i:'/ruːd/',m:'粗鲁'},{w:'June',i:'/dʒuːn/',m:'六月'},{w:'rule',i:'/ruːl/',m:'规则'},{w:'huge',i:'/hjuːdʒ/',m:'巨大'},{w:'use',i:'/juːz/',m:'使用'}
+]},
+
+// === 辅音组合 Blends ===
+{cat:'辅音组合',title:'L-Blends: bl, cl, fl, gl, pl, sl',desc:'辅音 + L。两个辅音都发音，快速连读在一起。',eg:[
+  {w:'blue',i:'/bluː/',m:'蓝色'},{w:'clap',i:'/klæp/',m:'拍手'},{w:'flag',i:'/flæg/',m:'旗帜'},{w:'glad',i:'/glæd/',m:'高兴'},{w:'plan',i:'/plæn/',m:'计划'},{w:'sleep',i:'/sliːp/',m:'睡觉'},{w:'black',i:'/blæk/',m:'黑色'},{w:'glass',i:'/glɑːs/',m:'玻璃'},{w:'fly',i:'/flaɪ/',m:'飞'},{w:'play',i:'/pleɪ/',m:'玩'}
+]},
+{cat:'辅音组合',title:'R-Blends: br, cr, dr, fr, gr, pr, tr',desc:'辅音 + R。舌尖需要卷起准备发 r 音。',eg:[
+  {w:'brave',i:'/breɪv/',m:'勇敢'},{w:'crab',i:'/kræb/',m:'螃蟹'},{w:'drum',i:'/drʌm/',m:'鼓'},{w:'frog',i:'/frɒg/',m:'青蛙'},{w:'green',i:'/griːn/',m:'绿色'},{w:'prize',i:'/praɪz/',m:'奖品'},{w:'tree',i:'/triː/',m:'树'},{w:'train',i:'/treɪn/',m:'火车'},{w:'brown',i:'/braʊn/',m:'棕色'},{w:'friend',i:'/frend/',m:'朋友'}
+]},
+{cat:'辅音组合',title:'S-Blends: sc, sk, sm, sn, sp, st, sw',desc:'S + 辅音。s 音先发出，紧接着跟上后面的辅音。',eg:[
+  {w:'skip',i:'/skɪp/',m:'跳过'},{w:'small',i:'/smɔːl/',m:'小的'},{w:'snake',i:'/sneɪk/',m:'蛇'},{w:'spoon',i:'/spuːn/',m:'勺子'},{w:'star',i:'/stɑːr/',m:'星星'},{w:'swim',i:'/swɪm/',m:'游泳'},{w:'school',i:'/skuːl/',m:'学校'},{w:'snow',i:'/snəʊ/',m:'雪'},{w:'stop',i:'/stɒp/',m:'停止'},{w:'sweet',i:'/swiːt/',m:'甜的'}
+]},
+{cat:'辅音组合',title:'词尾 Blends: nd, nt, mp, st, sk, ft, lp, lk',desc:'两个辅音在词尾，各自发音但要快速连在一起。',eg:[
+  {w:'hand',i:'/hænd/',m:'手'},{w:'ant',i:'/ænt/',m:'蚂蚁'},{w:'jump',i:'/dʒʌmp/',m:'跳'},{w:'best',i:'/best/',m:'最好'},{w:'desk',i:'/desk/',m:'书桌'},{w:'gift',i:'/gɪft/',m:'礼物'},{w:'help',i:'/help/',m:'帮助'},{w:'milk',i:'/mɪlk/',m:'牛奶'},{w:'fast',i:'/fɑːst/',m:'快的'},{w:'camp',i:'/kæmp/',m:'营地'}
+]},
+
+// === 二合辅音 Digraphs ===
+{cat:'二合辅音',title:'ch → /tʃ/',desc:'像中文"吃"的开头，但气息更短。两个字母一个音。',eg:[
+  {w:'chat',i:'/tʃæt/',m:'聊天'},{w:'chip',i:'/tʃɪp/',m:'芯片'},{w:'chin',i:'/tʃɪn/',m:'下巴'},{w:'much',i:'/mʌtʃ/',m:'许多'},{w:'lunch',i:'/lʌntʃ/',m:'午餐'},{w:'bench',i:'/bentʃ/',m:'长凳'},{w:'chick',i:'/tʃɪk/',m:'小鸡'},{w:'cheese',i:'/tʃiːz/',m:'奶酪'},{w:'chase',i:'/tʃeɪs/',m:'追逐'},{w:'charm',i:'/tʃɑːrm/',m:'魅力'}
+]},
+{cat:'二合辅音',title:'sh → /ʃ/',desc:'像让人安静时发出的"嘘"声，双唇微微圆起。',eg:[
+  {w:'ship',i:'/ʃɪp/',m:'船'},{w:'shop',i:'/ʃɒp/',m:'商店'},{w:'fish',i:'/fɪʃ/',m:'鱼'},{w:'wish',i:'/wɪʃ/',m:'愿望'},{w:'shell',i:'/ʃel/',m:'贝壳'},{w:'brush',i:'/brʌʃ/',m:'刷子'},{w:'sheep',i:'/ʃiːp/',m:'羊'},{w:'shine',i:'/ʃaɪn/',m:'发光'},{w:'shape',i:'/ʃeɪp/',m:'形状'},{w:'crash',i:'/kræʃ/',m:'碰撞'}
+]},
+{cat:'二合辅音',title:'th — /θ/ (清) 和 /ð/ (浊)',desc:'舌尖轻触上齿。清音（声带不振动）如 think；浊音（声带振动）如 this。',eg:[
+  {w:'think',i:'/θɪŋk/',m:'想(清)'},{w:'bath',i:'/bɑːθ/',m:'洗澡(清)'},{w:'three',i:'/θriː/',m:'三(清)'},{w:'teeth',i:'/tiːθ/',m:'牙齿(清)'},{w:'this',i:'/ðɪs/',m:'这个(浊)'},{w:'that',i:'/ðæt/',m:'那个(浊)'},{w:'they',i:'/ðeɪ/',m:'他们(浊)'},{w:'feather',i:'/ˈfeðər/',m:'羽毛(浊)'},{w:'mother',i:'/ˈmʌðər/',m:'妈妈(浊)'},{w:'thin',i:'/θɪn/',m:'薄的(清)'}
+]},
+{cat:'二合辅音',title:'wh → /w/ (或 /hw/)',desc:'大多数情况发 /w/。wh 和 w 发音相同。个别方言区分。',eg:[
+  {w:'what',i:'/wɒt/',m:'什么'},{w:'when',i:'/wen/',m:'何时'},{w:'where',i:'/weər/',m:'哪里'},{w:'white',i:'/waɪt/',m:'白色'},{w:'whale',i:'/weɪl/',m:'鲸鱼'},{w:'wheel',i:'/wiːl/',m:'轮子'},{w:'whip',i:'/wɪp/',m:'鞭子'},{w:'whisper',i:'/ˈwɪspər/',m:'耳语'},{w:'why',i:'/waɪ/',m:'为什么'},{w:'which',i:'/wɪtʃ/',m:'哪个'}
+]},
+{cat:'二合辅音',title:'ph → /f/',desc:'ph = f。源自希腊语。见到 ph 读 /f/ 就对了。',eg:[
+  {w:'photo',i:'/ˈfəʊtəʊ/',m:'照片'},{w:'phone',i:'/fəʊn/',m:'电话'},{w:'graph',i:'/grɑːf/',m:'图表'},{w:'elephant',i:'/ˈelɪfənt/',m:'大象'},{w:'dolphin',i:'/ˈdɒlfɪn/',m:'海豚'},{w:'alphabet',i:'/ˈælfəbet/',m:'字母表'},{w:'sphere',i:'/sfɪər/',m:'球体'},{w:'orphan',i:'/ˈɔːfən/',m:'孤儿'},{w:'phrase',i:'/freɪz/',m:'短语'},{w:'trophy',i:'/ˈtrəʊfi/',m:'奖杯'}
+]},
+{cat:'二合辅音',title:'ck → /k/ (词尾双k)',desc:'仅在短元音后出现，从不在词首。ck = k，两个字母一个音。',eg:[
+  {w:'back',i:'/bæk/',m:'后背'},{w:'duck',i:'/dʌk/',m:'鸭子'},{w:'sick',i:'/sɪk/',m:'生病'},{w:'lock',i:'/lɒk/',m:'锁'},{w:'neck',i:'/nek/',m:'脖子'},{w:'truck',i:'/trʌk/',m:'卡车'},{w:'clock',i:'/klɒk/',m:'钟'},{w:'stick',i:'/stɪk/',m:'棍子'},{w:'black',i:'/blæk/',m:'黑色'},{w:'trick',i:'/trɪk/',m:'把戏'}
+]},
+{cat:'二合辅音',title:'ng → /ŋ/ (鼻音)',desc:'舌后部抬起碰软腭，气流从鼻腔出。像中文"嗯"。',eg:[
+  {w:'sing',i:'/sɪŋ/',m:'唱歌'},{w:'ring',i:'/rɪŋ/',m:'戒指'},{w:'long',i:'/lɒŋ/',m:'长的'},{w:'king',i:'/kɪŋ/',m:'国王'},{w:'song',i:'/sɒŋ/',m:'歌曲'},{w:'swing',i:'/swɪŋ/',m:'秋千'},{w:'strong',i:'/strɒŋ/',m:'强壮'},{w:'bring',i:'/brɪŋ/',m:'带来'},{w:'spring',i:'/sprɪŋ/',m:'春天'},{w:'thing',i:'/θɪŋ/',m:'东西'}
+]},
+
+// === 元音组合 Vowel Teams ===
+{cat:'元音组合',title:'ai / ay → /eɪ/ (长a)',desc:'"两个元音一起走，第一个来说话"。ai 在词中，ay 通常在词尾。',eg:[
+  {w:'rain',i:'/reɪn/',m:'雨'},{w:'wait',i:'/weɪt/',m:'等待'},{w:'train',i:'/treɪn/',m:'火车'},{w:'paint',i:'/peɪnt/',m:'画画'},{w:'day',i:'/deɪ/',m:'天'},{w:'play',i:'/pleɪ/',m:'玩'},{w:'say',i:'/seɪ/',m:'说'},{w:'may',i:'/meɪ/',m:'可能'},{w:'tail',i:'/teɪl/',m:'尾巴'},{w:'mail',i:'/meɪl/',m:'邮件'}
+]},
+{cat:'元音组合',title:'ee / ea → /iː/ (长e)',desc:'ee 和 ea 都发长音 /iː/，像中文"衣"拉长。ea 偶尔发 /e/ 如 bread。',eg:[
+  {w:'bee',i:'/biː/',m:'蜜蜂'},{w:'tree',i:'/triː/',m:'树'},{w:'green',i:'/griːn/',m:'绿色'},{w:'sleep',i:'/sliːp/',m:'睡觉'},{w:'eat',i:'/iːt/',m:'吃'},{w:'sea',i:'/siː/',m:'海'},{w:'read',i:'/riːd/',m:'阅读'},{w:'dream',i:'/driːm/',m:'梦'},{w:'meat',i:'/miːt/',m:'肉'},{w:'teach',i:'/tiːtʃ/',m:'教'}
+]},
+{cat:'元音组合',title:'oa / ow → /əʊ/ (长o)',desc:'oa 在词中，ow 可在词中或词尾。都发"欧"的长音。',eg:[
+  {w:'boat',i:'/bəʊt/',m:'船'},{w:'coat',i:'/kəʊt/',m:'外套'},{w:'soap',i:'/səʊp/',m:'肥皂'},{w:'road',i:'/rəʊd/',m:'路'},{w:'snow',i:'/snəʊ/',m:'雪'},{w:'grow',i:'/grəʊ/',m:'生长'},{w:'show',i:'/ʃəʊ/',m:'展示'},{w:'yellow',i:'/ˈjeləʊ/',m:'黄色'},{w:'toast',i:'/təʊst/',m:'吐司'},{w:'blow',i:'/bləʊ/',m:'吹'}
+]},
+{cat:'元音组合',title:'oo — /uː/ (长) 和 /ʊ/ (短)',desc:'长 /uː/："乌"拉长（food）；短 /ʊ/：短促"乌"（book）。需记忆区分。',eg:[
+  {w:'food',i:'/fuːd/',m:'食物(长)'},{w:'moon',i:'/muːn/',m:'月亮(长)'},{w:'school',i:'/skuːl/',m:'学校(长)'},{w:'spoon',i:'/spuːn/',m:'勺子(长)'},{w:'book',i:'/bʊk/',m:'书(短)'},{w:'look',i:'/lʊk/',m:'看(短)'},{w:'foot',i:'/fʊt/',m:'脚(短)'},{w:'good',i:'/gʊd/',m:'好的(短)'},{w:'room',i:'/ruːm/',m:'房间(长)'},{w:'cook',i:'/kʊk/',m:'烹饪(短)'}
+]},
+{cat:'元音组合',title:'ou / ow → /aʊ/',desc:'从 /æ/ 滑向 /ʊ/，像中文"啊呜"连续快读。嘴巴从大到小。',eg:[
+  {w:'out',i:'/aʊt/',m:'向外'},{w:'loud',i:'/laʊd/',m:'大声'},{w:'cloud',i:'/klaʊd/',m:'云'},{w:'mouse',i:'/maʊs/',m:'老鼠'},{w:'cow',i:'/kaʊ/',m:'牛'},{w:'down',i:'/daʊn/',m:'向下'},{w:'brown',i:'/braʊn/',m:'棕色'},{w:'clown',i:'/klaʊn/',m:'小丑'},{w:'house',i:'/haʊs/',m:'房子'},{w:'town',i:'/taʊn/',m:'城镇'}
+]},
+{cat:'元音组合',title:'oi / oy → /ɔɪ/',desc:'从 /ɔː/ 滑向 /ɪ/。oi 在词中，oy 在词尾。像"奥衣"快读。',eg:[
+  {w:'coin',i:'/kɔɪn/',m:'硬币'},{w:'join',i:'/dʒɔɪn/',m:'加入'},{w:'soil',i:'/sɔɪl/',m:'土壤'},{w:'noise',i:'/nɔɪz/',m:'噪音'},{w:'boy',i:'/bɔɪ/',m:'男孩'},{w:'toy',i:'/tɔɪ/',m:'玩具'},{w:'joy',i:'/dʒɔɪ/',m:'快乐'},{w:'enjoy',i:'/ɪnˈdʒɔɪ/',m:'享受'},{w:'point',i:'/pɔɪnt/',m:'点'},{w:'voice',i:'/vɔɪs/',m:'声音'}
+]},
+{cat:'元音组合',title:'au / aw → /ɔː/',desc:'发长音 /ɔː/，嘴巴张大成圆形。像中文"噢"拉长。',eg:[
+  {w:'autumn',i:'/ˈɔːtəm/',m:'秋天'},{w:'sauce',i:'/sɔːs/',m:'酱'},{w:'pause',i:'/pɔːz/',m:'暂停'},{w:'saw',i:'/sɔː/',m:'锯/看见'},{w:'law',i:'/lɔː/',m:'法律'},{w:'draw',i:'/drɔː/',m:'画画'},{w:'straw',i:'/strɔː/',m:'吸管'},{w:'claw',i:'/klɔː/',m:'爪子'},{w:'launch',i:'/lɔːntʃ/',m:'发射'},{w:'dawn',i:'/dɔːn/',m:'黎明'}
+]},
+
+// === R 控制元音 ===
+{cat:'R控元音',title:'ar → /ɑːr/',desc:'a 被 r 控制变成"啊尔"。像汽车引擎声"ar~"。',eg:[
+  {w:'car',i:'/kɑːr/',m:'汽车'},{w:'star',i:'/stɑːr/',m:'星星'},{w:'farm',i:'/fɑːrm/',m:'农场'},{w:'park',i:'/pɑːrk/',m:'公园'},{w:'dark',i:'/dɑːrk/',m:'黑暗'},{w:'shark',i:'/ʃɑːrk/',m:'鲨鱼'},{w:'garden',i:'/ˈgɑːrdn/',m:'花园'},{w:'market',i:'/ˈmɑːrkɪt/',m:'市场'},{w:'arm',i:'/ɑːrm/',m:'手臂'},{w:'card',i:'/kɑːrd/',m:'卡片'}
+]},
+{cat:'R控元音',title:'er / ir / ur → /ɜːr/',desc:'三者都发同一个音 /ɜːr/。舌头中部向软腭卷起。',eg:[
+  {w:'her',i:'/hɜːr/',m:'她的'},{w:'germ',i:'/dʒɜːrm/',m:'细菌'},{w:'bird',i:'/bɜːrd/',m:'鸟'},{w:'girl',i:'/gɜːrl/',m:'女孩'},{w:'first',i:'/fɜːrst/',m:'第一'},{w:'turn',i:'/tɜːrn/',m:'转'},{w:'nurse',i:'/nɜːrs/',m:'护士'},{w:'surf',i:'/sɜːrf/',m:'冲浪'},{w:'dirt',i:'/dɜːrt/',m:'泥土'},{w:'shirt',i:'/ʃɜːrt/',m:'衬衫'}
+]},
+{cat:'R控元音',title:'or → /ɔːr/',desc:'o 被 r 控制变成"奥尔"。',eg:[
+  {w:'fork',i:'/fɔːrk/',m:'叉子'},{w:'corn',i:'/kɔːrn/',m:'玉米'},{w:'horse',i:'/hɔːrs/',m:'马'},{w:'north',i:'/nɔːrθ/',m:'北方'},{w:'sport',i:'/spɔːrt/',m:'运动'},{w:'storm',i:'/stɔːrm/',m:'暴风雨'},{w:'short',i:'/ʃɔːrt/',m:'短的'},{w:'story',i:'/ˈstɔːri/',m:'故事'},{w:'born',i:'/bɔːrn/',m:'出生'},{w:'forty',i:'/ˈfɔːrti/',m:'四十'}
+]},
+
+// === 特殊规则 ===
+{cat:'特殊规则',title:'不发音字母: kn, wr, gn, mb',desc:'词首 kn→/n/(k不发音)，wr→/r/(w不发音)，gn→/n/，词尾 mb→/m/(b不发音)。',eg:[
+  {w:'know',i:'/nəʊ/',m:'知道'},{w:'knee',i:'/niː/',m:'膝盖'},{w:'write',i:'/raɪt/',m:'写'},{w:'wrong',i:'/rɒŋ/',m:'错误的'},{w:'gnat',i:'/næt/',m:'小飞虫'},{w:'sign',i:'/saɪn/',m:'标志'},{w:'lamb',i:'/læm/',m:'羔羊'},{w:'comb',i:'/kəʊm/',m:'梳子'},{w:'knife',i:'/naɪf/',m:'刀'},{w:'wrist',i:'/rɪst/',m:'手腕'}
+]},
+{cat:'特殊规则',title:'软C: ce/ci/cy → /s/',desc:'c 在 e, i, y 前发软音 /s/。否则发硬音 /k/（cat, cup, cold）。',eg:[
+  {w:'nice',i:'/naɪs/',m:'好的'},{w:'city',i:'/ˈsɪti/',m:'城市'},{w:'cycle',i:'/ˈsaɪkl/',m:'循环'},{w:'cent',i:'/sent/',m:'分'},{w:'face',i:'/feɪs/',m:'脸'},{w:'pencil',i:'/ˈpensl/',m:'铅笔'},{w:'circle',i:'/ˈsɜːrkl/',m:'圆'},{w:'dance',i:'/dɑːns/',m:'跳舞'},{w:'rice',i:'/raɪs/',m:'米饭'},{w:'space',i:'/speɪs/',m:'空间'}
+]},
+{cat:'特殊规则',title:'软G: ge/gi/gy → /dʒ/',desc:'g 在 e, i, y 前通常发 /dʒ/（"知"）。但常见例外: give, get, girl。',eg:[
+  {w:'page',i:'/peɪdʒ/',m:'页'},{w:'giant',i:'/ˈdʒaɪənt/',m:'巨人'},{w:'gym',i:'/dʒɪm/',m:'健身房'},{w:'cage',i:'/keɪdʒ/',m:'笼子'},{w:'gem',i:'/dʒem/',m:'宝石'},{w:'ginger',i:'/ˈdʒɪndʒər/',m:'姜'},{w:'magic',i:'/ˈmædʒɪk/',m:'魔法'},{w:'orange',i:'/ˈɒrɪndʒ/',m:'橙子'},{w:'age',i:'/eɪdʒ/',m:'年龄'},{w:'huge',i:'/hjuːdʒ/',m:'巨大'}
+]},
+{cat:'特殊规则',title:'tch → /tʃ/ (短元音后)',desc:'短元音后的 /tʃ/ 写成 tch。长元音或辅音后用 ch。例外: such, much, rich。',eg:[
+  {w:'catch',i:'/kætʃ/',m:'抓住'},{w:'match',i:'/mætʃ/',m:'匹配'},{w:'watch',i:'/wɒtʃ/',m:'手表'},{w:'patch',i:'/pætʃ/',m:'补丁'},{w:'itch',i:'/ɪtʃ/',m:'痒'},{w:'kitchen',i:'/ˈkɪtʃɪn/',m:'厨房'},{w:'fetch',i:'/fetʃ/',m:'取来'},{w:'scratch',i:'/skrætʃ/',m:'抓'},{w:'ditch',i:'/dɪtʃ/',m:'沟渠'},{w:'switch',i:'/swɪtʃ/',m:'开关'}
+]},
+{cat:'特殊规则',title:'dge → /dʒ/ (短元音后)',desc:'短元音后的 /dʒ/ 写成 dge。长元音后用 ge。',eg:[
+  {w:'bridge',i:'/brɪdʒ/',m:'桥'},{w:'judge',i:'/dʒʌdʒ/',m:'法官'},{w:'badge',i:'/bædʒ/',m:'徽章'},{w:'edge',i:'/edʒ/',m:'边缘'},{w:'fridge',i:'/frɪdʒ/',m:'冰箱'},{w:'lodge',i:'/lɒdʒ/',m:'小屋'},{w:'pledge',i:'/pledʒ/',m:'誓言'},{w:'sledge',i:'/sledʒ/',m:'雪橇'},{w:'fudge',i:'/fʌdʒ/',m:'软糖'},{w:'ridge',i:'/rɪdʒ/',m:'山脊'}
+]},
+{cat:'特殊规则',title:'igh → /aɪ/ (三字母组合)',desc:'igh 三个字母发 /aɪ/，gh 不发音，i 读长音。常见于高频词。',eg:[
+  {w:'light',i:'/laɪt/',m:'光'},{w:'night',i:'/naɪt/',m:'夜晚'},{w:'right',i:'/raɪt/',m:'正确'},{w:'high',i:'/haɪ/',m:'高'},{w:'sight',i:'/saɪt/',m:'视力'},{w:'bright',i:'/braɪt/',m:'明亮'},{w:'fight',i:'/faɪt/',m:'打架'},{w:'flight',i:'/flaɪt/',m:'航班'},{w:'tight',i:'/taɪt/',m:'紧的'},{w:'slight',i:'/slaɪt/',m:'轻微'}
+]},
+{cat:'特殊规则',title:'tion → /ʃən/ (名词后缀)',desc:'最常见的名词后缀，永远读 /ʃən/（"申"）。',eg:[
+  {w:'nation',i:'/ˈneɪʃən/',m:'国家'},{w:'action',i:'/ˈækʃən/',m:'行动'},{w:'station',i:'/ˈsteɪʃən/',m:'车站'},{w:'question',i:'/ˈkwestʃən/',m:'问题'},{w:'section',i:'/ˈsekʃən/',m:'部分'},{w:'fraction',i:'/ˈfrækʃən/',m:'分数'},{w:'motion',i:'/ˈməʊʃən/',m:'运动'},{w:'ocean',i:'/ˈəʊʃən/',m:'海洋'},{w:'nation',i:'/ˈneɪʃən/',m:'国家'},{w:'lotion',i:'/ˈləʊʃən/',m:'乳液'}
+]},
+{cat:'特殊规则',title:'sion → /ʒən/ 或 /ʃən/',desc:'元音后通常 /ʒən/（"任"），辅音后 /ʃən/（"申"）。',eg:[
+  {w:'vision',i:'/ˈvɪʒən/',m:'愿景'},{w:'television',i:'/ˈtelɪvɪʒən/',m:'电视'},{w:'decision',i:'/dɪˈsɪʒən/',m:'决定'},{w:'mission',i:'/ˈmɪʃən/',m:'任务'},{w:'passion',i:'/ˈpæʃən/',m:'热情'},{w:'discussion',i:'/dɪˈskʌʃən/',m:'讨论'},{w:'explosion',i:'/ɪkˈspləʊʒən/',m:'爆炸'},{w:'invasion',i:'/ɪnˈveɪʒən/',m:'入侵'},{w:'confusion',i:'/kənˈfjuːʒən/',m:'困惑'},{w:'permission',i:'/pərˈmɪʃən/',m:'许可'}
+]},
+{cat:'特殊规则',title:'le → /əl/ (词尾音节)',desc:'辅音 + le 构成一个独立音节。e 不发音，l 充当元音。',eg:[
+  {w:'apple',i:'/ˈæpl/',m:'苹果'},{w:'table',i:'/ˈteɪbl/',m:'桌子'},{w:'little',i:'/ˈlɪtl/',m:'小的'},{w:'people',i:'/ˈpiːpl/',m:'人们'},{w:'bubble',i:'/ˈbʌbl/',m:'泡泡'},{w:'middle',i:'/ˈmɪdl/',m:'中间'},{w:'simple',i:'/ˈsɪmpl/',m:'简单'},{w:'turtle',i:'/ˈtɜːrtl/',m:'乌龟'},{w:'purple',i:'/ˈpɜːrpl/',m:'紫色'},{w:'candle',i:'/ˈkændl/',m:'蜡烛'}
+]},
+
+// === 其他重要规则 ===
+{cat:'其他规则',title:'ew → /juː/ 或 /uː/',desc:'多数发 /juː/（new, few）。在 ch, j, l, r 后发 /uː/（grew, flew）。',eg:[
+  {w:'new',i:'/njuː/',m:'新的'},{w:'few',i:'/fjuː/',m:'很少'},{w:'grew',i:'/gruː/',m:'生长过'},{w:'flew',i:'/fluː/',m:'飞过'},{w:'chew',i:'/tʃuː/',m:'咀嚼'},{w:'drew',i:'/druː/',m:'画过'},{w:'stew',i:'/stjuː/',m:'炖菜'},{w:'jewel',i:'/ˈdʒuːəl/',m:'宝石'},{w:'news',i:'/njuːz/',m:'新闻'},{w:'blew',i:'/bluː/',m:'吹过'}
+]},
+{cat:'其他规则',title:'ear — 三种读音',desc:'/ɪər/(ear, hear)，/ɜːr/(earth, learn)，/ɑːr/(heart 仅此一例)。',eg:[
+  {w:'ear',i:'/ɪər/',m:'耳朵'},{w:'hear',i:'/hɪər/',m:'听见'},{w:'near',i:'/nɪər/',m:'附近'},{w:'earth',i:'/ɜːrθ/',m:'地球'},{w:'learn',i:'/lɜːrn/',m:'学习'},{w:'early',i:'/ˈɜːrli/',m:'早的'},{w:'heart',i:'/hɑːrt/',m:'心脏'},{w:'pearl',i:'/pɜːrl/',m:'珍珠'},{w:'clear',i:'/klɪər/',m:'清楚'},{w:'search',i:'/sɜːrtʃ/',m:'搜索'}
+]},
+{cat:'其他规则',title:'双辅音字母 — 只发一个音',desc:'两个相同的辅音字母相邻（bb, dd, ff, ll, ss, tt 等），只发一个音。前面的元音通常是短的。',eg:[
+  {w:'rabbit',i:'/ˈræbɪt/',m:'兔子'},{w:'ladder',i:'/ˈlædər/',m:'梯子'},{w:'cliff',i:'/klɪf/',m:'悬崖'},{w:'doll',i:'/dɒl/',m:'玩偶'},{w:'grass',i:'/grɑːs/',m:'草'},{w:'butter',i:'/ˈbʌtər/',m:'黄油'},{w:'happy',i:'/ˈhæpi/',m:'开心'},{w:'summer',i:'/ˈsʌmər/',m:'夏天'},{w:'dinner',i:'/ˈdɪnər/',m:'晚餐'},{w:'kitten',i:'/ˈkɪtn/',m:'小猫'}
+]},
+{cat:'其他规则',title:'Y 作为元音: /aɪ/ 或 /iː/',desc:'单音节词尾 y → /aɪ/（my, fly）。多音节词尾 y → /iː/（happy, funny）。',eg:[
+  {w:'my',i:'/maɪ/',m:'我的'},{w:'fly',i:'/flaɪ/',m:'飞'},{w:'sky',i:'/skaɪ/',m:'天空'},{w:'happy',i:'/ˈhæpi/',m:'开心'},{w:'funny',i:'/ˈfʌni/',m:'有趣'},{w:'baby',i:'/ˈbeɪbi/',m:'宝宝'},{w:'lady',i:'/ˈleɪdi/',m:'女士'},{w:'cry',i:'/kraɪ/',m:'哭'},{w:'why',i:'/waɪ/',m:'为什么'},{w:'sunny',i:'/ˈsʌni/',m:'晴朗'}
+]},
+];
+
+// ============ 5篇进阶诵读文章 ============
+const PASSAGES = [
+{level:'easy',title:'第1篇 · 短元音入门 (CVC)',text:'The cat sat on a mat. The dog got on a log. A big pig can dig. The red hen is in the pen. The sun is up. A bug is in the mud. I can run and jump. I had a lot of fun!'},
+{level:'easy',title:'第2篇 · Magic E 魔法',text:'I like to ride my bike. The cake is on the plate. A cute mule ate a rose. The snake will slide home. It is time to make a game. I hope the rope will not break. We drove five miles to the lake. Jane gave me a big smile.'},
+{level:'medium',title:'第3篇 · 辅音组合与二合字母',text:'The frog sat on a green log. Three fish swim in the fresh pond. The chick says cheep cheep cheep. I think this ship is big. When the phone rang, I ran to get it. The black truck drove up the steep hill. She saw a white whale splash in the sea.'},
+{level:'medium',title:'第4篇 · 元音组合与R控元音',text:'Last autumn, a girl and a boy went to the park. They saw a dark cloud in the sky. The rain fell hard on the green grass. A bird with brown feathers sang a sweet song. The children found a coin near the old toy boat. The horse ran across the corn field at dawn.'},
+{level:'hard',title:'第5篇 · 综合进阶 (多音节)',text:'On a bright summer morning, young Charlie made an important decision. He would ride his bicycle across the whole nation to raise money for the education of orphans. The journey was long and the motion of the wheels never stopped. Through mountains and gardens, past stations and bridges, Charlie pedaled with passion. When he finally reached the ocean, the television reporters captured the explosion of joy on his face. Action and determination had turned a simple dream into a magical adventure.'},
+];
+
+// ============ 核心功能 ============
+function speak(text) {
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = 0.85;
+  speechSynthesis.speak(u);
+}
+
+function buildTabs() {
+  const cats = [...new Set(RULES.map(r=>r.cat)), '诵读文章'];
+  document.getElementById('tabs').innerHTML = cats.map((c,i)=>`<div class="tab${i===0?' active':''}" onclick="switchTab('${c}',this)">${c}</div>`).join('');
+}
+
+function switchTab(cat,el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  if(cat==='诵读文章') return renderPassages();
+  renderRules(cat);
+}
+
+function renderRules(cat) {
+  document.getElementById('content').innerHTML = '<h2 class="category-title">'+cat+'</h2>' +
+  RULES.filter(r=>r.cat===cat).map(r=>`
+    <div class="rule-card">
+      <h3>${r.title} <button class="read-btn" style="font-size:.8em;padding:6px 12px" onclick="event.stopPropagation();speak(`${r.eg[0].w}`)">🔊 听示范发音</button></h3>
+      <p class="desc">${r.desc}</p>
+      <div class="examples">${r.eg.map(e=>`<button class="example-btn" onclick="event.stopPropagation();speak('${e.w}')"><span>🔊</span><span class="word">${e.w}</span><span class="ipa">${e.i}</span><span style="color:#718096;font-size:.85em">${e.m}</span></button>`).join('')}</div>
+    </div>`).join('');
+}
+
+function renderPassages() {
+  document.getElementById('content').innerHTML = '<h2 class="category-title">📖 进阶诵读文章</h2>' +
+  PASSAGES.map((p,i)=>`
+    <div class="reading-passage">
+      <h3>${p.title}<span class="level ${p.level}">${p.level==='easy'?'⭐ 入门':p.level==='medium'?'⭐⭐ 进阶':'⭐⭐⭐ 高级'}</span></h3>
+      <div class="passage-text">${p.text.split(' ').map(w=>`<span onclick="event.stopPropagation();speak('${w.replace(/[.,!?;:]/g,'')}')" title="点击朗读">${w}</span>`).join(' ')}</div>
+      <button class="read-btn" onclick="event.stopPropagation();speak(\`${p.text}\`)">🔊 朗读全文</button>
+    </div>`).join('');
+}
+
+function filterRules() {
+  const q = document.getElementById('search').value.toLowerCase();
+  if(!q) return renderRules('短元音');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const matches = RULES.filter(r=>r.title.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)||r.eg.some(e=>e.w.includes(q)||e.m.includes(q)));
+  document.getElementById('content').innerHTML = '<h2 class="category-title">🔍 搜索: '+q+' ('+matches.length+'条)</h2>'+
+  (matches.length?matches.map(r=>`
+    <div class="rule-card">
+      <h3>${r.title} <span style="color:#a0aec0;font-size:.8em">[${r.cat}]</span></h3>
+      <p class="desc">${r.desc}</p>
+      <div class="examples">${r.eg.filter(e=>!q||e.w.includes(q)||e.m.includes(q)||r.title.toLowerCase().includes(q)).map(e=>`<button class="example-btn" onclick="event.stopPropagation();speak('${e.w}')"><span>🔊</span><span class="word">${e.w}</span><span class="ipa">${e.i}</span><span style="color:#718096;font-size:.85em">${e.m}</span></button>`).join('')}</div>
+    </div>`).join(''):'<p style="text-align:center;color:#a0aec0;padding:60px">未找到匹配结果，试试其他关键词</p>');
+}
+
+// 初始化
+buildTabs();
+renderRules('短元音');
+</script>
+</body>
+</html>
