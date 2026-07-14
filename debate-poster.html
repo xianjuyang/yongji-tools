@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Debate: Exams vs Projects</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.poster{width:100%;max-width:900px;background:linear-gradient(145deg,#1e293b,#0f172a);border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.05)}
+.header{background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:32px 40px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:24px 24px;animation:dots 20s linear infinite}
+@keyframes dots{0%{transform:translate(0,0)}100%{transform:translate(24px,24px)}}
+.header h1{font-size:2.4em;font-weight:900;letter-spacing:-1px;position:relative;z-index:1;line-height:1.2;text-shadow:0 2px 10px rgba(0,0,0,.3)}
+.header h1 span{display:block;font-size:.45em;font-weight:400;opacity:.85;letter-spacing:4px;text-transform:uppercase;margin-top:8px}
+.header .tag{display:inline-block;margin-top:16px;padding:8px 20px;background:rgba(255,255,255,.15);border-radius:20px;font-size:.85em;letter-spacing:2px;position:relative;z-index:1;backdrop-filter:blur(4px)}
+.content{padding:40px}
+.debate-row{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:30px}
+@media(max-width:700px){.debate-row{grid-template-columns:1fr}}
+.card{border-radius:16px;padding:28px;position:relative;overflow:hidden}
+.card.for{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(34,197,94,.04));border:1px solid rgba(34,197,94,.2)}
+.card.against{background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.04));border:1px solid rgba(239,68,68,.2)}
+.card .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:8px;font-size:.8em;font-weight:700;letter-spacing:1px;margin-bottom:20px}
+.card.for .badge{background:rgba(34,197,94,.2);color:#4ade80}
+.card.against .badge{background:rgba(239,68,68,.2);color:#f87171}
+.card h3{font-size:1.4em;font-weight:800;margin-bottom:16px}
+.card.for h3{color:#4ade80}
+.card.against h3{color:#f87171}
+.card ul{list-style:none}
+.card li{padding:8px 0;font-size:.95em;line-height:1.5;display:flex;align-items:flex-start;gap:10px;color:#cbd5e1}
+.card li::before{content:'';width:6px;height:6px;border-radius:50%;margin-top:8px;flex-shrink:0}
+.card.for li::before{background:#4ade80}
+.card.against li::before{background:#f87171}
+.vs-block{display:flex;align-items:center;justify-content:center;padding:20px 0}
+.vs-circle{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:1.6em;font-weight:900;color:#fff;box-shadow:0 0 40px rgba(124,58,237,.3)}
+.middle{text-align:center;padding:30px 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:30px}
+.middle h2{font-size:1.6em;font-weight:700;color:#a78bfa;margin-bottom:8px}
+.middle p{color:#94a3b8;font-size:.95em;max-width:600px;margin:0 auto}
+.key-questions{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.q-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px;text-align:center}
+.q-card .num{display:inline-block;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);line-height:36px;font-weight:800;font-size:.9em;margin-bottom:12px}
+.q-card p{font-size:.9em;color:#cbd5e1;line-height:1.5}
+.footer{padding:32px 40px;text-align:center;background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.05)}
+.footer p{color:#64748b;font-size:.85em}
+.footer .cite{color:#475569;font-size:.75em;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="poster">
+
+<div class="header">
+  <h1>Exams vs Projects<span>A Debate on the Future of Education</span></h1>
+  <div class="tag">🏛️ SCHOOL DEBATE · 2026</div>
+</div>
+
+<div class="content">
+
+<!-- MOTION -->
+<div style="text-align:center;padding:20px;margin-bottom:20px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:12px">
+  <p style="font-size:1.2em;font-weight:700;color:#a78bfa;letter-spacing:1px">📜 MOTION</p>
+  <p style="font-size:1.5em;font-weight:900;color:#e2e8f0;line-height:1.4;margin-top:8px">"Schools should cancel all written exams<br>and replace them with practical projects."</p>
+</div>
+
+<!-- TWO SIDES -->
+<div class="debate-row">
+  <div class="card for">
+    <div class="badge">✅ FOR · Proposition</div>
+    <h3>Cancel Exams. Embrace Projects.</h3>
+    <ul>
+      <li>Real-world skills: projects teach collaboration, research, and problem-solving that exams never test</li>
+      <li>Less anxiety: countless students suffer from test stress; projects are naturally paced</li>
+      <li>Deeper learning: building something forces understanding; memorizing for a test is forgotten in a week</li>
+      <li>Fairness: not every student performs well under timed pressure; projects level the playing field</li>
+      <li>Future-ready: universities and employers value portfolios over report cards</li>
+    </ul>
+  </div>
+  <div class="card against">
+    <div class="badge">❌ AGAINST · Opposition</div>
+    <h3>Keep Exams. Reform Them.</h3>
+    <ul>
+      <li>Objective measurement: exams provide a standardized way to compare knowledge across schools</li>
+      <li>Accountability: without exams, how do we ensure every student actually masters the basics?</li>
+      <li>Time & resources: grading 50 science fair projects fairly is far harder than marking one test</li>
+      <li>Preparation for reality: university entrance exams, professional certifications, and job interviews are all tests</li>
+      <li>Projects have bias: teachers may favor creative students; exams are blind to personality</li>
+    </ul>
+  </div>
+</div>
+
+<!-- VS -->
+<div class="vs-block">
+  <div class="vs-circle">VS</div>
+</div>
+
+<!-- MIDDLE -->
+<div class="middle">
+  <h2>⚡ The Real Question</h2>
+  <p>Can we find a middle ground — keep exams for accountability but add projects for depth?</p>
+</div>
+
+<!-- KEY DEBATE QUESTIONS -->
+<h2 style="text-align:center;font-size:1.3em;margin-bottom:24px;color:#94a3b8;letter-spacing:1px">🔑 KEY CLASH POINTS</h2>
+<div class="key-questions">
+  <div class="q-card">
+    <div class="num">1</div>
+    <p><strong style="color:#a78bfa">Fairness:</strong> Are timed exams really fair to all learners, or do they favor fast thinkers?</p>
+  </div>
+  <div class="q-card">
+    <div class="num">2</div>
+    <p><strong style="color:#a78bfa">Quality:</strong> Does a project grade truly reflect knowledge better than an exam score?</p>
+  </div>
+  <div class="q-card">
+    <div class="num">3</div>
+    <p><strong style="color:#a78bfa">Feasibility:</strong> Can schools with 40+ students per class realistically assess projects?</p>
+  </div>
+  <div class="q-card">
+    <div class="num">4</div>
+    <p><strong style="color:#a78bfa">Cheating:</strong> Who did the work — the student, the parent, or ChatGPT?</p>
+  </div>
+  <div class="q-card">
+    <div class="num">5</div>
+    <p><strong style="color:#a78bfa">Balance:</strong> Should we replace all exams, or could a 50/50 hybrid work better?</p>
+  </div>
+  <div class="q-card">
+    <div class="num">6</div>
+    <p><strong style="color:#a78bfa">Future:</strong> In an AI age, does memorizing facts still matter, or is doing more important?</p>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <p>🏫 School Debate Poster · 2026</p>
+  <p class="cite">"The purpose of education is not to fill a bucket, but to light a fire." — W.B. Yeats</p>
+  <p class="cite">Jerry学英语 出品</p>
+</div>
+
+</div>
+</body>
+</html>
