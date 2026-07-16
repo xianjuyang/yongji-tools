@@ -88,9 +88,9 @@ function init(){
   render();
 }
 function renderTabs(){
-  var h = '<button class="on" onclick="filterIdx=-1;render()">全部</button>';
-  KET_DATA.forEach(function(t,i){ h += '<button onclick="filterIdx='+i+';render()">'+(i+1)+'.'+h(t.title)+'</button>'; });
-  document.getElementById('tabs').innerHTML = h;
+  var h2 = '<button class="on" onclick="filterIdx=-1;render()">全部</button>';
+  KET_DATA.forEach(function(t,i){ h2 += '<button onclick="filterIdx='+i+';render()">'+(i+1)+'.'+h(t.title)+'</button>'; });
+  document.getElementById('tabs').innerHTML = h2;
 }
 function render(){
   document.getElementById('btn-list').className = mode==='list'?'on':'';
