@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KET单词工具·上 — Jerry英语</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f8f7f4;color:#1a1a1a}
+.top{background:#1a1a1a;color:#fff;padding:14px 16px;position:sticky;top:0;z-index:10;text-align:center}
+.top .brand{font-size:11px;letter-spacing:3px;color:#b8860b}
+.top h1{font-size:18px;margin:4px 0}
+.top .info{font-size:11px;opacity:.5}
+.top .row{display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.top .row button{padding:6px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:12px;cursor:pointer}
+.top .row button.on{background:#fff;color:#1a1a1a;font-weight:700}
+.top .tabs{display:flex;gap:4px;justify-content:center;margin-top:8px;flex-wrap:wrap;max-height:80px;overflow-y:auto}
+.top .tabs button{padding:4px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-size:11px;cursor:pointer;white-space:nowrap}
+.top .tabs button.on{background:#b8860b;border-color:#b8860b;color:#fff}
+.main{max-width:760px;margin:0 auto;padding:12px}
+.block{background:#fff;border-radius:10px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.block .hd{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border-bottom:1px solid #eee;user-select:none}
+.block .hd h3{font-size:14px}
+.block .hd .badge{font-size:10px;color:#888}
+.block .bd{display:none}
+.block.open .bd{display:block}
+.line{display:flex;align-items:center;padding:7px 14px;gap:8px;border-bottom:1px solid #f5f5f5}
+.line:last-child{border-bottom:none}
+.line .btn{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:14px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.line .btn:active{background:#b8860b}
+.line .en{flex:1;font-size:13px;font-weight:600}
+.line .ps{font-size:10px;color:#888;width:40px;text-align:center}
+.line .zh{font-size:12px;color:#555;min-width:80px;text-align:right}
+.hide{display:none!important}
+.test-sel{text-align:center;margin:12px 0}
+.test-sel select{padding:6px 12px;border-radius:8px;border:1px solid #ddd;font-size:13px}
+.stats{display:flex;gap:8px;justify-content:center;margin:12px 0}
+.stats .st{background:#fff;padding:8px 14px;border-radius:8px;text-align:center;min-width:60px}
+.stats .st .n{font-size:18px;font-weight:700;color:#2563eb}
+.stats .st .l{font-size:10px;color:#888}
+.card{background:#fff;border-radius:14px;padding:40px 20px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.04);cursor:pointer;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.card .hint{position:absolute;top:12px;font-size:10px;color:#ccc}
+.card .eword{font-size:28px;font-weight:700;margin:8px 0}
+.card .etag{font-size:11px;color:#888;margin-bottom:8px}
+.card .cword{font-size:22px;color:#2563eb;font-weight:600;display:none;margin:8px 0}
+.card .cword.show{display:block}
+.card .sbtn{width:40px;height:40px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:18px;cursor:pointer;margin:6px auto}
+.card .tap{font-size:10px;color:#ddd;margin-top:8px}
+.btns{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.btns button{flex:1;max-width:120px;padding:10px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer}
+.btns .no{background:#fee2e2;color:#dc2626}
+.btns .yes{background:#dcfce7;color:#16a34a}
+.end{text-align:center;padding:30px}
+.end .emoji{font-size:40px}
+.end h3{margin:10px 0}
+.end .rate{font-size:24px;font-weight:700}
+.end button{margin-top:12px;padding:8px 24px;border-radius:16px;border:none;background:#2563eb;color:#fff;font-size:13px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">Jerry英语</div>
+  <h1>KET单词记忆工具 · 上（话题1-16）</h1>
+  <div class="info" id="info-bar">加载中...</div>
+  <div class="row">
+    <button id="btn-list" class="on" onclick="mode='list';render()">📋 单词列表</button>
+    <button id="btn-test" onclick="mode='test';startTest()">🎯 英→中测试</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</div>
+<div class="main" id="main"></div>
+
+<script>const KET_DATA = [{"title":"日常生活与作息","subtitle":"Daily Life & Routines","words":[["get up","V","起床"],["wake up","V","醒来"],["brush teeth","Phr","刷牙"],["wash face","Phr","洗脸"],["have breakfast","Phr","吃早餐"],["go to school","Phr","上学"],["go to work","Phr","上班"],["come home","Phr","回家"],["have lunch","Phr","吃午餐"],["have dinner","Phr","吃晚餐"],["do homework","Phr","做作业"],["watch TV","Phr","看电视"],["go to bed","Phr","上床睡觉"],["take a shower","Phr","洗澡"],["take a bath","Phr","泡澡"],["get home","Phr","到家"],["leave home","Phr","离开家"],["cook dinner","Phr","做晚饭"],["clean the room","Phr","打扫房间"],["wash dishes","Phr","洗碗"],["make the bed","Phr","整理床铺"],["feed the pet","Phr","喂宠物"],["read a book","Phr","读书"],["routine","N","常规"],["morning","N","早晨"],["evening","N","傍晚"],["night","N","夜晚"],["early","Adj/Adv","早的/地"],["late","Adj/Adv","晚的/地"],["always","Adv","总是"],["usually","Adv","通常"],["often","Adv","经常"],["sometimes","Adv","有时"],["never","Adv","从不"],["every day","AdvP","每天"],["once a week","AdvP","每周一次"],["twice a month","AdvP","每月两次"]]},{"title":"家庭与亲属","subtitle":"Family & Relatives","words":[["family","N","家庭"],["parent","N","父/母亲"],["mother","N","母亲"],["father","N","父亲"],["mum/mom","N","妈妈"],["dad","N","爸爸"],["sister","N","姐妹"],["brother","N","兄弟"],["grandmother","N","祖母"],["grandfather","N","祖父"],["grandma","N","奶奶"],["grandpa","N","爷爷"],["aunt","N","阿姨/姑姑"],["uncle","N","叔叔/舅舅"],["cousin","N","堂/表兄弟姐妹"],["daughter","N","女儿"],["son","N","儿子"],["child","N","孩子"],["children","N","孩子们"],["baby","N","婴儿"],["husband","N","丈夫"],["wife","N","妻子"],["married","Adj","已婚的"],["single","Adj","单身的"],["relative","N","亲戚"],["twin","N","双胞胎"],["stepmother","N","继母"],["stepfather","N","继父"],["surname","N","姓"],["first name","N","名"],["age","N","年龄"],["old","Adj","老的/旧的"],["young","Adj","年轻的"],["grow up","Phr","长大"],["live with","Phr","和……住"],["get on with","Phr","与……相处"],["hug","V/N","拥抱"]]},{"title":"朋友与人际关系","subtitle":"Friends & Relationships","words":[["friend","N","朋友"],["best friend","N","最好的朋友"],["classmate","N","同学"],["penfriend","N","笔友"],["neighbour","N","邻居"],["guest","N","客人"],["partner","N","伙伴"],["member","N","成员"],["meet","V","遇见/见面"],["visit","V","拜访"],["invite","V","邀请"],["join","V","加入"],["help","V/N","帮助"],["talk","V/N","谈话"],["argue","V","争吵"],["nice","Adj","好的"],["lovely","Adj","可爱的"],["rude","Adj","粗鲁的"],["alone","Adj/Adv","独自"],["together","Adv","一起"],["each other","PronP","互相"],["someone","Pron","某人"],["everyone","Pron","每个人"],["nobody","Pron","没有人"],["anyone","Pron","任何人"],["call","V","打电话/称呼"],["send a message","Phr","发信息"],["get together","Phr","聚会"],["have fun","Phr","玩得开心"],["relationship","N","关系"],["trust","V/N","信任"],["support","V/N","支持"],["chat online","Phr","在线聊天"],["hang out","Phr","一起玩"],["make friends","Phr","交朋友"]]},{"title":"描述人物外貌","subtitle":"Describing People (Appearance)","words":[["tall","Adj","高的"],["short","Adj","矮的"],["fat","Adj","胖的"],["thin","Adj","瘦的"],["pretty","Adj","漂亮的"],["beautiful","Adj","美丽的"],["handsome","Adj","英俊的"],["ugly","Adj","丑陋的"],["strong","Adj","强壮的"],["weak","Adj","虚弱的"],["heavy","Adj","重的"],["hair","N","头发"],["blonde","Adj","金发的"],["dark","Adj","深色的"],["curly","Adj","卷曲的"],["straight","Adj","直的"],["long","Adj","长的"],["eye","N","眼睛"],["glasses","N","眼镜"],["beard","N","胡须"],["moustache","N","小胡子"],["bald","Adj","秃头的"],["face","N","脸"],["nose","N","鼻子"],["mouth","N","嘴"],["ear","N","耳朵"],["look like","Phr","看起来像"],["describe","V","描述"],["appearance","N","外貌"],["cute","Adj","可爱的"],["attractive","Adj","有吸引力的"],["ordinary","Adj","普通的"],["good-looking","Adj","好看的"],["medium height","Phr","中等身高"],["overweight","Adj","超重的"],["slim","Adj","苗条的"],["well-dressed","Adj","穿着得体的"]]},{"title":"描述人物性格","subtitle":"Describing People (Personality)","words":[["clever","Adj","聪明的"],["smart","Adj","机灵的"],["intelligent","Adj","智慧的"],["hard-working","Adj","勤奋的"],["lazy","Adj","懒惰的"],["brave","Adj","勇敢的"],["kind","Adj","善良的"],["funny","Adj","有趣的"],["serious","Adj","严肃的"],["strict","Adj","严格的"],["patient","Adj","耐心的"],["careful","Adj","小心的"],["careless","Adj","粗心的"],["helpful","Adj","乐于助人的"],["honest","Adj","诚实的"],["generous","Adj","慷慨的"],["selfish","Adj","自私的"],["noisy","Adj","吵闹的"],["shy","Adj","害羞的"],["confident","Adj","自信的"],["calm","Adj","冷静的"],["nervous","Adj","紧张的"],["crazy","Adj","疯狂的"],["silly","Adj","傻的"],["excellent","Adj","优秀的"],["terrible","Adj","糟糕的"],["perfect","Adj","完美的"],["person","N","人"],["character","N","性格"],["be like","Phr","像……"],["seem","V","似乎"],["think of","Phr","认为"],["become","V","变得"],["polite","Adj","有礼貌的"],["friendly","Adj","友好的"]]},{"title":"家与房间","subtitle":"Home & Rooms","words":[["house","N","房子"],["flat","N","公寓"],["apartment","N","公寓"],["room","N","房间"],["living room","N","客厅"],["bedroom","N","卧室"],["bathroom","N","浴室"],["kitchen","N","厨房"],["dining room","N","餐厅"],["study","N","书房"],["hall","N","走廊/门厅"],["stairs","N","楼梯"],["upstairs","Adv","楼上"],["downstairs","Adv","楼下"],["floor","N","地板/楼层"],["ceiling","N","天花板"],["wall","N","墙"],["door","N","门"],["window","N","窗户"],["roof","N","屋顶"],["garden","N","花园"],["yard","N","院子"],["garage","N","车库"],["driveway","N","车道"],["address","N","地址"],["move house","Phr","搬家"],["clean","V/Adj","清洁/干净的"],["tidy","Adj","整洁的"],["messy","Adj","凌乱的"],["comfortable","Adj","舒适的"],["home","N","家"],["housework","N","家务"],["balcony","N","阳台"]]},{"title":"家具与家居用品","subtitle":"Furniture & Household Items","words":[["table","N","桌子"],["chair","N","椅子"],["sofa","N","沙发"],["bed","N","床"],["desk","N","书桌"],["bookshelf","N","书架"],["cupboard","N","橱柜"],["wardrobe","N","衣柜"],["fridge","N","冰箱"],["freezer","N","冷冻柜"],["cooker","N","炉灶"],["oven","N","烤箱"],["washing machine","N","洗衣机"],["dishwasher","N","洗碗机"],["microwave","N","微波炉"],["kettle","N","水壶"],["lamp","N","灯"],["mirror","N","镜子"],["clock","N","时钟"],["carpet","N","地毯"],["curtain","N","窗帘"],["blanket","N","毯子"],["pillow","N","枕头"],["towel","N","毛巾"],["soap","N","肥皂"],["toothbrush","N","牙刷"],["toothpaste","N","牙膏"],["comb","N","梳子"],["key","N","钥匙"],["lock","N/V","锁"],["drawer","N","抽屉"],["shelf","N","架子"],["basket","N","篮子"],["box","N","盒子"],["furniture","N","家具"],["put","V","放"],["hang","V","悬挂"],["switch on/off","Phr","打开/关闭"]]},{"title":"日常食物","subtitle":"Food","words":[["rice","N","米饭"],["bread","N","面包"],["pasta","N","意大利面"],["noodle","N","面条"],["potato","N","土豆"],["chips","N","薯条"],["pizza","N","披萨"],["burger","N","汉堡"],["sandwich","N","三明治"],["soup","N","汤"],["salad","N","沙拉"],["egg","N","鸡蛋"],["meat","N","肉"],["chicken","N","鸡肉"],["beef","N","牛肉"],["pork","N","猪肉"],["fish","N","鱼"],["sausage","N","香肠"],["bacon","N","培根"],["ham","N","火腿"],["cheese","N","奶酪"],["butter","N","黄油"],["yoghurt","N","酸奶"],["cream","N","奶油"],["sugar","N","糖"],["salt","N","盐"],["pepper","N","胡椒"],["oil","N","油"],["sauce","N","酱"],["jam","N","果酱"],["honey","N","蜂蜜"],["chocolate","N","巧克力"],["biscuit","N","饼干"],["cake","N","蛋糕"],["pie","N","派"],["ice cream","N","冰淇淋"],["snack","N","零食"],["meal","N","一餐"],["taste","V/N","品尝/味道"]]},{"title":"饮料","subtitle":"Drinks & Beverages","words":[["water","N","水"],["milk","N","牛奶"],["juice","N","果汁"],["lemonade","N","柠檬水"],["tea","N","茶"],["coffee","N","咖啡"],["hot chocolate","N","热巧克力"],["cola","N","可乐"],["soft drink","N","软饮料"],["mineral water","N","矿泉水"],["fizzy drink","N","汽水"],["still water","N","纯净水"],["beer","N","啤酒"],["wine","N","葡萄酒"],["drink","V/N","喝/饮料"],["thirsty","Adj","口渴的"],["glass","N","玻璃杯"],["cup","N","杯子"],["bottle","N","瓶子"],["carton","N","纸盒"],["straw","N","吸管"],["pour","V","倒"],["fill","V","装满"],["empty","Adj/V","空的/倒空"],["hot","Adj","热的"],["cold","Adj","冷的"],["warm","Adj","温暖的"],["fresh","Adj","新鲜的"],["sweet","Adj","甜的"],["bitter","Adj","苦的"],["delicious","Adj","美味的"],["favourite","Adj","最喜欢的"],["serve","V","提供/服务"],["breakfast drink","N","早餐饮品"],["energy drink","N","能量饮料"],["smoothie","N","果昔"],["milkshake","N","奶昔"]]},{"title":"外出用餐","subtitle":"Eating Out & Restaurants","words":[["restaurant","N","餐厅"],["cafe","N","咖啡馆"],["fast food","N","快餐"],["menu","N","菜单"],["order","V/N","点餐/订单"],["waiter","N","服务员(男)"],["waitress","N","服务员(女)"],["customer","N","顾客"],["seat","N/V","座位/就坐"],["reserve","V","预订"],["starter","N","前菜"],["main course","N","主菜"],["dessert","N","甜点"],["side dish","N","配菜"],["bill","N","账单"],["tip","N","小费"],["cash","N","现金"],["card","N","银行卡"],["cost","V/N","花费/费用"],["cheap","Adj","便宜的"],["expensive","Adj","昂贵的"],["service","N","服务"],["buffet","N","自助餐"],["take away","Phr","外带"],["eat in","Phr","堂食"],["fork","N","叉子"],["knife","N","刀"],["spoon","N","勺子"],["plate","N","盘子"],["bowl","N","碗"],["napkin","N","餐巾"],["I'd like...","Phr","我想要……"],["Can I have...?","Phr","我能要……吗？"],["enjoy your meal","Phr","用餐愉快"]]},{"title":"水果与蔬菜","subtitle":"Fruits & Vegetables","words":[["apple","N","苹果"],["banana","N","香蕉"],["orange","N","橙子"],["lemon","N","柠檬"],["grape","N","葡萄"],["strawberry","N","草莓"],["pineapple","N","菠萝"],["watermelon","N","西瓜"],["peach","N","桃子"],["pear","N","梨"],["cherry","N","樱桃"],["mango","N","芒果"],["coconut","N","椰子"],["fruit","N","水果"],["tomato","N","西红柿"],["carrot","N","胡萝卜"],["onion","N","洋葱"],["garlic","N","大蒜"],["cucumber","N","黄瓜"],["mushroom","N","蘑菇"],["bean","N","豆子"],["pea","N","豌豆"],["corn","N","玉米"],["cabbage","N","卷心菜"],["lettuce","N","生菜"],["broccoli","N","西兰花"],["vegetable","N","蔬菜"],["ripe","Adj","成熟的"],["raw","Adj","生的"],["cook","V","烹饪"],["boil","V","煮"],["fry","V","炸"],["bake","V","烤"],["cut","V","切"],["peel","V","削皮"],["wash","V","洗"],["mix","V","混合"],["a packet of biscuits","Phr","一包饼干"],["a bar of chocolate","Phr","一条巧克力"],["a bag of crisps","Phr","一袋薯片"]]},{"title":"零食与甜食","subtitle":"Snacks & Sweets","words":[["cookie","N","曲奇"],["crisp","N","薯片"],["nut","N","坚果"],["popcorn","N","爆米花"],["lollipop","N","棒棒糖"],["chewing gum","N","口香糖"],["chocolate bar","N","巧克力棒"],["candy","N","糖果"],["jelly","N","果冻"],["marshmallow","N","棉花糖"],["muffin","N","松饼"],["doughnut","N","甜甜圈"],["pancake","N","煎饼"],["waffle","N","华夫饼"],["croissant","N","牛角包"],["toast","N","吐司"],["cereal","N","麦片"],["peanut butter","N","花生酱"],["spread","V","涂抹"],["hungry","Adj","饿的"],["full","Adj","饱的"],["a piece of","Phr","一块"],["a packet of","Phr","一包"],["a bar of","Phr","一条"],["a bag of","Phr","一袋"],["calorie","N","卡路里"],["unhealthy","Adj","不健康的"],["a piece of cake","Phr","一块蛋糕"]]},{"title":"服装","subtitle":"Clothes","words":[["shirt","N","衬衫"],["T-shirt","N","T恤"],["blouse","N","女衬衫"],["top","N","上衣"],["jumper","N","套头毛衣"],["sweater","N","毛衣"],["cardigan","N","开衫"],["hoodie","N","连帽衫"],["jacket","N","夹克"],["coat","N","外套"],["raincoat","N","雨衣"],["suit","N","西装"],["dress","N","连衣裙"],["skirt","N","裙子"],["trousers","N","裤子"],["jeans","N","牛仔裤"],["shorts","N","短裤"],["tights","N","紧身裤袜"],["swimming costume","N","泳衣"],["swimsuit","N","泳衣"],["underwear","N","内衣"],["sock","N","袜子"],["tie","N","领带"],["belt","N","腰带"],["scarf","N","围巾"],["glove","N","手套"],["hat","N","帽子"],["cap","N","棒球帽"],["shoe","N","鞋"],["boot","N","靴子"],["trainer","N","运动鞋"],["sandal","N","凉鞋"],["pocket","N","口袋"],["zip","N","拉链"],["button","N","纽扣"],["cotton","N","棉"],["wool","N","羊毛"],["leather","N","皮革"],["silk","N","丝绸"],["uniform","N","制服"]]},{"title":"配饰与穿戴","subtitle":"Accessories & Wearing","words":[["bag","N","包"],["handbag","N","手提包"],["backpack","N","背包"],["rucksack","N","背包"],["wallet","N","钱包"],["purse","N","女士钱包"],["umbrella","N","雨伞"],["sunglasses","N","太阳镜"],["watch","N","手表"],["ring","N","戒指"],["necklace","N","项链"],["bracelet","N","手镯"],["earring","N","耳环"],["chain","N","链子"],["jewellery","N","珠宝"],["make-up","N","化妆品"],["perfume","N","香水"],["handkerchief","N","手帕"],["tissue","N","纸巾"],["lipstick","N","口红"],["get dressed","Phr","穿好衣服"],["get undressed","Phr","脱衣服"],["put on","Phr","穿上"],["take off","Phr","脱下"],["try on","Phr","试穿"],["fit","V","合身"],["match","V","搭配"],["wear","V","穿着/戴着"],["carry","V","携带"],["fold","V","折叠"],["hang up","Phr","挂起来"],["fashion","N","时尚"],["style","N","风格"],["design","N/V","设计"],["size","N","尺码"]]},{"title":"颜色与形状","subtitle":"Colours & Shapes","words":[["red","Adj/N","红色"],["blue","Adj/N","蓝色"],["green","Adj/N","绿色"],["yellow","Adj/N","黄色"],["purple","Adj/N","紫色"],["pink","Adj/N","粉色"],["brown","Adj/N","棕色"],["black","Adj/N","黑色"],["white","Adj/N","白色"],["grey/gray","Adj/N","灰色"],["silver","Adj/N","银色"],["gold","Adj/N","金色"],["golden","Adj","金色的"],["light","Adj","浅色的"],["pale","Adj","苍白的/淡的"],["bright","Adj","明亮的"],["colourful","Adj","多彩的"],["plain","Adj","素色的"],["circle","N","圆形"],["square","N/Adj","正方形/方的"],["triangle","N","三角形"],["round","Adj","圆形的"],["shape","N","形状"],["pattern","N","图案"],["striped","Adj","条纹的"],["spotted","Adj","斑点的"],["paint","V/N","涂/油漆"],["draw","V","画"],["colour","V/N","涂色/颜色"],["rainbow","N","彩虹"],["favourite colour","Phr","最喜欢的颜色"],["look","V","看起来"],["change colour","Phr","变色"],["transparent","Adj","透明的"],["shiny","Adj","闪亮的"],["dull","Adj","暗淡的"],["metallic","Adj","金属的"]]},{"title":"学校与教育","subtitle":"School & Education","words":[["school","N","学校"],["primary school","N","小学"],["secondary school","N","中学"],["college","N","学院"],["university","N","大学"],["classroom","N","教室"],["library","N","图书馆"],["playground","N","操场"],["gym","N","体育馆"],["office","N","办公室"],["canteen","N","食堂"],["teacher","N","老师"],["student","N","学生"],["pupil","N","小学生"],["head teacher","N","校长"],["class","N","班级/课"],["lesson","N","课"],["break","N","休息"],["homework","N","家庭作业"],["exam/examination","N","考试"],["test","N","测验"],["mark","N/V","分数/打分"],["grade","N","等级/年级"],["pass","V","通过"],["fail","V","不及格"],["learn","V","学习"],["teach","V","教"],["explain","V","解释"],["understand","V","理解"],["remember","V","记住"],["forget","V","忘记"],["practise","V","练习"],["correct","Adj/V","正确的/纠正"],["wrong","Adj","错误的"],["term","N","学期"],["course","N","课程"],["education","N","教育"],["knowledge","N","知识"]]}];</script>
+
+<script>
+let mode = 'list', filterIdx = -1;
+let twords = [], tidx = 0, tok = 0, tfail = 0, revealed = false;
+
+function h(s){ var d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+
+function init(){
+  if(typeof KET_DATA === 'undefined'){
+    document.getElementById('info-bar').textContent = '错误：数据文件加载失败，请确保 ket-data-1-16.js 在同目录下';
+    return;
+  }
+  document.getElementById('info-bar').textContent = KET_DATA.length+'个话题 · '+KET_DATA.reduce((s,t)=>s+t.words.length,0)+'词 · 点击🔊听发音';
+  renderTabs();
+  render();
+}
+function renderTabs(){
+  var h = '<button class="on" onclick="filterIdx=-1;render()">全部</button>';
+  KET_DATA.forEach(function(t,i){ h += '<button onclick="filterIdx='+i+';render()">'+(i+1)+'.'+h(t.title)+'</button>'; });
+  document.getElementById('tabs').innerHTML = h;
+}
+function render(){
+  document.getElementById('btn-list').className = mode==='list'?'on':'';
+  document.getElementById('btn-test').className = mode==='test'?'on':'';
+  var topics = filterIdx===-1 ? KET_DATA : [KET_DATA[filterIdx]];
+  var h = '';
+  topics.forEach(function(t){
+    var realIdx = KET_DATA.indexOf(t);
+    h += '<div class="block open"><div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><div><h3>'+(realIdx+1)+'. '+h(t.title)+'</h3><span class="badge">'+(t.subtitle||'')+' · '+t.words.length+'词</span></div><span>▼</span></div><div class="bd">';
+    t.words.forEach(function(w){
+      h += '<div class="line"><button class="btn" data-w="'+h(w[0])+'" title="发音">🔊</button><span class="en">'+h(w[0])+'</span><span class="ps">'+h(w[1])+'</span><span class="zh">'+h(w[2])+'</span></div>';
+    });
+    h += '</div></div>';
+  });
+  document.getElementById('main').innerHTML = h;
+  document.getElementById('main').className = mode==='test'?'hide':'';
+}
+// Click delegation
+document.addEventListener('click',function(e){
+  var b = e.target.closest('.btn'); if(!b) return;
+  e.stopPropagation(); e.preventDefault();
+  var w = b.getAttribute('data-w');
+  if(!w || !window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(w);
+  u.lang='en-US'; u.rate=0.85;
+  speechSynthesis.speak(u);
+});
+// Test mode
+function startTest(){
+  var sel = document.getElementById('test-topic');
+  var val = sel ? sel.value : 'all';
+  twords = val==='all' ? KET_DATA.flatMap(function(t){return t.words;}) : KET_DATA[parseInt(val)].words.slice();
+  twords.sort(function(){return Math.random()-0.5});
+  tidx=0; tok=0; tfail=0; revealed=false;
+  showCard(); updateStats();
+  document.getElementById('main').className = mode==='test'?'':'hide';
+}
+function updateStats(){
+  var done=tok+tfail, remain=twords.length-tidx;
+  var h = '<div class="test-sel"><select id="test-topic" onchange="startTest()"><option value="all">全部话题</option>';
+  KET_DATA.forEach(function(t,i){ h += '<option value="'+i+'">'+h(t.title)+'（'+t.words.length+'词）</option>'; });
+  h += '</select></div>';
+  h += '<div class="stats"><div class="st"><div class="n">'+remain+'</div><div class="l">剩余</div></div><div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓ 认识</div></div><div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗ 不认识</div></div><div class="st"><div class="n">'+(done?Math.round(done/(done+remain)*100):0)+'%</div><div class="l">进度</div></div>';
+  document.getElementById('main').innerHTML = h + '<div id="card-area"></div><div class="btns" id="btns"></div>';
+}
+function showCard(){
+  if(tidx >= twords.length){
+    var total = tok+tfail, rate = total?Math.round(tok/total*100):0;
+    document.getElementById('card-area').innerHTML = '<div class="end"><div class="emoji">'+(rate>=80?'🎉':rate>=50?'💪':'📖')+'</div><h3>本轮完成！</h3><div class="rate" style="color:'+(rate>=60?'#16a34a':'#dc2626')+'">'+rate+'%</div><p style="color:#888;margin-top:4px">认识 '+tok+' / 不认识 '+tfail+'</p><button onclick="startTest()">🔄 再来一轮</button></div>';
+    document.getElementById('btns').innerHTML = '';
+    return;
+  }
+  var w = twords[tidx]; revealed = false;
+  document.getElementById('card-area').innerHTML = '<div class="card" id="fc" onclick="reveal()"><div class="hint">点击卡片看答案</div><div class="eword">'+h(w[0])+'</div><div class="etag">'+h(w[1])+'</div><button class="sbtn" data-w="'+h(w[0])+'">🔊</button><div class="cword" id="cn">'+h(w[2])+'</div><div class="tap">👆 点这里看释义</div></div>';
+  document.getElementById('btns').innerHTML = '<button class="no" onclick="mark(false)">😞 不认识</button><button class="yes" onclick="mark(true)">😊 认识</button>';
+}
+function reveal(){
+  if(revealed) return; revealed = true;
+  var cn = document.getElementById('cn'); if(cn) cn.classList.add('show');
+  var fc = document.getElementById('fc'); if(fc) fc.querySelector('.hint').textContent = '认识吗？';
+}
+function mark(ok){
+  if(!revealed){ reveal(); return; }
+  if(ok) tok++; else tfail++;
+  tidx++; updateStats(); showCard();
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
