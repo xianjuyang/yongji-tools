@@ -96,20 +96,22 @@ function render(){
   document.getElementById('btn-list').className = mode==='list'?'on':'';
   document.getElementById('btn-test').className = mode==='test'?'on':'';
   var topics = filterIdx===-1 ? KET_DATA : [KET_DATA[filterIdx]];
-  var h = '';
+  var html2 = '';
   topics.forEach(function(t){
     var realIdx = KET_DATA.indexOf(t);
-    h += '<div class="block open"><div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><div><h3>'+(realIdx+1)+'. '+h(t.title)+'</h3><span class="badge">'+(t.subtitle||'')+' · '+t.words.length+'词</span></div><span>▼</span></div><div class="bd">';
+    html2 += '<div class="block open"><div class="hd" data-action="toggle"><div><h3>'+(realIdx+1)+'. '+h(t.title)+'</h3><span class="badge">'+(t.subtitle||'')+' · '+t.words.length+'词</span></div><span>▼</span></div><div class="bd">';
     t.words.forEach(function(w){
-      h += '<div class="line"><button class="btn" data-w="'+h(w[0])+'" title="发音">🔊</button><span class="en">'+h(w[0])+'</span><span class="ps">'+h(w[1])+'</span><span class="zh">'+h(w[2])+'</span></div>';
+      html2 += '<div class="line"><button class="btn" data-w="'+h(w[0])+'" title="发音">🔊</button><span class="en">'+h(w[0])+'</span><span class="ps">'+h(w[1])+'</span><span class="zh">'+h(w[2])+'</span></div>';
     });
-    h += '</div></div>';
+    html2 += '</div></div>';
   });
-  document.getElementById('main').innerHTML = h;
+  document.getElementById('main').innerHTML = html2;
   document.getElementById('main').className = mode==='test'?'hide':'';
 }
 // Click delegation
 document.addEventListener('click',function(e){
+  var hd = e.target.closest('[data-action=\"toggle\"]');
+  if(hd){ hd.parentElement.classList.toggle('open'); return; }
   var b = e.target.closest('.btn'); if(!b) return;
   e.stopPropagation(); e.preventDefault();
   var w = b.getAttribute('data-w');
@@ -131,11 +133,11 @@ function startTest(){
 }
 function updateStats(){
   var done=tok+tfail, remain=twords.length-tidx;
-  var h = '<div class="test-sel"><select id="test-topic" onchange="startTest()"><option value="all">全部话题</option>';
-  KET_DATA.forEach(function(t,i){ h += '<option value="'+i+'">'+h(t.title)+'（'+t.words.length+'词）</option>'; });
-  h += '</select></div>';
-  h += '<div class="stats"><div class="st"><div class="n">'+remain+'</div><div class="l">剩余</div></div><div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓ 认识</div></div><div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗ 不认识</div></div><div class="st"><div class="n">'+(done?Math.round(done/(done+remain)*100):0)+'%</div><div class="l">进度</div></div>';
-  document.getElementById('main').innerHTML = h + '<div id="card-area"></div><div class="btns" id="btns"></div>';
+  var html3 = '<div class="test-sel"><select id="test-topic" onchange="startTest()"><option value="all">全部话题</option>';
+  KET_DATA.forEach(function(t,i){ html3 += '<option value="'+i+'">'+h(t.title)+'（'+t.words.length+'词）</option>'; });
+  html3 += '</select></div>';
+  html3 += '<div class="stats"><div class="st"><div class="n">'+remain+'</div><div class="l">剩余</div></div><div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓ 认识</div></div><div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗ 不认识</div></div><div class="st"><div class="n">'+(done?Math.round(done/(done+remain)*100):0)+'%</div><div class="l">进度</div></div>';
+  document.getElementById('main').innerHTML = html3 + '<div id="card-area"></div><div class="btns" id="btns"></div>';
 }
 function showCard(){
   if(tidx >= twords.length){
