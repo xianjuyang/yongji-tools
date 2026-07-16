@@ -128,7 +128,7 @@ function startTest(){
   twords = val==='all' ? KET_DATA.flatMap(function(t){return t.words;}) : KET_DATA[parseInt(val)].words.slice();
   twords.sort(function(){return Math.random()-0.5});
   tidx=0; tok=0; tfail=0; revealed=false;
-  showCard(); updateStats();
+  updateStats(); showCard();
   document.getElementById('main').className = mode==='test'?'':'hide';
 }
 function updateStats(){
