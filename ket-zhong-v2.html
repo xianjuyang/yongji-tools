@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KET单词 · 中（词句双轨训练 V3）</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f6f7f9;color:#1e293b;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#1a2332,#1e3a5f);color:#fff;padding:16px;position:sticky;top:0;z-index:20;text-align:center}
+.header .badge{font-size:10px;letter-spacing:3px;color:#f0d78c}
+.header h1{font-size:17px;margin:4px 0;font-weight:700}
+.header .info{font-size:10px;opacity:.6}
+.topic-bar{position:sticky;top:94px;z-index:10;background:#fff;border-bottom:1px solid #e5e7eb;padding:8px 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.topic-bar .nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;font-size:16px;cursor:pointer;color:#555;font-family:inherit;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;line-height:1}
+.topic-bar .nav-btn:active{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.topic-bar select{flex:1;max-width:280px;padding:8px 12px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#1a6b5a;cursor:pointer;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6b5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.topic-bar .progress{font-size:10px;color:#aaa;text-align:center;margin-top:2px}
+.main{max-width:700px;margin:0 auto;padding:12px 14px}
+.sec{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.sec .hd{cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;user-select:none;background:#fafcfb;border-bottom:1px solid #f0f0f0}
+.sec .hd h3{font-size:14px;display:flex;align-items:center;gap:6px}
+.sec .hd .arrow{font-size:11px;color:#aaa;transition:transform .2s}
+.sec.open .hd .arrow{transform:rotate(180deg)}
+.sec .bd{display:none;padding:12px 14px}
+.sec.open .bd{display:block}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.word-chip{display:flex;align-items:center;gap:6px;padding:8px 10px;background:#f8fafc;border-radius:8px;cursor:pointer;transition:all .12s;border:1.5px solid transparent}
+.word-chip:hover{border-color:#1a6b5a;background:#e8f5f0}
+.word-chip .en{font-size:13px;font-weight:600;color:#1a6b5a}
+.word-chip .cn{font-size:10px;color:#888;margin-left:auto;white-space:nowrap}
+.word-chip .spk{width:22px;height:22px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.word-chip .spk:hover{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.grammar-label{display:inline-block;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:0.5px}
+.sentence-list .sent{padding:10px 14px;margin:6px 0;background:#f8fafc;border-radius:8px;border-left:3px solid #1a6b5a;font-family:Georgia,serif;font-size:14px;line-height:1.6;color:#334155}
+.sentence-list .sent b{color:#1a6b5a;font-weight:600;background:#e8f5f0;padding:1px 4px;border-radius:3px}
+.sentence-list .sent .cn{display:block;font-size:11px;color:#999;margin-top:3px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.practice-item{padding:10px 14px;margin:8px 0;background:#fffbeb;border-radius:8px;border:1.5px dashed #e5e7eb}
+.practice-item .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.practice-item .blanks{font-family:Georgia,serif;font-size:14px;line-height:2}
+.practice-item .blanks .gap{display:inline-block;min-width:60px;border-bottom:2px dashed #1a6b5a;margin:0 6px;padding:2px 4px;color:#1a6b5a;font-weight:600;cursor:pointer;transition:all .15s}
+.practice-item .blanks .gap:hover{background:#e8f5f0}
+.practice-item .blanks .gap.filled{background:#e8f5f0;border-bottom-style:solid}
+.practice-item .choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.practice-item .choices button{padding:5px 12px;border-radius:12px;border:1.5px solid #1a6b5a;background:#fff;color:#1a6b5a;font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s;font-weight:500}
+.practice-item .choices button:hover{background:#1a6b5a;color:#fff}
+.practice-item .choices button.used{opacity:.3;pointer-events:none}
+.express-box{background:linear-gradient(135deg,#e8f5f0,#f0fdf4);border-radius:10px;padding:14px;text-align:center}
+.express-box .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.express-box .words-hint{font-size:12px;color:#999;margin-top:6px}
+.express-box .words-hint b{color:#1a6b5a}
+.fc{background:#fff;border-radius:14px;padding:36px 18px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);cursor:pointer;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.fc .ew{font-size:28px;font-weight:700;margin:8px 0}
+.fc .cn-hidden{font-size:16px;color:#ccc;margin-top:4px;display:none}
+.fc.reveal .cn-hidden{display:block;color:#1a6b5a;font-weight:600}
+.fc .tap{font-size:10px;color:#ddd;margin-top:8px}
+.fc.reveal .tap{display:none}
+.fc .fc-spk{width:36px;height:36px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;position:absolute;top:10px;right:10px}
+.test-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.test-btns button{flex:1;max-width:100px;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-no{background:#fee2e2;color:#dc2626}
+.btn-yes{background:#dcfce7;color:#16a34a}
+.test-stats{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.test-stats .st{background:#fff;padding:8px 12px;border-radius:8px;text-align:center;min-width:50px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.test-stats .st .n{font-size:18px;font-weight:700;color:#2563eb}
+.test-stats .st .l{font-size:9px;color:#888}
+.stats-done{text-align:center;padding:20px}
+.stats-done .emoji{font-size:40px}
+.stats-done h3{margin:8px 0}
+.stats-done .rate{font-size:22px;font-weight:700}
+@media(max-width:480px){
+  .word-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:12px 10px}.header h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">KET 词汇 · 词句双轨训练 · 中</div>
+  <h1 id="topicTitle">KET单词工具 · 中（话题17-32）</h1>
+  <div class="info">10核心词 · 5语法例句 · 造句练习 · 表达输出</div>
+</div>
+
+<div class="topic-bar" id="topicBar"></div>
+<div class="main" id="main"></div>
+
+<script>
+// ==================== KET 中（话题17-32） V3 DATA ====================
+var DATA = [
+{title:"学习用品与文具",grammar:"I can write. / Can I borrow your pen? / You can't run in class.<br><small>can + 动词原形 — 能力 / 许可 / 请求</small>",grammarLabel:"情态动词①：can/can't — 能力、许可与请求",
+coreWords:[["book","书"],["pen","钢笔"],["pencil","铅笔"],["rubber","橡皮"],["ruler","尺子"],["scissors","剪刀"],["school bag","书包"],["dictionary","字典"],["notebook","笔记本"],["calculator","计算器"]],
+sentences:[
+  {en:"I <b>can</b> read a <b>book</b> but I <b>can't</b> spell all the words.",cn:"我能读书，但我不会拼写所有的单词。"},
+  {en:"<b>Can</b> I use your <b>dictionary</b>? I need to check a word.",cn:"我能用你的字典吗？我需要查一个词。"},
+  {en:"You <b>can't</b> use <b>scissors</b> in class without asking the teacher.",cn:"没有老师的允许，你不能在课堂上使用剪刀。"},
+  {en:"She <b>can</b> find her <b>rubber</b> in her <b>school bag</b>.",cn:"她能在书包里找到她的橡皮。"},
+  {en:"<b>Can</b> you draw a straight line with a <b>ruler</b>? Yes, I <b>can</b>.",cn:"你能用尺子画一条直线吗？是的，我能。"}
+],
+practice:[
+  {prompt:"用 can / can't 完成句子:",template:"I ___ read a ___. You ___ find the ___.",words:["can","book","can't","rubber"]},
+  {prompt:"完成问句和回答:",template:"___ I borrow your ___? Yes, you ___.",words:["Can","pen","can"]}
+],
+express:{prompt:"用以下 4 个核心词谈谈你在学校能/不能做的事：",words:["book","pen","pencil","school bag"]}
+},
+
+{title:"学科与课程",grammar:"I like reading. / She enjoys swimming. / He loves painting.<br><small>like / love / enjoy + V-ing（动名词作宾语）</small>",grammarLabel:"动词模式①：like / love / enjoy + V-ing",
+coreWords:[["English","英语"],["maths","数学"],["science","科学"],["history","历史"],["geography","地理"],["art","美术"],["PE","体育"],["subject","学科"],["difficult","困难的"],["interesting","有趣的"]],
+sentences:[
+  {en:"I <b>like</b> learning <b>English</b> because it is very <b>interesting</b>.",cn:"我喜欢学英语，因为它非常有趣。"},
+  {en:"She <b>enjoys</b> studying <b>science</b> and doing experiments.",cn:"她喜欢学习科学和做实验。"},
+  {en:"He doesn't <b>like</b> doing <b>maths</b>. He finds it <b>difficult</b>.",cn:"他不喜欢做数学。他觉得数学很难。"},
+  {en:"We <b>love</b> reading about <b>history</b> and <b>geography</b>.",cn:"我们喜欢读历史和地理方面的书。"},
+  {en:"Do you <b>enjoy</b> playing sports in <b>PE</b>? I <b>love</b> it!",cn:"你喜欢在体育课上运动吗？我非常喜欢！"}
+],
+practice:[
+  {prompt:"用 like / love / enjoy + V-ing 完成:",template:"I ___（喜欢）___（学习）___. She ___（不喜欢）___（做）___.",words:["like","studying","English","doesn't like","doing","maths"]},
+  {prompt:"填入合适的词:",template:"My favourite ___ is ___. I enjoy ___（画）pictures.",words:["subject","art","drawing"]}
+],
+express:{prompt:"用以下 4 个核心词说说你最喜欢和最不喜欢的学科：",words:["English","maths","subject","difficult"]}
+},
+
+{title:"运动与锻炼",grammar:"I play football. / She plays the piano. / I played tennis yesterday.<br><small>play + 球类（零冠词）/ play + the + 乐器 + 一般过去时规则动词 -ed</small>",grammarLabel:"冠词搭配 + 一般过去时①：play 球类/乐器 + 规则动词 -ed",
+coreWords:[["football","足球"],["basketball","篮球"],["tennis","网球"],["swimming","游泳"],["running","跑步"],["cycling","骑自行车"],["team","队伍"],["player","选手"],["win","赢"],["exercise","锻炼"]],
+sentences:[
+  {en:"I <b>play</b> <b>football</b> every Saturday. Yesterday I <b>played</b> <b>basketball</b>.",cn:"我每周六踢足球。昨天我打了篮球。"},
+  {en:"She <b>plays</b> the <b>tennis</b>? No, she <b>plays</b> <b>tennis</b> (no 'the').",cn:"她打网球？不，我们说 play tennis（不用 the）。"},
+  {en:"Our <b>team</b> <b>practised</b> hard and we <b>won</b> the match.",cn:"我们的队伍努力训练，我们赢了比赛。"},
+  {en:"He <b>enjoys</b> <b>swimming</b> and <b>running</b>. He <b>exercised</b> for two hours.",cn:"他喜欢游泳和跑步。他锻炼了两个小时。"},
+  {en:"Every <b>player</b> on the <b>team</b> <b>tried</b> their best last week.",cn:"队伍里的每一位选手上周都尽了最大努力。"}
+],
+practice:[
+  {prompt:"用 play（球类不加 the）填入:",template:"I ___ ___ every day. She ___（played） ___ yesterday.",words:["play","football","played","tennis"]},
+  {prompt:"用过去式（-ed）填入:",template:"We ___（practised） hard and ___（won） the game.",words:["practised","won"]}
+],
+express:{prompt:"用以下 4 个核心词说说你最喜欢的运动和锻炼习惯：",words:["football","swimming","team","exercise"]}
+},
+
+{title:"爱好与休闲活动",grammar:"I will go camping. / I am going to go camping. / Will it rain? / Are you going to come?<br><small>will（即时决定/预测） vs be going to（计划/意图）</small>",grammarLabel:"将来时①：will vs be going to",
+coreWords:[["hobby","爱好"],["collect","收集"],["photography","摄影"],["painting","绘画"],["dancing","跳舞"],["camping","露营"],["fishing","钓鱼"],["shopping","购物"],["enjoy","享受"],["relaxing","令人放松的"]],
+sentences:[
+  {en:"My <b>hobby</b> is <b>photography</b>. I <b>am going to</b> take photos this weekend.",cn:"我的爱好是摄影。我打算这个周末去拍照。"},
+  {en:"I think I <b>will</b> <b>enjoy</b> <b>camping</b>. I <b>will</b> bring a tent.",cn:"我想我会喜欢露营的。我会带一个帐篷。"},
+  {en:"She <b>is going to</b> learn <b>painting</b> next month. It looks <b>relaxing</b>.",cn:"她打算下个月学绘画。看起来让人很放松。"},
+  {en:"We <b>are going to</b> go <b>fishing</b> by the lake. <b>Will</b> you join us?",cn:"我们打算去湖边钓鱼。你会加入我们吗？"},
+  {en:"I <b>will</b> go <b>shopping</b> with my mum. I think I <b>will</b> buy a new bag.",cn:"我将和我妈妈去购物。我想我会买一个新包。"}
+],
+practice:[
+  {prompt:"用 will 或 be going to 填入:",template:"I ___ ___ ___（打算）learn ___. I think I ___ enjoy it.",words:["am","going","to","painting","will"]},
+  {prompt:"选择 will 或 going to 完成:",template:"She ___ visit the museum. We ___ go ___ this summer.",words:["is going to","will","camping"]}
+],
+express:{prompt:"用以下 4 个核心词说说你的爱好和周末计划（用 will/going to）：",words:["hobby","photography","camping","enjoy"]}
+},
+
+{title:"音乐与艺术",grammar:"Have you ever been to a concert? / I have never played the guitar.<br><small>现在完成时入门：have/has + 过去分词 + ever / never / been to</small>",grammarLabel:"现在完成时①：ever / never / been to",
+coreWords:[["music","音乐"],["instrument","乐器"],["piano","钢琴"],["guitar","吉他"],["concert","音乐会"],["museum","博物馆"],["theatre","剧院"],["artist","艺术家"],["perform","表演"],["traditional","传统的"]],
+sentences:[
+  {en:"I have never <b>been</b> to a <b>concert</b>. Have you <b>ever</b> <b>been</b> to one?",cn:"我从没去过音乐会。你去过吗？"},
+  {en:"She has <b>played</b> the <b>piano</b> since she was five. She is a good <b>artist</b>.",cn:"她从五岁起弹钢琴。她是个好的艺术家。"},
+  {en:"Have you <b>ever</b> <b>listened</b> to <b>traditional</b> Chinese <b>music</b>?",cn:"你听过中国传统音乐吗？"},
+  {en:"He has never <b>performed</b> on stage. He plays the <b>guitar</b> at home.",cn:"他从没在舞台上表演过。他在家弹吉他。"},
+  {en:"We have <b>visited</b> the art <b>museum</b> and the <b>theatre</b> this month.",cn:"这个月我们参观了美术馆和剧院。"}
+],
+practice:[
+  {prompt:"用 have/has ever/never been to 完成:",template:"___ you ___ ___ to a ___? I ___ never ___ there.",words:["Have","ever","been","concert","have","been"]},
+  {prompt:"填入现在完成时:",template:"She ___ ___（has visited） the ___. He has ___（played） the ___.",words:["has","visited","museum","played","guitar"]}
+],
+express:{prompt:"用以下 4 个词说说你的音乐/艺术经历（用 have you ever... 提问）：",words:["music","concert","piano","guitar"]}
+},
+
+{title:"科技与设备",grammar:"I went to the shop. / She bought a new phone. / He took a photo.<br><small>一般过去时不规则动词：go→went / buy→bought / take→took 等</small>",grammarLabel:"一般过去时②：不规则动词变化",
+coreWords:[["computer","电脑"],["laptop","笔记本电脑"],["tablet","平板电脑"],["mobile phone","手机"],["camera","相机"],["headphones","头戴耳机"],["charger","充电器"],["switch on","打开"],["switch off","关闭"],["download","下载"]],
+sentences:[
+  {en:"I <b>took</b> a photo with my new <b>camera</b>. Then I <b>switched</b> it <b>off</b>.",cn:"我用新相机拍了一张照片。然后我把它关了。"},
+  {en:"She <b>bought</b> a new <b>laptop</b> and <b>downloaded</b> some apps.",cn:"她买了一台新笔记本电脑并下载了一些应用程序。"},
+  {en:"He <b>left</b> his <b>mobile phone</b> at home. He <b>felt</b> worried.",cn:"他把手机落在家里了。他感到很担心。"},
+  {en:"I <b>forgot</b> my <b>charger</b>. I <b>couldn't</b> <b>switch on</b> my <b>tablet</b>.",cn:"我忘了带充电器。我打不开平板电脑。"},
+  {en:"We <b>used</b> <b>headphones</b> to listen to music on the <b>computer</b>.",cn:"我们用耳机在电脑上听音乐。（use 是规则动词）"}
+],
+practice:[
+  {prompt:"用过去式（不规则）填入:",template:"I ___（went） to the shop and ___（bought） a ___.",words:["went","bought","laptop"]},
+  {prompt:"完成句子（注意不规则动词）:",template:"She ___（took） a photo and ___（sent） it to me.",words:["took","sent"]}
+],
+express:{prompt:"用以下 4 个核心词说说你昨天使用科技设备做了什么（用过去时）：",words:["computer","mobile phone","camera","switch on"]}
+},
+
+{title:"互联网与通信",grammar:"Email is faster than a letter. / The internet is the fastest way to search.<br><small>比较级：-er than / more ... than &nbsp; 最高级：the -est / the most ...</small>",grammarLabel:"比较级与最高级：-er / -est + more / most",
+coreWords:[["internet","互联网"],["website","网站"],["email","电子邮件"],["password","密码"],["online","在线"],["search","搜索"],["chat","聊天"],["message","消息"],["send","发送"],["share","分享"]],
+sentences:[
+  {en:"The <b>internet</b> is <b>faster</b> than books for finding information.",cn:"互联网比书本更快地找到信息。"},
+  {en:"<b>Email</b> is <b>quicker</b> and <b>cheaper</b> than sending a letter.",cn:"电子邮件比寄信更快更便宜。"},
+  {en:"I think this <b>website</b> is the <b>best</b> place to <b>search</b> for news.",cn:"我觉得这个网站是搜索新闻最好的地方。"},
+  {en:"<b>Chatting</b> <b>online</b> is <b>more</b> fun than sending <b>messages</b>.",cn:"在线聊天比发消息更有趣。"},
+  {en:"Don't <b>share</b> your <b>password</b>! That is the <b>most</b> important rule.",cn:"不要分享你的密码！那是最重要的规则。"}
+],
+practice:[
+  {prompt:"用比较级填入（-er 或 more）:",template:"Email is ___（快）than a letter. ___ online is ___（有趣）than writing.",words:["faster","Chatting","more fun"]},
+  {prompt:"用最高级填入:",template:"This is the ___（最好）___ for ___.",words:["best","website","search"]}
+],
+express:{prompt:"用以下 4 个核心词比较不同的通信方式（用比较级/最高级）：",words:["internet","email","message","online"]}
+},
+
+{title:"旅行与假期",grammar:"Go straight on. / Turn left at the bank. / The hotel is opposite the park.<br><small>祈使句 + 方位介词：问路与指路</small>",grammarLabel:"祈使句 + 方位介词：问路与指路",
+coreWords:[["travel","旅行"],["passport","护照"],["ticket","票"],["suitcase","行李箱"],["hotel","酒店"],["beach","海滩"],["holiday","假期"],["arrive","到达"],["pack","打包"],["explore","探索"]],
+sentences:[
+  {en:"I love to <b>travel</b>. Don't forget your <b>passport</b> and <b>ticket</b>!",cn:"我喜欢旅行。别忘了你的护照和票！"},
+  {en:"<b>Pack</b> your <b>suitcase</b> the night before. <b>Arrive</b> at the airport early.",cn:"前一天晚上打包好行李。早点到达机场。"},
+  {en:"<b>Go</b> straight on and <b>turn</b> left. The <b>hotel</b> is opposite the park.",cn:"直走然后左转。酒店在公园对面。"},
+  {en:"<b>Walk</b> along the <b>beach</b> and <b>enjoy</b> the sun. It's your <b>holiday</b>!",cn:"沿着海滩散步，享受阳光。这是你的假期！"},
+  {en:"<b>Explore</b> the city on foot. <b>Take</b> a map with you.",cn:"步行探索这座城市。带上一张地图。"}
+],
+practice:[
+  {prompt:"用祈使句完成（动词原形开头）:",template:"___ your ___ and ___ at the airport early.",words:["Pack","suitcase","arrive"]},
+  {prompt:"填入方位介词:",template:"The ___ is ___（opposite） the park. Go ___（straight） on.",words:["hotel","opposite","straight"]}
+],
+express:{prompt:"用以下 4 个核心词说说你梦想的假期（用祈使句给建议）：",words:["travel","beach","hotel","holiday"]}
+},
+
+{title:"交通与出行",grammar:"If it rains, I will take the bus. / If I am late, she will wait.<br><small>if + 一般现在时，主句 will + 动词原形（主将从现）</small>",grammarLabel:"条件句①：if 真实条件句（主将从现）",
+coreWords:[["car","汽车"],["bus","公交车"],["plane","飞机"],["taxi","出租车"],["bike","自行车"],["underground","地铁"],["station","车站"],["airport","机场"],["drive","驾驶"],["traffic","交通"]],
+sentences:[
+  {en:"If the <b>traffic</b> is bad, I <b>will</b> take the <b>underground</b>.",cn:"如果交通不好，我就坐地铁。"},
+  {en:"If we miss the <b>bus</b>, we <b>will</b> call a <b>taxi</b>.",cn:"如果我们错过了公交车，我们就叫出租车。"},
+  {en:"If my dad <b>drives</b> me, I <b>will</b> get to the <b>station</b> on time.",cn:"如果我爸爸开车送我，我会准时到车站。"},
+  {en:"If the weather is good, I <b>will</b> ride my <b>bike</b> to school.",cn:"如果天气好，我就骑自行车上学。"},
+  {en:"If we fly, we <b>will</b> take a <b>plane</b> from the <b>airport</b>.",cn:"如果我们坐飞机，我们就从机场出发。"}
+],
+practice:[
+  {prompt:"用 if 条件句完成（主将从现）:",template:"If it ___（rain）, I ___（will） take a ___.",words:["rains","will","bus"]},
+  {prompt:"填空完成条件句:",template:"If I ___ late, my dad ___ ___（will drive） the ___.",words:["am","will","drive","car"]}
+],
+express:{prompt:"用以下 4 个核心词造 if 条件句说说你的出行方式：",words:["bus","bike","underground","traffic"]}
+},
+
+{title:"城市与地标",grammar:"Turn left. / Go straight on. / The bank is next to the supermarket.<br><small>方位介词复习 + 祈使句：问路与指路</small>",grammarLabel:"方位介词 + 祈使句：问路指路复习",
+coreWords:[["city","城市"],["town","城镇"],["market","市场"],["supermarket","超市"],["hospital","医院"],["bridge","桥"],["park","公园"],["turn left","左转"],["turn right","右转"],["opposite","在……对面"]],
+sentences:[
+  {en:"The <b>supermarket</b> is <b>opposite</b> the <b>park</b>. You can't miss it.",cn:"超市在公园对面。你不会错过的。"},
+  {en:"<b>Turn left</b> at the <b>bridge</b> and the <b>market</b> is on your right.",cn:"在桥那里左转，市场就在你的右边。"},
+  {en:"<b>Turn right</b> after the <b>hospital</b>. <b>Go</b> straight on for five minutes.",cn:"过了医院右转。直走五分钟。"},
+  {en:"Our <b>city</b> has a big <b>park</b> and a beautiful old <b>bridge</b>.",cn:"我们的城市有一个大公园和一座美丽的古桥。"},
+  {en:"This <b>town</b> is small but there is a nice <b>market</b> near the centre.",cn:"这个城镇很小，但中心附近有一个不错的市场。"}
+],
+practice:[
+  {prompt:"用方位介词填入（opposite / next to / near）:",template:"The ___ is ___（对面） the park. The ___ is ___（旁边） the hospital.",words:["supermarket","opposite","market","next to"]},
+  {prompt:"完成指路句子:",template:"___ left at the ___. Go ___ on.",words:["Turn","bridge","straight"]}
+],
+express:{prompt:"用以下 4 个核心词给别人指路（用 turn left/right 和介词）：",words:["supermarket","park","bridge","turn left"]}
+},
+
+{title:"乡村与户外",grammar:"There is a river. / There are many trees. / The countryside is quieter than the city.<br><small>There be 复习 + 形容词描述 + 比较级</small>",grammarLabel:"There be 复习 + 形容词比较级",
+coreWords:[["countryside","乡村"],["farm","农场"],["forest","森林"],["river","河流"],["hill","小山"],["picnic","野餐"],["hike","远足"],["quiet","安静的"],["fresh air","新鲜空气"],["view","景色"]],
+sentences:[
+  {en:"There is a beautiful <b>river</b> near the <b>farm</b>. The <b>view</b> is amazing.",cn:"农场附近有一条美丽的河流。景色太棒了。"},
+  {en:"There are many trees in the <b>forest</b>. It is <b>quieter</b> than the city.",cn:"森林里有很多树。比城市安静得多。"},
+  {en:"The <b>countryside</b> is <b>quieter</b> and <b>cleaner</b> than the city.",cn:"乡村比城市更安静、更干净。"},
+  {en:"Let's have a <b>picnic</b> on the <b>hill</b>. The <b>fresh air</b> feels great!",cn:"我们在小山上野餐吧。新鲜空气感觉真好！"},
+  {en:"We can <b>hike</b> up the <b>hill</b> and see the <b>view</b> from the top.",cn:"我们可以爬上山，从山顶看风景。"}
+],
+practice:[
+  {prompt:"用 There is / There are 填入:",template:"___ ___ a ___ near the farm. ___ ___ many trees.",words:["There","is","river","There","are"]},
+  {prompt:"用比较级填入:",template:"The ___ is ___（安静） than the city. The ___ ___（新鲜空气） feels ___（好）. ",words:["countryside","quieter","fresh air","better"]}
+],
+express:{prompt:"用以下 4 个核心词描述乡村（用 There be 和比较级）：",words:["countryside","forest","river","quiet"]}
+},
+
+{title:"天气与气候",grammar:"It is sunny today. / Yesterday it was cloudy. / Summer is hotter than spring.<br><small>一般现在时描述天气 + 比较级 + 时间状语</small>",grammarLabel:"一般现在时②：天气描述 + 比较级 + 时间状语",
+coreWords:[["weather","天气"],["sunny","晴朗的"],["rainy","下雨的"],["cloudy","多云的"],["windy","有风的"],["storm","暴风雨"],["rain","雨"],["snow","雪"],["cool","凉爽的"],["freezing","极冷的"]],
+sentences:[
+  {en:"The <b>weather</b> today is <b>sunny</b> and <b>cool</b>. It's a perfect day.",cn:"今天天气晴朗又凉爽。真是完美的一天。"},
+  {en:"Yesterday it was <b>rainy</b> and <b>windy</b>. There was a heavy <b>rain</b>.",cn:"昨天下雨又有风。下了一场大雨。"},
+  {en:"Today is <b>cooler</b> than yesterday. The <b>windy</b> weather makes it feel cold.",cn:"今天比昨天凉快。刮风的天气让人感觉冷。"},
+  {en:"In winter, it often <b>snows</b>. The <b>weather</b> can be <b>freezing</b>.",cn:"冬天经常下雪。天气可能极冷。"},
+  {en:"A <b>storm</b> is coming. The sky is <b>cloudy</b> and dark. Stay inside!",cn:"暴风雨要来了。天空多云又暗。待在家里！"}
+],
+practice:[
+  {prompt:"用天气形容词填入:",template:"Today is ___ and ___. Yesterday was ___ and ___.",words:["sunny","cool","rainy","windy"]},
+  {prompt:"用比较级填入:",template:"Today is ___（更热） than yesterday. Winter is ___（更冷） than autumn.",words:["hotter","colder"]}
+],
+express:{prompt:"用以下 4 个核心词描述今天的天气并和昨天比较（用比较级）：",words:["weather","sunny","cloudy","cool"]}
+},
+
+{title:"季节与月份",grammar:"In spring, flowers bloom. / I always go swimming in July. / On Monday, I have art.<br><small>时间介词 in / on / at + 频率副词 always / usually / sometimes / never</small>",grammarLabel:"时间介词 + 频率副词：in / on / at + always / usually / sometimes / never",
+coreWords:[["spring","春天"],["summer","夏天"],["autumn","秋天"],["winter","冬天"],["January","一月"],["July","七月"],["December","十二月"],["season","季节"],["month","月"],["holiday","假期"]],
+sentences:[
+  {en:"<b>In</b> <b>spring</b>, I <b>always</b> go to the park. The flowers are beautiful.",cn:"在春天，我总是去公园。花很美。"},
+  {en:"<b>In</b> <b>summer</b>, it is hot in <b>July</b>. We <b>usually</b> go swimming.",cn:"在夏天，七月很热。我们通常去游泳。"},
+  {en:"<b>In</b> <b>autumn</b>, I <b>sometimes</b> walk in the forest. The leaves are golden.",cn:"在秋天，我有时在森林里散步。树叶是金色的。"},
+  {en:"<b>In</b> <b>winter</b>, <b>in</b> <b>December</b>, we <b>always</b> have a big family dinner.",cn:"在冬天，十二月，我们总是有一顿丰盛的家庭晚餐。"},
+  {en:"My favourite <b>season</b> is <b>summer</b> because we have a long <b>holiday</b>.",cn:"我最喜欢的季节是夏天，因为我们有长假。"}
+],
+practice:[
+  {prompt:"用 in / on / at 填入:",template:"___ spring, flowers bloom. ___ July, it is hot. ___ Monday, I have PE.",words:["In","In","On"]},
+  {prompt:"用频率副词填入:",template:"I ___（总是） go swimming ___（在） summer. I ___（从不） swim in ___（冬天）. ",words:["always","in","never","winter"]}
+],
+express:{prompt:"用以下 4 个核心词说说你最喜欢的季节（用 in + 季节 和频率副词）：",words:["spring","summer","season","holiday"]}
+},
+
+{title:"动物",grammar:"A dog has four legs. / Dogs can run fast. / A fish can't fly.<br><small>一般现在时（三单 + does/doesn't）+ 名词复数不规则 + can/can't</small>",grammarLabel:"一般现在时③：三单 + 名词复数不规则 + can/can't",
+coreWords:[["animal","动物"],["dog","狗"],["cat","猫"],["bird","鸟"],["horse","马"],["rabbit","兔子"],["lion","狮子"],["elephant","大象"],["monkey","猴子"],["snake","蛇"]],
+sentences:[
+  {en:"A <b>dog</b> <b>has</b> four legs. <b>Dogs</b> <b>can</b> run very fast.",cn:"狗有四条腿。狗能跑得非常快。"},
+  {en:"A <b>cat</b> <b>doesn't</b> like water. <b>Cats</b> <b>can</b> climb trees.",cn:"猫不喜欢水。猫能爬树。"},
+  {en:"An <b>elephant</b> <b>eats</b> plants. It <b>can't</b> jump but it <b>can</b> swim.",cn:"大象吃植物。它不能跳但能游泳。"},
+  {en:"A <b>lion</b> <b>lives</b> in Africa. <b>Lions</b> are wild <b>animals</b>.",cn:"狮子生活在非洲。狮子是野生动物。"},
+  {en:"A <b>bird</b> <b>has</b> wings. It <b>can</b> fly. A <b>snake</b> <b>doesn't</b> have legs.",cn:"鸟有翅膀。它能飞。蛇没有腿。"}
+],
+practice:[
+  {prompt:"用三单形式（-s / doesn't）填入:",template:"A dog ___（has） four legs. A snake ___（doesn't have） legs.",words:["has","doesn't have"]},
+  {prompt:"用 can/can't 填入:",template:"A bird ___ fly. An elephant ___ jump. ___ a monkey climb trees?",words:["can","can't","Can"]}
+],
+express:{prompt:"用以下 4 个核心词描述动物（用三单 + can/can't）：",words:["dog","bird","lion","elephant"]}
+},
+
+{title:"宠物与动物护理",grammar:"You should feed the dog. / You must clean the cage. / Take care of your pet.<br><small>should / must + 短语动词（look after / take care of / clean out）</small>",grammarLabel:"情态动词②：should / must + 短语动词",
+coreWords:[["feed","喂"],["walk the dog","遛狗"],["vet","兽医"],["look after","照顾"],["cage","笼子"],["brush","刷"],["love","爱"],["responsible","负责的"],["companion","伙伴"],["toy","玩具"]],
+sentences:[
+  {en:"You <b>should</b> <b>feed</b> your pet every day. A <b>responsible</b> owner does this.",cn:"你应该每天喂你的宠物。一个负责任的主人是这样做的。"},
+  {en:"You <b>must</b> <b>walk the dog</b> twice a day. It needs exercise.",cn:"你必须每天遛狗两次。它需要运动。"},
+  {en:"We <b>should</b> <b>look after</b> our pets. They are our <b>companions</b>.",cn:"我们应该照顾好我们的宠物。它们是我们的伙伴。"},
+  {en:"You <b>must</b> clean the <b>cage</b> every week and <b>brush</b> your pet's fur.",cn:"你必须每周清理笼子并刷宠物的毛。"},
+  {en:"If your pet is sick, you <b>must</b> take it to the <b>vet</b>. The pet needs <b>love</b>.",cn:"如果你的宠物生病了，你必须带它去看兽医。宠物需要爱。"}
+],
+practice:[
+  {prompt:"用 should / must 填入:",template:"You ___ feed your pet. You ___ clean the ___.",words:["should","must","cage"]},
+  {prompt:"用短语动词填入:",template:"You must ___ ___（look after） your pet. Don't forget to ___ ___ ___（walk the dog）. ",words:["look","after","walk","the","dog"]}
+],
+express:{prompt:"用以下 4 个核心词说说如何照顾宠物（用 should/must）：",words:["feed","walk the dog","look after","vet"]}
+},
+
+{title:"健康与身体",grammar:"I have got a headache. / She has got long hair. / He feels tired.<br><small>一般现在时 + 形容词描述 + have/has got 表示拥有</small>",grammarLabel:"一般现在时④ + have/has got：拥有与描述",
+coreWords:[["body","身体"],["head","头"],["hand","手"],["leg","腿"],["healthy","健康的"],["diet","饮食"],["exercise","锻炼"],["sleep","睡觉"],["feel","感觉"],["heart","心脏"]],
+sentences:[
+  {en:"I <b>have got</b> a strong <b>body</b>. I <b>feel</b> <b>healthy</b> every day.",cn:"我有一个强壮的身体。我每天都感觉很健康。"},
+  {en:"She <b>has got</b> a sore <b>head</b>. She needs to rest and <b>sleep</b>.",cn:"她头痛。她需要休息和睡觉。"},
+  {en:"You <b>have got</b> strong <b>legs</b> from running. Your <b>heart</b> is <b>healthy</b>.",cn:"你跑步练就了强壮的腿。你的心脏很健康。"},
+  {en:"A good <b>diet</b> and regular <b>exercise</b> keep your <b>body</b> strong.",cn:"良好的饮食和规律的锻炼让你的身体强壮。"},
+  {en:"I <b>have got</b> two <b>hands</b>. I use them to write, draw and <b>feel</b> things.",cn:"我有两只手。我用它们来写字、画画和感受事物。"}
+],
+practice:[
+  {prompt:"用 have/has got 填入:",template:"I ___ ___（have got） a healthy ___. She ___ ___（has got） a sore ___.",words:["have","got","body","has","got","head"]},
+  {prompt:"填入合适的词:",template:"A good ___ and ___（锻炼） keep you ___. ___（睡觉） well every night.",words:["diet","exercise","healthy","Sleep"]}
+],
+express:{prompt:"用以下 4 个核心词描述你的身体状况和健康习惯（用 have/has got）：",words:["body","healthy","exercise","feel"]}
+}];
+
+// ==================== RENDER ====================
+var curTopic = 0;
+
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function renderTopicBar(){
+  var h = '';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic-1+DATA.length)%DATA.length+')" title="上一课">←</button>';
+  h += '<select onchange="pickTopic(parseInt(this.value))">';
+  for(var i=0;i<DATA.length;i++){
+    h += '<option value="'+i+'"'+(i===curTopic?' selected':'')+'>'+(i+1)+'. '+esc(DATA[i].title)+'</option>';
+  }
+  h += '</select>';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic+1)%DATA.length+')" title="下一课">→</button>';
+  h += '<div class="progress" style="display:none"></div>';
+  document.getElementById('topicBar').innerHTML = h;
+}
+
+function pickTopic(i){
+  curTopic = i;
+  renderTopicBar();
+  renderTopic();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window._testMode) startTest();
+}
+
+function renderTopic(){
+  var t = DATA[curTopic];
+  document.getElementById('topicTitle').textContent = (curTopic+1)+'. '+t.title;
+
+  var h = '';
+
+  // Section 1: Core Words
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🧠 核心词汇（10个）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">📖 '+t.grammarLabel+'</div>';
+  h += '<div class="word-grid">';
+  t.coreWords.forEach(function(w){
+    h += '<div class="word-chip"><button class="spk" data-w="'+esc(w[0])+'">🔊</button><span class="en">'+esc(w[0])+'</span><span class="cn">'+esc(w[1])+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 2: Grammar Sentences
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>📝 语法例句（5句）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">'+t.grammar+'</div><div class="sentence-list">';
+  t.sentences.forEach(function(s){
+    h += '<div class="sent">'+s.en+'<span class="cn">'+esc(s.cn)+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 3: Sentence Practice
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>✏️ 造句练习</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  t.practice.forEach(function(p,pIdx){
+    h += '<div class="practice-item" id="practice-'+pIdx+'">';
+    h += '<div class="prompt">'+esc(p.prompt)+'</div>';
+    var parts = p.template.split('___');
+    var blanks = '<span class="blanks">';
+    for(var pi=0; pi<parts.length; pi++){
+      blanks += esc(parts[pi]);
+      if(pi < parts.length-1){
+        blanks += '<span class="gap" id="gap-'+pIdx+'-'+pi+'" onclick="fillGap('+pIdx+','+pi+')">______</span>';
+      }
+    }
+    blanks += '</span>';
+    h += blanks;
+    h += '<div class="choices" id="choices-'+pIdx+'">';
+    p.words.forEach(function(w){
+      h += '<button id="btn-'+pIdx+'-'+esc(w)+'" onclick="pickWord('+pIdx+',\''+esc(w)+'\')">'+esc(w)+'</button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div></div>';
+
+  // Section 4: Expression Challenge
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🗣️ 表达挑战</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="express-box">';
+  h += '<div class="prompt">'+esc(t.express.prompt)+'</div>';
+  h += '<div class="words-hint">可用词汇：<b>'+t.express.words.map(esc).join(' &nbsp;·&nbsp; ')+'</b></div>';
+  h += '</div></div></div>';
+
+  // Section 5: Flashcard Test
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🎯 闪卡测试（10词）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div id="testArea"><button onclick="startTest()" style="padding:10px 24px;border-radius:20px;border:none;background:#1a6b5a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">开始测试</button></div></div></div>';
+
+  document.getElementById('main').innerHTML = h;
+
+  // Rebind speak buttons
+  document.querySelectorAll('.spk').forEach(function(b){
+    b.addEventListener('click',function(e){
+      e.stopPropagation();e.preventDefault();
+      var w = this.getAttribute('data-w');
+      if(!w||!window.speechSynthesis)return;
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+      speechSynthesis.speak(u);
+    });
+  });
+}
+
+// ==================== SENTENCE PRACTICE ====================
+function fillGap(pIdx,gIdx){
+  var gap = document.getElementById('gap-'+pIdx+'-'+gIdx);
+  if(!gap||gap.classList.contains('filled'))return;
+}
+
+function pickWord(pIdx,word){
+  var key = pIdx+'-'+word;
+  var btn = document.getElementById('btn-'+key);
+  if(!btn||btn.classList.contains('used'))return;
+
+  var gaps = document.querySelectorAll('[id^="gap-'+pIdx+'-"]');
+  for(var g=0;g<gaps.length;g++){
+    if(!gaps[g].classList.contains('filled')){
+      gaps[g].textContent = word;
+      gaps[g].classList.add('filled');
+      btn.classList.add('used');
+      break;
+    }
+  }
+
+  var allFilled = true;
+  for(var g2=0;g2<gaps.length;g2++){
+    if(!gaps[g2].classList.contains('filled')){allFilled=false;break;}
+  }
+  if(allFilled){
+    var practiceBox = document.getElementById('practice-'+pIdx);
+    if(practiceBox) practiceBox.style.borderColor = '#16a34a';
+  }
+}
+
+// ==================== FLASHCARD TEST ====================
+window._testMode = false;
+var tw=[],ti=0,tok=0,tfail=0,shown=false;
+
+function startTest(){
+  window._testMode = true;
+  tw = DATA[curTopic].coreWords.slice();
+  tw.sort(function(){return Math.random()-0.5});
+  ti=0;tok=0;tfail=0;shown=false;
+  updateTestStats();
+  showCard();
+}
+
+function updateTestStats(){
+  var done = tok+tfail, rem = tw.length-ti;
+  var total = tok+tfail+rem;
+  var h = '<div class="test-stats">';
+  h += '<div class="st"><div class="n">'+rem+'</div><div class="l">剩余</div></div>';
+  h += '<div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓</div></div>';
+  h += '<div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗</div></div>';
+  h += '<div class="st"><div class="n">'+(done?Math.round(done/total*100):0)+'%</div><div class="l">进度</div></div>';
+  h += '</div><div id="cardArea"></div><div class="test-btns" id="testBtns"></div>';
+  document.getElementById('testArea').innerHTML = h;
+}
+
+function showCard(){
+  if(ti>=tw.length){
+    var rate = (tok+tfail)?Math.round(tok/(tok+tfail)*100):0;
+    document.getElementById('cardArea').innerHTML = '<div class="stats-done"><div class="emoji">'+(rate>=80?'🎉':rate>=50?'💪':'📖')+'</div><h3>完成！</h3><div class="rate" style="color:'+(rate>=60?'#16a34a':'#dc2626')+'">'+rate+'%</div><p style="color:#888">正确 '+tok+' / 错误 '+tfail+'</p><button onclick="startTest()" style="margin-top:8px;padding:8px 24px;border-radius:16px;border:none;background:#1a6b5a;color:#fff;font-size:13px;cursor:pointer;font-family:inherit">🔄 再来一轮</button></div>';
+    document.getElementById('testBtns').innerHTML = '';
+    return;
+  }
+  var w = tw[ti];shown=false;
+  document.getElementById('cardArea').innerHTML = '<div class="fc" id="fc" onclick="reveal()"><button class="fc-spk" data-w="'+esc(w[0])+'" onclick="event.stopPropagation();speakWord(\''+esc(w[0])+'\')">🔊</button><div class="ew">'+esc(w[0])+'</div><div class="cn-hidden" id="cnHidden">'+esc(w[1])+'</div><div class="tap">👆 点击查看中文</div></div>';
+  document.getElementById('testBtns').innerHTML = '<button class="btn-no" onclick="mark(false)">不认识</button><button class="btn-yes" onclick="mark(true)">认识</button>';
+}
+
+function reveal(){
+  if(shown)return;shown=true;
+  var cn = document.getElementById('cnHidden');
+  if(cn)cn.style.display='block';
+  var fc = document.getElementById('fc');
+  if(fc)fc.classList.add('reveal');
+}
+
+function mark(ok){
+  if(!shown){reveal();return;}
+  if(ok)tok++;else tfail++;
+  ti++;
+  updateTestStats();
+  showCard();
+}
+
+function speakWord(w){
+  if(!w||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+  speechSynthesis.speak(u);
+}
+
+// ==================== INIT ====================
+renderTopicBar();
+renderTopic();
+</script>
+</body>
+</html>
