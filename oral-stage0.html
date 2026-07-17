@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<title>口语单词 · 阶段0 破冰搭建期 — Jerry英语</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;background:#f8f7f4;color:#1a1a1a;padding-bottom:40px}
+.top{background:#1a1a1a;color:#fff;padding:12px 14px;position:sticky;top:0;z-index:20;text-align:center}
+.top .brand{font-size:10px;letter-spacing:3px;color:#b8860b}
+.top h1{font-size:16px;margin:3px 0;font-weight:600}
+.top .info{font-size:10px;opacity:.5}
+.top .bar{display:flex;gap:8px;justify-content:center;margin-top:8px}
+.top .bar button{padding:7px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:12px;cursor:pointer}
+.top .bar button.on{background:#fff;color:#1a1a1a;font-weight:700}
+.tabs-wrap{position:sticky;top:86px;z-index:10;background:#fff;border-bottom:1px solid #e5e0d8;padding:8px 10px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex-shrink:0;padding:5px 10px;border-radius:12px;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;white-space:nowrap;color:#555}
+.tabs button.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.main{max-width:760px;margin:0 auto;padding:10px}
+.block{background:#fff;border-radius:10px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.block .hd{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;border-bottom:1px solid #eee;user-select:none}
+.block .hd h3{font-size:14px}
+.block .hd .badge{font-size:10px;color:#888}
+.block .bd{display:none}
+.block.open .bd{display:block}
+.line{display:flex;align-items:center;padding:6px 14px;gap:8px;border-bottom:1px solid #f5f5f5}
+.line:last-child{border-bottom:none}
+.line .spk{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:14px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.line .spk:active{background:#b8860b}
+.line .en{flex:1;font-size:13px;font-weight:600}
+.line .ps{font-size:10px;color:#888;width:36px;text-align:center}
+.line .lv{font-size:9px;color:#aaa;width:30px;text-align:center}
+.hide{display:none!important}
+.tsel{text-align:center;margin:10px 0}
+.tsel select{padding:7px 14px;border-radius:8px;border:1px solid #ddd;font-size:13px;background:#fff;max-width:100%}
+.stats{display:flex;gap:6px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.stats .st{background:#fff;padding:8px 10px;border-radius:8px;text-align:center;min-width:55px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.stats .st .n{font-size:18px;font-weight:700;color:#2563eb}
+.stats .st .l{font-size:10px;color:#888}
+.fc{background:#fff;border-radius:14px;padding:36px 18px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.04);cursor:pointer;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;-webkit-tap-highlight-color:transparent}
+.fc .hint{position:absolute;top:10px;font-size:10px;color:#ccc}
+.fc .ew{font-size:28px;font-weight:700;margin:8px 0}
+.fc .ps{font-size:11px;color:#888;margin-bottom:6px}
+.fc .lv{font-size:10px;color:#aaa;display:none;margin:8px 0}
+.fc .lv.on{display:block}
+.fc .sbtn{width:40px;height:40px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:18px;cursor:pointer;margin:6px auto;display:flex;align-items:center;justify-content:center}
+.fc .sbtn:active{background:#b8860b;border-color:#b8860b}
+.fc .tap{font-size:10px;color:#ddd;margin-top:6px}
+.btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.btns button{flex:1;max-width:120px;padding:10px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer}
+.btns .no{background:#fee2e2;color:#dc2626}
+.btns .no:active{background:#fecaca}
+.btns .mid{background:#f0f0f0;color:#555;max-width:60px}
+.btns .yes{background:#dcfce7;color:#16a34a}
+.btns .yes:active{background:#bbf7d0}
+.done{text-align:center;padding:30px}
+.done .emoji{font-size:40px}
+.done h3{margin:10px 0}
+.done .rate{font-size:24px;font-weight:700}
+.done button{margin-top:12px;padding:8px 24px;border-radius:16px;border:none;background:#2563eb;color:#fff;font-size:13px;cursor:pointer}
+@media(max-width:480px){
+  .top{padding:10px 10px}.top h1{font-size:14px}
+  .fc .ew{font-size:24px}
+  .line .en{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">Jerry英语 · 口语单词</div>
+  <h1>阶段0 破冰搭建期</h1>
+  <div class="info">15个话题 · 508词 · A1 · 句子成分→名词冠词→代词限定词 · 15话题 · 全部背诵</div>
+  <div class="bar">
+    <button id="btn-list" class="on" onclick="switchMode('list')">📋 单词列表</button>
+    <button id="btn-test" onclick="switchMode('test')">🎯 测试模式</button>
+  </div>
+</div>
+
+<div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
+<div class="main" id="main"></div>
+
+<script>
+var DATA=[{"title":"自我介绍","words":[["age","n. A1, v.","年龄、老年、时代"],["family","n., adj.","家庭、亲属；家族；语系；科；适合家庭的"],["friend","n.","朋友、友人"],["hobby","n.","业余爱好"],["name","n., v.","名字、名声；取名、提名、列举"],["student","n.","学生、大学生、研究者"],["teacher","n.","教师"],["advantage","n.","好处、有利因素、优势"],["agency","n.","代理处、机构"],["agenda","n.","B2"],["agent","n.","代理人、经纪人"],["alive","adj.","活着的、活跃的"],["average","adj., n. A2, v.","平均数、平均的"],["boyfriend","n.","男友"],["courage","n.","勇气、胆量"],["damage","n., v.","毁坏、损害"],["deliver","v.","投递、发表、给予、解救"],["delivery","n.","投递、邮件、发送的货物"],["disadvantage","n.","不利条件、损失"],["dislike","v., n.","不喜欢、厌恶"],["encourage","v.","鼓励、激励、怂恿；促进、助长、激发"],["end","n., v.","末尾、尽头、终止、结果；结束、终止"],["engage","v.","吸引、占用；聘、使订婚；从事于"],["engaged","adj.","忙着、占线、订婚"],["friendly","adj.","友好的、友谊的"],["friendship","n.","友谊、友好"],["garage","n.","车库、汽车修理行"],["garbage","n.","垃圾、废话、无用（不正确）的资料"],["girlfriend","n.","女朋友、情人"],["image","n.","形象、声誉、印象、图像"],["a,","an indefinite article","A1"],["bent","adj.","弯曲的、驼背的"],["boil","v.","沸腾、激动"],["bomb","n., v.","炸弹、轰炸"],["boy","n.","男孩"],["buy","v.","买、收买、购买"],["bye","exclam.","再见"],["cafe","n.","A1"],["CD","n.","光盘"],["chef","n.","A2"]]},{"title":"我的家庭","words":[["big","adj.","大的、重要的"],["brother","n.","兄弟"],["father","n.","父亲、祖先、创始人、神父"],["happy","adj.","快乐的、幸福的、乐意的、令人满意的"],["love","n., v.","爱、爱情；爱、热爱、喜欢、爱好"],["mother","n.","母亲、妈妈"],["sister","n.","姐、妹"],["small","adj.","小的、少的、不重要的"],["app","n.","A2"],["behave","v.","表现，表现得体、有礼貌"],["glove","n.","手套"],["grandfather","n.","祖父、外祖父"],["grandmother","n.","祖母、外祖母"],["mall","n.","购物中心"],["unhappy","adj.","不快的、不幸的"],["beloved","adj.","心爱的，钟爱的"],["basis","n.","基础、根据"],["bath","n.","洗澡、浴缸"],["exist","v.","存在、生存"],["female","adj., n.","雌的、女性的；雌性动物、女性"],["male","adj., n.","男性的、雄的；男子、雄性"],["register","v., n.","登记、注册、表示、挂号"],["shape","n. A2, v.","外形、状况；形成、决定…的进程"],["slave","n.","B1"],["steep","adj.","陡的、过高的、急剧的"],["cave","n.","洞穴"],["foster","v.","培养；收养；促进"],["racist","adj., n.","种族主义的；种族主义者"],["shaped","adj.","成某种形状的"],["smash","v.","粉碎；猛撞"],["spokesman","n.","发言人"],["twist","v., n.","扭转；扭曲；意外转折"],["weave","v.","编织；编造"]]},{"title":"我的房间","words":[["bed","n.","床、底部"],["chair","n. A1, v.","椅子、主席"],["clean","adj., v.","干净的、熟练的；把……弄干净"],["desk","n.","书桌、办公桌、写字台"],["door","n.","门、出入口"],["floor","n.","地面、楼层；发言权；底部、底线"],["room","n.","房间、室、空间、地方、余地"],["wall","n.","墙、壁、围墙"],["window","n.","窗户、窗口"],["air","n.","空气、神情、乘飞机"],["bathroom","n.","浴室、盥洗室、卫生间"],["bedroom","n.","卧室"],["chairman","n.","B2"],["classroom","n.","教室、课堂"],["hair","n.","头发、毛发"],["indoor","adj.","在室内"],["indoors","adv.","在屋里"],["lean","v.","倾斜、倚靠"],["outdoor","adj.","户外的、野外的"],["outdoors","adv.","户外、露天"],["win","v. A1, n.","获胜、赢"],["desktop","n.","桌面；台式电脑"],["embed","v.","嵌入；使深留脑中"],["swallow","v.","吞咽；吞没"],["aircraft","n.","飞行器"],["bean","n.","A2"],["blind","adj.","失明的、盲目的"],["clerk","n.","职员，店员"],["float","v.","浮动、漂流、飘动"],["jeans","n.","工装裤、牛仔裤"],["leaf","n.","叶、叶子；张、页；薄金属片"],["muscle","n.","肌肉、体力；力量、实力"],["ocean","n.","洋、海洋；大量、许多"],["uncle","n.","伯父、叔父、舅父、姨夫、姑父"],["bind","v.","捆绑；约束"],["boom","n.","繁荣；隆隆声"],["chaos","n.","混乱，混沌"],["clerk","n.","职员，店员"],["dairy","n., adj.","乳制品；乳品的"],["hail","v.","向……欢呼；下冰雹"]]},{"title":"我的一天","words":[["afternoon","n.","下午"],["breakfast","n.","早餐"],["dinner","n.","正餐、宴会"],["evening","n.","傍晚、晚上"],["home","n., adv. A1, adj.","家、原产地；回家"],["lunch","n.","午餐"],["morning","n.","早晨、上午"],["school","n.","学校、学院、上学、学业、学派"],["time","n. A1, v.","时间、时光、光阴，次、回，倍、乘，时期、时代"],["break","v., n.","休息、打破、弄坏"],["fast","adj., adv.","快的、快速地"],["homework","n.","家庭作业、准备工作"],["inner","adj.","内部的、里面的、内心的"],["sometimes","adv.","有时、间或"],["full-time","adj./adv.","全职的；全日制地"],["homeland","n.","祖国，家园"],["homeless","adj.","无家可归的"],["lifetime","n.","一生，终生"],["long-time","adj.","长期的"],["meantime","n.","其间"],["noon","n.","中午，正午"],["part-time","adj./adv.","兼职的；部分时间地"],["sentiment","n.","感情；情绪；观点"],["sometime","adv.","某个时候；改天"],["timely","adj.","及时的；适时的"],["breast","n.","胸部、乳房"],["bunch","n.","束、群"],["coast","n.","海岸、海滨"],["eastern","adj.","东方的、东部的"],["fifteen","number","A1"],["inch","n.","英寸、少量、短距离"],["including","prep.","包括、包含"],["kilometer","n.","A2"],["launch","v., n.","发动、推出、发射；发射、下水、投产"],["lung","n.","B2"],["moon","n.","月球、月亮、卫星"],["owner","n.","物主、所有人"],["senior","adj.","地位高的、年长的；年长者、毕业班学生"],["seven","number","A1"],["shoot","v.","拍摄；嫩芽"]]},{"title":"我最好的朋友","words":[["clever","adj.","聪明的、机灵的、灵巧的、精巧的"],["eye","n.","眼睛、视力、眼力"],["funny","adj.","滑稽的、有趣的、稀奇的、稍感不适的"],["help","v., n.","帮助、有助于、救命"],["kind","(type) n.","种类；亲切的、和蔼的、仁慈的"],["kind","(caring) adj.","种类；亲切的、和蔼的、仁慈的"],["short","adj.","短的、矮的、缺乏"],["smile","v., n.","微笑、露出笑容"],["tall","adj.","高的、难以置信的、难以办成的"],["fun","n. A1, adj.","有趣的事、乐趣；有趣的、令人愉快的"],["helpful","adj.","有益的、给予帮助的、肯帮忙的"],["install","v.","任命、使就职；安装、设置；安顿、安置"],["mile","n.","英里"],["totally","adv.","完全、整个地"],["accidentally","adv.","意外地，偶然地"],["fundamentally","adv.","根本上"],["installation","n.","安装；装置"],["shortage","n.","不足；短缺"],["shortly","adv.","不久；简短地"],["short-term","adj.","短期的"],["stall","n.","货摊；畜栏；熄火"],["file","n. B1, v.","档案、文件夹"],["hell","n.","地狱、苦境、该死"],["pile","n., v.","B2"],["skin","n.","皮肤、毛皮、外皮、外壳"],["sort","n. A2, v.","种类、类别、某一种人；分类、整理"],["toilet","n.","厕所、盥洗室"],["brutal","adj.","残忍的，野蛮的"],["dilemma","n.","困境，进退两难"],["exile","n.","流放；流亡"],["fragile","adj.","脆弱的；易碎的"],["helmet","n.","头盔"]]},{"title":"我的学习用品","words":[["bag","n.","袋、行李箱、手袋"],["book","n. A1, v.","书报杂志、本子、簿册；预定"],["box","n.","盒子、箱子"],["dictionary","n.","词典、字典"],["pen","n.","钢笔、圆珠笔"],["pencil","n.","铅笔"],["watch","v., n.","观看、看守、照看、小心；表、看管"],["notebook","n.","笔记本；笔记本电脑"],["depend","v.","A2"],["expense","n.","价钱、花费、费"],["expensive","adj.","昂贵的、花钱多的"],["happen","v.","发生；碰巧、恰好"],["independent","adj.","独立的、自主的、中立的、无关的"],["note","n. A1, v.","便条、笔记、音符、钞票；注意、记录"],["open","adj., v.","开的、开放的、公开的；开、开始、开放"],["opening","n.","开端、空缺；开盘；好机会"],["penny","n.","便士、分"],["rule","n. A1, v.","规则、惯例、统治；统治、裁决"],["spend","v.","用钱、花时间、度过、消磨"],["spending","n.","用钱、花时间、度过、消磨"],["booking","n.","预订，预约"],["compensate","v.","补偿，赔偿"],["compensation","n.","补偿，赔偿金"],["dependence","n.","依赖；依靠"],["dependent","adj.","依赖的；取决于……的"],["era","n.","时代，纪元"],["expenditure","n.","支出，花费"],["independence","n.","独立；自主"],["openly","adv.","公开地；坦率地"],["penalty","n.","惩罚；点球；罚款"],["base","n., v.","底部、根基"],["based","adj.","底部、根基"],["boot","n.","靴子、后备箱"],["catch","v. A2, n.","抓住、发觉、感染、赶上、引起、领会"],["council","n.","委员会、理事会"],["diary","n.","日记"],["function","n. B1, v.","功能、重大聚会、函数；运行、起作用"],["notion","n.","B2"],["OK","exclam., adj./adv.","A1"],["truly","adv.","真正的、忠实地"]]},{"title":"逛超市买食物","words":[["apple","n.","苹果"],["banana","n.","A1"],["bread","n.","面包、生计、谋生之道"],["cheese","n.","乳酪、干酪"],["egg","n.","蛋、卵"],["meat","n.","A1"],["milk","n.","牛奶"],["rice","n.","稻、米、米饭"],["water","n. A1, v.","B1"],["ban","v., n.","禁止"],["eat","v.","吃、吃东西"],["fishing","n.","钓鱼、捕鱼、渔业"],["ice","n.","冰、冰块"],["ice","cream n.","冰、冰块"],["price","n. A1, v.","价格、价钱、代价"],["read","v.","读、理解、读数为、读到、写明"],["ad","n.","B1"],["bank","(money) n.","银行、堤岸"],["bank","(river) n.","银行、堤岸"],["dish","n.","碟、盘"],["heel","n.","脚后跟、后跟"],["juice","n.","汁、液"],["meal","n.","一顿饭、吃饭"],["sheep","n.","绵羊"],["sheet","n.","被单、薄板、一片、一张"],["silk","n.","丝、绸"],["sweater","n.","针织套衫、羊毛套衫"],["threat","n.","威胁、恐吓、凶兆、征兆"],["urban","adj.","城市的"],["wheel","n.","轮、车轮"],["applaud","v.","鼓掌；称赞"],["cater","v.","提供饮食；迎合"],["cheek","n.","脸颊"],["cheer","v., n.","欢呼；使振奋"],["fabric","n.","织物；结构"],["sheer","adj.","纯粹的；陡峭的"],["suburban","adj.","郊区的；平淡无奇的"],["thread","n.","线；线索；思路"]]},{"title":"动物园一日游","words":[["animal","n.","动物"],["bear","(deal with) v.","熊、携带、承担、负担、忍受、经得起"],["bear","(animal) n.","熊、携带、承担、负担、忍受、经得起"],["bird","n.","A1"],["elephant","n.","A1"],["horse","n.","A1"],["lion","n.","A1"],["monkey","n.","A2"],["snake","n.","快餐、小吃、点心"],["billion","number","A2"],["ear","n.","耳朵、听力、听觉"],["key","n., adj. A1, v.","钥匙、关键、键、答案；主要的"],["million","number","A1"],["monk","n.","僧侣，修道士"],["rebellion","n.","叛乱；反抗"],["trillion","number","万亿"],["bake","v.","烤、烤硬"],["cake","n.","饼、糕、蛋糕"],["lake","n.","A2"],["lemon","n.","柠檬、柠檬黄、淡黄色"],["pants","n.","长裤、便库、内裤"],["shake","v. A2, n.","摇动、摇、震动、颤抖"],["beam","n.","梁；光束"],["blanket","n.","毛毯，毯子"],["demon","n.","恶魔；魔鬼"],["elegant","adj.","优雅的，高雅的"],["gear","n.","齿轮；档位；装备"],["minimal","adj.","最小的；最低限度的"],["monopoly","n.","垄断；专卖"],["naked","adj.","裸体的；无遮蔽的"],["sake","n.","缘故；理由"],["snap","v.","突然折断；快照；厉声说"],["weird","adj.","怪异的；不可思议的"]]},{"title":"我的衣柜","words":[["clothes","n.","衣服、服装"],["coat","n.","上衣、外套"],["dress","n., v.","连衣裙、衣服、穿衣服"],["hat","n.","帽子"],["jacket","n.","短上衣、夹克衫"],["shirt","n.","衬衫"],["shoe","n.","A1"],["sock","n.","短袜"],["uniform","n.","制服；全都相同的、一律的、清一色的"],["wear","v.","穿着、穿破"],["address","n. A1, v.","地址、演说"],["chat","v., n.","闲谈、聊天"],["cloth","n.","布、衣料、抹布、桌布"],["dressed","adj.","穿戴、穿着"],["form","n., v.","形式、外形、表格；形成、产生"],["hate","v. A1, n.","憎恨、不喜欢、不愿；厌恶、憎恨"],["lot","pron., det., adv.","A1"],["somewhat","adv.","稍微、有点儿"],["swear","v.","诅咒、咒骂、宣誓、发誓"],["T-shirt","n.","A1"],["underwear","n.","衬衣、内衣"],["whatever","det./pron.","无论什么、不管怎样"],["hatred","n,","仇恨，憎恨"],["shatter","v.","粉碎；使震惊"],["whatsoever","adv.","任何，无论什么；丝毫（用于强调否定句）"],["boat","n.","小船"],["dirt","n.","尘、土、污垢"],["dirty","adj.","肮脏的、下流的、卑鄙的"],["hi","exclam.","A1"],["junior","adj.","年少的、资历浅的；晚辈、年少者"],["knock","v. A2, n.","敲、打、碰撞、撞击"],["pilot","n.","飞行员"],["pocket","n.","衣袋、小袋、钱"],["shock","n., v.","震动、震惊、休克、电击；使震惊"],["shocked","adj.","震动的、震惊的"],["skirt","n.","裙子、边缘"],["soccer","n.","A2"],["thirty","number","A1"],["sack","v.","解雇；洗劫"],["slot","n.","狭槽；时间段；职位"]]},{"title":"准备晚餐","words":[["bowl","n.","碗、碗状物"],["cook","v. A1, n.","烹调、煮、烧；厨师、炊事员"],["cup","n.","杯子"],["fork","n.","餐叉、耙、分叉、岔口"],["glass","n.","玻璃、玻璃杯"],["kitchen","n.","厨房"],["knife","n.","A2"],["plate","n.","盘子、金属牌、平板、薄板"],["spoon","n.","汤匙、一汤匙的量、勺子"],["cookie","n.","饼干"],["cooking","n.","烹调、烹饪"],["cupboard","n.","碗橱"],["late","adj., adv.","晚的、晚期的、最近的；迟、晚"],["contemplate","v.","沉思；考虑"],["kit","n.","工具包；成套工具"],["occupation","n.","职业；占领"],["occupy","v.","占据；占领；使忙碌"],["flash","n., v.","闪光、掠过"],["flat","adj.","平的、统一的、单调的；公寓套房"],["glad","adj.","高兴的、快活的、乐意的、情愿的"],["pitch","n.","球场、强度、音高、沥青"],["spot","n. B1, v.","地点、斑点、污点、少量"],["wife","n.","妻子"],["elbow","n.","肘部"],["slash","v.","砍；大幅削减"]]},{"title":"我和我的家人","words":[["anywhere","adv., pron.","任何地方、无论哪里"],["atmosphere","n.","大气层、气氛、空气"],["bother","v.","麻烦、打扰、使恼怒、使不安、烦恼、担心"],["course","n.","课程、过程、做法、路线、一道菜"],["court","n.","法庭、法院、球场、庭院"],["elsewhere","adv.","在别处、到别处"],["everywhere","adv.","到处、各处"],["feather","n.","羽毛、翎毛"],["flour","n.","面粉"],["four","number","A1"],["fourteen","number","A1"],["fourth","number","A1"],["further","adj. A2, adv.","另外的、更远的"],["furthermore","adv.","B2"],["gather","v.","聚集、收集、逐渐增加、猜想"],["hero","n.","英雄、男主角、男主人公"],["herself","pron.","她自己、她亲自、她本人"],["hey","exclam.","A1"],["himself","pron.","他自己、他本人"],["historic","adj.","B1"],["historical","adj.","历史上的、史学的"],["history","n.","历史、史学、履历、病例、病史"],["hour","n.","小时、时间、时刻"],["journal","n.","B1"],["journalist","n.","新闻工作者、新闻记者"],["journey","n.","旅程、行程"],["leather","n.","皮革、皮革制品"],["mathematics","n.","A2"],["northern","adj.","北方的、北部的"],["nowhere","adv.","任何地方都不、无处；毫无结果"],["pour","v.","灌、倒、注；倾泻、流出"],["flavour","n.","味道；风味"]]},{"title":"镜子里的是谁","words":[["identity","n.","身份、个性、特性、同一性、一致性"],["individual","n., adj.","单独的、个人的、独特的；个人"],["itself","pron.","它自己、自身、本身"],["myself","pron.","我自己、我亲自"],["ourselves","pron.","我们自己"],["self","n.","自己、自我、本身"],["special","adj.","特殊的、专门的"],["themselves","pron.","他们自己"],["unique","adj.","唯一的、独一无二的、极不寻常的"],["yourself","pron.","你自己、你本人"],["especially","adv.","特别、尤其、格外"],["specialist","n., adj.","专家"],["dual","adj.","双重的，双的"],["entity","n.","实体，存在"],["specialized","adj.","专业的；专门的"],["annual","adj.","每年的、年度的"],["crucial","adj.","至关重要的、决定性的"],["dentist","n.","牙科医生"],["divide","v. B1, n.","分、分开、分歧、分界线"],["ghost","n.","B1"],["hide","v.","藏起来、躲藏、隐瞒"],["host","n. B1, v.","主人、东道主、主持人、许多"],["identify","v.","认出、识别、鉴定；认同"],["liquid","n., adj.","液体；液态的、液体的、清澈的、流畅的"],["pursue","v.","继续、从事；追赶、追踪、追求"],["sexual","adj.","性的、两性的、性别的"],["species","n.","B2"],["speech","n.","说话、演说、言语、言论"],["twelve","number","A1"],["video","n.","录像机、视频"],["burst","v.","爆发；破裂"],["denial","n.","否认；拒绝"],["divine","adj.","神圣的；极好的"],["dose","n.","剂量，一剂"],["evident","adj.","明显的，明白的"],["mosque","n.","清真寺"],["pity","n.","怜悯；遗憾"],["racial","adj.","种族的；人种的"],["squeeze","v.","挤压；榨取"],["widen","v.","加宽；扩大"]]},{"title":"班里来了新同学","words":[["anybody","pron.","A2"],["anyone","pron.","A1"],["anything","pron.","任何事"],["everybody","pron.","A1"],["everyone","pron.","A1"],["everything","pron.","每件事、一切"],["nobody","pron.","A1"],["nothing","pron.","没有东西（事情）"],["somebody","pron.","A1"],["someone","pron.","A1"],["something","pron.","某事"],["somewhere","adv., pron.","在某处、到某处；大约、大概"],["body","n.","身体、躯干、正文、尸体"],["thin","adj.","薄、细、瘦 、稀薄的"],["thing","n.","事、物；局面、所有物、用品"],["beyond","prep., adv.","在……另一边、超出……的范围"],["adhere","v.","坚持；粘附"],["mere","adj.","仅仅的；只不过的"],["myth","n.","神话；谬见"],["sphere","n.","球体；范围；领域"]]},{"title":"比较两个书包","words":[["none","pron.","没有一人"],["whole","adj. A2, n.","全部的、完整的、无缺的；全部、整体"],["actually","adv.","实际上、事实上"],["allow","v.","允许、留出"],["automatically","adv.","自动地"],["ball","n.","球、舞会"],["baseball","n.","A1"],["basically","adv.","基本上、简而言之"],["basketball","n.","A1"],["beach","n.","海滩"],["call","v., n.","叫喊、拜访、召唤、打电话给、把……叫做"],["challenge","n. B1, v.","挑战书、想……挑战"],["equally","adv.","相等地、平等地"],["eventually","adv.","终于、最后"],["everyday","adj.","A2"],["fall","v., n.","落下、垮台、下垂；下降、瀑布、秋天"],["finally","adv.","最后、终于"],["football","n.","足球、橄榄球"],["gallery","n.","A2"],["generally","adv.","一般地、通常、普遍地、广泛地"],["gradually","adv.","逐渐地"],["hall","n.","门厅、礼堂、会堂、办公大楼"],["hole","n.","洞、孔眼；漏洞、缺陷；窘境"],["initially","adv.","最初、开始"],["naturally","adv.","当然、自然；天然地、天生地"],["normally","adv.","通常、正常地"],["occasionally","adv.","偶然地、非经常地"],["originally","adv.","本来、独创地"],["otherwise","adv.","否则、除此以外"],["overall","adj., adv.","全部的、总的来说"],["alcohol","n.","酒、酒精"],["alcoholic","adj.","含酒精的、酒鬼"],["holy","adj.","冬青树"],["piano","n.","钢琴"],["albeit","conj.","尽管，虽然"],["anonymous","adj.","匿名的"],["pole","n.","极；杆；电极"],["sole","adj.","唯一的；独占的"]]},{"title":"谁的书在桌上","words":[["determine","v.","确定、决定、下决心"],["determined","adj.","坚决的、确定的"],["examine","v.","检查、调查、仔细观察、考查"],["mineral","n.","矿物、矿石；矿物的、无机的"],["whisper","v., n.","低语、耳语"],["discourse","n.","话语；演讲；论文"],["franchise","n.","特许经营权；选举权"],["historian","n.","历史学家"],["imminent","adj.","即将发生的，逼近的"],["miner","n.","矿工"],["nominee","n.","被提名人；候选人"],["prominent","adj.","突出的；杰出的"],["sophisticated","adj.","复杂的；老练的；尖端的"],["undermine","v.","破坏；削弱"],["whoever","pron.","无论谁；任何人"],["wholly","adv.","完全地；全部地"],["whip","v.","鞭打；快速移动"]]}];
+var mode='list',curTopic=0;
+var tw=[],ti=0,tok=0,tfail=0,shown=false;
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+(function(){renderTabs();renderList();})();
+function renderTabs(){
+  var h='<button class="on" onclick="pickTopic(0)">'+esc(DATA[0].title)+'</button>';
+  for(var i=1;i<DATA.length;i++) h+='<button onclick="pickTopic('+i+')">'+esc(DATA[i].title)+'</button>';
+  document.getElementById('tabs').innerHTML=h;
+}
+function pickTopic(i){
+  curTopic=i;
+  var btns=document.querySelectorAll('#tabs button');
+  for(var j=0;j<btns.length;j++) btns[j].className=j===i?'on':'';
+  if(mode==='list') renderList();else startTest();
+}
+function renderList(){
+  document.getElementById('btn-list').className='on';
+  document.getElementById('btn-test').className='';
+  var t=DATA[curTopic];
+  var h='<div class="block open"><div class="hd" data-action="toggle-topic"><div><h3>'+(curTopic+1)+'. '+esc(t.title)+'</h3><span class="badge">'+t.words.length+'词</span></div><span>▼</span></div><div class="bd">';
+  t.words.forEach(function(w){
+    h+='<div class="line"><button class="spk" data-w="'+esc(w[0])+'">🔊</button><span class="en">'+esc(w[0])+'</span><span class="ps">'+esc(w[1])+'</span><span class="lv">'+esc(w[2])+'</span></div>';
+  });
+  h+='</div></div>';
+  document.getElementById('main').innerHTML=h;
+}
+document.addEventListener('click',function(e){
+  var hd=e.target.closest('[data-action="toggle-topic"]');
+  if(hd){hd.parentElement.classList.toggle('open');return;}
+  var b=e.target.closest('.spk,.sbtn');if(!b)return;
+  e.stopPropagation();e.preventDefault();
+  var w=b.getAttribute('data-w');
+  if(!w||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+  speechSynthesis.speak(u);
+});
+function switchMode(m){mode=m;if(m==='test')startTest();else renderList();}
+function startTest(){
+  document.getElementById('btn-list').className='';
+  document.getElementById('btn-test').className='on';
+  tw=DATA[curTopic].words.slice();
+  tw.sort(function(){return Math.random()-0.5});
+  ti=0;tok=0;tfail=0;shown=false;
+  updateStats();showCard();
+}
+function updateStats(){
+  var done=tok+tfail,rem=tw.length-ti;
+  var h='<div class="tsel"><select onchange="curTopic=parseInt(this.value);startTest()">';
+  DATA.forEach(function(t,i){h+='<option value="'+i+'"'+(i===curTopic?' selected':'')+'>'+esc(t.title)+'（'+t.words.length+'词）</option>';});
+  h+='</select></div>';
+  h+='<div class="stats"><div class="st"><div class="n">'+rem+'</div><div class="l">剩余</div></div><div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓</div></div><div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗</div></div><div class="st"><div class="n">'+(done?Math.round(done/(done+rem)*100):0)+'%</div><div class="l">进度</div></div>';
+  h+='<div id="card-area"></div><div class="btns" id="btns"></div>';
+  document.getElementById('main').innerHTML=h;
+}
+function showCard(){
+  if(ti>=tw.length){
+    var total=tok+tfail,rate=total?Math.round(tok/total*100):0;
+    document.getElementById('card-area').innerHTML='<div class="done"><div class="emoji">'+(rate>=80?'🎉':rate>=50?'💪':'📖')+'</div><h3>本轮完成！</h3><div class="rate" style="color:'+(rate>=60?'#16a34a':'#dc2626')+'">'+rate+'%</div><p style="color:#888;margin-top:4px">正确 '+tok+' / 错误 '+tfail+'</p><button onclick="startTest()">🔄 再来一轮</button></div>';
+    document.getElementById('btns').innerHTML='';
+    return;
+  }
+  var w=tw[ti];shown=false;
+  document.getElementById('card-area').innerHTML='<div class="fc" id="fc" onclick="reveal()"><div class="hint">点击卡片看释义</div><div class="ew">'+esc(w[0])+'</div><div class="ps">'+esc(w[1])+'</div><button class="sbtn" data-w="'+esc(w[0])+'">🔊</button><div class="lv" id="lv">'+esc(w[2])+'</div><div class="tap">👆 点击查看中文释义</div></div>';
+  document.getElementById('btns').innerHTML='<button class="no" onclick="mark(false)">😞 不认识</button><button class="mid" data-w="'+esc(w[0])+'">🔊</button><button class="yes" onclick="mark(true)">😊 认识</button>';
+}
+function reveal(){if(shown)return;shown=true;var lv=document.getElementById('lv');if(lv)lv.classList.add('on');var fc=document.getElementById('fc');if(fc)fc.querySelector('.hint').textContent='释义：';}
+function mark(ok){if(!shown){reveal();return;}if(ok)tok++;else tfail++;ti++;updateStats();showCard();}
+</script>
+</body>
+</html>
