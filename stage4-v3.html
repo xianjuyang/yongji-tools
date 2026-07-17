@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>阶段4 地道优化进阶 — 词句双轨训练 V3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f6f7f9;color:#1e293b;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#1a2332,#1e3a5f);color:#fff;padding:16px;position:sticky;top:0;z-index:20;text-align:center}
+.header .badge{font-size:10px;letter-spacing:3px;color:#f0d78c}
+.header h1{font-size:17px;margin:4px 0;font-weight:700}
+.header .info{font-size:10px;opacity:.6}
+.topic-bar{position:sticky;top:94px;z-index:10;background:#fff;border-bottom:1px solid #e5e7eb;padding:8px 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.topic-bar .nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;font-size:16px;cursor:pointer;color:#555;font-family:inherit;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;line-height:1}
+.topic-bar .nav-btn:active{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.topic-bar select{flex:1;max-width:280px;padding:8px 12px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#1a6b5a;cursor:pointer;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6b5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.topic-bar .progress{font-size:10px;color:#aaa;text-align:center;margin-top:2px}
+.main{max-width:700px;margin:0 auto;padding:12px 14px}
+.sec{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.sec .hd{cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;user-select:none;background:#fafcfb;border-bottom:1px solid #f0f0f0}
+.sec .hd h3{font-size:14px;display:flex;align-items:center;gap:6px}
+.sec .hd .arrow{font-size:11px;color:#aaa;transition:transform .2s}
+.sec.open .hd .arrow{transform:rotate(180deg)}
+.sec .bd{display:none;padding:12px 14px}
+.sec.open .bd{display:block}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.word-chip{display:flex;align-items:center;gap:6px;padding:8px 10px;background:#f8fafc;border-radius:8px;cursor:pointer;transition:all .12s;border:1.5px solid transparent}
+.word-chip:hover{border-color:#1a6b5a;background:#e8f5f0}
+.word-chip .en{font-size:13px;font-weight:600;color:#1a6b5a}
+.word-chip .cn{font-size:10px;color:#888;margin-left:auto;white-space:nowrap}
+.word-chip .spk{width:22px;height:22px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.word-chip .spk:hover{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.grammar-label{display:inline-block;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:0.5px}
+.sentence-list .sent{padding:10px 14px;margin:6px 0;background:#f8fafc;border-radius:8px;border-left:3px solid #1a6b5a;font-family:Georgia,serif;font-size:14px;line-height:1.6;color:#334155}
+.sentence-list .sent b{color:#1a6b5a;font-weight:600;background:#e8f5f0;padding:1px 4px;border-radius:3px}
+.sentence-list .sent .cn{display:block;font-size:11px;color:#999;margin-top:3px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.practice-item{padding:10px 14px;margin:8px 0;background:#fffbeb;border-radius:8px;border:1.5px dashed #e5e7eb}
+.practice-item .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.practice-item .blanks{font-family:Georgia,serif;font-size:14px;line-height:2}
+.practice-item .blanks .gap{display:inline-block;min-width:60px;border-bottom:2px dashed #1a6b5a;margin:0 6px;padding:2px 4px;color:#1a6b5a;font-weight:600;cursor:pointer;transition:all .15s}
+.practice-item .blanks .gap:hover{background:#e8f5f0}
+.practice-item .blanks .gap.filled{background:#e8f5f0;border-bottom-style:solid}
+.practice-item .choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.practice-item .choices button{padding:5px 12px;border-radius:12px;border:1.5px solid #1a6b5a;background:#fff;color:#1a6b5a;font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s;font-weight:500}
+.practice-item .choices button:hover{background:#1a6b5a;color:#fff}
+.practice-item .choices button.used{opacity:.3;pointer-events:none}
+.express-box{background:linear-gradient(135deg,#e8f5f0,#f0fdf4);border-radius:10px;padding:14px;text-align:center}
+.express-box .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.express-box .words-hint{font-size:12px;color:#999;margin-top:6px}
+.express-box .words-hint b{color:#1a6b5a}
+.fc{background:#fff;border-radius:14px;padding:36px 18px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);cursor:pointer;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.fc .ew{font-size:28px;font-weight:700;margin:8px 0}
+.fc .cn-hidden{font-size:16px;color:#ccc;margin-top:4px;display:none}
+.fc.reveal .cn-hidden{display:block;color:#1a6b5a;font-weight:600}
+.fc .tap{font-size:10px;color:#ddd;margin-top:8px}
+.fc.reveal .tap{display:none}
+.fc .fc-spk{width:36px;height:36px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;position:absolute;top:10px;right:10px}
+.test-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.test-btns button{flex:1;max-width:100px;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-no{background:#fee2e2;color:#dc2626}
+.btn-yes{background:#dcfce7;color:#16a34a}
+.test-stats{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.test-stats .st{background:#fff;padding:8px 12px;border-radius:8px;text-align:center;min-width:50px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.test-stats .st .n{font-size:18px;font-weight:700;color:#2563eb}
+.test-stats .st .l{font-size:9px;color:#888}
+.stats-done{text-align:center;padding:20px}
+.stats-done .emoji{font-size:40px}
+.stats-done h3{margin:8px 0}
+.stats-done .rate{font-size:22px;font-weight:700}
+@media(max-width:480px){
+  .word-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:12px 10px}.header h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">阶段 4 · 地道优化进阶 · CEFR B2-C1</div>
+  <h1 id="topicTitle">词句双轨训练</h1>
+  <div class="info">10核心词 · 5语法例句 · 造句练习 · 表达输出</div>
+</div>
+
+<div class="topic-bar" id="topicBar"></div>
+<div class="main" id="main"></div>
+
+<script>
+// ==================== STAGE 4 DATA (V3 — 地道优化进阶 B2-C1) ====================
+var DATA = [
+
+// ==================== Part 1: Grammar专项 (#75-85) ====================
+
+{title:"如果我是你",grammar:"虚拟语气①：if非真实条件句（与现在/将来相反）<br><small>If I were you, I would… / If he had time, he would…</small>",grammarLabel:"虚拟语气①：if非真实条件句",
+coreWords:[["suppose","假设"],["imagine","想象"],["reality","现实"],["situation","情况"],["advice","建议"],["opportunity","机会"],["consideration","考虑"],["unlikely","不太可能的"],["theoretical","理论上的"],["hypothetical","假设的"]],
+sentences:[
+  {en:"<b>Suppose</b> you won the lottery — what would you do? <b>Hypothetical</b> questions are fun.",cn:"假设你中了彩票——你会做什么？假设性的问题很有趣。"},
+  {en:"If I <b>were</b> you, I would seize this <b>opportunity</b> without hesitation.",cn:"如果我是你，我会毫不犹豫地抓住这个机会。"},
+  {en:"In an ideal <b>situation</b>, we <b>would</b> have more time for <b>consideration</b>.",cn:"在理想的情况下，我们会有更多时间考虑。"},
+  {en:"It is highly <b>unlikely</b> that she <b>would</b> accept such a <b>theoretical</b> proposal.",cn:"她接受这样一个理论性的提议是极不可能的。"},
+  {en:"<b>Imagine</b> what you <b>would</b> say if you met your hero in <b>reality</b>.",cn:"想象一下如果你在现实中遇到你的偶像，你会说什么。"}
+],
+practice:[
+  {prompt:"用虚拟语气完成句子（与现在相反）:",template:"If I ___ you, I ___ take the ___ and follow his ___.",words:["were","would","opportunity","advice"]},
+  {prompt:"用 suppose/imagine 引导的非真实条件句:",template:"___ you had three wishes — what ___ you ask for? ___ a world without problems.",words:["Suppose","would","Imagine"]}
+],
+express:{prompt:"用虚拟语气 if…would 给朋友提一个建议（3句话）:",words:["suppose","were","would","opportunity"]}
+},
+
+{title:"要是早点出发就好了",grammar:"虚拟语气②：与过去相反<br><small>If I had left earlier, I would have caught… / should have done</small>",grammarLabel:"虚拟语气②：与过去事实相反",
+coreWords:[["regret","后悔"],["departure","出发"],["consequence","后果"],["hindsight","事后聪明"],["prevent","防止"],["avoid","避免"],["realize","意识到"],["otherwise","否则"],["fortunate","幸运的"],["inevitable","不可避免的"]],
+sentences:[
+  {en:"I deeply <b>regret</b> not arriving earlier. If we <b>had</b> set off on time, we <b>would have</b> caught the train.",cn:"我深深后悔没有早点到。如果我们准时出发，就能赶上火车了。"},
+  {en:"In <b>hindsight</b>, I <b>should have</b> checked the <b>departure</b> time more carefully.",cn:"事后看来，我本应该更仔细地检查出发时间。"},
+  {en:"If I <b>had realized</b> the <b>consequences</b>, I <b>would have</b> acted differently.",cn:"如果我当时意识到了后果，我就会采取不同的行动。"},
+  {en:"The delay was <b>inevitable</b> — but we <b>could have avoided</b> it with better planning.",cn:"延误是不可避免的——但如果有更好的规划，我们本可以避免。"},
+  {en:"<b>Fortunately</b>, she forgave me. <b>Otherwise</b>, I <b>would have</b> lost a good friend.",cn:"幸运的是，她原谅了我。否则，我可能已经失去了一个好朋友。"}
+],
+practice:[
+  {prompt:"用与过去相反的虚拟语气完成:",template:"If I ___ earlier, I ___ caught the bus. I deeply ___ it now.",words:["had left","would have","regret"]},
+  {prompt:"用 should have 表达后悔:",template:"In ___, I ___ realized the ___ of my actions.",words:["hindsight","should have","consequences"]}
+],
+express:{prompt:"用虚拟语气（与过去相反）描述一件让你后悔的事:",words:["regret","hindsight","should have","would have"]}
+},
+
+{title:"我希望能飞",grammar:"虚拟语气③：wish / as if / if only / would rather<br><small>I wish I could… / He acts as if he knew… / If only I had…</small>",grammarLabel:"虚拟语气③：wish/as if/if only/would rather",
+coreWords:[["desire","渴望"],["capable","有能力的"],["ability","能力"],["freedom","自由"],["talent","天赋"],["aspiration","抱负"],["fantasy","幻想"],["genuinely","真正地"],["extraordinary","非凡的"],["pursue","追求"]],
+sentences:[
+  {en:"I <b>wish</b> I <b>could</b> fly — that kind of <b>freedom</b> would be <b>extraordinary</b>.",cn:"我希望我能飞——那种自由将是非凡的。"},
+  {en:"If <b>only</b> I <b>had</b> the <b>ability</b> to play piano like a professional.",cn:"要是我有专业钢琴家那样的能力就好了。"},
+  {en:"She speaks <b>as if</b> she <b>knew</b> everything, but she is still learning.",cn:"她说话的样子好像什么都懂，但她还在学习。"},
+  {en:"I would <b>rather</b> you <b>pursued</b> your own <b>aspiration</b> than followed the crowd.",cn:"我宁愿你追求自己的抱负，而不是随大流。"},
+  {en:"He <b>wishes</b> he <b>were</b> more <b>capable</b> of expressing his <b>genuinely</b> creative ideas.",cn:"他希望自己能更好地表达他真正有创意的想法。"}
+],
+practice:[
+  {prompt:"用 wish 表达与现在相反的愿望:",template:"I ___ I ___ fly like a bird. If ___ I had wings!",words:["wish","could","only"]},
+  {prompt:"用 as if / would rather 完成:",template:"He acts ___ he ___ the boss. I would ___ you ___ honest with me.",words:["as if","were","rather","were"]}
+],
+express:{prompt:"用 wish / if only 说出你 3 个不切实际的愿望:",words:["wish","could","if only","freedom"]}
+},
+
+{title:"我建议他去看医生",grammar:"虚拟语气④：suggest/recommend that… (should) do<br><small>I suggest that he see a doctor. / It is essential that she be…</small>",grammarLabel:"虚拟语气④：suggest/recommend/insist that…do",
+coreWords:[["suggest","建议"],["recommend","推荐"],["insist","坚持"],["demand","要求"],["propose","提议"],["essential","必要的"],["vital","至关重要的"],["urgent","紧急的"],["necessary","必需的"],["crucial","关键的"]],
+sentences:[
+  {en:"I <b>suggest</b> that he <b>see</b> a doctor immediately — it is <b>urgent</b>.",cn:"我建议他立刻去看医生——情况很紧急。"},
+  {en:"The teacher <b>recommends</b> that every student <b>review</b> the <b>crucial</b> points before the exam.",cn:"老师建议每个学生在考试前复习关键点。"},
+  {en:"It is <b>essential</b> that she <b>be</b> informed of the <b>vital</b> changes.",cn:"她必须被告知这些至关重要的变化。"},
+  {en:"My parents <b>insist</b> that I <b>finish</b> my homework before playing — it is <b>necessary</b>.",cn:"我父母坚持要我在玩之前完成作业——这是必要的。"},
+  {en:"We <b>propose</b> that the meeting <b>be</b> postponed. The committee <b>demands</b> a full report.",cn:"我们提议会议延期。委员会要求一份完整的报告。"}
+],
+practice:[
+  {prompt:"用 suggest/recommend + 动词原形完成:",template:"I ___ that she ___ more exercise. It is ___ for her health.",words:["suggest","take","essential"]},
+  {prompt:"用 insist/demand + that…(should) do 完成:",template:"The boss ___ that we ___ on time. She ___ that the report ___ submitted today.",words:["insists","arrive","demands","be"]}
+],
+express:{prompt:"用 suggest/insist that…(should) do 给同学提 3 个学习建议:",words:["suggest","recommend","essential","insist"]}
+},
+
+{title:"要不是你帮忙",grammar:"虚拟语气⑤：含蓄虚拟（but for/without/otherwise）<br><small>But for your help, I would have… / Without water, we would…</small>",grammarLabel:"虚拟语气⑤：含蓄虚拟条件句",
+coreWords:[["otherwise","否则"],["support","支持"],["assistance","帮助"],["grateful","感激的"],["manage","设法完成"],["overcome","克服"],["rescue","解救"],["relief","解脱"],["appreciate","感激"],["generous","慷慨的"]],
+sentences:[
+  {en:"<b>But for</b> your timely <b>support</b>, I <b>would have</b> failed the interview. I am deeply <b>grateful</b>.",cn:"要不是你及时的支持，我面试就失败了。我深表感激。"},
+  {en:"<b>Without</b> her <b>assistance</b>, we <b>would</b> never have <b>overcome</b> such a huge challenge.",cn:"没有她的帮助，我们绝对克服不了这么大的挑战。"},
+  {en:"I really <b>appreciate</b> your help — <b>otherwise</b> I <b>would</b> not have <b>managed</b> on my own.",cn:"我真的很感激你的帮助——否则我一个人是应付不了的。"},
+  {en:"He came to my <b>rescue</b> at the last minute. What a <b>generous</b> and selfless person!",cn:"他在最后一刻来救了我。多么慷慨无私的人！"},
+  {en:"It was a huge <b>relief</b> when you showed up. <b>Without</b> you, the situation <b>would have been</b> hopeless.",cn:"你出现时真是巨大的解脱。没有你，情况将毫无希望。"}
+],
+practice:[
+  {prompt:"用 but for / without 表达含蓄虚拟:",template:"___ your ___, I ___ have passed. I truly ___ it.",words:["But for","assistance","would not","appreciate"]},
+  {prompt:"用 otherwise 改写虚拟条件句:",template:"You helped me a lot. ___, I ___ have ___.",words:["Otherwise","would","failed"]}
+],
+express:{prompt:"用 but for / without 感谢一个人对你的帮助（3句话）:",words:["without","support","grateful","otherwise"]}
+},
+
+{title:"他不仅会唱歌还会跳舞",grammar:"倒装句：全部倒装与部分倒装<br><small>Not only does he sing, but he also… / Seldom have I seen…</small>",grammarLabel:"倒装句：全部/部分倒装",
+coreWords:[["talent","才能"],["impressive","令人印象深刻的"],["versatile","多才多艺的"],["remarkable","卓越的"],["seldom","很少"],["rarely","几乎不"],["nowhere","无处"],["accomplish","达成"],["demonstrate","展示"],["extraordinary","非凡的"]],
+sentences:[
+  {en:"<b>Not only does</b> he sing, but he <b>also</b> dances — what a <b>versatile</b> performer!",cn:"他不仅会唱歌，还会跳舞——多么多才多艺的表演者！"},
+  {en:"<b>Seldom have</b> I seen such <b>impressive</b> teamwork. The result is truly <b>remarkable</b>.",cn:"我很少见过如此令人印象深刻的团队合作。结果确实卓越。"},
+  {en:"<b>Nowhere</b> else <b>can</b> you find such a <b>talent</b> for storytelling and humor combined.",cn:"在其他任何地方你都找不到这样兼具讲故事和幽默的才能。"},
+  {en:"<b>Rarely does</b> a student <b>accomplish</b> so much at such a young age — <b>so extraordinary</b> is his dedication.",cn:"很少有学生在这么小的年纪取得如此大的成就——他的专注是如此非凡。"},
+  {en:"<b>Here comes</b> the moment we all waited for. Let him <b>demonstrate</b> his skills.",cn:"我们等待的时刻到来了。让他展示他的技能吧。"}
+],
+practice:[
+  {prompt:"用 Not only…but also 倒装完成:",template:"___ does he play guitar, ___ he composes. He is truly ___.",words:["Not only","but also","versatile"]},
+  {prompt:"用 Seldom / Rarely 倒装完成:",template:"___ have I seen such a ___ performance. ___ does he disappoint.",words:["Seldom","remarkable","Rarely"]}
+],
+express:{prompt:"用 Not only… 或 Seldom… 倒装句描述一位有才华的人:",words:["not only","impressive","seldom","talent"]}
+},
+
+{title:"是杰克昨天在公园遇到了她",grammar:"强调句：It is/was…that/who<br><small>It was Jack who met her. / It was in the park that…</small>",grammarLabel:"强调句：It is/was…that/who",
+coreWords:[["encounter","偶遇"],["recognize","认出"],["coincidence","巧合"],["witness","目击"],["identify","识别"],["spot","发现"],["moment","时刻"],["fate","命运"],["memorable","难忘的"],["precisely","恰恰"]],
+sentences:[
+  {en:"<b>It was</b> Jack <b>who</b> had a chance <b>encounter</b> with her in the park yesterday.",cn:"是杰克昨天在公园与她偶遇的。"},
+  {en:"<b>It is</b> pure <b>coincidence</b> <b>that</b> brought us together — or perhaps <b>fate</b>.",cn:"是纯粹的巧合让我们走到一起——或者也许是命运。"},
+  {en:"<b>It was</b> at that <b>precisely</b> memorable <b>moment</b> <b>that</b> I <b>recognized</b> her smile.",cn:"正是在那个精确而难忘的时刻，我认出了她的微笑。"},
+  {en:"<b>It is</b> the small details <b>that</b> help us <b>identify</b> someone we once knew.",cn:"正是那些小细节帮助我们识别曾经认识的人。"},
+  {en:"<b>It was</b> my friend <b>who</b> first <b>spotted</b> her across the street. What a coincidence!",cn:"是我的朋友首先在街对面发现了她。多巧啊！"}
+],
+practice:[
+  {prompt:"用 It was…that/who 强调划线部分:",template:"___ my sister ___ first ___ her in the crowd. What a ___!",words:["It was","who","spotted","coincidence"]},
+  {prompt:"用强调句改写:",template:"I met him at the library. → ___ at the library ___ I met him. It was a truly ___ ___.",words:["It was","that","memorable","moment"]}
+],
+express:{prompt:"用 It was…that/who 强调句描述一次难忘的偶遇:",words:["encounter","recognize","moment","fate"]}
+},
+
+{title:"你准备好了吗？",grammar:"省略句：并列/从句/不定式省略<br><small>Ready yet? / Want to go? / I will if you will. / He runs faster than I (do).</small>",grammarLabel:"省略句：并列省略、从句省略、不定式省略",
+coreWords:[["prepared","准备好的"],["willing","愿意的"],["suppose","猜想"],["intend","打算"],["attempt","尝试"],["manage","设法"],["expect","期望"],["eager","急切的"],["hesitate","犹豫"],["confident","自信的"]],
+sentences:[
+  {en:"Ready or not? I am fully <b>prepared</b> and <b>eager</b> to start this journey.",cn:"准备好了还是没准备好？我完全准备好了，急切地开始这段旅程。"},
+  {en:"I <b>suppose</b> you are <b>willing</b> to help, and certainly I am (willing to help).",cn:"我想你愿意帮忙，我当然也愿意。"},
+  {en:"He wants to <b>attempt</b> the challenge, but I do not <b>intend</b> to (attempt it).",cn:"他想尝试这个挑战，但我不打算（尝试）。"},
+  {en:"She speaks more <b>confidently</b> than most people (do), and never <b>hesitates</b>.",cn:"她说话比大多数人都自信，从不犹豫。"},
+  {en:"Though (he was) exhausted, he still <b>managed</b> to finish. I did not <b>expect</b> that!",cn:"尽管精疲力竭，他还是设法完成了。我没想到！"}
+],
+practice:[
+  {prompt:"用省略句完成对话:",template:"Are you ___ to go? Yes, I am ___. Do you ___ to join?",words:["ready","(ready)","intend"]},
+  {prompt:"补全省略的部分:",template:"She runs faster than I ___. Though ___, she ___ to finish.",words:["do","tired","managed"]}
+],
+express:{prompt:"用省略句和以下词完成一段自然对话（3回合）:",words:["prepared","willing","suppose","manage"]}
+},
+
+{title:"每个人都有自己的梦想",grammar:"主谓一致：就近原则/意义一致/集体名词<br><small>Everyone has… / The team are… / Neither he nor I am…</small>",grammarLabel:"主谓一致：语法一致、意义一致、就近原则",
+coreWords:[["individual","个人"],["unique","独特的"],["pursue","追求"],["perspective","视角"],["approach","方法"],["society","社会"],["authority","权威"],["committee","委员会"],["majority","大多数"],["phenomenon","现象"]],
+sentences:[
+  {en:"Every <b>individual</b> <b>has</b> a dream — that is what makes each of us <b>unique</b>.",cn:"每个人都有自己的梦想——这就是让我们每个人都独特的原因。"},
+  {en:"The <b>committee</b> <b>are</b> divided in their opinions. The <b>majority</b> <b>supports</b> the new <b>approach</b>.",cn:"委员会成员意见不一。大多数人支持新方法。"},
+  {en:"<b>Neither</b> my parents <b>nor</b> my teacher <b>agrees</b> with my decision to <b>pursue</b> art.",cn:"我的父母和老师都不同意我追求艺术的决定。"},
+  {en:"This <b>phenomenon</b> <b>is</b> widely discussed in <b>society</b>. Every <b>perspective</b> matters.",cn:"这一现象在社会上被广泛讨论。每个视角都很重要。"},
+  {en:"The <b>authority</b> <b>has</b> issued new guidelines. Each school <b>is</b> expected to comply.",cn:"当局发布了新的指导方针。每所学校都应遵守。"}
+],
+practice:[
+  {prompt:"选择正确的动词形式:",template:"Everyone ___ a dream. Neither the teacher nor the students ___ happy about the decision.",words:["has","are"]},
+  {prompt:"用意义一致原则完成:",template:"The ___ ___ divided. The ___ of people ___ this view.",words:["committee","are","majority","holds"]}
+],
+express:{prompt:"用主谓一致的句子描述你身边人的不同梦想:",words:["individual","pursue","unique","perspective"]}
+},
+
+{title:"猜猜这个词是什么意思",grammar:"构词法：派生（词缀）、合成、转化<br><small>unhappy / friendship / smartphone / email (n.→v.)</small>",grammarLabel:"构词法：派生、合成、转化",
+coreWords:[["meaning","含义"],["definition","定义"],["origin","起源"],["prefix","前缀"],["suffix","后缀"],["transform","转变"],["compound","复合的"],["derive","派生"],["interpret","解读"],["concept","概念"]],
+sentences:[
+  {en:"Can you guess the <b>meaning</b> of this word? Look at its <b>prefix</b> and <b>suffix</b> for clues.",cn:"你能猜猜这个词的含义吗？看它的前缀和后缀来找线索。"},
+  {en:"Many English words are <b>derived</b> from Latin or Greek. Understanding their <b>origin</b> helps a lot.",cn:"很多英语单词源自拉丁语或希腊语。理解它们的起源会很有帮助。"},
+  {en:"The <b>compound</b> word 'smartphone' combines two simple words to create a new <b>concept</b>.",cn:"合成词'smartphone'将两个简单词组合在一起创造了一个新概念。"},
+  {en:"You can <b>transform</b> 'friend' into 'friendship' by adding a <b>suffix</b>. The <b>definition</b> changes slightly.",cn:"你可以通过添加后缀将'friend'转化为'friendship'。定义会发生微小的变化。"},
+  {en:"I cannot <b>interpret</b> this sentence without a dictionary. The <b>prefix</b> 'un-' means 'not'.",cn:"没有字典我无法解读这个句子。前缀'un-'意思是'不'。"}
+],
+practice:[
+  {prompt:"用构词法知识完成:",template:"The ___ 're-' means 'again'. The ___ '-able' means 'can be'. So 'renewable' ___ from these two parts.",words:["prefix","suffix","derives"]},
+  {prompt:"识别词根词缀:",template:"unbelievable = ___ (prefix) + ___ (root) + ___ (suffix). Can you ___ its meaning?",words:["un-","believe","-able","interpret"]}
+],
+express:{prompt:"用构词法知识拆解并解释 3 个英语单词的前缀/后缀:",words:["prefix","suffix","derive","meaning"]}
+},
+
+{title:"写给一年后的自己",grammar:"语法总复习：综合运用所学语法点<br><small>时态·语态·从句·虚拟·倒装·强调·省略·主谓一致·构词</small>",grammarLabel:"语法总复习：综合运用",
+coreWords:[["reflect","反思"],["growth","成长"],["anticipate","预期"],["ambition","雄心"],["accomplish","达成"],["overcome","克服"],["mature","成熟"],["confident","自信的"],["grateful","感恩的"],["commit","承诺"]],
+sentences:[
+  {en:"If I <b>could</b> send a message to my future self, I <b>would</b> ask: have you <b>accomplished</b> your goals?",cn:"如果我能给未来的自己发一条信息，我会问：你完成你的目标了吗？（虚拟语气）"},
+  {en:"<b>Not only have</b> I grown academically, <b>but</b> I <b>have</b> also become more <b>mature</b> emotionally.",cn:"我不仅在学业上成长了，在情感上也变得更加成熟。（倒装句）"},
+  {en:"<b>It was</b> the challenges I faced <b>that</b> taught me to <b>overcome</b> fear and stay <b>confident</b>.",cn:"正是我面对的挑战教会了我克服恐惧并保持自信。（强调句）"},
+  {en:"I <b>suggest</b> that you <b>reflect</b> on your <b>growth</b> regularly — it is <b>essential</b> for progress.",cn:"我建议你定期反思自己的成长——这对进步至关重要。（虚拟语气④）"},
+  {en:"I am deeply <b>grateful</b> for everything, and I <b>commit</b> to pursuing my <b>ambition</b> with all my heart.",cn:"我对一切深怀感恩，我承诺全心全意追求我的抱负。（主谓一致+不定式）"}
+],
+practice:[
+  {prompt:"综合运用语法完成句子:",template:"___ only I ___ worked harder, I ___ have ___ more this year.",words:["If","had","would","accomplished"]},
+  {prompt:"用倒装+虚拟完成:",template:"___ have I ___ so much about myself. It is essential that I ___ to improve every day.",words:["Never","learned","commit"]}
+],
+express:{prompt:"用至少 3 种语法结构给一年后的自己写一段话:",words:["reflect","growth","overcome","grateful"]}
+},
+
+// ==================== Part 2: 场景综合 (#86-115) ====================
+
+{title:"在餐厅用英语点餐",grammar:"🎯情态动词礼貌请求<br><small>May I have…? / Could I get…? / Would you mind…?</small><br>附带：比较级、宾语从句",grammarLabel:"情态动词礼貌请求 + 比较级 + 宾语从句",
+coreWords:[["appetizer","开胃菜"],["main course","主菜"],["beverage","饮料"],["portion","份量"],["flavor","口味"],["specialty","特色菜"],["recommendation","推荐"],["preference","偏好"],["dietary","饮食的"],["satisfying","令人满意的"]],
+sentences:[
+  {en:"<b>May I</b> take a look at the menu? I would love to hear your <b>recommendation</b>.",cn:"我可以看一下菜单吗？我很想听听你的推荐。"},
+  {en:"<b>Could I get</b> the grilled chicken as my <b>main course</b> and a light <b>appetizer</b> to start?",cn:"我可以点烤鸡作为主菜，先来一道清淡的开胃菜吗？"},
+  {en:"<b>Would you mind</b> telling me what the <b>specialty</b> is today? I have some <b>dietary</b> restrictions.",cn:"你介意告诉我今天的特色菜是什么吗？我有一些饮食限制。"},
+  {en:"I think this <b>portion</b> is <b>more generous than</b> what I expected. The <b>flavor</b> is amazing!",cn:"我觉得这份量比我预想的更足。味道好极了！"},
+  {en:"I <b>do recommend</b> the chocolate cake — it was the most <b>satisfying</b> dessert I have ever had.",cn:"我确实推荐巧克力蛋糕——这是我吃过的最令人满意的甜点。"}
+],
+practice:[
+  {prompt:"用 May I / Could I 完成礼貌请求:",template:"___ have a table by the window? ___ recommend a popular ___?",words:["May I","Could you","specialty"]},
+  {prompt:"用 Would you mind 完成:",template:"___ bringing me another ___? This ___ is too small.",words:["Would you mind","beverage","portion"]}
+],
+express:{prompt:"模拟在餐厅用礼貌情态动词点餐（口头 4 句话）:",words:["May I","recommendation","main course","flavor"]}
+},
+
+{title:"第一次去机场办登机",grammar:"🎯疑问句+现在完成时<br><small>Have you checked in? / Where should I go? / What time does…?</small><br>附带：情态动词、时间表达",grammarLabel:"疑问句 + 现在完成时 + 情态动词",
+coreWords:[["check-in","登机手续"],["boarding pass","登机牌"],["departure gate","登机口"],["luggage","行李"],["terminal","航站楼"],["security check","安检"],["announcement","广播"],["delay","延误"],["passport","护照"],["confirm","确认"]],
+sentences:[
+  {en:"Excuse me, <b>have</b> you already <b>checked in</b> online? I <b>have</b> not <b>confirmed</b> my seat yet.",cn:"打扰一下，你已经在网上办过登机了吗？我还没有确认我的座位。"},
+  {en:"<b>Where should</b> I go to drop off my <b>luggage</b>? <b>Which terminal</b> is for international flights?",cn:"我应该去哪里托运行李？哪个航站楼是国际航班？"},
+  {en:"<b>Have</b> you ever <b>missed</b> a flight before? That <b>announcement</b> said our flight might be <b>delayed</b>.",cn:"你以前误过飞机吗？那个广播说我们的航班可能会延误。"},
+  {en:"<b>What time does</b> the <b>security check</b> open? I <b>have</b> not been through it yet.",cn:"安检什么时候开始？我还没过安检呢。"},
+  {en:"You <b>must</b> keep your <b>boarding pass</b> and <b>passport</b> handy. <b>Have</b> you found the <b>departure gate</b>?",cn:"你必须把登机牌和护照放在手边。你找到登机口了吗？"}
+],
+practice:[
+  {prompt:"用现在完成时疑问句完成:",template:"___ you ___ your ___ yet? ___ you found the ___ gate?",words:["Have","checked in","luggage","Have","departure"]},
+  {prompt:"用情态动词+疑问词完成:",template:"___ should I arrive at the ___? You ___ be there two hours early.",words:["When","airport","should"]}
+],
+express:{prompt:"模拟第一次登机咨询——用疑问句和现在完成时问工作人员问题:",words:["check-in","boarding pass","luggage","terminal"]}
+},
+
+{title:"住酒店遇到问题怎么办",grammar:"🎯请求句式+现在完成时<br><small>Could you please…? / I have lost… / There seems to be…</small><br>附带：比较级、条件句",grammarLabel:"请求句式 + 现在完成时 + 条件句",
+coreWords:[["reception","前台"],["room service","客房服务"],["key card","房卡"],["air conditioner","空调"],["complain","投诉"],["request","请求"],["available","可用的"],["immediately","立即"],["inconvenience","不便"],["resolve","解决"]],
+sentences:[
+  {en:"<b>Could you please</b> send someone to fix the <b>air conditioner</b>? It <b>has stopped</b> working.",cn:"你能派人来修一下空调吗？它已经停止工作了。"},
+  {en:"I <b>have lost</b> my <b>key card</b>. <b>Would it be possible</b> to get a new one from the <b>reception</b>?",cn:"我的房卡丢了。可以去前台拿一张新的吗？"},
+  {en:"<b>There seems to be</b> a problem with the hot water. I <b>would appreciate</b> it if you could <b>resolve</b> this <b>immediately</b>.",cn:"热水好像有问题。如果你能立即解决这个问题，我将不胜感激。"},
+  {en:"<b>If</b> a room is <b>available</b> on a higher floor, I would <b>prefer</b> to switch — this one is <b>noisier than</b> I expected.",cn:"如果有更高楼层的空房，我宁愿换一间——这间比我预想的更吵。"},
+  {en:"I <b>do apologize</b> for the <b>inconvenience</b>. Let me <b>request</b> <b>room service</b> to bring you fresh towels right away.",cn:"我为不便之处道歉。让我请客房服务立刻给你送来新毛巾。"}
+],
+practice:[
+  {prompt:"用 Could you please 完成请求:",template:"___ send someone to fix the ___? I ___ waiting for an hour.",words:["Could you please","air conditioner","have been"]},
+  {prompt:"用 I have lost / There seems to be 完成:",template:"___ my ___ card. ___ a problem with the Wi-Fi too.",words:["I have lost","key","There seems to be"]}
+],
+express:{prompt:"模拟在酒店前台用礼貌请求句式投诉一个问题:",words:["reception","key card","resolve","inconvenience"]}
+},
+
+{title:"我去看医生描述症状",grammar:"🎯现在完成时（持续+经历）<br><small>I have had a fever since… / I have been feeling… / Have you ever…?</small><br>附带：should、if条件句",grammarLabel:"现在完成时（持续+经历）+ should + if条件句",
+coreWords:[["symptom","症状"],["appetite","食欲"],["prescription","处方"],["recover","恢复"],["diagnose","诊断"],["infection","感染"],["prescribe","开药"],["dizzy","头晕的"],["throat","喉咙"],["allergy","过敏"]],
+sentences:[
+  {en:"I <b>have had</b> a sore <b>throat</b> since Monday, and I <b>have been feeling</b> really <b>dizzy</b> all day.",cn:"我从周一开始嗓子疼，而且一整天都觉得很头晕。"},
+  {en:"<b>Have</b> you <b>noticed</b> any other <b>symptoms</b>? You <b>should</b> probably get tested for an <b>infection</b>.",cn:"你注意到其他症状了吗？你应该做个检查，看看是否有感染。"},
+  {en:"I <b>have never had</b> an <b>allergy</b> before, but I <b>have lost</b> my <b>appetite</b> completely.",cn:"我以前从来没有过敏过，但我完全失去了食欲。"},
+  {en:"<b>If</b> the doctor <b>diagnoses</b> you with a bacterial <b>infection</b>, she will <b>prescribe</b> antibiotics.",cn:"如果医生诊断你是细菌感染，她会开抗生素。"},
+  {en:"Take this <b>prescription</b> to the pharmacy. You <b>should recover</b> within a week <b>if</b> you rest well.",cn:"拿这个处方去药房。如果你好好休息，一周内应该就能恢复。"}
+],
+practice:[
+  {prompt:"用现在完成时描述持续的症状:",template:"I ___ a headache ___ yesterday. I ___ feeling tired all week.",words:["have had","since","have been"]},
+  {prompt:"用 should + if 完成建议:",template:"You ___ see a doctor ___ your fever continues. She can ___ the problem.",words:["should","if","diagnose"]}
+],
+express:{prompt:"模拟在诊所向医生描述你的症状（用现在完成时）:",words:["throat","dizzy","appetite","symptom"]}
+},
+
+{title:"打电话预约牙医",grammar:"🎯情态动词请求+间接引语<br><small>I would like to… / Could I schedule…? / She said that…</small><br>附带：时间表达、宾语从句",grammarLabel:"情态动词请求 + 间接引语 + 宾语从句",
+coreWords:[["appointment","预约"],["schedule","安排"],["available","可用的"],["confirm","确认"],["cancel","取消"],["reschedule","改期"],["urgent","紧急的"],["insurance","保险"],["dentist","牙医"],["check-up","检查"]],
+sentences:[
+  {en:"Hello, <b>I would like to</b> <b>schedule</b> an <b>appointment</b> with the <b>dentist</b> for a routine <b>check-up</b>.",cn:"你好，我想预约牙医做个常规检查。"},
+  {en:"<b>Could I</b> book the earliest <b>available</b> slot? The receptionist <b>told me that</b> Dr. Li is fully booked this week.",cn:"我能预约最早可用的时段吗？前台告诉我说李医生这周都约满了。"},
+  {en:"She <b>said that</b> I <b>could reschedule</b> for next Tuesday. Can you <b>confirm</b> the time with me?",cn:"她说我可以改到下周二。你能跟我确认一下时间吗？"},
+  {en:"<b>I was wondering if</b> I <b>could cancel</b> my current <b>appointment</b>. Is there a cancellation fee?",cn:"我在想我能否取消目前的预约。有取消费吗？"},
+  {en:"The nurse <b>mentioned that</b> my <b>insurance</b> covers the <b>check-up</b>. This is not an <b>urgent</b> case.",cn:"护士提到我的保险涵盖了检查费用。这不是紧急情况。"}
+],
+practice:[
+  {prompt:"用 I would like to / Could I 完成预约电话:",template:"Hello, ___ ___ to ___ an appointment. ___ book a morning slot?",words:["I would like","schedule","Could I"]},
+  {prompt:"用间接引语改写:",template:"She ___ that the dentist ___ fully booked. Can I ___ for next week?",words:["said","was","reschedule"]}
+],
+express:{prompt:"模拟打电话预约牙医（用情态动词请求+间接引语）:",words:["appointment","schedule","available","confirm"]}
+},
+
+{title:"明天会不会下雨",grammar:"🎯比较级+条件句<br><small>It looks more cloudy than yesterday. / If it rains, I will…</small><br>附带：将来时、主语从句",grammarLabel:"比较级 + 条件句 + 将来时",
+coreWords:[["forecast","预报"],["shower","阵雨"],["temperature","温度"],["humidity","湿度"],["breeze","微风"],["overcast","阴天的"],["thunderstorm","雷暴"],["sunshine","阳光"],["likely","可能的"],["climate","气候"]],
+sentences:[
+  {en:"The <b>forecast</b> says it is <b>more likely</b> to rain tomorrow <b>than</b> it was today. The <b>humidity</b> is rising.",cn:"预报说明天比今天更可能下雨。湿度在上升。"},
+  {en:"<b>If</b> there is a <b>thunderstorm</b> in the afternoon, we <b>will</b> cancel the outdoor activity.",cn:"如果下午有雷暴，我们就取消户外活动。"},
+  {en:"The <b>temperature</b> is dropping <b>faster than</b> I expected. It feels like an <b>overcast</b> winter day.",cn:"温度下降得比我预想的更快。感觉像是阴沉的冬日。"},
+  {en:"<b>Whether</b> we get <b>sunshine</b> or <b>showers</b> tomorrow <b>remains</b> uncertain — the <b>climate</b> here is unpredictable.",cn:"明天是晴天还是阵雨还不确定——这里的气候难以预测。"},
+  {en:"A gentle <b>breeze</b> is blowing. <b>If</b> it stays like this, it <b>will</b> be a pleasant day for a walk.",cn:"一阵微风在吹。如果一直这样，这将是一个宜人的散步天。"}
+],
+practice:[
+  {prompt:"用比较级完成天气预报:",template:"Today is ___ than yesterday. The ___ says it will be even ___ tomorrow.",words:["warmer","forecast","hotter"]},
+  {prompt:"用 if 条件句完成:",template:"___ it rains tomorrow, we ___ stay indoors. There might be a ___.",words:["If","will","thunderstorm"]}
+],
+express:{prompt:"用比较级和条件句预报明天的天气（口头 3 句话）:",words:["forecast","temperature","likely","shower"]}
+},
+
+{title:"描述一个你忘不了的人",grammar:"🎯定语从句+形容词顺序<br><small>Someone who/that… / a tall handsome young man</small><br>附带：比较级、过去时",grammarLabel:"定语从句 + 形容词顺序 + 比较级",
+coreWords:[["impression","印象"],["remarkable","卓越的"],["personality","个性"],["generous","慷慨的"],["inspiring","鼓舞人心的"],["genuine","真诚的"],["courage","勇气"],["wisdom","智慧"],["admire","钦佩"],["influence","影响"]],
+sentences:[
+  {en:"There is one person <b>who</b> I can never forget — a kind, warm-hearted old gentleman <b>who</b> left a deep <b>impression</b>.",cn:"有一个人我永远忘不了——一位留下了深刻印象的善良热心的老先生。"},
+  {en:"She is the most <b>inspiring</b> teacher <b>that</b> I have ever met, <b>whose</b> <b>wisdom</b> and <b>genuine</b> care changed my life.",cn:"她是我见过的最鼓舞人心的老师，她的智慧和真诚的关怀改变了我的人生。"},
+  {en:"I deeply <b>admire</b> people <b>who</b> show real <b>courage</b> in difficult situations — they are <b>more resilient than</b> most.",cn:"我非常钦佩那些在困境中展现真正勇气的人——他们比大多数人都更有韧性。"},
+  {en:"His <b>personality</b> was so warm and <b>generous</b> — that is the quality <b>which</b> I remember most vividly.",cn:"他的个性是那么温暖和慷慨——那是我最深切记得的品质。"},
+  {en:"A small, kind gesture <b>that</b> someone makes can have a lasting <b>influence</b> far <b>greater than</b> a grand speech.",cn:"某人做出的一个小小的善意举动，其持久的影响力可以远大于一场宏大的演讲。"}
+],
+practice:[
+  {prompt:"用 who/that/whose 定语从句完成:",template:"I know a person ___ always helps others. His ___ is truly ___.",words:["who","generosity","remarkable"]},
+  {prompt:"用适当形容词顺序完成:",template:"She is a ___, ___, ___ teacher ___ I deeply ___.",words:["young","passionate","Chinese","whom","admire"]}
+],
+express:{prompt:"用定语从句描述一个对你影响很大的人（3句话）:",words:["impression","inspiring","genuine","influence"]}
+},
+
+{title:"从学校到我家怎么走",grammar:"🎯祈使句+方位介词<br><small>Go straight / Turn left at… / It is opposite the…</small><br>附带：条件句、There be",grammarLabel:"祈使句 + 方位介词 + 条件句",
+coreWords:[["intersection","十字路口"],["landmark","地标"],["straight ahead","一直向前"],["opposite","在对面"],["pedestrian","行人"],["crosswalk","斑马线"],["distance","距离"],["shortcut","捷径"],["route","路线"],["convenient","方便的"]],
+sentences:[
+  {en:"<b>Go straight ahead</b> until you reach the second <b>intersection</b>, then <b>turn right</b>. The school is right there.",cn:"一直往前走直到第二个十字路口，然后右转。学校就在那里。"},
+  {en:"<b>Walk past</b> the supermarket — the park is <b>opposite</b> the library. You cannot miss the big <b>landmark</b>.",cn:"走过超市——公园在图书馆对面。你不会错过那个大地标的。"},
+  {en:"<b>Do not cross</b> the street until the <b>pedestrian</b> light turns green. <b>Use</b> the <b>crosswalk</b> for safety.",cn:"不要过马路，等到行人灯变绿。为了安全，走斑马线。"},
+  {en:"<b>If</b> you take the <b>shortcut</b> behind the bank, the <b>distance</b> is much shorter. It is more <b>convenient</b>.",cn:"如果你走银行后面的捷径，距离要短得多。这样更方便。"},
+  {en:"<b>There is</b> a bus stop near my home. <b>Take</b> bus No. 15 and <b>get off</b> at the third stop — that is the best <b>route</b>.",cn:"我家附近有个公交站。坐 15 路车，在第三站下车——那是最好的路线。"}
+],
+practice:[
+  {prompt:"用祈使句给出路线:",template:"___ straight for two blocks. ___ left at the ___. You will see it on your right.",words:["Go","Turn","intersection"]},
+  {prompt:"用方位介词完成:",template:"The school is ___ the bank. There is a ___ near the ___ for safety.",words:["opposite","crosswalk","intersection"]}
+],
+express:{prompt:"用祈使句和方位介词告诉同学从学校到你家怎么走:",words:["straight ahead","intersection","opposite","shortcut"]}
+},
+
+{title:"这个东西能便宜点吗",grammar:"🎯比较级+条件句<br><small>Can you make it cheaper? / If I buy two, could you…?</small><br>附带：情态动词、宾语从句",grammarLabel:"比较级 + 条件句 + 情态动词",
+coreWords:[["bargain","讨价还价"],["discount","折扣"],["affordable","负担得起的"],["reasonable","合理的"],["quality","质量"],["worth","值得"],["budget","预算"],["overpriced","定价过高的"],["negotiate","协商"],["receipt","收据"]],
+sentences:[
+  {en:"This is a bit <b>overpriced</b>. <b>Could</b> you make it a little <b>more affordable</b>? I am on a tight <b>budget</b>.",cn:"这个有点贵了。你能让它更实惠一点吗？我预算很紧。"},
+  {en:"<b>If</b> I buy two, <b>could</b> you give me a <b>discount</b>? I think the price <b>should be more reasonable</b>.",cn:"如果我买两个，你能给我打折吗？我觉得价格应该更合理一些。"},
+  {en:"<b>What is</b> the best price you can offer? I <b>believe that</b> this is <b>worth</b> buying at a lower price.",cn:"你能给的最低价是多少？我相信这个价格更低时是值得买的。"},
+  {en:"The <b>quality</b> is good, but it is <b>not as cheap as</b> the one I saw at the other store. Can we <b>negotiate</b>?",cn:"质量不错，但它不如我在另一家店看到的便宜。我们能商量一下吗？"},
+  {en:"<b>Would you</b> mind giving me a <b>receipt</b>? I want to make sure I <b>don't end up paying more than</b> the agreed price.",cn:"你介意给我一张收据吗？我想确保我付的钱不会超过我们谈好的价格。"}
+],
+practice:[
+  {prompt:"用比较级讨价:",template:"This bag is ___ than I expected. Could you offer a ___ ___ price?",words:["more expensive","more","reasonable"]},
+  {prompt:"用 if 条件句完成:",template:"___ I pay in cash, ___ you lower the price? I think it ___ be cheaper.",words:["If","could","should"]}
+],
+express:{prompt:"模拟在市场讨价还价——用比较级和条件句（4句话）:",words:["discount","affordable","reasonable","bargain"]}
+},
+
+{title:"我周末喜欢干什么",grammar:"🎯动名词+used to<br><small>I enjoy reading. / I am keen on swimming. / I used to play…</small><br>附带：would like to、频率副词",grammarLabel:"动名词 + used to + would like to",
+coreWords:[["leisure","休闲"],["relaxation","放松"],["pastime","消遣"],["entertainment","娱乐"],["volunteer","志愿者"],["workout","锻炼"],["creativity","创造力"],["schedule","日程"],["occasionally","偶尔"],["regularly","定期地"]],
+sentences:[
+  {en:"I really enjoy <b>spending</b> my <b>leisure</b> time outdoors. <b>Reading</b> novels is my favorite <b>pastime</b>.",cn:"我非常喜欢在户外度过休闲时光。读小说是我最喜欢的消遣。"},
+  {en:"I <b>used to play</b> video games all weekend, but now I prefer <b>going</b> to the gym for a <b>workout</b>.",cn:"我以前整个周末都打游戏，但现在我更喜欢去健身房锻炼。"},
+  {en:"<b>Volunteering</b> at the animal shelter gives me a sense of purpose. I do it <b>regularly</b> every Saturday.",cn:"在动物收容所做志愿者给我一种使命感。我每周六定期去。"},
+  {en:"I <b>would like to</b> try <b>painting</b> — I have heard it helps with <b>creativity</b> and <b>relaxation</b>.",cn:"我想尝试画画——我听说它有助于创造力和放松。"},
+  {en:"<b>Occasionally</b>, I enjoy simple <b>entertainment</b> like <b>watching</b> a movie. My <b>schedule</b> is usually flexible.",cn:"偶尔，我喜欢看电影这样的简单娱乐。我的日程通常很灵活。"}
+],
+practice:[
+  {prompt:"用动名词完成:",template:"I enjoy ___ books and ___ to music. It is great ___.",words:["reading","listening","entertainment"]},
+  {prompt:"用 used to / would like to 完成:",template:"I ___ sleep late, but now I ___ wake up early. I would like to start ___ regularly.",words:["used to","regularly","exercising"]}
+],
+express:{prompt:"用动名词和 used to 说说你周末喜欢做什么（4句话）:",words:["leisure","reading","used to","workout"]}
+},
+
+{title:"计划一次全家出游",grammar:"🎯will vs going to 对比<br><small>We will visit… / We are going to leave at… / Look at the clouds — it is going to rain.</small><br>附带：比较级、should",grammarLabel:"will vs going to 对比 + 比较级 + should",
+coreWords:[["destination","目的地"],["itinerary","行程"],["accommodation","住宿"],["sightseeing","观光"],["reservation","预订"],["pack","打包"],["budget","预算"],["transportation","交通"],["depart","出发"],["souvenir","纪念品"]],
+sentences:[
+  {en:"We <b>are going to</b> visit Beijing this summer. I <b>have already planned</b> the whole <b>itinerary</b>.",cn:"我们打算今年夏天去北京。我已经计划好了整个行程。（已有计划 → going to）"},
+  {en:"I think we <b>will</b> need a bigger <b>budget</b> — <b>going to</b> a popular <b>destination</b> during peak season is not cheap.",cn:"我觉得我们需要更大的预算——旺季去热门目的地不便宜。（即时判断 → will）"},
+  {en:"Look! The hotel booking site just crashed. We <b>are going to</b> have trouble with the <b>reservation</b>.",cn:"看！酒店预订网站刚崩溃了。我们预订要有麻烦了。（有征兆 → going to）"},
+  {en:"You <b>should pack</b> light — <b>it is going to be</b> much <b>hotter than</b> what we are used to.",cn:"你应该轻装打包——那里会比我们习惯的要热得多。"},
+  {en:"We <b>will depart</b> at 6 a.m. I promise I <b>will</b> buy you a <b>souvenir</b> from every city we visit!",cn:"我们早上 6 点出发。我保证在我们去的每个城市都给你买纪念品！（意愿/承诺 → will）"}
+],
+practice:[
+  {prompt:"用 will 或 going to 完成:",template:"We ___ leave at 7 — look at the dark clouds, it ___ rain. I ___ bring an umbrella.",words:["are going to","is going to","will"]},
+  {prompt:"用 should + 比较级完成:",template:"You ___ book the ___ early. This hotel is ___ than that one.",words:["should","accommodation","cheaper"]}
+],
+express:{prompt:"用 will 和 going to 计划一次家庭出游（区分用法，4句话）:",words:["destination","itinerary","budget","pack"]}
+},
+
+{title:"我的一天从刷手机开始",grammar:"🎯一般现在时+现在完成时<br><small>I wake up at… / I have already checked… / I scroll…every morning.</small><br>附带：频率副词、There be",grammarLabel:"一般现在时 + 现在完成时 + 频率副词",
+coreWords:[["routine","日常"],["notification","通知"],["scroll","滚动"],["social media","社交媒体"],["distraction","干扰"],["productive","高效的"],["screen time","屏幕时间"],["habit","习惯"],["constantly","不断地"],["aware","意识到的"]],
+sentences:[
+  {en:"My day <b>starts</b> with <b>scrolling</b> through <b>social media</b> — I <b>have already checked</b> all my <b>notifications</b> before breakfast.",cn:"我的一天从刷社交媒体开始——吃早餐前我已经查看完所有通知了。"},
+  {en:"I <b>spend</b> way too much <b>screen time</b> every morning. I <b>have tried</b> to break this <b>habit</b> many times.",cn:"我每天早上花太多时间看屏幕了。我试过很多次打破这个习惯。"},
+  {en:"<b>There are</b> always endless <b>distractions</b> on my phone. I <b>am constantly</b> checking for updates.",cn:"手机上总有没完没了的干扰。我不断地检查有没有更新。"},
+  {en:"I <b>have recently become</b> more <b>aware</b> of how <b>unproductive</b> my morning <b>routine</b> is.",cn:"我最近更加意识到我的晨间日常有多低效。"},
+  {en:"<b>Usually</b>, I <b>tell</b> myself to put the phone away, but I <b>have never succeeded</b> for more than a day.",cn:"通常，我告诉自己把手机收起来，但我从来没有成功坚持超过一天。"}
+],
+practice:[
+  {prompt:"用一般现在时+频率副词完成:",template:"I ___ check my phone ___ I wake up. It is a bad ___.",words:["always","as soon as","habit"]},
+  {prompt:"用现在完成时完成:",template:"I ___ already ___ an hour on my phone. I ___ not ___ anything ___ yet.",words:["have","spent","have","done","productive"]}
+],
+express:{prompt:"用一般现在时+现在完成时描述你每天刷手机的习惯:",words:["routine","scroll","notification","habit"]}
+},
+
+{title:"我家开始垃圾分类了",grammar:"🎯被动语态<br><small>Waste is sorted into… / Bins are placed… / Plastic can be recycled.</small><br>附带：should、条件句",grammarLabel:"被动语态 + should + 条件句",
+coreWords:[["recycle","回收"],["sort","分类"],["bin","垃圾桶"],["waste","垃圾"],["plastic","塑料"],["environment","环境"],["sustainable","可持续的"],["dispose","处理"],["pollution","污染"],["regulation","规定"]],
+sentences:[
+  {en:"In our community, household <b>waste</b> <b>must be sorted</b> into four categories. It <b>is required</b> by the new <b>regulation</b>.",cn:"在我们社区，家庭垃圾必须分为四类。这是新规定要求的。"},
+  {en:"<b>Plastic</b> bottles <b>can be recycled</b> and <b>are collected</b> every Tuesday morning. This <b>should be done</b> carefully.",cn:"塑料瓶可以被回收，每周二早上收集。这应该被仔细完成。"},
+  {en:"Different <b>bins</b> <b>have been placed</b> at every corner. Kitchen waste <b>is disposed</b> of separately.",cn:"每个角落都放置了不同的垃圾桶。厨余垃圾被分开处理。"},
+  {en:"<b>If</b> waste <b>is not sorted</b> properly, it <b>will be rejected</b> by the collection service. Everyone <b>should</b> cooperate.",cn:"如果垃圾分类不当，将被回收服务拒收。每个人都应该配合。"},
+  {en:"The <b>environment</b> <b>is being protected</b> by these efforts. A <b>sustainable</b> lifestyle <b>is being promoted</b> everywhere.",cn:"环境正通过这些努力得到保护。可持续的生活方式正在各地被推广。"}
+],
+practice:[
+  {prompt:"用被动语态完成:",template:"Waste ___ into different categories. Plastic ___ easily.",words:["is sorted","can be recycled"]},
+  {prompt:"用被动 + should 完成:",template:"Rubbish ___ in the correct bin. Everyone ___ follow the ___.",words:["should be placed","should","regulation"]}
+],
+express:{prompt:"用被动语态描述你家如何进行垃圾分类（3句话）:",words:["sort","recycle","bin","waste"]}
+},
+
+{title:"我在网上自学了一门课",grammar:"🎯现在完成时+不定式<br><small>I have completed… / I decided to learn… / I managed to finish…</small><br>附带：宾语从句、定语从句",grammarLabel:"现在完成时 + 不定式 + 宾语从句",
+coreWords:[["self-study","自学"],["online course","在线课程"],["certificate","证书"],["motivation","动力"],["discipline","自律"],["progress","进展"],["challenge","挑战"],["achievement","成就"],["flexible","灵活的"],["recommend","推荐"]],
+sentences:[
+  {en:"I <b>have just finished</b> an <b>online course</b> on web design. <b>Self-study</b> requires real <b>discipline</b>.",cn:"我刚完成了一门网页设计的在线课程。自学需要真正的自律。"},
+  {en:"I <b>decided to learn</b> coding <b>to improve</b> my skills. I <b>have made</b> steady <b>progress</b> every week.",cn:"我决定学编程来提高我的技能。我每周都在稳步进步。"},
+  {en:"The biggest <b>challenge</b> was <b>to stay</b> focused. I <b>have learned</b> a method <b>that</b> helps me concentrate better.",cn:"最大的挑战是保持专注。我学会了一个帮助我更专注的方法。"},
+  {en:"I <b>have earned</b> a <b>certificate</b> <b>that</b> proves my <b>achievement</b>. It was so <b>flexible</b> — I could study anytime.",cn:"我获得了一张证明我成就的证书。它非常灵活——我可以随时学习。"},
+  {en:"My friend asked me <b>whether</b> I would <b>recommend</b> it. I told her <b>that</b> the key is strong <b>motivation</b>.",cn:"朋友问我是否会推荐。我告诉她关键是强烈的动力。"}
+],
+practice:[
+  {prompt:"用现在完成时+不定式完成:",template:"I ___ already ___ a course. I decided ___ it to gain new skills.",words:["have","completed","to take"]},
+  {prompt:"用宾语从句完成:",template:"She asked ___ I liked the course. I said ___ it was amazing. I ___ her to try it.",words:["whether","that","recommend"]}
+],
+express:{prompt:"用现在完成时描述你自学一门课的经历（3句话）:",words:["self-study","online course","progress","achievement"]}
+},
+
+{title:"我第一次参加面试",grammar:"🎯宾语从句+现在完成时<br><small>I think that… / I have prepared… / The interviewer asked if I had…</small><br>附带：情态动词、虚拟语气",grammarLabel:"宾语从句 + 现在完成时 + 情态动词",
+coreWords:[["interview","面试"],["resume","简历"],["qualification","资格"],["confidence","信心"],["impress","留下好印象"],["prepare","准备"],["nervous","紧张的"],["opportunity","机会"],["employer","雇主"],["position","职位"]],
+sentences:[
+  {en:"I <b>think that</b> my first <b>interview</b> went better than I expected, though I was incredibly <b>nervous</b>.",cn:"我觉得我第一次面试比预想的要好，尽管我当时紧张得不行。"},
+  {en:"The interviewer asked me <b>whether I had</b> any relevant <b>qualification</b>. I <b>have prepared</b> my <b>resume</b> carefully.",cn:"面试官问我是否有相关的资格。我已经认真准备了简历。"},
+  {en:"I <b>believe that</b> <b>confidence</b> is the key <b>to impressing</b> any <b>employer</b>. You <b>should</b> be yourself.",cn:"我相信信心是给任何雇主留下好印象的关键。你应该做自己。"},
+  {en:"She told me <b>that</b> the <b>position</b> required teamwork. If I <b>were</b> more experienced, I <b>would feel</b> less anxious.",cn:"她告诉我这个职位需要团队合作。要是我更有经验，我就会感觉不那么焦虑了。"},
+  {en:"I <b>have never realized</b> <b>how important</b> preparation is until this <b>opportunity</b> came along.",cn:"在这次机会到来之前，我从来没有意识到准备有多重要。"}
+],
+practice:[
+  {prompt:"用宾语从句完成:",template:"I think ___ I did well. The interviewer said ___ I had good ___.",words:["that","that","qualifications"]},
+  {prompt:"用现在完成时+情态动词完成:",template:"I ___ already ___ my ___. You ___ be confident in an interview.",words:["have","prepared","resume","should"]}
+],
+express:{prompt:"描述你第一次面试的经历（用宾语从句+现在完成时）:",words:["interview","nervous","confidence","prepare"]}
+},
+
+{title:"没有手机的一天",grammar:"🎯比较级+现在完成时<br><small>It was harder than I thought. / I have learned to… / I have never felt so…</small><br>附带：被动语态、定语从句",grammarLabel:"比较级 + 现在完成时 + 被动语态",
+coreWords:[["digital detox","数字排毒"],["disconnect","断开"],["anxiety","焦虑"],["boredom","无聊"],["awareness","意识"],["liberating","解放的"],["addicted","上瘾的"],["present","当下的"],["meaningful","有意义的"],["device","设备"]],
+sentences:[
+  {en:"One day without my phone was <b>far harder than</b> I imagined. I <b>have never felt</b> such intense <b>anxiety</b> before.",cn:"一天没有手机比我想象的要难得多。我以前从未感受过如此强烈的焦虑。"},
+  {en:"I <b>have tried</b> a <b>digital detox</b> twice. <b>Being disconnected</b> from social media is surprisingly <b>liberating</b>.",cn:"我尝试过两次数字排毒。断开社交媒体出奇地解放。"},
+  {en:"I realized <b>how addicted</b> I was to my <b>device</b>. That realization <b>has changed</b> my daily habits forever.",cn:"我意识到我对我的设备有多么上瘾。这个认识永远地改变了我的日常习惯。"},
+  {en:"<b>More awareness</b> of real life is <b>what is needed</b> most. I <b>have become</b> more <b>present</b> and engaged.",cn:"对现实生活更多的觉知是最需要的。我变得更加专注当下和投入了。"},
+  {en:"The initial <b>boredom</b> was <b>worse than</b> I expected, but <b>it has been replaced</b> by a sense of <b>meaningful</b> calm.",cn:"最初的枯燥比我想的更糟，但它已被一种有意义的平静所取代。"}
+],
+practice:[
+  {prompt:"用比较级+现在完成时完成:",template:"This day was ___ than I thought. I ___ learned to appreciate ___ moments.",words:["harder","have","present"]},
+  {prompt:"用被动语态完成:",template:"My phone ___ away. I realized how ___ I was to the ___.",words:["was taken","addicted","device"]}
+],
+express:{prompt:"用比较级+现在完成时描述一次没有手机的经历:",words:["digital detox","anxiety","liberating","awareness"]}
+},
+
+{title:"去外国朋友家做客",grammar:"🎯让步从句+比较状语从句<br><small>Although it is different, I try my best. / The more I learn, the more…</small><br>附带：名词从句、情态动词",grammarLabel:"让步从句 + 比较状语从句 + 情态动词",
+coreWords:[["hospitality","待客之道"],["etiquette","礼仪"],["adapt","适应"],["compliment","赞美"],["host","主人"],["guest","客人"],["tradition","传统"],["considerate","体贴的"],["appropriate","合适的"],["offensive","冒犯的"]],
+sentences:[
+  {en:"<b>Although</b> the customs were unfamiliar, I tried my best to be a <b>considerate</b> <b>guest</b> and show respect.",cn:"虽然风俗不熟悉，但我尽力做一个体贴的客人并表示尊重。"},
+  {en:"<b>The more</b> I learned about their <b>hospitality</b> <b>traditions</b>, <b>the more</b> I appreciated how warm they were.",cn:"我越了解他们的待客传统，就越感激他们有多热情。"},
+  {en:"<b>Even though</b> I did not know the <b>etiquette</b>, the <b>host</b> was very understanding. I <b>should have</b> asked beforehand.",cn:"尽管我不懂礼仪，主人非常理解。我本该事先问一下的。"},
+  {en:"I gave a <b>compliment</b> about the food — I was told <b>that</b> it is always <b>appropriate</b> to do so.",cn:"我赞美了食物——别人告诉我这样做总是合适的。"},
+  {en:"<b>No matter how</b> different the culture is, being genuine is never <b>offensive</b>. You <b>must</b> <b>adapt</b> with an open mind.",cn:"不管文化有多不同，真诚是永远不会冒犯人的。你必须以开放的心态去适应。"}
+],
+practice:[
+  {prompt:"用 Although / Even though 让步从句完成:",template:"___ I was nervous, I tried to be ___. ___ the customs differ, respect is universal.",words:["Although","considerate","Even though"]},
+  {prompt:"用 the more…the more 比较状语从句完成:",template:"___ I traveled, ___ I understood different ___ and traditions.",words:["The more","the more","cultures"]}
+],
+express:{prompt:"用让步从句和比较状语从句描述去朋友家做客的经历:",words:["hospitality","etiquette","adapt","appropriate"]}
+},
+
+{title:"我最喜欢的运动",grammar:"🎯动名词+不定式<br><small>I enjoy swimming. / I decided to join… / Playing basketball helps me…</small><br>附带：条件句、情态动词",grammarLabel:"动名词 + 不定式 + 条件句",
+coreWords:[["athletic","运动的"],["endurance","耐力"],["teamwork","团队合作"],["strategy","策略"],["competitive","有竞争力的"],["opponent","对手"],["training","训练"],["tournament","锦标赛"],["passionate","充满热情的"],["determination","决心"]],
+sentences:[
+  {en:"<b>Playing</b> basketball <b>helps</b> me stay <b>athletic</b> and builds my <b>endurance</b>. I truly love <b>competing</b>.",cn:"打篮球帮助我保持运动能力和增强耐力。我真的热爱竞技。"},
+  {en:"I <b>decided to join</b> the school team <b>to improve</b> my <b>teamwork</b> skills and learn better <b>strategy</b>.",cn:"我决定加入校队来提高我的团队合作能力并学习更好的策略。"},
+  {en:"<b>Winning</b> against a strong <b>opponent</b> is one of the most <b>competitive</b> and satisfying feelings ever.",cn:"赢过强大的对手是最具竞争性和满足感的感觉之一。"},
+  {en:"<b>If</b> I keep up my <b>training</b>, I believe I <b>can</b> make it to the regional <b>tournament</b>.",cn:"如果我坚持训练，我相信我能进入地区锦标赛。"},
+  {en:"I am deeply <b>passionate</b> about this sport. It takes real <b>determination</b> <b>to keep going</b> when you lose.",cn:"我对这项运动充满热情。输了之后继续坚持需要真正的决心。"}
+],
+practice:[
+  {prompt:"用动名词/不定式完成:",template:"I enjoy ___ basketball. I decided ___ the team. ___ sports makes me healthy.",words:["playing","to join","Playing"]},
+  {prompt:"用 if 条件句完成:",template:"___ I train harder, I ___ win the next ___. ___ is essential.",words:["If","can","tournament","Determination"]}
+],
+express:{prompt:"用动名词和不定式介绍你最喜欢的运动（4句话）:",words:["playing","endurance","teamwork","competitive"]}
+},
+
+{title:"一部让我哭的电影",grammar:"🎯定语从句+被动语态<br><small>A film that moved me to tears. / I was touched by… / The story was based on…</small><br>附带：过去时、感官动词",grammarLabel:"定语从句 + 被动语态 + 感官动词",
+coreWords:[["plot","情节"],["character","角色"],["soundtrack","配乐"],["emotional","情感上的"],["heartbreaking","令人心碎的"],["inspiring","鼓舞人心的"],["ending","结局"],["perform","表演"],["cinematography","摄影"],["masterpiece","杰作"]],
+sentences:[
+  {en:"One film <b>that</b> made me cry is a <b>masterpiece</b> <b>that was directed</b> with stunning <b>cinematography</b>.",cn:"一部让我哭的电影是一部摄影惊艳的杰作。"},
+  {en:"The <b>plot</b>, <b>which was based</b> on a true story, was so <b>heartbreaking</b> <b>that</b> I <b>could</b> not hold back my tears.",cn:"这个基于真实故事的情节太令人心碎了，我忍不住流下了眼泪。"},
+  {en:"I <b>was deeply moved</b> by the main <b>character</b> — every scene <b>was performed</b> with such genuine <b>emotional</b> depth.",cn:"我被主角深深打动了——每一场戏都表演得情感充沛、真实动人。"},
+  {en:"The <b>soundtrack</b> <b>was composed</b> beautifully. I <b>watched</b> the <b>ending</b> three times and cried every time.",cn:"配乐被谱写得优美极了。我看了结局三遍，每次都哭。"},
+  {en:"It is an <b>inspiring</b> story of hope <b>that</b> <b>was told</b> through powerful <b>performances</b>. I <b>felt</b> every moment.",cn:"这是一部通过强有力的表演讲述的鼓舞人心的希望故事。我感受到了每一个瞬间。"}
+],
+practice:[
+  {prompt:"用定语从句完成:",template:"I love the film ___ made me cry. The character ___ I related to the most was brave.",words:["that","whom"]},
+  {prompt:"用被动语态完成:",template:"The story ___ on real events. I ___ deeply ___ by the ___ soundtrack.",words:["was based","was","moved","emotional"]}
+],
+express:{prompt:"用定语从句和被动语态介绍一部让你感动的电影:",words:["plot","character","emotional","masterpiece"]}
+},
+
+{title:"我的零花钱去哪了",grammar:"🎯现在完成时+条件句<br><small>I have spent all my… / If I save enough, I will… / I have been saving for…</small><br>附带：宾语从句、比较级",grammarLabel:"现在完成时 + 条件句 + 宾语从句",
+coreWords:[["allowance","零花钱"],["expense","开支"],["save up","存钱"],["purchase","购买"],["receipt","收据"],["impulse","冲动"],["budget","预算"],["worthwhile","值得的"],["afford","负担得起"],["track","追踪"]],
+sentences:[
+  {en:"I <b>have already spent</b> this month's <b>allowance</b> and I cannot even remember where it went. I <b>need to track</b> my <b>expenses</b>.",cn:"我已经花完了这个月的零花钱，我甚至不记得花到哪里去了。我需要追踪我的开支。"},
+  {en:"<b>If</b> I <b>had saved</b> more last month, I <b>would have</b> enough to <b>afford</b> the new headphones now.",cn:"如果我上个月省下更多钱，现在就有足够的钱买新耳机了。"},
+  {en:"I realize <b>that</b> most of my <b>purchases</b> were made on <b>impulse</b>. I <b>have decided</b> to create a monthly <b>budget</b>.",cn:"我意识到我的大多数购买都是冲动消费。我已经决定制定月度预算。"},
+  {en:"I <b>have been saving up</b> for a <b>worthwhile</b> trip. <b>If</b> I keep going, I <b>will</b> reach my goal by summer.",cn:"我一直在为一次值得的旅行存钱。如果我继续下去，到夏天就能达到目标。"},
+  {en:"My mom asked me <b>whether</b> I kept any <b>receipts</b>. I admitted <b>that</b> I was <b>less careful than</b> I should have been.",cn:"妈妈问我有没有留收据。我承认我比应该的更不小心。"}
+],
+practice:[
+  {prompt:"用现在完成时完成:",template:"I ___ already ___ all my money. I ___ ___ saving for months.",words:["have","spent","have","been"]},
+  {prompt:"用条件句完成:",template:"___ I had a better ___, I ___ spend less on ___ purchases.",words:["If","budget","would","impulse"]}
+],
+express:{prompt:"用现在完成时+条件句说说你的零花钱管理:",words:["allowance","save up","budget","afford"]}
+},
+
+{title:"堵车迟到怎么解释",grammar:"🎯原因从句+让步从句<br><small>I am late because… / Although I left early… / Since the traffic was…</small><br>附带：比较级、过去时",grammarLabel:"原因从句 + 让步从句 + 比较级",
+coreWords:[["traffic jam","交通堵塞"],["rush hour","高峰期"],["apologize","道歉"],["unavoidable","不可避免的"],["frustrating","令人沮丧的"],["delay","延误"],["reasonable","合理的"],["explanation","解释"],["alternative","替代方案"],["commute","通勤"]],
+sentences:[
+  {en:"I am terribly sorry <b>because</b> I got stuck in a massive <b>traffic jam</b> during <b>rush hour</b>. It was completely <b>frustrating</b>.",cn:"我非常抱歉，因为我在高峰期遇上了严重堵车。真是让人沮丧。"},
+  {en:"<b>Although</b> I left home half an hour earlier than usual, the <b>commute</b> was still <b>worse than</b> I had imagined.",cn:"虽然我比平时早半小时出门，通勤状况还是比我想象的更糟。"},
+  {en:"<b>Since</b> the <b>delay</b> was <b>unavoidable</b>, I hope you can accept my <b>reasonable</b> <b>explanation</b>.",cn:"既然延误是不可避免的，我希望你能接受我合理的解释。"},
+  {en:"I sincerely <b>apologize</b>. <b>Even though</b> it was not entirely my fault, I should have called you sooner.",cn:"我真诚地道歉。尽管这不全是我的错，我本应该早点打电话给你的。"},
+  {en:"Next time, I will take an <b>alternative</b> route. <b>As</b> the traffic is unpredictable, leaving even earlier is the safest bet.",cn:"下次我会走另一条路线。由于交通难以预测，更早出发是最稳妥的。"}
+],
+practice:[
+  {prompt:"用 because / since 原因从句完成:",template:"I was late ___ I got stuck in a ___. ___ the delay was unavoidable, I hope you understand.",words:["because","traffic jam","Since"]},
+  {prompt:"用 Although 让步从句完成:",template:"___ I left early, the ___ was still terrible. I ___ to my teacher.",words:["Although","commute","apologized"]}
+],
+express:{prompt:"用原因从句+让步从句解释为什么迟到并道歉:",words:["traffic jam","rush hour","apologize","unavoidable"]}
+},
+
+{title:"地震来了怎么办",grammar:"🎯被动语态+时间从句<br><small>Drop, Cover, Hold. / When the ground shakes, … / Doors should be opened.</small><br>附带：条件句、情态动词",grammarLabel:"被动语态 + 时间从句 + 条件句",
+coreWords:[["earthquake","地震"],["evacuate","疏散"],["shelter","避难所"],["emergency","紧急情况"],["aftershock","余震"],["survival","生存"],["supplies","物资"],["procedure","程序"],["panic","恐慌"],["secure","稳固的"]],
+sentences:[
+  {en:"<b>When</b> the ground starts shaking, tables and desks <b>should be used</b> as <b>shelter</b>. The most important rule is: do not <b>panic</b>.",cn:"当地面开始摇晃时，桌子和书桌应该被用作掩体。最重要的规则是：不要恐慌。"},
+  {en:"All doors <b>must be opened</b> immediately <b>when</b> an <b>earthquake</b> strikes — escape routes <b>should not be blocked</b>.",cn:"地震发生时所有门必须立即打开——逃生路线不应被阻塞。"},
+  {en:"<b>Once</b> the shaking stops, the building <b>should be evacuated</b> calmly. Be prepared for <b>aftershocks</b>.",cn:"一旦震动停止，应冷静疏散建筑物。要做好余震的准备。"},
+  {en:"<b>If</b> you are trapped, you <b>must</b> conserve energy. Emergency <b>supplies</b> <b>have been prepared</b> in every classroom.",cn:"如果你被困住了，你必须保存体力。每个教室都已准备了应急物资。"},
+  {en:"The standard <b>procedure</b> <b>is taught</b> in schools. <b>Survival</b> skills <b>should be practiced</b> regularly by everyone.",cn:"标准流程在学校被教授。生存技能应该被每个人定期练习。"}
+],
+practice:[
+  {prompt:"用被动语态+时间从句完成:",template:"___ the shaking stops, the building ___ immediately. Keep calm and do not ___.",words:["When","should be evacuated","panic"]},
+  {prompt:"用 if 条件句完成:",template:"___ you feel an ___, you ___ hide under a table. Ensure your position is ___.",words:["If","earthquake","should","secure"]}
+],
+express:{prompt:"用被动语态和时间从句说明地震安全措施（3句话）:",words:["earthquake","shelter","evacuate","emergency"]}
+},
+
+{title:"我想养一只宠物",grammar:"🎯定语从句+动名词<br><small>I want a dog that is… / Taking care of a pet means…</small><br>附带：原因从句、情态动词",grammarLabel:"定语从句 + 动名词 + 原因从句",
+coreWords:[["companion","伙伴"],["responsibility","责任"],["breed","品种"],["affection","关爱"],["loyalty","忠诚"],["maintenance","养护"],["companion animal","伴侣动物"],["commitment","承诺"],["adopt","领养"],["attachment","依恋"]],
+sentences:[
+  {en:"I want a pet <b>that</b> can be my lifelong <b>companion</b> — a dog <b>whose</b> <b>loyalty</b> and <b>affection</b> are unconditional.",cn:"我想要一只能做我终身伙伴的宠物——一只忠诚和关爱无条件的狗。"},
+  {en:"<b>Taking care of</b> a pet involves huge <b>responsibility</b>. It is a serious <b>commitment</b>, not just a hobby.",cn:"照顾宠物涉及巨大的责任。这是一种严肃的承诺，而不仅仅是爱好。"},
+  {en:"<b>Because</b> pets require daily <b>maintenance</b>, you <b>must</b> consider the <b>breed</b> carefully before making a decision.",cn:"因为宠物需要日常养护，你必须在下决定之前认真考虑品种。"},
+  {en:"<b>Adopting</b> a <b>companion animal</b> from a shelter is more meaningful than buying one. The emotional <b>attachment</b> grows deeply.",cn:"从收容所领养伴侣动物比买一只更有意义。情感依恋会变得很深。"},
+  {en:"I have found a cat <b>that</b> I truly love. <b>Having</b> a pet teaches you about care, patience and unconditional love.",cn:"我找到了一只我真心喜欢的猫。养宠物教会你关心、耐心和无条件的爱。"}
+],
+practice:[
+  {prompt:"用定语从句完成:",template:"I want a pet ___ is friendly and playful. A dog ___ loyalty is strong would be perfect.",words:["that","whose"]},
+  {prompt:"用动名词完成:",template:"___ a pet requires daily ___. I am ready for the ___.",words:["Caring for","maintenance","commitment"]}
+],
+express:{prompt:"用定语从句+动名词说服父母让你养一只宠物:",words:["companion","responsibility","loyalty","adopt"]}
+},
+
+{title:"一首让我想起家乡的歌",grammar:"🎯定语从句+现在完成时<br><small>A song that reminds me of… / I have listened to… / The melody that has stayed…</small><br>附带：比较级、非谓语",grammarLabel:"定语从句 + 现在完成时 + 比较级",
+coreWords:[["melody","旋律"],["lyrics","歌词"],["nostalgia","怀旧"],["childhood","童年"],["evoke","唤起"],["sentimental","感伤的"],["rhythm","节奏"],["timeless","永恒的"],["folk song","民歌"],["cherish","珍惜"]],
+sentences:[
+  {en:"There is one song <b>that</b> always brings me <b>nostalgia</b> — its <b>melody</b> <b>has stayed</b> with me since my <b>childhood</b>.",cn:"有一首歌总是让我怀旧——它的旋律从我的童年起就一直陪伴着我。"},
+  {en:"The <b>lyrics</b>, <b>which</b> <b>have been passed</b> down for generations, <b>evoke</b> memories of home more powerfully <b>than</b> any photo.",cn:"那些代代相传的歌词，比任何照片都更有力地唤起了家的记忆。"},
+  {en:"I <b>have listened</b> to this <b>folk song</b> hundreds of times, yet it feels <b>more timeless</b> <b>than</b> ever.",cn:"这首民歌我已经听了几百遍了，但它感觉比以往任何时候都更永恒。"},
+  {en:"<b>Hearing</b> the familiar <b>rhythm</b> instantly makes me <b>sentimental</b>. I <b>have never found</b> another song that does the same.",cn:"听到这熟悉的节奏让我顿时感伤。我从未找到过另一首同样效果的歌。"},
+  {en:"It is a song <b>that</b> I truly <b>cherish</b>. <b>Growing up</b> with it in the background <b>has shaped</b> who I am.",cn:"这是一首我真正珍惜的歌。在它的陪伴下长大塑造了今天的我。"}
+],
+practice:[
+  {prompt:"用定语从句完成:",template:"I love the song ___ reminds me of home. Its ___ is beautiful.",words:["that","melody"]},
+  {prompt:"用现在完成时完成:",template:"I ___ to this song for years. It ___ many happy memories of my ___.",words:["have listened","has evoked","childhood"]}
+],
+express:{prompt:"用定语从句描述一首让你想家的歌:",words:["melody","lyrics","nostalgia","childhood"]}
+},
+
+{title:"那次我们比赛输了",grammar:"🎯比较级+让步从句<br><small>We were better than them but… / Although we lost, we… / The harder we tried…</small><br>附带：条件句、过去时",grammarLabel:"比较级 + 让步从句 + 条件句",
+coreWords:[["defeat","失败"],["opponent","对手"],["teamwork","团队合作"],["strategy","策略"],["disappointment","失望"],["effort","努力"],["dignity","尊严"],["resilience","韧性"],["analyze","分析"],["comeback","翻盘"]],
+sentences:[
+  {en:"<b>Although</b> we lost the match, we played <b>better than</b> we ever had before. <b>Defeat</b> taught us so much.",cn:"虽然我们输掉了比赛，但我们打得比以往任何时候都好。失败教会了我们很多。"},
+  {en:"Our <b>opponent</b> was <b>stronger than</b> we expected, yet our <b>teamwork</b> never broke down, not even once.",cn:"我们的对手比我们预期的更强，但我们的团队合作从未崩溃，一次都没有。"},
+  {en:"<b>Even though</b> we felt deep <b>disappointment</b>, we accepted the result with <b>dignity</b> and shook hands.",cn:"尽管我们感到深深的失望，我们还是有尊严地接受了结果并握了手。"},
+  {en:"<b>The harder</b> we tried in the second half, <b>the more</b> we exposed our weaknesses. We <b>should have</b> adjusted our <b>strategy</b>.",cn:"下半场我们越努力，就越暴露了我们的弱点。我们本该调整策略的。"},
+  {en:"<b>If</b> we <b>had communicated</b> better, we <b>could have</b> won. But <b>resilience</b> is what matters — we will <b>analyze</b> and make a <b>comeback</b>.",cn:"如果我们沟通得更好，我们本可以赢的。但韧性才是关键——我们会分析并翻盘。"}
+],
+practice:[
+  {prompt:"用 Although 让步从句完成:",template:"___ we lost, we showed great ___. The ___ was tough but fair.",words:["Although","effort","opponent"]},
+  {prompt:"用比较级完成:",template:"They were ___ than us. ___ harder we tried, ___ mistakes we made.",words:["stronger","The","the more"]}
+],
+express:{prompt:"用比较级和让步从句描述一次失败的比赛经历:",words:["defeat","teamwork","disappointment","resilience"]}
+},
+
+{title:"一本改变我想法的书",grammar:"🎯定语从句+现在完成时<br><small>A book that changed… / I have read… / The ideas which…</small><br>附带：动名词、宾语从句",grammarLabel:"定语从句 + 现在完成时 + 动名词",
+coreWords:[["perspective","视角"],["insight","洞见"],["transform","转变"],["profound","深远的"],["philosophy","哲学"],["persuade","说服"],["impact","影响"],["rethink","重新思考"],["enlightening","启迪的"],["chapter","章节"]],
+sentences:[
+  {en:"There is one book <b>that</b> completely changed my <b>perspective</b> on life — I <b>have reread</b> it three times.",cn:"有一本书彻底改变了我对生活的视角——我已经重读了三遍。"},
+  {en:"The author <b>whose</b> <b>philosophy</b> <b>has influenced</b> millions shares a <b>profound</b> <b>insight</b> in every <b>chapter</b>.",cn:"那位其哲学影响了数百万人的作者在每一章都分享了深远的洞见。"},
+  {en:"<b>Reading</b> this book <b>has transformed</b> how I view challenges. I <b>have learned</b> <b>that</b> failure is merely feedback.",cn:"阅读这本书转变了我看待挑战的方式。我明白了失败只是反馈。"},
+  {en:"The ideas <b>which</b> are presented in the final <b>chapter</b> <b>have persuaded</b> me to <b>rethink</b> my career goals.",cn:"最后一章中提出的想法说服了我重新思考我的职业目标。"},
+  {en:"It is the most <b>enlightening</b> book I <b>have ever read</b>. Its <b>impact</b> on my thinking <b>has been</b> truly transformative.",cn:"这是我读过的最具启迪性的书。它对我思维的影响确实是变革性的。"}
+],
+practice:[
+  {prompt:"用定语从句完成:",template:"This is the book ___ changed my life. The author ___ ideas inspired me is amazing.",words:["that","whose"]},
+  {prompt:"用现在完成时完成:",template:"I ___ already ___ three chapters. The book ___ me to think differently.",words:["have","read","has persuaded"]}
+],
+express:{prompt:"用定语从句+现在完成时介绍一本改变你想法的书:",words:["perspective","insight","transform","impact"]}
+},
+
+{title:"我去敬老院做志愿者的那天",grammar:"🎯不定式+动名词<br><small>I decided to volunteer at… / Helping others makes me… / To see them smile…</small><br>附带：现在完成时、过去时",grammarLabel:"不定式 + 动名词 + 现在完成时",
+coreWords:[["volunteer","志愿者"],["elderly","老人"],["companionship","陪伴"],["gratitude","感激"],["contribute","贡献"],["rewarding","有回报的"],["compassion","同情心"],["interact","互动"],["fulfillment","满足感"],["humble","谦卑的"]],
+sentences:[
+  {en:"I <b>decided to volunteer</b> at a nursing home. <b>Spending</b> time with the <b>elderly</b> <b>has given</b> me a new sense of <b>fulfillment</b>.",cn:"我决定去敬老院做志愿者。花时间陪伴老人给了我一种新的满足感。"},
+  {en:"<b>Helping</b> others <b>is</b> deeply <b>rewarding</b>. <b>To see</b> their smiles of <b>gratitude</b> <b>was</b> the best part of my day.",cn:"帮助他人是非常有回报的。看到他们感激的笑容是我一天中最好的部分。"},
+  {en:"<b>Interacting</b> with the residents taught me real <b>compassion</b>. I <b>have become</b> more <b>humble</b> and patient.",cn:"与老人们互动教会了我真正的同情心。我变得更谦卑、更有耐心了。"},
+  {en:"I <b>have contributed</b> something meaningful. <b>Providing</b> <b>companionship</b> to those who feel lonely is priceless.",cn:"我贡献了一些有意义的事。为感到孤独的人提供陪伴是无价的。"},
+  {en:"<b>To be</b> a true <b>volunteer</b>, you need empathy. I <b>have never experienced</b> such a <b>rewarding</b> feeling before.",cn:"要做一个真正的志愿者，你需要同理心。我以前从未体验过如此有回报的感觉。"}
+],
+practice:[
+  {prompt:"用不定式/动名词完成:",template:"I chose ___ at a nursing home. ___ the elderly is very ___.",words:["to volunteer","Helping","rewarding"]},
+  {prompt:"用现在完成时完成:",template:"I ___ ___ a volunteer for six months. It ___ a truly ___ experience.",words:["have","been","has been","fulfilling"]}
+],
+express:{prompt:"用不定式和动名词描述一次志愿者经历:",words:["volunteer","elderly","companionship","gratitude"]}
+},
+
+{title:"AI能帮我写作业吗",grammar:"🎯情态动词推测+被动语态<br><small>AI might replace… / It can be used to… / It must be noted that…</small><br>附带：条件句、主语从句",grammarLabel:"情态动词推测 + 被动语态 + 条件句",
+coreWords:[["artificial","人工的"],["intelligence","智能"],["capability","能力"],["limitation","局限"],["assist","协助"],["plagiarism","抄袭"],["ethics","伦理"],["reliable","可靠的"],["generate","生成"],["critical thinking","批判思维"]],
+sentences:[
+  {en:"<b>Can</b> AI really <b>assist</b> with homework? It <b>might</b> be useful for research, but it <b>should not be relied</b> on entirely.",cn:"AI真的能帮做作业吗？它可能在研究方面有用，但不应被完全依赖。"},
+  {en:"AI <b>can be used</b> <b>to generate</b> ideas, but the final work <b>must be done</b> by the student — <b>otherwise</b> it is <b>plagiarism</b>.",cn:"AI可以用来生成想法，但最终的工作必须由学生完成——否则就是抄袭。"},
+  {en:"<b>It must be admitted</b> that AI has remarkable <b>capabilities</b>, but its <b>limitations</b> <b>cannot be ignored</b>.",cn:"必须承认AI有卓越的能力，但它的局限性不能被忽视。"},
+  {en:"<b>Whether</b> AI <b>should be allowed</b> in education <b>is</b> a hot debate. <b>If</b> used properly, it <b>could</b> enhance <b>critical thinking</b>.",cn:"AI是否应该被允许用于教育是一个热议话题。如果使用得当，它可以提升批判思维。"},
+  {en:"The <b>ethics</b> of AI <b>cannot be overlooked</b>. Students <b>must</b> learn to evaluate whether the information is <b>reliable</b>.",cn:"AI的伦理不能被忽视。学生必须学会评估信息是否可靠。"}
+],
+practice:[
+  {prompt:"用情态动词推测+被动完成:",template:"AI ___ a helpful tool, but it ___ be used wisely. Its ___ are real.",words:["might be","must","limitations"]},
+  {prompt:"用条件句完成:",template:"___ AI is used properly, it ___ improve learning. But ___ thinking is essential.",words:["If","can","critical"]}
+],
+express:{prompt:"用情态动词推测和被动语态讨论AI是否能帮做作业:",words:["assist","generate","reliable","ethics"]}
+},
+
+{title:"我的外国笔友",grammar:"🎯现在完成时+定语从句<br><small>I have been writing to… / A friend who lives in… / We have shared…</small><br>附带：让步从句、比较级",grammarLabel:"现在完成时 + 定语从句 + 让步从句",
+coreWords:[["pen pal","笔友"],["correspondence","通信"],["culture shock","文化冲击"],["exchange","交流"],["time zone","时区"],["fluent","流利的"],["intercultural","跨文化的"],["curiosity","好奇心"],["perspective","视角"],["meaningful","有意义的"]],
+sentences:[
+  {en:"I <b>have been writing</b> to a <b>pen pal</b> in England for three years. This <b>correspondence</b> <b>has become</b> the most <b>meaningful</b> part of my routine.",cn:"我和一个英国的笔友通信已经三年了。这段通信已成为我日常中最有意义的一部分。"},
+  {en:"My pen pal, <b>who</b> is now <b>fluent</b> in Chinese, is a person <b>whose</b> <b>curiosity</b> about my culture never fades.",cn:"我的笔友现在中文很流利，他是一个对我文化好奇心永不消退的人。"},
+  {en:"<b>Although</b> the <b>time zone</b> difference makes live chat difficult, we <b>have managed</b> to maintain a regular <b>exchange</b>.",cn:"虽然时区差异让实时聊天很困难，我们还是设法保持了定期的交流。"},
+  {en:"I <b>have gained</b> a broader <b>perspective</b> through this <b>intercultural</b> friendship — <b>much broader than</b> any textbook could offer.",cn:"通过这段跨文化的友谊，我获得了更广阔的视角——比任何课本能提供的都要广阔得多。"},
+  {en:"We <b>have shared</b> our dreams, fears and <b>culture shock</b> stories. <b>Even though</b> we live far apart, we feel close.",cn:"我们分享了彼此的梦想、恐惧和文化冲击的故事。尽管我们相隔很远，却感觉很亲近。"}
+],
+practice:[
+  {prompt:"用现在完成时完成:",template:"I ___ a pen pal for two years. We ___ many interesting stories.",words:["have had","have shared"]},
+  {prompt:"用定语从句完成:",template:"My pen pal, ___ lives in Australia, has a personality ___ I really admire.",words:["who","that"]}
+],
+express:{prompt:"用现在完成时+定语从句描述你的笔友:",words:["pen pal","correspondence","exchange","perspective"]}
+},
+
+{title:"十年后的我会是什么样",grammar:"🎯总复习<br><small>I will be… / By then, I will have… / If I work hard, I may…</small><br>附带：将来时、虚拟语气",grammarLabel:"总复习：综合运用",
+coreWords:[["vision","愿景"],["aspiration","抱负"],["optimistic","乐观的"],["milestone","里程碑"],["evolve","演变"],["dedication","专注"],["potential","潜力"],["ambitious","有雄心的"],["inevitable","必然的"],["embrace","拥抱"]],
+sentences:[
+  {en:"In ten years, I <b>will have graduated</b> from university and <b>will be</b> pursuing my <b>vision</b> with full <b>dedication</b>.",cn:"十年后，我将已经大学毕业，并全力以赴地追逐我的愿景。（将来完成时）"},
+  {en:"I <b>am optimistic</b> about the future. <b>By then</b>, I <b>will have achieved</b> several important <b>milestones</b> in my career.",cn:"我对未来很乐观。到那时，我将在职业生涯中完成几个重要的里程碑。（将来完成时）"},
+  {en:"<b>If</b> I <b>were</b> to give my future self one piece of advice, I <b>would say</b>: <b>embrace</b> every challenge as it comes.",cn:"如果我要给未来的自己一个建议，我会说：拥抱迎面而来的每一个挑战。（虚拟语气）"},
+  {en:"<b>Not only will</b> I <b>have</b> a career, <b>but</b> I <b>will also have</b> a family — I hope to <b>evolve</b> into a more mature person.",cn:"我不仅会有一份事业，我还将有一个家庭——我希望能成长为一个更成熟的人。（倒装句）"},
+  {en:"<b>It is</b> my <b>ambitious</b> dream <b>that</b> drives me forward. I believe <b>that</b> my <b>potential</b> is limitless.",cn:"正是我那雄心勃勃的梦想在推动我前进。我相信我的潜力是无限的。（强调句+宾语从句）"}
+],
+practice:[
+  {prompt:"用将来完成时完成:",template:"By 2036, I ___ from university. I ___ several languages by then.",words:["will have graduated","will have learned"]},
+  {prompt:"综合语法完成:",template:"If I ___ my future self, I would say: embrace ___. Every ___ teaches us something.",words:["could meet","challenges","milestone"]}
+],
+express:{prompt:"用至少 3 种语法结构描述十年后的自己:",words:["vision","optimistic","ambitious","embrace"]}
+}
+
+];
+
+// ==================== RENDER ====================
+var curTopic = 0;
+
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function renderTopicBar(){
+  var h = '';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic-1+DATA.length)%DATA.length+')" title="上一课">←</button>';
+  h += '<select onchange="pickTopic(parseInt(this.value))">';
+  for(var i=0;i<DATA.length;i++){
+    h += '<option value="'+i+'"'+(i===curTopic?' selected':'')+'>'+(i+1)+'. '+esc(DATA[i].title)+'</option>';
+  }
+  h += '</select>';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic+1)%DATA.length+')" title="下一课">→</button>';
+  h += '<div class="progress" style="display:none"></div>';
+  document.getElementById('topicBar').innerHTML = h;
+}
+
+function pickTopic(i){
+  curTopic = i;
+  renderTopicBar();
+  renderTopic();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window._testMode) startTest();
+}
+
+function renderTopic(){
+  var t = DATA[curTopic];
+  document.getElementById('topicTitle').textContent = (curTopic+1)+'. '+t.title;
+
+  var h = '';
+
+  // Section 1: Core Words
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🧠 核心词汇（10个）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">📖 '+t.grammarLabel+'</div>';
+  h += '<div class="word-grid">';
+  t.coreWords.forEach(function(w){
+    h += '<div class="word-chip"><button class="spk" data-w="'+esc(w[0])+'">🔊</button><span class="en">'+esc(w[0])+'</span><span class="cn">'+esc(w[1])+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 2: Grammar Sentences
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>📝 语法例句（5句）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">'+t.grammar+'</div><div class="sentence-list">';
+  t.sentences.forEach(function(s){
+    h += '<div class="sent">'+s.en+'<span class="cn">'+esc(s.cn)+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 3: Sentence Practice
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>✏️ 造句练习</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  t.practice.forEach(function(p,pIdx){
+    h += '<div class="practice-item" id="practice-'+pIdx+'">';
+    h += '<div class="prompt">'+esc(p.prompt)+'</div>';
+    var parts = p.template.split('___');
+    var blanks = '<span class="blanks">';
+    for(var pi=0; pi<parts.length; pi++){
+      blanks += esc(parts[pi]);
+      if(pi < parts.length-1){
+        blanks += '<span class="gap" id="gap-'+pIdx+'-'+pi+'" onclick="fillGap('+pIdx+','+pi+')">______</span>';
+      }
+    }
+    blanks += '</span>';
+    h += blanks;
+    h += '<div class="choices" id="choices-'+pIdx+'">';
+    p.words.forEach(function(w){
+      h += '<button id="btn-'+pIdx+'-'+esc(w)+'" onclick="pickWord('+pIdx+',\''+esc(w)+'\')">'+esc(w)+'</button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div></div>';
+
+  // Section 4: Expression Challenge
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🗣️ 表达挑战</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="express-box">';
+  h += '<div class="prompt">'+esc(t.express.prompt)+'</div>';
+  h += '<div class="words-hint">可用词汇：<b>'+t.express.words.map(esc).join(' &nbsp;·&nbsp; ')+'</b></div>';
+  h += '</div></div></div>';
+
+  // Section 5: Flashcard Test
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🎯 闪卡测试（10词）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div id="testArea"><button onclick="startTest()" style="padding:10px 24px;border-radius:20px;border:none;background:#1a6b5a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">开始测试</button></div></div></div>';
+
+  document.getElementById('main').innerHTML = h;
+
+  // Rebind speak buttons
+  document.querySelectorAll('.spk').forEach(function(b){
+    b.addEventListener('click',function(e){
+      e.stopPropagation();e.preventDefault();
+      var w = this.getAttribute('data-w');
+      if(!w||!window.speechSynthesis)return;
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+      speechSynthesis.speak(u);
+    });
+  });
+}
+
+// ==================== SENTENCE PRACTICE ====================
+function fillGap(pIdx,gIdx){
+  var gap = document.getElementById('gap-'+pIdx+'-'+gIdx);
+  if(!gap||gap.classList.contains('filled'))return;
+}
+
+function pickWord(pIdx,word){
+  var key = pIdx+'-'+word;
+  var btn = document.getElementById('btn-'+key);
+  if(!btn||btn.classList.contains('used'))return;
+
+  var gaps = document.querySelectorAll('[id^="gap-'+pIdx+'-"]');
+  for(var g=0;g<gaps.length;g++){
+    if(!gaps[g].classList.contains('filled')){
+      gaps[g].textContent = word;
+      gaps[g].classList.add('filled');
+      btn.classList.add('used');
+      break;
+    }
+  }
+
+  var allFilled = true;
+  for(var g2=0;g2<gaps.length;g2++){
+    if(!gaps[g2].classList.contains('filled')){allFilled=false;break;}
+  }
+  if(allFilled){
+    var practiceBox = document.getElementById('practice-'+pIdx);
+    if(practiceBox) practiceBox.style.borderColor = '#16a34a';
+  }
+}
+
+// ==================== FLASHCARD TEST ====================
+window._testMode = false;
+var tw=[],ti=0,tok=0,tfail=0,shown=false;
+
+function startTest(){
+  window._testMode = true;
+  tw = DATA[curTopic].coreWords.slice();
+  tw.sort(function(){return Math.random()-0.5});
+  ti=0;tok=0;tfail=0;shown=false;
+  updateTestStats();
+  showCard();
+}
+
+function updateTestStats(){
+  var done = tok+tfail, rem = tw.length-ti;
+  var total = tok+tfail+rem;
+  var h = '<div class="test-stats">';
+  h += '<div class="st"><div class="n">'+rem+'</div><div class="l">剩余</div></div>';
+  h += '<div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓</div></div>';
+  h += '<div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗</div></div>';
+  h += '<div class="st"><div class="n">'+(done?Math.round(done/total*100):0)+'%</div><div class="l">进度</div></div>';
+  h += '</div><div id="cardArea"></div><div class="test-btns" id="testBtns"></div>';
+  document.getElementById('testArea').innerHTML = h;
+}
+
+function showCard(){
+  if(ti>=tw.length){
+    var rate = (tok+tfail)?Math.round(tok/(tok+tfail)*100):0;
+    document.getElementById('cardArea').innerHTML = '<div class="stats-done"><div class="emoji">'+(rate>=80?'🎉':rate>=50?'💪':'📖')+'</div><h3>完成！</h3><div class="rate" style="color:'+(rate>=60?'#16a34a':'#dc2626')+'">'+rate+'%</div><p style="color:#888">正确 '+tok+' / 错误 '+tfail+'</p><button onclick="startTest()" style="margin-top:8px;padding:8px 24px;border-radius:16px;border:none;background:#1a6b5a;color:#fff;font-size:13px;cursor:pointer;font-family:inherit">🔄 再来一轮</button></div>';
+    document.getElementById('testBtns').innerHTML = '';
+    return;
+  }
+  var w = tw[ti];shown=false;
+  document.getElementById('cardArea').innerHTML = '<div class="fc" id="fc" onclick="reveal()"><button class="fc-spk" data-w="'+esc(w[0])+'" onclick="event.stopPropagation();speakWord(\''+esc(w[0])+'\')">🔊</button><div class="ew">'+esc(w[0])+'</div><div class="cn-hidden" id="cnHidden">'+esc(w[1])+'</div><div class="tap">👆 点击查看中文</div></div>';
+  document.getElementById('testBtns').innerHTML = '<button class="btn-no" onclick="mark(false)">不认识</button><button class="btn-yes" onclick="mark(true)">认识</button>';
+}
+
+function reveal(){
+  if(shown)return;shown=true;
+  var cn = document.getElementById('cnHidden');
+  if(cn)cn.style.display='block';
+  var fc = document.getElementById('fc');
+  if(fc)fc.classList.add('reveal');
+}
+
+function mark(ok){
+  if(!shown){reveal();return;}
+  if(ok)tok++;else tfail++;
+  ti++;
+  updateTestStats();
+  showCard();
+}
+
+function speakWord(w){
+  if(!w||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+  speechSynthesis.speak(u);
+}
+
+// ==================== INIT ====================
+renderTopicBar();
+renderTopic();
+</script>
+</body>
+</html>
