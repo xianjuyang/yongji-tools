@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KET单词工具 · 下 — 词句双轨训练 V3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f6f7f9;color:#1e293b;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#1a2332,#1e3a5f);color:#fff;padding:16px;position:sticky;top:0;z-index:20;text-align:center}
+.header .badge{font-size:10px;letter-spacing:3px;color:#f0d78c}
+.header h1{font-size:17px;margin:4px 0;font-weight:700}
+.header .info{font-size:10px;opacity:.6}
+.topic-bar{position:sticky;top:94px;z-index:10;background:#fff;border-bottom:1px solid #e5e7eb;padding:8px 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.topic-bar .nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;font-size:16px;cursor:pointer;color:#555;font-family:inherit;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;line-height:1}
+.topic-bar .nav-btn:active{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.topic-bar select{flex:1;max-width:280px;padding:8px 12px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#1a6b5a;cursor:pointer;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6b5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.topic-bar .progress{font-size:10px;color:#aaa;text-align:center;margin-top:2px}
+.main{max-width:700px;margin:0 auto;padding:12px 14px}
+.sec{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.sec .hd{cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;user-select:none;background:#fafcfb;border-bottom:1px solid #f0f0f0}
+.sec .hd h3{font-size:14px;display:flex;align-items:center;gap:6px}
+.sec .hd .arrow{font-size:11px;color:#aaa;transition:transform .2s}
+.sec.open .hd .arrow{transform:rotate(180deg)}
+.sec .bd{display:none;padding:12px 14px}
+.sec.open .bd{display:block}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.word-chip{display:flex;align-items:center;gap:6px;padding:8px 10px;background:#f8fafc;border-radius:8px;cursor:pointer;transition:all .12s;border:1.5px solid transparent}
+.word-chip:hover{border-color:#1a6b5a;background:#e8f5f0}
+.word-chip .en{font-size:13px;font-weight:600;color:#1a6b5a}
+.word-chip .cn{font-size:10px;color:#888;margin-left:auto;white-space:nowrap}
+.word-chip .spk{width:22px;height:22px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.word-chip .spk:hover{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.grammar-label{display:inline-block;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:0.5px}
+.sentence-list .sent{padding:10px 14px;margin:6px 0;background:#f8fafc;border-radius:8px;border-left:3px solid #1a6b5a;font-family:Georgia,serif;font-size:14px;line-height:1.6;color:#334155}
+.sentence-list .sent b{color:#1a6b5a;font-weight:600;background:#e8f5f0;padding:1px 4px;border-radius:3px}
+.sentence-list .sent .cn{display:block;font-size:11px;color:#999;margin-top:3px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.practice-item{padding:10px 14px;margin:8px 0;background:#fffbeb;border-radius:8px;border:1.5px dashed #e5e7eb}
+.practice-item .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.practice-item .blanks{font-family:Georgia,serif;font-size:14px;line-height:2}
+.practice-item .blanks .gap{display:inline-block;min-width:60px;border-bottom:2px dashed #1a6b5a;margin:0 6px;padding:2px 4px;color:#1a6b5a;font-weight:600;cursor:pointer;transition:all .15s}
+.practice-item .blanks .gap:hover{background:#e8f5f0}
+.practice-item .blanks .gap.filled{background:#e8f5f0;border-bottom-style:solid}
+.practice-item .choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.practice-item .choices button{padding:5px 12px;border-radius:12px;border:1.5px solid #1a6b5a;background:#fff;color:#1a6b5a;font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s;font-weight:500}
+.practice-item .choices button:hover{background:#1a6b5a;color:#fff}
+.practice-item .choices button.used{opacity:.3;pointer-events:none}
+.express-box{background:linear-gradient(135deg,#e8f5f0,#f0fdf4);border-radius:10px;padding:14px;text-align:center}
+.express-box .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.express-box .words-hint{font-size:12px;color:#999;margin-top:6px}
+.express-box .words-hint b{color:#1a6b5a}
+.fc{background:#fff;border-radius:14px;padding:36px 18px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);cursor:pointer;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.fc .ew{font-size:28px;font-weight:700;margin:8px 0}
+.fc .cn-hidden{font-size:16px;color:#ccc;margin-top:4px;display:none}
+.fc.reveal .cn-hidden{display:block;color:#1a6b5a;font-weight:600}
+.fc .tap{font-size:10px;color:#ddd;margin-top:8px}
+.fc.reveal .tap{display:none}
+.fc .fc-spk{width:36px;height:36px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;position:absolute;top:10px;right:10px}
+.test-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.test-btns button{flex:1;max-width:100px;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-no{background:#fee2e2;color:#dc2626}
+.btn-yes{background:#dcfce7;color:#16a34a}
+.test-stats{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.test-stats .st{background:#fff;padding:8px 12px;border-radius:8px;text-align:center;min-width:50px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.test-stats .st .n{font-size:18px;font-weight:700;color:#2563eb}
+.test-stats .st .l{font-size:9px;color:#888}
+.stats-done{text-align:center;padding:20px}
+.stats-done .emoji{font-size:40px}
+.stats-done h3{margin:8px 0}
+.stats-done .rate{font-size:22px;font-weight:700}
+@media(max-width:480px){
+  .word-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:12px 10px}.header h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">KET 词汇 · 词句双轨训练 · 下</div>
+  <h1 id="topicTitle">KET单词工具 · 下（话题33-48）</h1>
+  <div class="info">10核心词 · 5语法例句 · 造句练习 · 表达输出</div>
+</div>
+
+<div class="topic-bar" id="topicBar"></div>
+<div class="main" id="main"></div>
+
+<script>
+// ==================== KET VOCABULARY DATA (Topics 33-48, V3 Format) ====================
+var DATA = [
+{title:"疾病与医疗",grammar:"现在完成时（have had...since/for）+ should 建议 + 条件句<br><small>I have had a headache since... / You should... / If it gets worse, I will...</small>",grammarLabel:"时态：现在完成时 + should 建议 + If 条件句",
+coreWords:[["headache","头痛"],["fever","发烧"],["medicine","药"],["cough","咳嗽"],["doctor","医生"],["rest","休息"],["sore throat","喉咙痛"],["recover","康复"],["flu","流感"],["pain","疼痛"]],
+sentences:[
+  {en:"I have <b>had</b> a <b>headache</b> <b>since</b> this morning. I <b>should</b> take some <b>medicine</b>.",cn:"我从今天早上开始就一直头痛。我应该吃点药。（现在完成时+should）"},
+  {en:"She has <b>had</b> a <b>fever</b> <b>for</b> two days. She <b>should</b> see a <b>doctor</b>.",cn:"她已经发烧两天了。她应该去看医生。（have had...for + should）"},
+  {en:"I have <b>had</b> a bad <b>cough</b> <b>since</b> last week. <b>If</b> it gets worse, I will call the <b>doctor</b>.",cn:"我从上周开始就一直咳嗽得很厉害。如果加重了，我就叫医生。（条件句）"},
+  {en:"He has <b>had</b> a <b>sore throat</b> <b>for</b> three days. He <b>should</b> <b>rest</b> at home.",cn:"他喉咙痛了三天了。他应该在家休息。（for + should）"},
+  {en:"<b>Have</b> you ever <b>had</b> the <b>flu</b>? Yes, I have. It caused a lot of <b>pain</b>. If you <b>rest</b> well, you will <b>recover</b> faster.",cn:"你得过流感吗？得过。它引起了很多疼痛。如果你好好休息，你会康复得更快。（现在完成时疑问+条件句）"}
+],
+practice:[
+  {prompt:"用 have/has had + since/for 完成:",template:"I ___ ___ a headache ___ yesterday. She ___ ___ a fever ___ two days.",words:["have","had","since","has","had","for"]},
+  {prompt:"用 should 或 If 条件句完成:",template:"If you have a ___, you ___ see a doctor. You ___ ___ at home.",words:["fever","should","should","rest"]}
+],
+express:{prompt:"用以下 4 个核心词描述你上次生病的情况（用现在完成时或should，口头说3句话）:",words:["headache","medicine","doctor","rest"]}
+},
+
+{title:"购物",grammar:"比较级 + would like + How much<br><small>cheaper than... / I would like to buy... / How much does it cost?</small>",grammarLabel:"比较级 + would like 礼貌请求 + How much 问价",
+coreWords:[["shop","商店"],["price","价格"],["discount","折扣"],["bargain","便宜货"],["receipt","收据"],["spend","花费"],["choose","选择"],["sale","促销"],["gift","礼物"],["pay for","支付"]],
+sentences:[
+  {en:"This <b>shop</b> is <b>cheaper</b> than that one. I <b>would like</b> to buy a <b>gift</b>.",cn:"这家商店比那家便宜。我想买一件礼物。（比较级+would like）"},
+  {en:"The <b>price</b> is <b>lower</b> today. <b>How much</b> does this <b>gift</b> cost?",cn:"今天的价格更低。这个礼物多少钱？（比较级+How much）"},
+  {en:"I <b>would like</b> to <b>choose</b> a <b>cheaper</b> one. Is there a <b>discount</b>?",cn:"我想选一个更便宜的。有折扣吗？（would like+比较级）"},
+  {en:"A <b>bargain</b> is <b>better</b> than a full-price item. I <b>spend</b> less money.",cn:"便宜货比全价商品更好。我花的钱更少。（比较级）"},
+  {en:"I <b>would like</b> to <b>pay for</b> this. <b>How much</b> did the <b>sale</b> item cost? Remember to keep the <b>receipt</b>.",cn:"我想支付这个。促销商品多少钱？记得保留收据。（would like+How much）"}
+],
+practice:[
+  {prompt:"用比较级完成:",template:"This shop is ___（更便宜）than that one. This price is ___（更好）.",words:["cheaper","better"]},
+  {prompt:"用 would like 或 How much 完成:",template:"I ___ ___ to buy a gift. ___ ___ does it cost?",words:["would","like","How","much"]}
+],
+express:{prompt:"用以下 4 个核心词模拟一次购物对话（口头3-4句话，用比较级或would like）:",words:["price","discount","choose","pay for"]}
+},
+
+{title:"金钱与预算",grammar:"条件句（If I save...）+ 比较级 + enough/too<br><small>If I save money, I will... / more expensive than... / not enough / too expensive</small>",grammarLabel:"If 条件句 + 比较级 + enough / too",
+coreWords:[["money","钱"],["save","节省"],["waste","浪费"],["afford","负担得起"],["borrow","借入"],["lend","借出"],["budget","预算"],["enough","足够的"],["pocket money","零花钱"],["bank account","银行账户"]],
+sentences:[
+  {en:"<b>If</b> I <b>save</b> my <b>pocket money</b>, I will open a <b>bank account</b>.",cn:"如果我存下零花钱，我就开一个银行账户。（If 条件句）"},
+  {en:"<b>If</b> you <b>waste</b> <b>money</b>, you will not have <b>enough</b> for the trip.",cn:"如果你浪费钱，你就不够钱去旅行了。（条件句+enough）"},
+  {en:"This phone is <b>too</b> expensive. I cannot <b>afford</b> it. Can I <b>borrow</b> some <b>money</b>?",cn:"这个手机太贵了。我买不起。我能借点钱吗？（too+borrow）"},
+  {en:"A good <b>budget</b> is <b>more</b> important <b>than</b> a big salary. <b>If</b> you plan well, you will always have <b>enough</b>.",cn:"好的预算比高工资更重要。如果你计划得好，你总会有足够的钱。（比较级+条件句）"},
+  {en:"Can you <b>lend</b> me some <b>money</b>? I promise to pay back. <b>If</b> I <b>save</b> more next month, I will not need to <b>borrow</b>.",cn:"你能借我一些钱吗？我保证还。如果我下个月多存一些，我就不需要借了。（lend/borrow+条件句）"}
+],
+practice:[
+  {prompt:"用 If 条件句完成:",template:"___ I save my pocket money, I ___ buy a gift. ___ you waste money, you will not have ___.",words:["If","will","If","enough"]},
+  {prompt:"用 too/enough 完成:",template:"This toy is ___ expensive. I do not have ___ money. I cannot ___ it.",words:["too","enough","afford"]}
+],
+express:{prompt:"用以下 4 个核心词说说你的理财计划（口头3句话，用 If 条件句）:",words:["save","pocket money","budget","enough"]}
+},
+
+{title:"工作与职业",grammar:"be going to / want to be + 宾语从句<br><small>I am going to be a... / I want to be a... / I think (that)...</small>",grammarLabel:"be going to / want to be + 宾语从句（I think that...）",
+coreWords:[["job","工作"],["career","职业"],["interview","面试"],["apply for","申请"],["manager","经理"],["colleague","同事"],["boss","老板"],["assistant","助手"],["full-time","全职的"],["part-time","兼职的"]],
+sentences:[
+  {en:"I <b>am going to</b> <b>apply for</b> a <b>job</b> at the hospital. I <b>think</b> <b>that</b> it is a great <b>career</b>.",cn:"我打算申请医院的工作。我觉得那是一份很好的职业。（be going to+宾语从句）"},
+  {en:"She <b>wants to be</b> a <b>manager</b>. I <b>think</b> <b>that</b> she will do well.",cn:"她想成为一名经理。我觉得她会做得很好。（want to be+宾语从句）"},
+  {en:"He <b>is going to</b> have an <b>interview</b> tomorrow. His <b>boss</b> <b>thinks</b> <b>that</b> he is ready.",cn:"他明天有一场面试。他的老板觉得他准备好了。（be going to+宾语从句）"},
+  {en:"My <b>colleague</b> <b>wants to be</b> a <b>full-time</b> worker, but now she is <b>part-time</b>.",cn:"我的同事想成为全职员工，但她现在是兼职的。（want to be）"},
+  {en:"I <b>am going to</b> work as an <b>assistant</b> first. I believe <b>that</b> every <b>career</b> starts small.",cn:"我打算先做助手。我相信每个职业都从小处开始。（be going to+宾语从句）"}
+],
+practice:[
+  {prompt:"用 be going to 或 want to be 完成:",template:"I ___ ___ ___ ___ a doctor. She ___ ___ ___ apply for a job.",words:["want","to","be","is","going","to"]},
+  {prompt:"用宾语从句完成:",template:"I think ___ she is a good ___. He believes ___ a ___ is important.",words:["that","boss","that","career"]}
+],
+express:{prompt:"用以下 4 个核心词说说你未来的职业计划（口头3句话，用 be going to / want to be）:",words:["job","career","apply for","full-time"]}
+},
+
+{title:"感受与情绪",grammar:"系动词+形容词 + -ing vs -ed 形容词<br><small>I feel happy. / The film is exciting. / I am excited.</small>",grammarLabel:"系动词 + 形容词 + -ing/-ed 形容词对比",
+coreWords:[["happy","快乐的"],["sad","悲伤的"],["angry","生气的"],["excited","兴奋的"],["bored","无聊的"],["tired","疲惫的"],["worried","担忧的"],["surprised","惊讶的"],["disappointed","失望的"],["proud","自豪的"]],
+sentences:[
+  {en:"I <b>feel</b> <b>happy</b> when I see my friends. The news is <b>exciting</b> and I am <b>excited</b>.",cn:"见到朋友时我感到快乐。这消息令人兴奋，我很兴奋。（系动词+形/-ing vs -ed）"},
+  {en:"The long class is <b>boring</b>. I <b>feel</b> <b>bored</b> and <b>tired</b>.",cn:"漫长的课程很无聊。我觉得无聊和疲惫。（-ing vs -ed）"},
+  {en:"She <b>looks</b> <b>sad</b>. The film was <b>surprising</b> — I was very <b>surprised</b>.",cn:"她看起来很悲伤。电影令人惊讶——我非常惊讶。（系动词+-ing/-ed）"},
+  {en:"He <b>got</b> <b>angry</b> when his team lost. His mother was <b>disappointed</b> too.",cn:"他的队伍输了以后他变得生气。他妈妈也很失望。（系动词+形容词）"},
+  {en:"I am <b>proud</b> of my work. My parents are <b>worried</b> but also <b>happy</b>.",cn:"我为我的作品感到自豪。我的父母有些担忧但也很开心。（系动词+形容词连用）"}
+],
+practice:[
+  {prompt:"用 -ing 或 -ed 形容词完成:",template:"The film is ___（exciting）. I am ___（excited）. The class is ___（boring）. I feel ___（bored）.",words:["exciting","excited","boring","bored"]},
+  {prompt:"用系动词 + 形容词完成:",template:"She ___ ___（看起来开心）. He ___ ___（变得生气）. I ___ ___（感到骄傲）.",words:["looks","happy","got","angry","feel","proud"]}
+],
+express:{prompt:"用以下 4 个核心词描述你最近的一次感受（口头3句话，用 -ing vs -ed 区分）:",words:["excited","bored","surprised","happy"]}
+},
+
+{title:"观点与偏好",grammar:"宾语从句 + prefer...to... + should<br><small>I think that... / I prefer A to B. / You should...</small>",grammarLabel:"宾语从句 + prefer...to... + should 建议",
+coreWords:[["think","认为"],["believe","相信"],["agree","同意"],["prefer","更喜欢"],["opinion","意见"],["decide","决定"],["suggest","建议"],["important","重要的"],["recommend","推荐"],["reason","理由"]],
+sentences:[
+  {en:"I <b>think</b> <b>that</b> this is a good <b>opinion</b>. I <b>agree</b> with you.",cn:"我觉得这是个好意见。我同意你。（宾语从句）"},
+  {en:"I <b>prefer</b> reading <b>to</b> watching TV. I <b>believe</b> <b>that</b> books are <b>important</b>.",cn:"比起看电视我更喜欢阅读。我相信书是重要的。（prefer...to...+宾语从句）"},
+  {en:"She <b>thinks</b> <b>that</b> we <b>should</b> <b>decide</b> now. I <b>suggest</b> <b>that</b> we wait.",cn:"她觉得我们应该现在决定。我建议我们等一下。（宾语从句+should）"},
+  {en:"In my <b>opinion</b>, you <b>should</b> <b>choose</b> this one. Can you give a <b>reason</b>?",cn:"在我看来，你应该选这个。你能给个理由吗？（opinion+should）"},
+  {en:"I <b>recommend</b> <b>that</b> you try it. I <b>prefer</b> this colour <b>to</b> that one, and I <b>think</b> you will too.",cn:"我推荐你试试。比起那个颜色我更喜欢这个，我觉得你也会的。（recommend+prefer+think）"}
+],
+practice:[
+  {prompt:"用宾语从句完成:",template:"I think ___ she is right. She believes ___ it is ___.",words:["that","that","important"]},
+  {prompt:"用 prefer...to... 完成:",template:"I ___ tea ___ coffee. In my ___, you ___ try it.",words:["prefer","to","opinion","should"]}
+],
+express:{prompt:"用以下 4 个核心词表达你的观点（口头3句话，用 I think that / prefer...to...）:",words:["think","prefer","opinion","important"]}
+},
+
+{title:"节日与庆祝",grammar:"一般过去时 + 时间状语 + 被动入门<br><small>We celebrated... / It was decorated... / Last year...</small>",grammarLabel:"一般过去时 + 时间状语 + 被动语态入门",
+coreWords:[["celebrate","庆祝"],["decoration","装饰"],["tradition","传统"],["gift","礼物"],["party","派对"],["invitation","邀请函"],["special","特别的"],["wonderful","精彩的"],["wish","祝愿"],["host","主人"]],
+sentences:[
+  {en:"Last year, we <b>celebrated</b> Christmas at home. The house <b>was decorated</b> with lights.",cn:"去年我们在家庆祝了圣诞节。房子被灯装饰了起来。（过去时+被动入门）"},
+  {en:"She <b>gave</b> me a <b>gift</b> for my birthday. The <b>party</b> <b>was held</b> at a restaurant.",cn:"她送了我一份生日礼物。派对在餐厅举办。（过去时+被动入门）"},
+  {en:"I <b>received</b> an <b>invitation</b> last week. It <b>was written</b> by hand.",cn:"上周我收到了邀请函。它是手写的。（过去时+被动）"},
+  {en:"The <b>tradition</b> <b>started</b> many years ago. Every year, a big <b>party</b> <b>is organised</b> by the <b>host</b>.",cn:"这个传统很多年前就开始了。每年主办方都会组织一场大派对。（过去时+被动）"},
+  {en:"We <b>made</b> a <b>wish</b> together. The night was <b>special</b> and <b>wonderful</b>. I will never forget it.",cn:"我们一起许了愿。那个夜晚特别而精彩。我永远不会忘记。（过去时）"}
+],
+practice:[
+  {prompt:"用一般过去时完成:",template:"Last year, we ___（庆祝）New Year at home. She ___（给）me a ___（礼物）. The party ___（举办）at school.",words:["celebrated","gave","gift","was held"]},
+  {prompt:"用被动语态完成:",template:"The house ___ ___ with lights. The invitation ___ ___ by my friend.",words:["was","decorated","was","written"]}
+],
+express:{prompt:"用以下 4 个核心词描述你上次庆祝的节日（口头3句话，用一般过去时）:",words:["celebrate","gift","party","special"]}
+},
+
+{title:"时间与日程",grammar:"钟点表达 + 介词 at/on/in + 一般现在时<br><small>at 7 o'clock / on Monday / in the morning</small>",grammarLabel:"钟点表达 + 时间介词 at/on/in + 一般现在时",
+coreWords:[["time","时间"],["schedule","时间表"],["appointment","预约"],["on time","准时"],["hurry","赶快"],["wait","等待"],["calendar","日历"],["minute","分钟"],["hour","小时"],["o'clock","……点钟"]],
+sentences:[
+  {en:"I get up <b>at</b> 7 <b>o'clock</b> every day. School starts <b>at</b> half past eight <b>in</b> the morning.",cn:"我每天七点起床。学校早上八点半开始上课。（at+钟点, in the morning）"},
+  {en:"<b>On</b> Monday, I have a busy <b>schedule</b>. My first class is <b>at</b> 9 <b>o'clock</b>.",cn:"星期一我的时间表很满。第一节课在九点。（on+星期, at+钟点）"},
+  {en:"I have an <b>appointment</b> <b>at</b> 3 <b>o'clock</b> <b>in</b> the afternoon. I check my <b>calendar</b> every morning.",cn:"我下午三点有一个预约。我每天早上查看日历。（at+钟点, in the afternoon）"},
+  {en:"Please be <b>on time</b>! The bus leaves <b>in</b> five <b>minutes</b>. Do not be late.",cn:"请准时！公交车五分钟后就出发。别迟到。（on time, in+时间段）"},
+  {en:"Do not <b>hurry</b>! We still have one <b>hour</b>. I will <b>wait</b> for you <b>at</b> the station.",cn:"别急！我们还有一个小时。我会在车站等你。（at+地点）"}
+],
+practice:[
+  {prompt:"用 at/on/in 完成:",template:"I get up ___ 7 o'clock ___ the morning. ___ Monday, I have a test.",words:["at","in","On"]},
+  {prompt:"用钟点表达完成:",template:"The meeting is ___ half past two. I have an ___ at 4 ___. I am always ___ ___.",words:["at","appointment","o'clock","on","time"]}
+],
+express:{prompt:"用以下 4 个核心词描述你今天的时间安排（口头3句话，用 at/on/in + 钟点）:",words:["time","schedule","on time","morning"]}
+},
+
+{title:"数字与计量",grammar:"基数词/序数词 + 比较级 + 度量表达<br><small>first, second, third... / longer than... / 5 kilometres</small>",grammarLabel:"基数词/序数词 + 比较级 + 度量单位",
+coreWords:[["hundred","百"],["thousand","千"],["first","第一"],["third","第三"],["fifth","第五"],["kilogram","公斤"],["kilometre","公里"],["metre","米"],["measure","测量"],["distance","距离"]],
+sentences:[
+  {en:"I live on the <b>third</b> floor. The <b>distance</b> to my school is two <b>kilometres</b>.",cn:"我住在三楼。到学校的距离是两公里。（序数词+度量）"},
+  {en:"The <b>first</b> bridge is <b>longer</b> <b>than</b> the <b>fifth</b> one. It is five <b>hundred</b> <b>metres</b> long.",cn:"第一座桥比第五座更长。它有五百米长。（序数词+比较级+度量）"},
+  {en:"This bag weighs three <b>kilograms</b>. That one is <b>heavier</b> — four kilograms.",cn:"这个包重三公斤。那个更重——四公斤。（度量+比较级）"},
+  {en:"There are over one <b>thousand</b> students. The <b>first</b> class has the <b>largest</b> number.",cn:"有一千多名学生。第一个班级人数最多。（基数词+序数词+比较级）"},
+  {en:"I <b>measured</b> the <b>distance</b> — it is exactly sixty <b>metres</b>. Let me <b>measure</b> the height now.",cn:"我测量了距离——刚好六十米。现在让我测量高度。（度量表达）"}
+],
+practice:[
+  {prompt:"用序数词完成:",template:"I am the ___（第一）child. She lives on the ___（第三）floor. Today is my ___（第五）lesson.",words:["first","third","fifth"]},
+  {prompt:"用度量表达完成:",template:"The distance is three ___. It weighs five ___. There are two ___ students.",words:["kilometres","kilograms","hundred"]}
+],
+express:{prompt:"用以下 4 个核心词描述一个物体的尺寸或数量（口头3句话，用比较级+度量）:",words:["metre","kilogram","distance","measure"]}
+},
+
+{title:"国家与语言",grammar:"特殊疑问句 + 一般现在时 + 国籍形容词<br><small>Where do you come from? / What language do you speak? / She is Chinese.</small>",grammarLabel:"Wh- 特殊疑问句 + 一般现在时 + 国籍形容词",
+coreWords:[["country","国家"],["nationality","国籍"],["flag","国旗"],["capital city","首都"],["population","人口"],["culture","文化"],["come from","来自"],["language","语言"],["England","英格兰"],["France","法国"]],
+sentences:[
+  {en:"<b>Where</b> do you <b>come from</b>? I come from <b>England</b>. I am British.",cn:"你来自哪里？我来自英格兰。我是英国人。（特殊疑问句+国籍）"},
+  {en:"<b>What</b> <b>language</b> do they speak in <b>France</b>? They speak French.",cn:"在法国他们说什么语言？他们说法语。（特殊疑问句+语言）"},
+  {en:"<b>Which</b> <b>country</b> has the largest <b>population</b>? China does. Beijing is its <b>capital city</b>.",cn:"哪个国家人口最多？中国。北京是它的首都。（特殊疑问句）"},
+  {en:"The <b>flag</b> of my <b>country</b> is red and yellow. <b>What</b> colour is your <b>flag</b>?",cn:"我国家的国旗是红黄两色的。你的国旗是什么颜色的？（特殊疑问句）"},
+  {en:"<b>How</b> many <b>languages</b> do you speak? I speak two. Every <b>culture</b> is interesting.",cn:"你会说几种语言？我说两种。每种文化都很有趣。（特殊疑问句+How many）"}
+],
+practice:[
+  {prompt:"用特殊疑问词完成:",template:"___ do you come from? ___ language do you speak? ___ country has the largest population?",words:["Where","What","Which"]},
+  {prompt:"用国籍形容词完成:",template:"I come from England. I am ___. She comes from France. She is ___. Beijing is the ___ ___ of China.",words:["British","French","capital","city"]}
+],
+express:{prompt:"用以下 4 个核心词介绍一个你喜欢的国家（口头3句话，用特殊疑问句）:",words:["country","capital city","language","come from"]}
+},
+
+{title:"社交互动",grammar:"情态动词礼貌请求 + 祈使句 + 感叹句<br><small>Could you...? / Please sit down. / What a nice day!</small>",grammarLabel:"情态动词礼貌请求 + 祈使句 + 感叹句",
+coreWords:[["introduce","介绍"],["greet","问候"],["offer","提供"],["accept","接受"],["refuse","拒绝"],["thank","感谢"],["apologise","道歉"],["promise","承诺"],["congratulate","祝贺"],["formal","正式的"]],
+sentences:[
+  {en:"<b>Could you</b> please <b>introduce</b> yourself? Let me <b>greet</b> our guests first.",cn:"能请你介绍一下自己吗？让我先问候我们的客人。（礼貌请求+祈使句）"},
+  {en:"<b>Would you</b> like to <b>accept</b> our invitation? <b>What a</b> wonderful surprise!",cn:"你愿意接受我们的邀请吗？多么美妙的惊喜！（礼貌请求+感叹句）"},
+  {en:"<b>Please</b> let me <b>thank</b> you for your help. <b>Could you</b> <b>offer</b> some advice?",cn:"请让我感谢你的帮助。你能提供一些建议吗？（祈使句+礼貌请求）"},
+  {en:"I must <b>apologise</b> for being late. <b>Do not</b> <b>refuse</b> the gift — <b>please</b> take it!",cn:"我必须为迟到道歉。不要拒绝这个礼物——请收下！（祈使句否定）"},
+  {en:"<b>Congratulations</b>! <b>What a</b> great success! I <b>promise</b> to keep it a secret. This is quite <b>formal</b>.",cn:"祝贺你！多么大的成功！我承诺保密。这相当正式。（感叹句+promise）"}
+],
+practice:[
+  {prompt:"用礼貌请求完成:",template:"___ you please ___ me to your friend? ___ you like to accept the invitation?",words:["Could","introduce","Would"]},
+  {prompt:"用祈使句或感叹句完成:",template:"___ me help you.（祈使句） ___ a nice day!（感叹句） Do not ___ the gift.（否定祈使）",words:["Let","What","refuse"]}
+],
+express:{prompt:"用以下 4 个核心词模拟一次礼貌的社交对话（口头3-4句话，用 Could you.../Please）:",words:["introduce","offer","accept","thank"]}
+},
+
+{title:"指令与规则",grammar:"must / mustn't / can / can't + 被动语态<br><small>You must follow the rules. / Rules must be followed.</small>",grammarLabel:"must/mustn't/can/can't + 被动语态",
+coreWords:[["rule","规则"],["must","必须"],["mustn't","禁止"],["allowed","被允许的"],["forbidden","被禁止的"],["danger","危险"],["warning","警告"],["emergency","紧急情况"],["follow","遵守"],["obey","服从"]],
+sentences:[
+  {en:"You <b>must</b> <b>follow</b> the <b>rule</b>. The <b>rule</b> <b>must be followed</b> by everyone.",cn:"你必须遵守规则。规则必须被每个人遵守。（must+被动语态）"},
+  {en:"You <b>mustn't</b> enter this area. It is <b>forbidden</b>. There is a <b>danger</b> sign.",cn:"你禁止进入这个区域。这是被禁止的。有危险标志。（mustn't+被动形容词）"},
+  {en:"Pets are not <b>allowed</b> inside. This sign <b>must be obeyed</b> at all times.",cn:"宠物不允许入内。这个标志必须始终遵守。（被动语态）"},
+  {en:"<b>Can</b> I park here? No, you <b>can't</b>. Parking <b>is forbidden</b>. Read the <b>warning</b>.",cn:"我能在这里停车吗？不，你不能。停车是禁止的。看警告牌。（can/can't）"},
+  {en:"In an <b>emergency</b>, the door <b>must be opened</b> quickly. You <b>must</b> <b>obey</b> all <b>rules</b> for your safety.",cn:"紧急情况下门必须快速打开。你必须服从所有规则以确保安全。（被动+must）"}
+],
+practice:[
+  {prompt:"用 must 或 mustn't 完成:",template:"You ___ follow the rule. You ___ enter — it is ___. Pets are not ___.",words:["must","mustn't","forbidden","allowed"]},
+  {prompt:"用被动语态完成:",template:"Rules ___ ___ followed. This sign ___ ___ obeyed. The door ___ ___ opened in an emergency.",words:["must","be","must","be","must","be"]}
+],
+express:{prompt:"用以下 4 个核心词说明学校/图书馆的规则（口头3句话，用 must/mustn't/can't）:",words:["rule","must","allowed","follow"]}
+},
+
+{title:"环境与自然",grammar:"被动语态 + should + 条件句<br><small>Trees are planted... / We should protect... / If we recycle, the planet will be saved.</small>",grammarLabel:"被动语态 + should 建议 + If 条件句",
+coreWords:[["environment","环境"],["pollution","污染"],["recycle","回收"],["energy","能源"],["planet","星球"],["endangered","濒危的"],["climate change","气候变化"],["rubbish","垃圾"],["nature","自然"],["reduce","减少"]],
+sentences:[
+  {en:"The <b>environment</b> <b>should be protected</b> by everyone. <b>If</b> we act now, the <b>planet</b> <b>will be saved</b>.",cn:"环境应该被每个人保护。如果我们现在行动起来，星球就会得救。（被动+should+条件句）"},
+  {en:"<b>Rubbish</b> <b>should be recycled</b> to <b>reduce</b> <b>pollution</b>. We all <b>should</b> help.",cn:"垃圾应该被回收以减少污染。我们都应该帮忙。（被动+should）"},
+  {en:"<b>If</b> we use less <b>energy</b>, the air <b>will be</b> cleaner. Lights <b>should be turned</b> off.",cn:"如果我们少用能源，空气会更清洁。灯应该被关掉。（条件句+被动）"},
+  {en:"Many animals are <b>endangered</b> because of <b>climate change</b>. They <b>must be protected</b>.",cn:"因为气候变化许多动物濒危。它们必须被保护。（被动语态）"},
+  {en:"<b>Nature</b> is beautiful. <b>If</b> we all <b>recycle</b>, less waste <b>will be produced</b>. The <b>planet</b> <b>should be</b> our priority.",cn:"自然是美丽的。如果我们都回收，就会产生更少的废物。星球应该是我们的首要任务。（条件句+被动）"}
+],
+practice:[
+  {prompt:"用被动语态完成:",template:"The environment ___ ___ protected. Rubbish ___ ___ recycled. Air ___ ___ cleaned by trees.",words:["should","be","should","be","is","cleaned"]},
+  {prompt:"用 If 条件句完成:",template:"___ we recycle more, the planet ___ be cleaner. ___ we reduce pollution, animals will be safer.",words:["If","will","If"]}
+],
+express:{prompt:"用以下 4 个核心词说说如何保护环境（口头3句话，用 should + 被动语态）:",words:["environment","recycle","pollution","energy"]}
+},
+
+{title:"住房与建筑",grammar:"There be + 比较级 + 方位介词 + 被动语态<br><small>There is a house on the hill. / bigger than... / The house was built...</small>",grammarLabel:"There be + 比较级 + 方位介词 + 被动语态",
+coreWords:[["building","建筑"],["modern","现代的"],["ancient","古代的"],["own","拥有"],["rent","租用"],["move in","搬入"],["furnished","带家具的"],["basement","地下室"],["attic","阁楼"],["build","建造"]],
+sentences:[
+  {en:"<b>There is</b> a <b>modern</b> <b>building</b> <b>behind</b> the park. It is <b>taller</b> <b>than</b> the <b>ancient</b> temple.",cn:"公园后面有一座现代建筑。它比那座古庙更高。（There be+比较级+方位介词）"},
+  {en:"<b>There are</b> two bedrooms <b>on</b> the <b>second</b> floor. This flat is <b>bigger</b> <b>than</b> my old one.",cn:"二楼有两间卧室。这间公寓比我旧的那间更大。（There be+比较级+方位）"},
+  {en:"The house <b>was built</b> fifty years ago. <b>There is</b> a small <b>basement</b> <b>under</b> the kitchen.",cn:"这座房子是五十年前建造的。厨房下面有一个小地下室。（被动+There be+方位）"},
+  {en:"I <b>own</b> this flat — it <b>is fully furnished</b>. <b>There is</b> an <b>attic</b> <b>above</b> the top floor.",cn:"我拥有这套公寓——它带全套家具。顶层上面有一个阁楼。（own+furnished+方位）"},
+  {en:"<b>There are</b> many people who <b>rent</b> here. They <b>moved in</b> last month. New flats <b>are being built</b> <b>next to</b> the station.",cn:"有很多人在这里租房。他们是上个月搬进来的。车站旁边正在建新公寓。（There be+被动+方位）"}
+],
+practice:[
+  {prompt:"用 There be + 方位介词完成:",template:"___ ___ a basement ___ the kitchen. ___ ___ two bedrooms ___ the second floor.",words:["There","is","under","There","are","on"]},
+  {prompt:"用比较级或被动语态完成:",template:"This building is ___ than that one. The house ___ ___ in 1990. I ___ ___ here last week.",words:["taller","was","built","moved","in"]}
+],
+express:{prompt:"用以下 4 个核心词描述你梦想的房子（口头3句话，用 There be + 方位介词）:",words:["building","modern","basement","attic"]}
+},
+
+{title:"通信与媒体",grammar:"现在完成时 + 间接引语 + 比较级<br><small>I have watched... / She said that... / more popular than...</small>",grammarLabel:"现在完成时 + 间接引语 + 比较级",
+coreWords:[["newspaper","报纸"],["radio","收音机"],["television","电视"],["article","文章"],["report","报道"],["news","新闻"],["advertisement","广告"],["popular","受欢迎的"],["channel","频道"],["programme","节目"]],
+sentences:[
+  {en:"I <b>have</b> already <b>read</b> this <b>article</b> in the <b>newspaper</b>. The <b>report</b> says <b>that</b> the event was a success.",cn:"我已经在报纸上看过这篇文章了。报道说活动很成功。（现在完成时+间接引语）"},
+  {en:"She <b>said</b> <b>that</b> she <b>has watched</b> this <b>programme</b> three times. It is the <b>most popular</b> show on this <b>channel</b>.",cn:"她说这个节目她已经看了三遍了。它是这个频道最受欢迎的节目。（间接引语+现在完成时+最高级）"},
+  {en:"<b>Have</b> you <b>heard</b> the <b>news</b> on the <b>radio</b>? They <b>said</b> <b>that</b> the weather will be sunny.",cn:"你听收音机里的新闻了吗？他们说明天天气会是晴天。（现在完成时+间接引语）"},
+  {en:"Online <b>news</b> is <b>faster</b> <b>than</b> the <b>newspaper</b>. The <b>advertisement</b> said <b>that</b> the sale starts today.",cn:"在线新闻比报纸更快。广告说促销今天开始。（比较级+间接引语）"},
+  {en:"I <b>have</b> never <b>seen</b> such an interesting <b>programme</b>. My friend <b>said</b> <b>that</b> <b>television</b> is still <b>more popular</b> <b>than</b> the internet here.",cn:"我从未看过这么有趣的节目。我朋友说在这里电视仍然比互联网更受欢迎。（现在完成时+间接引语+比较级）"}
+],
+practice:[
+  {prompt:"用现在完成时完成:",template:"I ___ already ___（看）the news. She ___ ___（从未读过）this article. ___ you ___（听过）this programme?",words:["have","read","has","never","Have","heard"]},
+  {prompt:"用间接引语完成:",template:"She said ___ the programme was good. The report says ___ the news is important. He told me ___ he likes the ___ channel.",words:["that","that","that","television"]}
+],
+express:{prompt:"用以下 4 个核心词描述你获取新闻的方式（口头3句话，用现在完成时或比较级）:",words:["newspaper","news","popular","channel"]}
+},
+
+{title:"能力与可能",grammar:"can / could / be able to + 条件句 + 程度副词<br><small>I can swim. / I could read at 4. / I will be able to... / If I try, I can... / very well / quite easily</small>",grammarLabel:"can/could/be able to + If 条件句 + 程度副词",
+coreWords:[["be able to","能够"],["perhaps","也许"],["probably","很可能"],["definitely","绝对地"],["skill","技能"],["ability","能力"],["improve","提高"],["succeed","成功"],["chance","机会"],["opportunity","机会"]],
+sentences:[
+  {en:"I <b>can</b> speak English <b>quite</b> well. <b>If</b> I practise every day, I <b>will be able to</b> <b>improve</b> my <b>skill</b>.",cn:"我英语说得相当好。如果我每天练习，我就能提高我的技能。（can+条件句+程度副词）"},
+  {en:"She <b>could</b> swim when she was five. Now she <b>can</b> swim <b>very</b> fast. She <b>will definitely</b> <b>succeed</b>.",cn:"她五岁就会游泳了。现在她能游得非常快。她绝对会成功。（could/can+程度副词）"},
+  {en:"<b>Perhaps</b> I <b>will be able to</b> join the team. <b>If</b> I get the <b>chance</b>, I <b>can</b> show my <b>ability</b>.",cn:"也许我能加入队伍。如果我有机会，我就能展示我的能力。（perhaps+条件句）"},
+  {en:"You <b>can definitely</b> do it! <b>If</b> you work hard, this <b>opportunity</b> <b>will probably</b> come again.",cn:"你绝对能做到！如果你努力，这个机会很可能会再来。（程度副词+条件句）"},
+  {en:"He <b>could</b> not solve the problem, but he <b>can</b> now. <b>If</b> you have the <b>ability</b> to learn, you <b>will be able to</b> <b>succeed</b> <b>quite</b> easily.",cn:"他以前解不开这道题，但他现在可以了。如果你有学习的能力，你就能相当容易地成功。（can/could/be able to+副词）"}
+],
+practice:[
+  {prompt:"用 can/could/be able to 完成:",template:"I ___ swim well. She ___ read at age 4. If I practise, I ___ ___ ___ improve.",words:["can","could","will","be","able","to"]},
+  {prompt:"用程度副词完成:",template:"She can ___（绝对地）do it. I can ___（相当）easily succeed. He ___（也许）will come.",words:["definitely","quite","perhaps"]}
+],
+express:{prompt:"用以下 4 个核心词描述你的能力（口头3句话，用 can/be able to + 程度副词）:",words:["be able to","skill","improve","probably"]}
+}
+];
+
+// ==================== RENDER LOGIC (V3 TEMPLATE) ====================
+var curTopic = 0;
+
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function renderTopicBar(){
+  var h = '';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic-1+DATA.length)%DATA.length+')" title="上一课">←</button>';
+  h += '<select onchange="pickTopic(parseInt(this.value))">';
+  for(var i=0;i<DATA.length;i++){
+    h += '<option value="'+i+'"'+(i===curTopic?' selected':'')+'>'+(i+33)+'. '+esc(DATA[i].title)+'</option>';
+  }
+  h += '</select>';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic+1)%DATA.length+')" title="下一课">→</button>';
+  h += '<div class="progress" style="display:none"></div>';
+  document.getElementById('topicBar').innerHTML = h;
+}
+
+function pickTopic(i){
+  curTopic = i;
+  renderTopicBar();
+  renderTopic();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window._testMode) startTest();
+}
+
+function renderTopic(){
+  var t = DATA[curTopic];
+  document.getElementById('topicTitle').textContent = '话题'+(curTopic+33)+'：'+t.title;
+
+  var h = '';
+
+  // Section 1: Core Words
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🧠 核心词汇（10个）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">📖 '+t.grammarLabel+'</div>';
+  h += '<div class="word-grid">';
+  t.coreWords.forEach(function(w){
+    h += '<div class="word-chip"><button class="spk" data-w="'+esc(w[0])+'">🔊</button><span class="en">'+esc(w[0])+'</span><span class="cn">'+esc(w[1])+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 2: Grammar Sentences
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>📝 语法例句（5句）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">'+t.grammar+'</div><div class="sentence-list">';
+  t.sentences.forEach(function(s){
+    h += '<div class="sent">'+s.en+'<span class="cn">'+esc(s.cn)+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 3: Sentence Practice
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>✏️ 造句练习</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  t.practice.forEach(function(p,pIdx){
+    h += '<div class="practice-item" id="practice-'+pIdx+'">';
+    h += '<div class="prompt">'+esc(p.prompt)+'</div>';
+    var parts = p.template.split('___');
+    var blanks = '<span class="blanks">';
+    for(var pi=0; pi<parts.length; pi++){
+      blanks += esc(parts[pi]);
+      if(pi < parts.length-1){
+        blanks += '<span class="gap" id="gap-'+pIdx+'-'+pi+'" onclick="fillGap('+pIdx+','+pi+')">______</span>';
+      }
+    }
+    blanks += '</span>';
+    h += blanks;
+    h += '<div class="choices" id="choices-'+pIdx+'">';
+    p.words.forEach(function(w){
+      h += '<button id="btn-'+pIdx+'-'+esc(w)+'" onclick="pickWord('+pIdx+',\''+esc(w)+'\')">'+esc(w)+'</button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div></div>';
+
+  // Section 4: Expression Challenge
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🗣️ 表达挑战</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="express-box">';
+  h += '<div class="prompt">'+esc(t.express.prompt)+'</div>';
+  h += '<div class="words-hint">可用词汇：<b>'+t.express.words.map(esc).join(' &nbsp;·&nbsp; ')+'</b></div>';
+  h += '</div></div></div>';
+
+  // Section 5: Flashcard Test
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🎯 闪卡测试（10词）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div id="testArea"><button onclick="startTest()" style="padding:10px 24px;border-radius:20px;border:none;background:#1a6b5a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">开始测试</button></div></div></div>';
+
+  document.getElementById('main').innerHTML = h;
+
+  // Rebind speak buttons
+  document.querySelectorAll('.spk').forEach(function(b){
+    b.addEventListener('click',function(e){
+      e.stopPropagation();e.preventDefault();
+      var w = this.getAttribute('data-w');
+      if(!w||!window.speechSynthesis)return;
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+      speechSynthesis.speak(u);
+    });
+  });
+}
+
+// ==================== SENTENCE PRACTICE ====================
+function fillGap(pIdx,gIdx){
+  var gap = document.getElementById('gap-'+pIdx+'-'+gIdx);
+  if(!gap||gap.classList.contains('filled'))return;
+}
+
+function pickWord(pIdx,word){
+  var key = pIdx+'-'+word;
+  var btn = document.getElementById('btn-'+key);
+  if(!btn||btn.classList.contains('used'))return;
+
+  var gaps = document.querySelectorAll('[id^="gap-'+pIdx+'-"]');
+  for(var g=0;g<gaps.length;g++){
+    if(!gaps[g].classList.contains('filled')){
+      gaps[g].textContent = word;
+      gaps[g].classList.add('filled');
+      btn.classList.add('used');
+      break;
+    }
+  }
+
+  var allFilled = true;
+  for(var g2=0;g2<gaps.length;g2++){
+    if(!gaps[g2].classList.contains('filled')){allFilled=false;break;}
+  }
+  if(allFilled){
+    var practiceBox = document.getElementById('practice-'+pIdx);
+    if(practiceBox) practiceBox.style.borderColor = '#16a34a';
+  }
+}
+
+// ==================== FLASHCARD TEST ====================
+window._testMode = false;
+var tw=[],ti=0,tok=0,tfail=0,shown=false;
+
+function startTest(){
+  window._testMode = true;
+  tw = DATA[curTopic].coreWords.slice();
+  tw.sort(function(){return Math.random()-0.5});
+  ti=0;tok=0;tfail=0;shown=false;
+  updateTestStats();
+  showCard();
+}
+
+function updateTestStats(){
+  var done = tok+tfail, rem = tw.length-ti;
+  var total = tok+tfail+rem;
+  var h = '<div class="test-stats">';
+  h += '<div class="st"><div class="n">'+rem+'</div><div class="l">剩余</div></div>';
+  h += '<div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓</div></div>';
+  h += '<div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗</div></div>';
+  h += '<div class="st"><div class="n">'+(done?Math.round(done/total*100):0)+'%</div><div class="l">进度</div></div>';
+  h += '</div><div id="cardArea"></div><div class="test-btns" id="testBtns"></div>';
+  document.getElementById('testArea').innerHTML = h;
+}
+
+function showCard(){
+  if(ti>=tw.length){
+    var rate = (tok+tfail)?Math.round(tok/(tok+tfail)*100):0;
+    document.getElementById('cardArea').innerHTML = '<div class="stats-done"><div class="emoji">'+(rate>=80?'🎉':rate>=50?'💪':'📖')+'</div><h3>完成！</h3><div class="rate" style="color:'+(rate>=60?'#16a34a':'#dc2626')+'">'+rate+'%</div><p style="color:#888">正确 '+tok+' / 错误 '+tfail+'</p><button onclick="startTest()" style="margin-top:8px;padding:8px 24px;border-radius:16px;border:none;background:#1a6b5a;color:#fff;font-size:13px;cursor:pointer;font-family:inherit">🔄 再来一轮</button></div>';
+    document.getElementById('testBtns').innerHTML = '';
+    return;
+  }
+  var w = tw[ti];shown=false;
+  document.getElementById('cardArea').innerHTML = '<div class="fc" id="fc" onclick="reveal()"><button class="fc-spk" data-w="'+esc(w[0])+'" onclick="event.stopPropagation();speakWord(\''+esc(w[0])+'\')">🔊</button><div class="ew">'+esc(w[0])+'</div><div class="cn-hidden" id="cnHidden">'+esc(w[1])+'</div><div class="tap">👆 点击查看中文</div></div>';
+  document.getElementById('testBtns').innerHTML = '<button class="btn-no" onclick="mark(false)">不认识</button><button class="btn-yes" onclick="mark(true)">认识</button>';
+}
+
+function reveal(){
+  if(shown)return;shown=true;
+  var cn = document.getElementById('cnHidden');
+  if(cn)cn.style.display='block';
+  var fc = document.getElementById('fc');
+  if(fc)fc.classList.add('reveal');
+}
+
+function mark(ok){
+  if(!shown){reveal();return;}
+  if(ok)tok++;else tfail++;
+  ti++;
+  updateTestStats();
+  showCard();
+}
+
+function speakWord(w){
+  if(!w||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+  speechSynthesis.speak(u);
+}
+
+// ==================== INIT ====================
+renderTopicBar();
+renderTopic();
+</script>
+</body>
+</html>
