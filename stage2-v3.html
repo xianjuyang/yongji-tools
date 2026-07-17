@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>阶段2 进阶表达期 — 词句双轨训练 V3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f6f7f9;color:#1e293b;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#1a2332,#1e3a5f);color:#fff;padding:16px;position:sticky;top:0;z-index:20;text-align:center}
+.header .badge{font-size:10px;letter-spacing:3px;color:#f0d78c}
+.header h1{font-size:17px;margin:4px 0;font-weight:700}
+.header .info{font-size:10px;opacity:.6}
+.topic-bar{position:sticky;top:94px;z-index:10;background:#fff;border-bottom:1px solid #e5e7eb;padding:8px 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.topic-bar .nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;font-size:16px;cursor:pointer;color:#555;font-family:inherit;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;line-height:1}
+.topic-bar .nav-btn:active{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.topic-bar select{flex:1;max-width:280px;padding:8px 12px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#1a6b5a;cursor:pointer;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6b5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.topic-bar .progress{font-size:10px;color:#aaa;text-align:center;margin-top:2px}
+.main{max-width:700px;margin:0 auto;padding:12px 14px}
+.sec{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.sec .hd{cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;user-select:none;background:#fafcfb;border-bottom:1px solid #f0f0f0}
+.sec .hd h3{font-size:14px;display:flex;align-items:center;gap:6px}
+.sec .hd .arrow{font-size:11px;color:#aaa;transition:transform .2s}
+.sec.open .hd .arrow{transform:rotate(180deg)}
+.sec .bd{display:none;padding:12px 14px}
+.sec.open .bd{display:block}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.word-chip{display:flex;align-items:center;gap:6px;padding:8px 10px;background:#f8fafc;border-radius:8px;cursor:pointer;transition:all .12s;border:1.5px solid transparent}
+.word-chip:hover{border-color:#1a6b5a;background:#e8f5f0}
+.word-chip .en{font-size:13px;font-weight:600;color:#1a6b5a}
+.word-chip .cn{font-size:10px;color:#888;margin-left:auto;white-space:nowrap}
+.word-chip .spk{width:22px;height:22px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.word-chip .spk:hover{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.grammar-label{display:inline-block;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:0.5px}
+.sentence-list .sent{padding:10px 14px;margin:6px 0;background:#f8fafc;border-radius:8px;border-left:3px solid #1a6b5a;font-family:Georgia,serif;font-size:14px;line-height:1.6;color:#334155}
+.sentence-list .sent b{color:#1a6b5a;font-weight:600;background:#e8f5f0;padding:1px 4px;border-radius:3px}
+.sentence-list .sent .cn{display:block;font-size:11px;color:#999;margin-top:3px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.practice-item{padding:10px 14px;margin:8px 0;background:#fffbeb;border-radius:8px;border:1.5px dashed #e5e7eb}
+.practice-item .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.practice-item .blanks{font-family:Georgia,serif;font-size:14px;line-height:2}
+.practice-item .blanks .gap{display:inline-block;min-width:60px;border-bottom:2px dashed #1a6b5a;margin:0 6px;padding:2px 4px;color:#1a6b5a;font-weight:600;cursor:pointer;transition:all .15s}
+.practice-item .blanks .gap:hover{background:#e8f5f0}
+.practice-item .blanks .gap.filled{background:#e8f5f0;border-bottom-style:solid}
+.practice-item .choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.practice-item .choices button{padding:5px 12px;border-radius:12px;border:1.5px solid #1a6b5a;background:#fff;color:#1a6b5a;font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s;font-weight:500}
+.practice-item .choices button:hover{background:#1a6b5a;color:#fff}
+.practice-item .choices button.used{opacity:.3;pointer-events:none}
+.express-box{background:linear-gradient(135deg,#e8f5f0,#f0fdf4);border-radius:10px;padding:14px;text-align:center}
+.express-box .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.express-box .words-hint{font-size:12px;color:#999;margin-top:6px}
+.express-box .words-hint b{color:#1a6b5a}
+.fc{background:#fff;border-radius:14px;padding:36px 18px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);cursor:pointer;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.fc .ew{font-size:28px;font-weight:700;margin:8px 0}
+.fc .cn-hidden{font-size:16px;color:#ccc;margin-top:4px;display:none}
+.fc.reveal .cn-hidden{display:block;color:#1a6b5a;font-weight:600}
+.fc .tap{font-size:10px;color:#ddd;margin-top:8px}
+.fc.reveal .tap{display:none}
+.fc .fc-spk{width:36px;height:36px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;position:absolute;top:10px;right:10px}
+.test-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.test-btns button{flex:1;max-width:100px;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-no{background:#fee2e2;color:#dc2626}
+.btn-yes{background:#dcfce7;color:#16a34a}
+.test-stats{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.test-stats .st{background:#fff;padding:8px 12px;border-radius:8px;text-align:center;min-width:50px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.test-stats .st .n{font-size:18px;font-weight:700;color:#2563eb}
+.test-stats .st .l{font-size:9px;color:#888}
+.stats-done{text-align:center;padding:20px}
+.stats-done .emoji{font-size:40px}
+.stats-done h3{margin:8px 0}
+.stats-done .rate{font-size:22px;font-weight:700}
+@media(max-width:480px){
+  .word-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:12px 10px}.header h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">阶段 2 · 进阶表达期 · CEFR B1</div>
+  <h1 id="topicTitle">词句双轨训练</h1>
+  <div class="info">10核心词 · 5语法例句 · 造句练习 · 表达输出</div>
+</div>
+
+<div class="topic-bar" id="topicBar"></div>
+<div class="main" id="main"></div>
+
+<script>
+// ==================== STAGE 2 DATA (V3 — B1 进阶表达期) ====================
+var DATA = [
+{title:"我去北京之前已经学过英语了",grammar:"had + 过去分词<br><small>I had learned… / She had already left… / They hadn't finished yet.</small>",grammarLabel:"时态②：过去完成时（Past Perfect）",
+coreWords:[["already","已经"],["learn","学习"],["arrive","到达"],["travel","旅行"],["experience","经历"],["prepare","准备"],["visit","参观"],["realise","意识到"],["trip","旅程"],["before","之前"]],
+sentences:[
+  {en:"Before I <b>travelled</b> to Beijing, I <b>had</b> already <b>learned</b> English for two years.",cn:"在我去北京旅行之前，我已经学过两年英语了。"},
+  {en:"She <b>had</b> already <b>arrived</b> at the station when I called her.",cn:"我给她打电话时，她已经到车站了。（had + 过去分词）"},
+  {en:"We <b>had</b> not <b>prepared</b> enough food before the <b>trip</b> started.",cn:"旅行开始前，我们没有准备足够的食物。（hadn't + 过去分词）"},
+  {en:"<b>Had</b> you ever <b>visited</b> the Great Wall <b>before</b> last summer?",cn:"去年夏天之前，你参观过长城吗？（Had + 主语 + 过去分词）"},
+  {en:"I <b>realised</b> I <b>had</b> left my ticket at home — what a terrible <b>experience</b>!",cn:"我意识到把票落在家里了——多么糟糕的经历！（先发生后意识到）"}
+],
+practice:[
+  {prompt:"用过去完成时（had + 过去分词）完成句子:",template:"Before she arrived, I ___ already ___ my homework.",words:["had","finished"]},
+  {prompt:"填入正确的过去完成时形式:",template:"They ___ not ___（see）the movie before last weekend.",words:["had","seen"]}
+],
+express:{prompt:"用过去完成时说说你上初中之前已经做过的事（3-4句话）:",words:["already","learn","visit","before"]}
+},
+
+{title:"那件事发生在什么时候",grammar:"一般过去 vs 过去进行 vs 过去完成<br><small>I walked… / I was walking… / I had walked…</small>",grammarLabel:"时态③：三大过去时态对比",
+coreWords:[["happen","发生"],["suddenly","突然"],["while","当…时"],["still","仍然"],["accident","事故"],["realise","意识到"],["moment","时刻"],["explain","解释"],["surprise","惊讶"],["weather","天气"]],
+sentences:[
+  {en:"The <b>accident</b> <b>happened</b> when I was walking to school.（一般过去 + 过去进行）",cn:"事故发生时我正在走去学校。"},
+  {en:"<b>While</b> my mother was cooking, my father <b>was</b> <b>still</b> reading the newspaper.",cn:"我妈妈在做饭时，我爸爸还在看报纸。（两个过去进行同时）"},
+  {en:"I <b>realised</b> I <b>had</b> forgotten my keys after I closed the door.",cn:"关上门后我意识到忘了带钥匙。（先忘后意识到→过去完成）"},
+  {en:"<b>Suddenly</b>, the <b>weather</b> changed and it started to rain heavily.",cn:"突然，天气变了，下起了大雨。（一般过去叙事）"},
+  {en:"At that <b>moment</b>, she <b>was</b> trying to <b>explain</b> what <b>had</b> <b>happened</b>.",cn:"在那一刻，她正在试着解释发生了什么。（三时态同框）"}
+],
+practice:[
+  {prompt:"选择正确的时态（一般过去/过去进行/过去完成）:",template:"While I ___（walk）home, I ___（see）an accident.",words:["was walking","saw"]},
+  {prompt:"用正确的过去时态完成:",template:"She ___（already leave）when I ___（arrive）at the party.",words:["had already left","arrived"]}
+],
+express:{prompt:"用至少两种过去时态讲述一件上周发生的意外小事:",words:["happen","suddenly","while","moment"]}
+},
+
+{title:"我下周要去旅行",grammar:"will + V原<br><small>I will travel… / She will not come… / Will you join…?</small>",grammarLabel:"时态④：一般将来时 will",
+coreWords:[["travel","旅行"],["plan","计划"],["tomorrow","明天"],["soon","很快"],["ticket","票"],["future","未来"],["hope","希望"],["decide","决定"],["pack","打包"],["weather","天气"]],
+sentences:[
+  {en:"I <b>will</b> <b>travel</b> to Shanghai next week. I <b>hope</b> the <b>weather</b> is nice.",cn:"我下周将去上海旅行。我希望天气好。"},
+  {en:"She <b>will</b> not join us <b>tomorrow</b> because she has a meeting.",cn:"她明天不会加入我们，因为她有个会议。（will not = won't）"},
+  {en:"<b>Will</b> you buy the <b>tickets</b> online? Yes, I <b>will</b>.",cn:"你会在网上买票吗？是的，我会。"},
+  {en:"I think the <b>future</b> <b>will</b> be bright if we work hard.",cn:"我认为如果我们努力，未来会是光明的。"},
+  {en:"I <b>have decided</b> — I <b>will</b> <b>pack</b> my bags tonight and leave <b>soon</b>.",cn:"我决定了——我今晚就打包行李，很快出发。"}
+],
+practice:[
+  {prompt:"用 will + 动词原形完成句子:",template:"I ___ ___（travel）to Beijing next month.",words:["will","travel"]},
+  {prompt:"用 will 的否定或疑问形式:",template:"___ you ___（come）to the party? No, she ___ not ___（go）. ",words:["Will","come","will","go"]}
+],
+express:{prompt:"用 will 说说你下周的计划（至少3个句子）:",words:["travel","tomorrow","hope","plan"]}
+},
+
+{title:"我打算学弹吉他",grammar:"be going to vs will<br><small>I am going to learn… / I will help you. / Look! It's going to rain!</small>",grammarLabel:"时态⑤：be going to vs will",
+coreWords:[["guitar","吉他"],["learn","学习"],["intention","意图"],["promise","承诺"],["probably","大概"],["certainly","肯定"],["instrument","乐器"],["practice","练习"],["predict","预测"],["offer","提供"]],
+sentences:[
+  {en:"I am going to <b>learn</b> to play the <b>guitar</b>. It is my new year's <b>intention</b>.",cn:"我打算学弹吉他。这是我的新年打算。（打算→be going to）"},
+  {en:"Look at those clouds! It is going to rain <b>probably</b> in a few minutes.",cn:"看那些云！大概几分钟内就要下雨了。（有迹象→be going to）"},
+  {en:"I <b>promise</b> I <b>will</b> <b>practice</b> every day. I <b>will</b> not give up.",cn:"我承诺我会每天练习。我不会放弃。（承诺→will）"},
+  {en:"She <b>will</b> <b>certainly</b> pass the exam — she has studied so hard.",cn:"她肯定会通过考试——她学得非常努力。（预测→will）"},
+  {en:"A: The phone is ringing! B: I <b>will</b> answer it. (当场决定→will，非 be going to)",cn:"A：电话响了！B：我来接。（当场决定必须用 will）"}
+],
+practice:[
+  {prompt:"选择 be going to 或 will:",template:"I ___ going to ___ the guitar. I ___ help you with your bag.",words:["am","learn","will"]},
+  {prompt:"判断场景，选正确的将来表达:",template:"Look! The glass ___ going to fall! Don't worry, I ___ catch it.",words:["is","will"]}
+],
+express:{prompt:"用 be going to 和 will 各说两句，区分你的计划 vs 现场决定:",words:["guitar","learn","promise","practice"]}
+},
+
+{title:"明天这个时候我在干什么",grammar:"will be + V-ing<br><small>I will be studying… / She will be sleeping… / Will you be waiting…?</small>",grammarLabel:"时态⑥：将来进行时（Future Continuous）",
+coreWords:[["exactly","恰好"],["flight","航班"],["attend","参加"],["exam","考试"],["busy","忙碌的"],["schedule","日程"],["activity","活动"],["prepare","准备"],["hour","小时"],["meeting","会议"]],
+sentences:[
+  {en:"At this time tomorrow, I <b>will</b> be flying on a <b>flight</b> to London.",cn:"明天这个时候，我将正在飞往伦敦的航班上。"},
+  {en:"She <b>will</b> be <b>attending</b> an important <b>meeting</b> from 2 to 4 pm.",cn:"下午2点到4点，她将正在参加一个重要会议。"},
+  {en:"Don't call me at 8 — I <b>will</b> be taking my English <b>exam</b>.",cn:"8点别给我打电话——我将正在考英语。"},
+  {en:"This time next week, what <b>will</b> you be doing? I <b>will</b> be <b>preparing</b> for my trip.",cn:"下周此时你将在做什么？我将在为旅行做准备。"},
+  {en:"My <b>schedule</b> is very <b>busy</b> — I <b>will</b> be working for eight <b>hours</b> straight.",cn:"我的日程很忙——我将连续工作八个小时。"}
+],
+practice:[
+  {prompt:"用将来进行时 will be + V-ing 完成:",template:"At 3 pm tomorrow, I ___ ___ ___（study）in the library.",words:["will","be","studying"]},
+  {prompt:"填入正确的将来进行时形式:",template:"This time next week, she ___ ___ ___（travel）to Paris.",words:["will","be","travelling"]}
+],
+express:{prompt:"用将来进行时描述明天下午3点你将在做什么（3句话）:",words:["exactly","busy","activity","prepare"]}
+},
+
+{title:"到年底我就学完这本书了",grammar:"will have + 过去分词<br><small>I will have finished… / By then, she will have left…</small>",grammarLabel:"时态⑦：将来完成时入门（Future Perfect）",
+coreWords:[["finish","完成"],["complete","完成"],["graduate","毕业"],["achieve","实现"],["goal","目标"],["entire","整个的"],["progress","进步"],["project","项目"],["reach","达到"],["ahead","提前"]],
+sentences:[
+  {en:"By the end of this year, I <b>will</b> have <b>finished</b> this <b>entire</b> book.",cn:"到今年年底，我将学完这整本书。"},
+  {en:"She <b>will</b> have <b>graduated</b> from university by next summer.",cn:"到明年夏天，她将已经大学毕业了。"},
+  {en:"Don't worry — we <b>will</b> have <b>completed</b> the <b>project</b> before the deadline.",cn:"别担心——在截止日期前我们将已经完成这个项目。"},
+  {en:"By 2030, I <b>will</b> have <b>achieved</b> my biggest <b>goal</b> in life.",cn:"到2030年，我将已经实现我人生中最大的目标。"},
+  {en:"Keep working hard — you <b>will</b> have made great <b>progress</b> by the end of the term.",cn:"继续努力——到学期末你将已经取得很大进步。"}
+],
+practice:[
+  {prompt:"用将来完成时 will have + 过去分词完成:",template:"By next month, I ___ ___ ___（finish）all my homework.",words:["will","have","finished"]},
+  {prompt:"填入正确的形式:",template:"By 2027, she ___ ___ ___（graduate）from high school.",words:["will","have","graduated"]}
+],
+express:{prompt:"用将来完成时说说到今年年底你将已经完成的事情:",words:["finish","achieve","goal","progress"]}
+},
+
+{title:"我的生活时间线",grammar:"六大时态横向对比<br><small>I wake up… / I am reading… / I lived… / I have grown… / I will study… / I was sleeping…</small>",grammarLabel:"时态⑧：六大时态横向对比",
+coreWords:[["timeline","时间线"],["born","出生"],["grow","成长"],["remember","记得"],["change","改变"],["dream","梦想"],["memory","记忆"],["future","未来"],["achievement","成就"],["journey","旅程"]],
+sentences:[
+  {en:"I <b>was</b> <b>born</b> in 2014. Now I am 12 years old. My <b>journey</b> has just begun.（一般过去→一般现在→现在完成）",cn:"我2014年出生。现在12岁。我的旅程才刚刚开始。"},
+  {en:"I <b>am</b> <b>growing</b> taller every year. Last year, I was only 140 cm.（现在进行→一般过去）",cn:"我每年都在长高。去年我才140厘米。"},
+  {en:"I <b>have</b> already <b>achieved</b> many things, and I <b>will</b> work even harder.（现在完成→一般将来）",cn:"我已经取得了很多成就，而且我会更加努力。"},
+  {en:"When I <b>was</b> young, I <b>dreamed</b> of becoming a pilot. Now my <b>dream</b> has <b>changed</b>.",cn:"我小时候梦想成为飞行员。现在我的梦想改变了。"},
+  {en:"I <b>will</b> always <b>remember</b> these happy <b>memories</b>. The <b>future</b> is bright.",cn:"我将永远记住这些快乐的回忆。未来是光明的。"}
+],
+practice:[
+  {prompt:"判断时态并填入正确的动词形式:",template:"I ___（be）born in 2014. Now I ___（study）at middle school.",words:["was","study"]},
+  {prompt:"用正确的时态完成时间线:",template:"Last year I ___（live）in Shanghai. Next year I ___（move）to Beijing.",words:["lived","will move"]}
+],
+express:{prompt:"画一条你的人生时间线，口头用至少4种时态介绍:",words:["born","grow","change","future"]}
+},
+
+{title:"你会弹钢琴吗",grammar:"can / could + be able to<br><small>I can play the piano. / Could you swim at age 5? / I am able to…</small>",grammarLabel:"情态动词①：能力 can/could/be able to",
+coreWords:[["piano","钢琴"],["ability","能力"],["skill","技能"],["swim","游泳"],["draw","画画"],["manage","设法做到"],["talent","天赋"],["impossible","不可能的"],["ride","骑"],["dance","跳舞"]],
+sentences:[
+  {en:"<b>Can</b> you play the <b>piano</b>? Yes, I <b>can</b>. It is my favourite <b>skill</b>.",cn:"你会弹钢琴吗？是的，我会。这是我最喜欢的技能。"},
+  {en:"When I was five, I <b>could</b> already <b>swim</b> very well.",cn:"我五岁时就已经能游得很好。（过去能力→could）"},
+  {en:"I am <b>able</b> to <b>draw</b> beautiful pictures. It is my <b>talent</b>.",cn:"我能画出美丽的画。这是我的天赋。（be able to = can）"},
+  {en:"She has not been <b>able</b> to <b>ride</b> a bike yet, but she keeps trying.",cn:"她还不会骑自行车，但她一直在努力。（完成时只能用 be able to）"},
+  {en:"I will be <b>able</b> to <b>manage</b> this task myself — nothing is <b>impossible</b>.",cn:"我将会自己能完成这个任务——没有什么是不可能的。（将来时只能用 be able to）"}
+],
+practice:[
+  {prompt:"用 can / could / be able to 的正确形式:",template:"I ___ play the piano now. When I was four, I ___ not read.",words:["can","could"]},
+  {prompt:"在不能用 can 的时态中填入 be able to:",template:"She has not ___ ___ to swim since the accident. I will ___ ___ to help you.",words:["been","able","be","able"]}
+],
+express:{prompt:"用 can/could/be able to 说说你现在的能力和小时候的能力:",words:["piano","swim","draw","ability"]}
+},
+
+{title:"教室里必须保持安静",grammar:"must / have to / mustn't / should<br><small>You must keep… / You have to wear… / You shouldn't run…</small>",grammarLabel:"情态动词②：义务与建议",
+coreWords:[["quiet","安静的"],["rule","规则"],["classroom","教室"],["advice","建议"],["necessary","必要的"],["allow","允许"],["respect","尊重"],["polite","礼貌的"],["follow","遵守"],["obey","服从"]],
+sentences:[
+  {en:"You <b>must</b> keep <b>quiet</b> in the <b>classroom</b>. That is the <b>rule</b>.",cn:"你必须在教室里保持安静。那是规则。（must—强制义务）"},
+  {en:"We <b>have</b> to wear uniforms to school. It is <b>necessary</b>.",cn:"我们必须穿校服上学。这是必要的。（have to—外部规定）"},
+  {en:"You <b>mustn't</b> eat in the library. It is not <b>allowed</b>.",cn:"你不准在图书馆吃东西。这是不允许的。（mustn't—禁止）"},
+  {en:"You <b>should</b> listen to your teacher's <b>advice</b>. It helps you learn.",cn:"你应该听老师的建议。这有助于你学习。（should—建议）"},
+  {en:"We <b>should</b> be <b>polite</b> and <b>follow</b> the <b>rules</b> of the school.",cn:"我们应该礼貌并遵守学校的规则。"}
+],
+practice:[
+  {prompt:"用 must / mustn't / should 填入:",template:"You ___ keep quiet in class. You ___ play with your phone.",words:["must","mustn't"]},
+  {prompt:"区分 must（主观义务）和 have to（外部规定）:",template:"I ___ finish my homework（妈妈要求的）. I ___ remember to call Grandma（我自己觉得很重要）.",words:["have to","must"]}
+],
+express:{prompt:"用 must/mustn't/should 列出 3 条教室或家庭规则:",words:["quiet","rule","allow","polite"]}
+},
+
+{title:"他一定在家，灯亮着",grammar:"must be / can't be / may be / might be<br><small>He must be at home. / It can't be true. / She may be sick.</small>",grammarLabel:"情态动词③：推测（Speculation）",
+coreWords:[["light","灯"],["guess","猜测"],["probably","大概"],["perhaps","也许"],["maybe","可能"],["certainly","肯定"],["sure","确定"],["doubt","怀疑"],["suppose","猜想"],["evidence","证据"]],
+sentences:[
+  {en:"He <b>must</b> be at home — the <b>light</b> is on. I am very <b>sure</b>.",cn:"他一定在家——灯亮着。我非常确定。（must be—肯定推测）"},
+  {en:"She <b>can't</b> be serious. There is no <b>evidence</b> for that.",cn:"她不可能是认真的。没有证据。（can't be—否定推测）"},
+  {en:"I <b>suppose</b> it <b>may</b> be rain tomorrow. <b>Perhaps</b> we should stay home.",cn:"我猜想明天可能会下雨。也许我们该待在家里。（may be—可能50%）"},
+  {en:"She <b>might</b> be late — the traffic is terrible. I <b>doubt</b> it though.",cn:"她也许会迟到——交通很糟。不过我怀疑。（might be—可能性更小）"},
+  {en:"You <b>must</b> be tired after running ten kilometres! <b>Certainly</b> you need a rest.",cn:"跑了十公里你一定累了！你肯定需要休息。"}
+],
+practice:[
+  {prompt:"用 must be / can't be / may be 完成推测:",template:"He ___ ___ at home（灯亮着，非常确定）. She ___ ___ ill（没来学校，50%可能）.",words:["must","be","may","be"]},
+  {prompt:"选择正确的推测表达:",template:"That ___ be true — I saw it myself. That ___ be true — I have never heard of it.",words:["must","can't"]}
+],
+express:{prompt:"观察教室或家里，用 must be/can't be/may be 做 3 个推测:",words:["light","guess","probably","sure"]}
+},
+
+{title:"你能帮我一个忙吗",grammar:"would / could / may + used to<br><small>Could you help me? / Would you mind…? / I used to play…</small>",grammarLabel:"情态动词④：礼貌请求与过去习惯",
+coreWords:[["favor","帮忙"],["request","请求"],["polite","礼貌的"],["borrow","借入"],["return","归还"],["habit","习惯"],["offer","提供"],["mind","介意"],["lend","借出"],["through","通过"]],
+sentences:[
+  {en:"<b>Could</b> you do me a <b>favor</b>? <b>Would</b> you <b>mind</b> opening the window?",cn:"你能帮我一个忙吗？你介意开一下窗户吗？（could/would—礼貌请求）"},
+  {en:"<b>May</b> I <b>borrow</b> your pen? Of course, I <b>will</b> <b>lend</b> it to you.",cn:"我可以借你的钢笔吗？当然，我会借给你。（may—正式请求）"},
+  {en:"I <b>used</b> to walk to school, but now I ride my bike. It is a new <b>habit</b>.",cn:"我过去走路上学，但现在我骑自行车。这是个新习惯。（used to—过去习惯）"},
+  {en:"<b>Would</b> you like me to <b>offer</b> you a ride <b>through</b> the city?",cn:"你愿意我载你穿过市区吗？（would like—礼貌提议）"},
+  {en:"Could you please <b>return</b> the book when you finish? That would be very <b>polite</b>.",cn:"你看完能把书还回来吗？那样会很礼貌。"}
+],
+practice:[
+  {prompt:"用 could / would / may 完成礼貌请求:",template:"___ you help me carry this bag? ___ I use your phone?",words:["Could","May"]},
+  {prompt:"用 used to + 动词原形完成:",template:"I ___ ___（walk）to school, but now I take the bus.",words:["used","to"]}
+],
+express:{prompt:"用 Could you… 和 Would you mind… 造 2 个礼貌请求，并用 used to 说一个你过去的习惯:",words:["favor","polite","borrow","habit"]}
+},
+
+{title:"这本书是1950年写的",grammar:"be + 过去分词（一般现在/一般过去）<br><small>This book was written… / It is made in China. / English is spoken…</small>",grammarLabel:"语态①：被动语态基础（Passive Voice）",
+coreWords:[["write","写"],["build","建造"],["invent","发明"],["discover","发现"],["create","创造"],["design","设计"],["produce","生产"],["publish","出版"],["found","创立"],["paint","绘画"]],
+sentences:[
+  {en:"This book <b>was</b> <b>written</b> in 1950. It <b>was</b> <b>published</b> in London.",cn:"这本书写于1950年。它在伦敦出版。（一般过去被动）"},
+  {en:"English <b>is</b> spoken by millions of people around the world.",cn:"英语被全球数百万人使用。（一般现在被动）"},
+  {en:"The telephone <b>was</b> <b>invented</b> by Alexander Graham Bell in 1876.",cn:"电话是亚历山大·格拉汉姆·贝尔在1876年发明的。"},
+  {en:"This beautiful bridge <b>was</b> <b>designed</b> by a famous architect.",cn:"这座美丽的桥是由一位著名建筑师设计的。"},
+  {en:"The new school <b>was</b> <b>built</b> last year. It <b>is</b> <b>painted</b> white and blue.",cn:"新学校是去年建的。它被漆成了白色和蓝色。"}
+],
+practice:[
+  {prompt:"用被动语态 be + 过去分词完成:",template:"This photo ___ ___（take）in Paris. These shoes ___ ___（make）in China.",words:["was","taken","are","made"]},
+  {prompt:"将主动语态改为被动语态:",template:"They built the house in 2000. → The house ___ ___ in 2000.",words:["was","built"]}
+],
+express:{prompt:"用被动语态描述一件物品是如何被制造/发明/发现的（3句话）:",words:["write","build","invent","discover"]}
+},
+
+{title:"这个城市每年被数百万人参观",grammar:"被动语态各时态<br><small>It is visited… / It was built… / It has been… / It will be…</small>",grammarLabel:"语态②：被动语态进阶（多时态）",
+coreWords:[["city","城市"],["million","百万"],["visit","参观"],["attract","吸引"],["locate","位于"],["hold","举办"],["celebrate","庆祝"],["repair","修理"],["clean","清洁"],["serve","服务"]],
+sentences:[
+  {en:"This <b>city</b> <b>is</b> <b>visited</b> by <b>millions</b> of people every year.（一般现在被动）",cn:"这个城市每年被数百万人参观。"},
+  {en:"The museum <b>was</b> <b>built</b> in 1920 and <b>has</b> been <b>visited</b> by over 50 <b>million</b> people.",cn:"博物馆建于1920年，已被超过五千万人参观过。（过去被动 + 现在完成被动）"},
+  {en:"The festival <b>is</b> <b>held</b> every spring. It <b>is</b> <b>celebrated</b> with music and food.",cn:"这个节日每年春天举办。人们用音乐和美食来庆祝它。"},
+  {en:"The bridge <b>is</b> being <b>repaired</b> right now — it <b>will</b> be reopened next month.",cn:"这座桥正在被修缮——它将于下个月重新开放。（现在进行被动 + 将来被动）"},
+  {en:"The room <b>has</b> already been <b>cleaned</b>. Dinner <b>will</b> be <b>served</b> at 7.",cn:"房间已经被打扫干净了。晚餐将在7点供应。"}
+],
+practice:[
+  {prompt:"用正确的被动语态时态完成:",template:"The house ___ ___（clean）every day. It ___ ___（paint）last week.",words:["is","cleaned","was","painted"]},
+  {prompt:"填入被动语态形式:",template:"The meeting ___ ___ ___（hold）next Monday. The room ___ already ___ ___（prepare）.",words:["will","be","held","has","been","prepared"]}
+],
+express:{prompt:"用至少两种时态的被动语态描述你的城市或学校:",words:["city","visit","build","clean"]}
+},
+
+{title:"快起床！天亮了",grammar:"动词 + 副词<br><small>get up / turn on / put off / wake up / pick up / take off</small>",grammarLabel:"短语动词①：动词+副词（Phrasal Verbs）",
+coreWords:[["wake","醒来"],["alarm","闹钟"],["switch","开关"],["hurry","赶快"],["outside","外面"],["ready","准备好的"],["knock","敲"],["set","设置"],["arrive","到达"],["breathe","呼吸"]],
+sentences:[
+  {en:"<b>Wake</b> up! It is already 7 o'clock. The <b>alarm</b> went off ten minutes ago.",cn:"快醒醒！已经7点了。闹钟十分钟前就响了。（wake up / go off）"},
+  {en:"<b>Get</b> up quickly and <b>turn</b> on the lights. <b>Hurry</b> up — we are late!",cn:"快起床，把灯打开。赶快——我们迟到了！（get up / turn on / hurry up）"},
+  {en:"Please <b>pick</b> up your clothes from the floor and <b>put</b> them away.",cn:"请把地上的衣服捡起来并收好。（pick up / put away）"},
+  {en:"Don't forget to <b>switch</b> off the TV before you go to bed.",cn:"睡觉前别忘了关掉电视。（switch off）"},
+  {en:"I <b>set</b> up the tent and looked <b>outside</b>. I could <b>breathe</b> in the fresh air.",cn:"我搭好帐篷，看向外面。我能呼吸到新鲜空气。（set up / look outside / breathe in）"}
+],
+practice:[
+  {prompt:"用正确的短语动词完成:",template:"Please ___ up! It is time to ___ up and ___ on the lights.",words:["Wake","get","turn"]},
+  {prompt:"填入短语动词:",template:"Don't ___ off the meeting. Please ___ up your books and ___ them away.",words:["put","pick","put"]}
+],
+express:{prompt:"用至少 4 个短语动词（动词+副词）描述你早上的 routine:",words:["wake","alarm","switch","ready"]}
+},
+
+{title:"我期待见到你",grammar:"look forward to / get along with / run out of<br><small>I look forward to meeting you. / We get along with… / We ran out of…</small>",grammarLabel:"短语动词②：多词动词（Multi-word Verbs）",
+coreWords:[["forward","向前"],["expect","期待"],["excited","兴奋的"],["patient","耐心的"],["introduce","介绍"],["contact","联系"],["relationship","关系"],["communicate","交流"],["invite","邀请"],["prepare","准备"]],
+sentences:[
+  {en:"I look <b>forward</b> to meeting you. I am really <b>excited</b> about our trip!",cn:"我期待见到你。我对我们的旅行非常兴奋！（look forward to + doing）"},
+  {en:"She gets along well with her classmates. They have a great <b>relationship</b>.",cn:"她和同学们相处得很好。他们的关系很好。（get along with）"},
+  {en:"We have run out of milk. Can you go and buy some?",cn:"我们的牛奶喝完了。你能去买一些吗？（run out of）"},
+  {en:"I will get in touch with you when I arrive. Keep in <b>contact</b>!",cn:"我到了会跟你联系的。保持联系！（get in touch with）"},
+  {en:"Let me <b>introduce</b> you to my friend. I think you will get along with her.",cn:"让我介绍你给我的朋友。我觉得你会和她相处得来的。（introduce + get along with）"}
+],
+practice:[
+  {prompt:"用 look forward to / get along with / run out of 完成:",template:"I ___ ___ ___ meeting you. We have ___ ___ ___ time.",words:["look","forward","to","run","out","of"]},
+  {prompt:"填入正确的多词动词:",template:"She ___ ___ well ___ her new classmates. I am ___ ___ ___ the summer holiday.",words:["gets","along","with","looking","forward","to"]}
+],
+express:{prompt:"用 look forward to / get along with 各造一句，说说你期待的事和你的朋友:",words:["forward","excited","patient","contact"]}
+},
+
+{title:"我想成为一名医生",grammar:"to do（主语/宾语/表语/目的状语）<br><small>I want to be… / To learn English is… / I came to see you.</small>",grammarLabel:"非谓语①：不定式 to do（Infinitive）",
+coreWords:[["doctor","医生"],["career","职业"],["decide","决定"],["choose","选择"],["hope","希望"],["dream","梦想"],["effort","努力"],["succeed","成功"],["achieve","实现"],["purpose","目的"]],
+sentences:[
+  {en:"I want to become a <b>doctor</b>. It is my <b>dream</b> <b>career</b>.",cn:"我想成为一名医生。这是我梦想的职业。（want + to do—宾语）"},
+  {en:"<b>To</b> learn a new language is not easy, but it is worth the <b>effort</b>.",cn:"学习一门新语言不容易，但值得付出努力。（to do—主语）"},
+  {en:"My <b>purpose</b> is <b>to</b> help people. That is why I <b>choose</b> this path.",cn:"我的目的就是帮助别人。这就是为什么我选择这条路。（to do—表语）"},
+  {en:"I study hard <b>to</b> <b>achieve</b> my goals and <b>succeed</b> in life.",cn:"我努力学习是为了实现目标并在人生中取得成功。（to do—目的状语）"},
+  {en:"I have <b>decided</b> <b>to</b> work harder. I <b>hope</b> <b>to</b> make my parents proud.",cn:"我已决定要更加努力。我希望让我的父母骄傲。（decide to do / hope to do）"}
+],
+practice:[
+  {prompt:"用 to do 的正确形式完成:",template:"I want ___ ___（become）a teacher. ___ ___（learn）English is important.",words:["to","become","To","learn"]},
+  {prompt:"判断 to do 在句中的作用:",template:"I came here ___ ___（see）you.（目的状语）My goal is ___ ___（help）others.（表语）",words:["to","see","to","help"]}
+],
+express:{prompt:"用 to do 说说你未来的职业梦想（want to / hope to / to do 作目的）:",words:["doctor","career","dream","achieve"]}
+},
+
+{title:"我喜欢在周末游泳",grammar:"doing（主语/宾语）<br><small>I like swimming. / Swimming is fun. / I enjoy reading. / Do you mind waiting?</small>",grammarLabel:"非谓语②：动名词 doing（Gerund）",
+coreWords:[["weekend","周末"],["swimming","游泳"],["reading","阅读"],["dancing","跳舞"],["singing","唱歌"],["drawing","画画"],["relax","放松"],["enjoy","享受"],["hobby","爱好"],["practice","练习"]],
+sentences:[
+  {en:"I like <b>swimming</b> on the <b>weekend</b>. It is my favourite <b>hobby</b>.",cn:"我喜欢在周末游泳。这是我最喜欢的爱好。（like + doing）"},
+  {en:"<b>Reading</b> books is a great way to learn. I <b>enjoy</b> it very much.",cn:"读书是学习的好方法。我非常享受它。（doing—主语）"},
+  {en:"Do you <b>enjoy</b> <b>dancing</b>? Yes, and I also love <b>singing</b>.",cn:"你喜欢跳舞吗？是的，我也喜欢唱歌。（enjoy/love + doing）"},
+  {en:"Would you mind <b>practising</b> with me? <b>Drawing</b> helps me <b>relax</b>.",cn:"你介意和我一起练习吗？画画帮助我放松。（mind + doing）"},
+  {en:"I am not good at <b>singing</b>, but I keep <b>practising</b> every <b>weekend</b>.",cn:"我不擅长唱歌，但我每个周末都在坚持练习。（keep + doing）"}
+],
+practice:[
+  {prompt:"用 doing（动名词）完成句子:",template:"I like ___（swim）on weekends. ___（read）is my favourite hobby.",words:["swimming","Reading"]},
+  {prompt:"在需要 doing 的地方填入动名词:",template:"Do you enjoy ___（dance）? Would you mind ___（open）the door?",words:["dancing","opening"]}
+],
+express:{prompt:"用 like/enjoy + doing 说说你的周末爱好（至少 4 句话）:",words:["weekend","swimming","reading","hobby"]}
+}];
+
+// ==================== RENDER ====================
+var curTopic = 0;
+
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function renderTopicBar(){
+  var h = '';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic-1+DATA.length)%DATA.length+')" title="上一课">←</button>';
+  h += '<select onchange="pickTopic(parseInt(this.value))">';
+  for(var i=0;i<DATA.length;i++){
+    h += '<option value="'+i+'"'+(i===curTopic?' selected':'')+'>'+(i+1)+'. '+esc(DATA[i].title)+'</option>';
+  }
+  h += '</select>';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic+1)%DATA.length+')" title="下一课">→</button>';
+  h += '<div class="progress" style="display:none"></div>';
+  document.getElementById('topicBar').innerHTML = h;
+}
+
+function pickTopic(i){
+  curTopic = i;
+  renderTopicBar();
+  renderTopic();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window._testMode) startTest();
+}
+
+function renderTopic(){
+  var t = DATA[curTopic];
+  document.getElementById('topicTitle').textContent = (curTopic+1)+'. '+t.title;
+
+  var h = '';
+
+  // Section 1: Core Words
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🧠 核心词汇（10个）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">📖 '+t.grammarLabel+'</div>';
+  h += '<div class="word-grid">';
+  t.coreWords.forEach(function(w){
+    h += '<div class="word-chip"><button class="spk" data-w="'+esc(w[0])+'">🔊</button><span class="en">'+esc(w[0])+'</span><span class="cn">'+esc(w[1])+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 2: Grammar Sentences
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>📝 语法例句（5句）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">'+t.grammar+'</div><div class="sentence-list">';
+  t.sentences.forEach(function(s){
+    h += '<div class="sent">'+s.en+'<span class="cn">'+esc(s.cn)+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 3: Sentence Practice
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>✏️ 造句练习</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  t.practice.forEach(function(p,pIdx){
+    h += '<div class="practice-item" id="practice-'+pIdx+'">';
+    h += '<div class="prompt">'+esc(p.prompt)+'</div>';
+    var parts = p.template.split('___');
+    var blanks = '<span class="blanks">';
+    for(var pi=0; pi<parts.length; pi++){
+      blanks += esc(parts[pi]);
+      if(pi < parts.length-1){
+        blanks += '<span class="gap" id="gap-'+pIdx+'-'+pi+'" onclick="fillGap('+pIdx+','+pi+')">______</span>';
+      }
+    }
+    blanks += '</span>';
+    h += blanks;
+    h += '<div class="choices" id="choices-'+pIdx+'">';
+    p.words.forEach(function(w){
+      h += '<button id="btn-'+pIdx+'-'+esc(w)+'" onclick="pickWord('+pIdx+',\''+esc(w)+'\')">'+esc(w)+'</button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div></div>';
+
+  // Section 4: Expression Challenge
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🗣️ 表达挑战</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="express-box">';
+  h += '<div class="prompt">'+esc(t.express.prompt)+'</div>';
+  h += '<div class="words-hint">可用词汇：<b>'+t.express.words.map(esc).join(' &nbsp;·&nbsp; ')+'</b></div>';
+  h += '</div></div></div>';
+
+  // Section 5: Flashcard Test
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🎯 闪卡测试（10词）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div id="testArea"><button onclick="startTest()" style="padding:10px 24px;border-radius:20px;border:none;background:#1a6b5a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">开始测试</button></div></div></div>';
+
+  document.getElementById('main').innerHTML = h;
+
+  // Rebind speak buttons
+  document.querySelectorAll('.spk').forEach(function(b){
+    b.addEventListener('click',function(e){
+      e.stopPropagation();e.preventDefault();
+      var w = this.getAttribute('data-w');
+      if(!w||!window.speechSynthesis)return;
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+      speechSynthesis.speak(u);
+    });
+  });
+}
+
+// ==================== SENTENCE PRACTICE ====================
+function fillGap(pIdx,gIdx){
+  var gap = document.getElementById('gap-'+pIdx+'-'+gIdx);
+  if(!gap||gap.classList.contains('filled'))return;
+}
+
+function pickWord(pIdx,word){
+  var key = pIdx+'-'+word;
+  var btn = document.getElementById('btn-'+key);
+  if(!btn||btn.classList.contains('used'))return;
+
+  var gaps = document.querySelectorAll('[id^="gap-'+pIdx+'-"]');
+  for(var g=0;g<gaps.length;g++){
+    if(!gaps[g].classList.contains('filled')){
+      gaps[g].textContent = word;
+      gaps[g].classList.add('filled');
+      btn.classList.add('used');
+      break;
+    }
+  }
+
+  var allFilled = true;
+  for(var g2=0;g2<gaps.length;g2++){
+    if(!gaps[g2].classList.contains('filled')){allFilled=false;break;}
+  }
+  if(allFilled){
+    var practiceBox = document.getElementById('practice-'+pIdx);
+    if(practiceBox) practiceBox.style.borderColor = '#16a34a';
+  }
+}
+
+// ==================== FLASHCARD TEST ====================
+window._testMode = false;
+var tw=[],ti=0,tok=0,tfail=0,shown=false;
+
+function startTest(){
+  window._testMode = true;
+  tw = DATA[curTopic].coreWords.slice();
+  tw.sort(function(){return Math.random()-0.5});
+  ti=0;tok=0;tfail=0;shown=false;
+  updateTestStats();
+  showCard();
+}
+
+function updateTestStats(){
+  var done = tok+tfail, rem = tw.length-ti;
+  var total = tok+tfail+rem;
+  var h = '<div class="test-stats">';
+  h += '<div class="st"><div class="n">'+rem+'</div><div class="l">剩余</div></div>';
+  h += '<div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓</div></div>';
+  h += '<div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗</div></div>';
+  h += '<div class="st"><div class="n">'+(done?Math.round(done/total*100):0)+'%</div><div class="l">进度</div></div>';
+  h += '</div><div id="cardArea"></div><div class="test-btns" id="testBtns"></div>';
+  document.getElementById('testArea').innerHTML = h;
+}
+
+function showCard(){
+  if(ti>=tw.length){
+    var rate = (tok+tfail)?Math.round(tok/(tok+tfail)*100):0;
+    document.getElementById('cardArea').innerHTML = '<div class="stats-done"><div class="emoji">'+(rate>=80?'🎉':rate>=50?'💪':'📖')+'</div><h3>完成！</h3><div class="rate" style="color:'+(rate>=60?'#16a34a':'#dc2626')+'">'+rate+'%</div><p style="color:#888">正确 '+tok+' / 错误 '+tfail+'</p><button onclick="startTest()" style="margin-top:8px;padding:8px 24px;border-radius:16px;border:none;background:#1a6b5a;color:#fff;font-size:13px;cursor:pointer;font-family:inherit">🔄 再来一轮</button></div>';
+    document.getElementById('testBtns').innerHTML = '';
+    return;
+  }
+  var w = tw[ti];shown=false;
+  document.getElementById('cardArea').innerHTML = '<div class="fc" id="fc" onclick="reveal()"><button class="fc-spk" data-w="'+esc(w[0])+'" onclick="event.stopPropagation();speakWord(\''+esc(w[0])+'\')">🔊</button><div class="ew">'+esc(w[0])+'</div><div class="cn-hidden" id="cnHidden">'+esc(w[1])+'</div><div class="tap">👆 点击查看中文</div></div>';
+  document.getElementById('testBtns').innerHTML = '<button class="btn-no" onclick="mark(false)">不认识</button><button class="btn-yes" onclick="mark(true)">认识</button>';
+}
+
+function reveal(){
+  if(shown)return;shown=true;
+  var cn = document.getElementById('cnHidden');
+  if(cn)cn.style.display='block';
+  var fc = document.getElementById('fc');
+  if(fc)fc.classList.add('reveal');
+}
+
+function mark(ok){
+  if(!shown){reveal();return;}
+  if(ok)tok++;else tfail++;
+  ti++;
+  updateTestStats();
+  showCard();
+}
+
+function speakWord(w){
+  if(!w||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+  speechSynthesis.speak(u);
+}
+
+// ==================== INIT ====================
+renderTopicBar();
+renderTopic();
+</script>
+</body>
+</html>
