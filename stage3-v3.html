@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>阶段3 中高级表达期 — 词句双轨训练 V3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f6f7f9;color:#1e293b;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#1a2332,#1e3a5f);color:#fff;padding:16px;position:sticky;top:0;z-index:20;text-align:center}
+.header .badge{font-size:10px;letter-spacing:3px;color:#f0d78c}
+.header h1{font-size:17px;margin:4px 0;font-weight:700}
+.header .info{font-size:10px;opacity:.6}
+.topic-bar{position:sticky;top:94px;z-index:10;background:#fff;border-bottom:1px solid #e5e7eb;padding:8px 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.topic-bar .nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;font-size:16px;cursor:pointer;color:#555;font-family:inherit;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;line-height:1}
+.topic-bar .nav-btn:active{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.topic-bar select{flex:1;max-width:280px;padding:8px 12px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#1a6b5a;cursor:pointer;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6b5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.topic-bar .progress{font-size:10px;color:#aaa;text-align:center;margin-top:2px}
+.main{max-width:700px;margin:0 auto;padding:12px 14px}
+.sec{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.sec .hd{cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;user-select:none;background:#fafcfb;border-bottom:1px solid #f0f0f0}
+.sec .hd h3{font-size:14px;display:flex;align-items:center;gap:6px}
+.sec .hd .arrow{font-size:11px;color:#aaa;transition:transform .2s}
+.sec.open .hd .arrow{transform:rotate(180deg)}
+.sec .bd{display:none;padding:12px 14px}
+.sec.open .bd{display:block}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.word-chip{display:flex;align-items:center;gap:6px;padding:8px 10px;background:#f8fafc;border-radius:8px;cursor:pointer;transition:all .12s;border:1.5px solid transparent}
+.word-chip:hover{border-color:#1a6b5a;background:#e8f5f0}
+.word-chip .en{font-size:13px;font-weight:600;color:#1a6b5a}
+.word-chip .cn{font-size:10px;color:#888;margin-left:auto;white-space:nowrap}
+.word-chip .spk{width:22px;height:22px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.word-chip .spk:hover{background:#1a6b5a;color:#fff;border-color:#1a6b5a}
+.grammar-label{display:inline-block;background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:10px;letter-spacing:0.5px}
+.sentence-list .sent{padding:10px 14px;margin:6px 0;background:#f8fafc;border-radius:8px;border-left:3px solid #1a6b5a;font-family:Georgia,serif;font-size:14px;line-height:1.6;color:#334155}
+.sentence-list .sent b{color:#1a6b5a;font-weight:600;background:#e8f5f0;padding:1px 4px;border-radius:3px}
+.sentence-list .sent .cn{display:block;font-size:11px;color:#999;margin-top:3px;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
+.practice-item{padding:10px 14px;margin:8px 0;background:#fffbeb;border-radius:8px;border:1.5px dashed #e5e7eb}
+.practice-item .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.practice-item .blanks{font-family:Georgia,serif;font-size:14px;line-height:2}
+.practice-item .blanks .gap{display:inline-block;min-width:60px;border-bottom:2px dashed #1a6b5a;margin:0 6px;padding:2px 4px;color:#1a6b5a;font-weight:600;cursor:pointer;transition:all .15s}
+.practice-item .blanks .gap:hover{background:#e8f5f0}
+.practice-item .blanks .gap.filled{background:#e8f5f0;border-bottom-style:solid}
+.practice-item .choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.practice-item .choices button{padding:5px 12px;border-radius:12px;border:1.5px solid #1a6b5a;background:#fff;color:#1a6b5a;font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s;font-weight:500}
+.practice-item .choices button:hover{background:#1a6b5a;color:#fff}
+.practice-item .choices button.used{opacity:.3;pointer-events:none}
+.express-box{background:linear-gradient(135deg,#e8f5f0,#f0fdf4);border-radius:10px;padding:14px;text-align:center}
+.express-box .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.express-box .words-hint{font-size:12px;color:#999;margin-top:6px}
+.express-box .words-hint b{color:#1a6b5a}
+.fc{background:#fff;border-radius:14px;padding:36px 18px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.08);cursor:pointer;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.fc .ew{font-size:28px;font-weight:700;margin:8px 0}
+.fc .cn-hidden{font-size:16px;color:#ccc;margin-top:4px;display:none}
+.fc.reveal .cn-hidden{display:block;color:#1a6b5a;font-weight:600}
+.fc .tap{font-size:10px;color:#ddd;margin-top:8px}
+.fc.reveal .tap{display:none}
+.fc .fc-spk{width:36px;height:36px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;position:absolute;top:10px;right:10px}
+.test-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.test-btns button{flex:1;max-width:100px;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-no{background:#fee2e2;color:#dc2626}
+.btn-yes{background:#dcfce7;color:#16a34a}
+.test-stats{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+.test-stats .st{background:#fff;padding:8px 12px;border-radius:8px;text-align:center;min-width:50px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.test-stats .st .n{font-size:18px;font-weight:700;color:#2563eb}
+.test-stats .st .l{font-size:9px;color:#888}
+.stats-done{text-align:center;padding:20px}
+.stats-done .emoji{font-size:40px}
+.stats-done h3{margin:8px 0}
+.stats-done .rate{font-size:22px;font-weight:700}
+@media(max-width:480px){
+  .word-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:12px 10px}.header h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">阶段 3 · 中高级表达期 · CEFR B2</div>
+  <h1 id="topicTitle">词句双轨训练</h1>
+  <div class="info">10核心词 · 5语法例句 · 造句练习 · 表达输出</div>
+</div>
+
+<div class="topic-bar" id="topicBar"></div>
+<div class="main" id="main"></div>
+
+<script>
+// ==================== STAGE 3 DATA (#56-74) ====================
+var DATA = [
+{title:"分词作定语与状语",grammar:"请把打破的窗户修好 → 分词作定语/状语（-ing表主动，-ed表被动）<br><small>The <b>broken</b> window / The <b>running</b> water / The book <b>written</b> by her</small>",grammarLabel:"非谓语①：分词作定语与状语",
+coreWords:[["broken","打破的"],["running","流动的"],["sleeping","睡着的"],["written","写好的"],["exciting","令人兴奋的"],["interested","感兴趣的"],["amazing","惊人的"],["bored","无聊的"],["falling","落下的"],["shining","闪耀的"]],
+sentences:[
+  {en:"Please fix the <b>broken</b> window. The glass is everywhere.",cn:"请把打破的窗户修好。玻璃到处都是。"},
+  {en:"The <b>running</b> water sounds so peaceful and calm.",cn:"流水的声音听起来非常平和宁静。"},
+  {en:"The book <b>written</b> by Mo Yan is famous worldwide.",cn:"莫言写的那本书在全世界都很出名。"},
+  {en:"I felt very <b>excited</b> about the <b>amazing</b> news today.",cn:"我对今天那个惊人的消息感到非常兴奋。"},
+  {en:"<b>Falling</b> leaves covered the ground, <b>shining</b> in the autumn sun.",cn:"落叶覆盖了地面，在秋日的阳光下闪闪发光。"}
+],
+practice:[
+  {prompt:"用适当的分词填入（-ing 或 -ed）:",template:"The ___ (break) window needs repair. The ___ (run) dog is cute.",words:["broken","running"]},
+  {prompt:"选择正确的分词形式:",template:"I am ___ (interest) in the ___ (excite) story she told.",words:["interested","exciting"]}
+],
+express:{prompt:"用以下 4 个核心词（分词）描述一个你印象深刻的场景:",words:["broken","exciting","falling","shining"]}
+},
+
+{title:"非谓语动词进阶",grammar:"做完作业后我出去玩了 → 非谓语进阶（having done/being done/done）<br><small><b>Having finished</b> homework / The car <b>being repaired</b> / <b>Done</b> with work</small>",grammarLabel:"非谓语②：非谓语动词进阶形式",
+coreWords:[["finished","完成的"],["having","（用于完成式）"],["being","正在被"],["repaired","被修理的"],["completed","已完成的"],["washed","洗过的"],["prepared","准备好的"],["eaten","吃过的"],["dressed","穿好衣服的"],["locked","锁上的"]],
+sentences:[
+  {en:"<b>Having finished</b> my homework, I went out to play with friends.",cn:"做完作业后我出去和朋友玩了。"},
+  {en:"The car <b>being repaired</b> now is my father's old one.",cn:"正在被修理的那辆车是我父亲的旧车。"},
+  {en:"<b>Having eaten</b> breakfast quickly, she rushed to the bus stop.",cn:"匆匆吃完早餐后她冲向公交站。"},
+  {en:"The room, <b>cleaned</b> and <b>prepared</b>, was ready for the guests.",cn:"房间被打扫好了也准备好了，可以接待客人了。"},
+  {en:"<b>Having locked</b> the door, he suddenly realized he forgot his phone.",cn:"锁上门后他突然意识到忘了带手机。"}
+],
+practice:[
+  {prompt:"用 having done 形式填入:",template:"___ (finish) the project, we celebrated. ___ (eat) lunch, I took a nap.",words:["Having finished","Having eaten"]},
+  {prompt:"用 being done 或 done 填入:",template:"The house ___ (paint) looks brand new. The bridge ___ (build) will open next month.",words:["painted","being built"]}
+],
+express:{prompt:"用 having done + being done 描述你完成一天任务后的感受:",words:["finished","having","prepared","completed"]}
+},
+
+{title:"宾语从句",grammar:"我知道你在想什么 → 宾语从句（that/what/whether/if + 陈述语序）<br><small>I know <b>what</b> you think. / I wonder <b>whether</b> he will come. / She said <b>that</b> she was fine.</small>",grammarLabel:"从句①：宾语从句",
+coreWords:[["know","知道"],["think","思考"],["believe","相信"],["wonder","想知道"],["understand","理解"],["realize","意识到"],["remember","记得"],["explain","解释"],["suggest","建议"],["whether","是否"]],
+sentences:[
+  {en:"I <b>know</b> what you are <b>thinking</b> about right now.",cn:"我知道你现在在想什么。"},
+  {en:"She asked me <b>whether</b> I could help her with the homework.",cn:"她问我是否能帮她做作业。"},
+  {en:"I firmly <b>believe</b> that honesty is the best policy.",cn:"我坚信诚实是最佳策略。"},
+  {en:"Do you really <b>understand</b> what I am trying to say?",cn:"你真的理解我想表达什么吗？"},
+  {en:"He didn't <b>realize</b> that the meeting had already started.",cn:"他没有意识到会议已经开始了。"}
+],
+practice:[
+  {prompt:"用 that / what / whether 填入:",template:"I know ___ she is right. I wonder ___ he will come. Tell me ___ you want.",words:["that","whether","what"]},
+  {prompt:"合并句子（注意陈述语序）:",template:"Can you tell me ___ the station is? (where)",words:["where"]}
+],
+express:{prompt:"用 I know/think/believe/wonder + 宾语从句 表达你的想法:",words:["know","think","believe","wonder"]}
+},
+
+{title:"主语从句与表语从句",grammar:"最重要的是你开心 → 主语从句 + 表语从句（What…/That… 作主语/表语）<br><small><b>What matters</b> is… / The truth is <b>that</b>… / <b>That</b> he passed is great.</small>",grammarLabel:"从句②：主语从句与表语从句",
+coreWords:[["important","重要的"],["matter","重要；要紧"],["truth","真相"],["reason","原因"],["problem","问题"],["fact","事实"],["suggestion","建议"],["opinion","观点"],["dream","梦想"],["secret","秘密"]],
+sentences:[
+  {en:"<b>What matters</b> most is that you are happy and healthy.",cn:"最重要的是你开心和健康。"},
+  {en:"The <b>truth</b> is that we need more time to finish the task.",cn:"真相是我们需要更多时间来完成这个任务。"},
+  {en:"<b>That</b> he got full marks on the test is really amazing.",cn:"他在考试中得了满分真令人惊讶。"},
+  {en:"My <b>dream</b> is that I can travel all around the world one day.",cn:"我的梦想是有一天能环游世界。"},
+  {en:"The <b>reason</b> why she left early is that she felt unwell.",cn:"她早退的原因是她身体不舒服。"}
+],
+practice:[
+  {prompt:"用 What 开头改写句子:",template:"The most important thing is your safety. → ___ is most important is your safety.",words:["What"]},
+  {prompt:"用 that 完成表语从句:",template:"My opinion is ___ we should take action now. The ___ is ___ nobody knows.",words:["that","fact","that"]}
+],
+express:{prompt:"用 What...is that... 和 The truth/reason is that... 表达你的一个观点:",words:["important","matter","truth","dream"]}
+},
+
+{title:"间接引语：陈述句",grammar:"他说他明天会来 → 直接引语→间接引语① 陈述句<br><small>She said, \"I am tired.\" → She said (that) she <b>was</b> tired.</small>",grammarLabel:"间接引语①：陈述句转换",
+coreWords:[["said","说"],["told","告诉"],["explained","解释"],["mentioned","提及"],["replied","回答"],["announced","宣布"],["reported","报告"],["admitted","承认"],["promised","承诺"],["claimed","声称"]],
+sentences:[
+  {en:"He <b>said</b> that he would come and visit us the next day.",cn:"他说他第二天会来看我们。"},
+  {en:"She <b>told</b> me that she really liked my new haircut.",cn:"她告诉我她非常喜欢我的新发型。"},
+  {en:"He <b>explained</b> that he had been too busy to call all week.",cn:"他解释说他整个星期都忙得没时间打电话。"},
+  {en:"She sincerely <b>promised</b> that she would never lie to me again.",cn:"她真诚地承诺她再也不会对我撒谎。"},
+  {en:"They <b>reported</b> that the storm would arrive by midnight.",cn:"他们报告说暴风雨将在午夜前到达。"}
+],
+practice:[
+  {prompt:"把直接引语变成间接引语（注意时态变化）:",template:"She said, \"I am tired.\" → She said that ___ ___ tired.",words:["she","was"]},
+  {prompt:"注意时态变化:",template:"He said, \"I will help you.\" → He said that he ___ help me. She said, \"I lost my keys.\" → She said she ___ lost her keys.",words:["would","had"]}
+],
+express:{prompt:"用 said/told/explained/promised 转述别人对你说过的话:",words:["said","told","explained","promised"]}
+},
+
+{title:"间接引语：疑问句与祈使句",grammar:"她问我是否喜欢音乐 → 直接引语→间接引语② 疑问句+祈使句<br><small>\"Do you like music?\" → She asked <b>if</b> I liked music. / \"Sit down!\" → He told me <b>to</b> sit down.</small>",grammarLabel:"间接引语②：疑问句与祈使句转换",
+coreWords:[["asked","问"],["wondered","想知道"],["inquired","询问"],["ordered","命令"],["requested","请求"],["advised","建议"],["begged","恳求"],["commanded","指挥"],["suggested","提议"],["reminded","提醒"]],
+sentences:[
+  {en:"She <b>asked</b> me if I liked listening to pop music.",cn:"她问我是否喜欢听流行音乐。"},
+  {en:"He <b>wondered</b> where I had been the whole afternoon.",cn:"他想知道我整个下午去了哪里。"},
+  {en:"The teacher <b>ordered</b> the whole class to keep quiet.",cn:"老师命令全班同学保持安静。"},
+  {en:"Mom gently <b>reminded</b> me not to forget my lunch box.",cn:"妈妈温柔地提醒我不要忘记带午餐盒。"},
+  {en:"She <b>advised</b> me to take more exercise and eat healthier.",cn:"她建议我多锻炼并且吃得更健康一些。"}
+],
+practice:[
+  {prompt:"把一般疑问句变成间接引语:",template:"\"Do you like pizza?\" she asked. → She asked ___ I liked pizza.",words:["if"]},
+  {prompt:"把祈使句变成间接引语:",template:"\"Please sit down,\" he said. → He ___ me to sit down. \"Don't run!\" she said. → She ___ us not to run.",words:["asked","told"]}
+],
+express:{prompt:"用 asked/wondered/advised/reminded 转述一段你记忆中老师和你的对话:",words:["asked","wondered","advised","reminded"]}
+},
+
+{title:"定语从句：关系代词",grammar:"我认识那个戴眼镜的女孩 → 定语从句① 关系代词（who/whom/which/that）<br><small>The girl <b>who</b> wears glasses / The book <b>which</b> I bought / The man <b>that</b> I met</small>",grammarLabel:"定语从句①：关系代词",
+coreWords:[["recognize","认出"],["glasses","眼镜"],["neighbor","邻居"],["musician","音乐家"],["photograph","照片"],["stranger","陌生人"],["athlete","运动员"],["journalist","记者"],["author","作者"],["scientist","科学家"]],
+sentences:[
+  {en:"I <b>recognize</b> the girl who wears <b>glasses</b> every day.",cn:"我认出了那个每天都戴眼镜的女孩。"},
+  {en:"The <b>musician</b> whom we met last weekend is world-famous.",cn:"我们上周末见到的那位音乐家是世界知名的。"},
+  {en:"The book which I borrowed from the library is about a great <b>scientist</b>.",cn:"我从图书馆借的那本书是关于一位伟大科学家的。"},
+  {en:"The <b>athlete</b> that won the gold medal comes from a small village.",cn:"赢得金牌的那位运动员来自一个小村庄。"},
+  {en:"The <b>author</b> who wrote this inspiring novel is surprisingly young.",cn:"写这本鼓舞人心的小说的作者出奇地年轻。"}
+],
+practice:[
+  {prompt:"用 who / which / that 填入:",template:"The girl ___ sings in the choir is my friend. The phone ___ I bought is really fast.",words:["who","that"]},
+  {prompt:"合并句子（用定语从句）:",template:"I met a woman. She is a famous doctor. → The woman ___ I met is a famous doctor.",words:["whom"]}
+],
+express:{prompt:"用关系代词 who/which/that 描述你身边的人或物品:",words:["recognize","neighbor","musician","author"]}
+},
+
+{title:"定语从句：关系副词",grammar:"这就是我出生的地方 → 定语从句② 关系副词（when/where/why）<br><small>The place <b>where</b> I was born / The day <b>when</b> we met / The reason <b>why</b> she left</small>",grammarLabel:"定语从句②：关系副词",
+coreWords:[["birthplace","出生地"],["moment","时刻"],["occasion","场合"],["situation","情况"],["hometown","家乡"],["childhood","童年"],["memory","记忆"],["reason","理由"],["village","村庄"],["anniversary","周年纪念"]],
+sentences:[
+  {en:"This is the <b>birthplace</b> where I was born and spent my <b>childhood</b>.",cn:"这就是我出生的地方，我在这里度过了童年。"},
+  {en:"I still clearly remember the day when we first met at the park.",cn:"我仍然清晰地记得我们第一次在公园见面的那天。"},
+  {en:"Do you know the real <b>reason</b> why she quit her job?",cn:"你知道她辞职的真正原因吗？"},
+  {en:"That was the exact <b>moment</b> when everything changed forever.",cn:"那就是一切永远改变的那个时刻。"},
+  {en:"Last summer I visited the small <b>village</b> where my grandparents grew up.",cn:"去年夏天我参观了我祖父母长大的小村庄。"}
+],
+practice:[
+  {prompt:"用 when / where / why 填入:",template:"I remember the day ___ we first spoke. This is the park ___ we used to play. The ___ ___ he cried is unknown.",words:["when","where","reason","why"]},
+  {prompt:"合并句子:",template:"That is the reason. She was late for it. → That is the reason ___ she was late.",words:["why"]}
+],
+express:{prompt:"用 when/where/why 引导的定语从句描述你童年的一段记忆:",words:["hometown","childhood","moment","reason"]}
+},
+
+{title:"限制性与非限制性定语从句",grammar:"我的妈妈，她是一名医生 → 定语从句③ 限制性 vs 非限制性<br><small>My mom, <b>who is a doctor</b>, works hard. / The man <b>who sits there</b> is my uncle.</small>",grammarLabel:"定语从句③：限制性 vs 非限制性",
+coreWords:[["physician","内科医生"],["colleague","同事"],["relative","亲戚"],["cousin","堂/表亲"],["nephew","侄子"],["niece","侄女"],["generous","慷慨的"],["humorous","幽默的"],["patient","耐心的"],["introduction","介绍"]],
+sentences:[
+  {en:"My mother, who is a skilled <b>physician</b>, works extremely hard every day.",cn:"我的妈妈，她是一名技术精湛的医生，每天都非常努力地工作。"},
+  {en:"The <b>colleague</b> who sits next to me in the office is very <b>generous</b>.",cn:"办公室里坐在我旁边的同事非常慷慨。"},
+  {en:"Beijing, which is the capital of China, has a long and rich history.",cn:"北京，中国的首都，有着悠久而丰富的历史。"},
+  {en:"My <b>cousin</b>, whom you met at the party last month, is visiting again.",cn:"我的表弟，你上个月在聚会上见过的那位，又要来访了。"},
+  {en:"The teacher, who is always <b>patient</b>, helps every single student.",cn:"那位老师，总是很有耐心，帮助每一个学生。"}
+],
+practice:[
+  {prompt:"判断是否需要逗号（填入 , who 或 who）:",template:"My sister ___ lives in London ___ is a lawyer. (非限制性)",words:[", who",","]},
+  {prompt:"用非限制性定语从句完成:",template:"My best friend, ___ I have known for ten years, is a doctor. Shanghai, ___ is the biggest city in China, is amazing.",words:["whom","which"]}
+],
+express:{prompt:"用非限制性定语从句介绍你的家人或朋友:",words:["physician","cousin","generous","humorous"]}
+},
+
+{title:"定语从句：that的特殊用法",grammar:"这是我读过的最好的一本书 → 定语从句④ that特殊用法<br><small>the best book <b>that</b> I have read / the first person <b>that</b> arrived / all <b>that</b> I know</small>",grammarLabel:"定语从句④：that 的特殊用法",
+coreWords:[["masterpiece","杰作"],["novel","小说"],["documentary","纪录片"],["literature","文学"],["adventure","冒险"],["recommend","推荐"],["brilliant","出色的"],["unforgettable","难忘的"],["classic","经典"],["treasure","珍品"]],
+sentences:[
+  {en:"This is the best <b>novel</b> that I have ever read in my whole life.",cn:"这是我一生中读过的最好的一本小说。"},
+  {en:"He was the first person that arrived at the meeting this morning.",cn:"他是今早第一个到达会议的人。"},
+  {en:"This is the very <b>masterpiece</b> that I have been searching for years.",cn:"这就是我多年来一直在寻找的那部杰作。"},
+  {en:"She is the most <b>brilliant</b> student that I have ever taught in this school.",cn:"她是我在这所学校教过的最出色的学生。"},
+  {en:"All that I truly want is a quiet place to read this <b>classic</b> book.",cn:"我真正想要的只是一个安静的地方读这本经典的书。"}
+],
+practice:[
+  {prompt:"判断必须用 that 还是可以用 which:",template:"This is the best movie ___ I have ever seen. The movie ___ we watched last night was fun.",words:["that","which"]},
+  {prompt:"用 that 填入（先行词前有最高级/序数词/all等）:",template:"All ___ she said was true. This is the first gift ___ I have received.",words:["that","that"]}
+],
+express:{prompt:"用最高级/序数词 + that 定语从句推荐一部电影或一本书:",words:["masterpiece","recommend","brilliant","unforgettable"]}
+},
+
+{title:"定语从句：as vs which",grammar:"正如你所知，英语很重要 → 定语从句⑤ as vs which + 综合复习<br><small><b>As</b> you know / He was late, <b>which</b> annoyed us / <b>As</b> is often the case</small>",grammarLabel:"定语从句⑤：as vs which + 综合复习",
+coreWords:[["aware","意识到的"],["obvious","明显的"],["expect","预期"],["predict","预测"],["demonstrate","展示"],["confirm","确认"],["announcement","公告"],["worldwide","全球的"],["essential","必需的"],["global","全球的"]],
+sentences:[
+  {en:"<b>As</b> you know, learning English is very important today.",cn:"正如你所知，学习英语在今天非常重要。"},
+  {en:"He passed the difficult exam, which surprised absolutely everyone.",cn:"他通过了那个很难的考试，这让每个人都很惊讶。"},
+  {en:"<b>As</b> I <b>expected</b>, the results turned out to be excellent.",cn:"正如我预期的，结果非常出色。"},
+  {en:"The <b>announcement</b>, which went <b>worldwide</b>, spread within minutes.",cn:"那个公告，全球传播，几分钟内就传开了。"},
+  {en:"<b>As</b> the report clearly <b>demonstrates</b>, the economy is improving fast.",cn:"正如报告清晰展示的那样，经济正在快速改善。"}
+],
+practice:[
+  {prompt:"用 as 或 which 填入:",template:"___ everyone knows, honesty matters. He was late, ___ made the teacher angry. ___ is often the case, she forgot her keys.",words:["As","which","As"]},
+  {prompt:"判断用 as 还是 which:",template:"___ I said before, practice makes perfect. The news ___ he brought was exciting.",words:["As","which"]}
+],
+express:{prompt:"用 As we all know... 和 ..., which... 表达你的看法:",words:["aware","obvious","essential","demonstrate"]}
+},
+
+{title:"时间状语从句",grammar:"我到家的时候天已经黑了 → 时间状语从句（when/while/as/until/since）<br><small><b>When</b> I arrived / <b>While</b> I was reading / <b>Since</b> I moved here</small>",grammarLabel:"状语从句①：时间状语从句",
+coreWords:[["arrive","到达"],["darkness","黑暗"],["sunset","日落"],["meanwhile","同时"],["gradually","逐渐地"],["immediately","立刻"],["eventually","最终"],["suddenly","突然"],["midnight","午夜"],["dawn","黎明"]],
+sentences:[
+  {en:"<b>When</b> I <b>arrived</b> home, the sky was already in complete <b>darkness</b>.",cn:"我到家的时候天已经完全黑了。"},
+  {en:"<b>While</b> I was reading a novel, my little brother was watching cartoons.",cn:"当我在读小说时，我的小弟弟在看动画片。"},
+  {en:"I waited patiently <b>until</b> <b>midnight</b>, but he never showed up.",cn:"我耐心地一直等到午夜，但他始终没出现。"},
+  {en:"<b>Since</b> I moved to this city, I have made many wonderful friends.",cn:"自从我搬到这座城市，我交了很多很棒的朋友。"},
+  {en:"<b>As</b> I walked into the room, <b>suddenly</b> everyone stopped talking.",cn:"当我走进房间时，突然所有人都停止了说话。"}
+],
+practice:[
+  {prompt:"用 when / while / as 填入:",template:"___ I got home, it was dark. ___ I was cooking, the phone rang. ___ time went by, we became closer.",words:["When","While","As"]},
+  {prompt:"用 until 或 since 填入:",template:"Wait here ___ I come back. I have loved reading ___ I was a small child.",words:["until","since"]}
+],
+express:{prompt:"用 when/while/as soon as 描述你一天中的几个时间点:",words:["arrive","meanwhile","eventually","suddenly"]}
+},
+
+{title:"原因与目的状语从句",grammar:"因为下雨所以我们待在家里 → 原因 + 目的状语从句<br><small><b>Because</b> it rained / <b>So that</b> we wouldn't be late / <b>In order to</b> pass the exam</small>",grammarLabel:"状语从句②：原因与目的状语从句",
+coreWords:[["therefore","因此"],["consequence","后果"],["shelter","庇护所"],["indoor","室内的"],["cancel","取消"],["postpone","推迟"],["protection","保护"],["intention","意图"],["purpose","目的"],["avoid","避免"]],
+sentences:[
+  {en:"<b>Because</b> it was raining heavily, we decided to stay <b>indoor</b>.",cn:"因为下着大雨，我们决定待在室内。"},
+  {en:"We took a taxi <b>so that</b> we would not be late for the important meeting.",cn:"我们打了出租车以便不会错过那个重要的会议。"},
+  {en:"She studies very hard <b>in order to</b> get into her dream university.",cn:"她非常努力地学习，为了能考上理想的大学。"},
+  {en:"<b>Since</b> you are already here, let's begin the presentation right away.",cn:"既然你已经来了，我们马上开始演示吧。"},
+  {en:"I always bring an umbrella <b>in case</b> it rains, just for <b>protection</b>.",cn:"我总是带伞以防下雨，就当是一种保护。"}
+],
+practice:[
+  {prompt:"用 because / so that / in order to 填入:",template:"He exercises daily ___ stay fit. We stayed inside ___ it was freezing cold.",words:["in order to","because"]},
+  {prompt:"合并句子（用 so that）:",template:"She saved money. She wanted to travel abroad. → She saved money ___ ___ she could travel abroad.",words:["so","that"]}
+],
+express:{prompt:"用 because/so that/in order to 解释你做某事的原因和目的:",words:["therefore","cancel","purpose","avoid"]}
+},
+
+{title:"条件状语从句",grammar:"如果他来了我就告诉你 → 条件状语从句（if/unless/as long as）<br><small><b>If</b> he comes / <b>Unless</b> you try / <b>As long as</b> you behave</small>",grammarLabel:"状语从句③：条件状语从句",
+coreWords:[["condition","条件"],["suppose","假定"],["provide","提供"],["guarantee","保证"],["otherwise","否则"],["certainly","当然"],["possibly","可能地"],["definitely","绝对地"],["absolutely","完全地"],["imagine","想象"]],
+sentences:[
+  {en:"<b>If</b> he arrives early, I will <b>certainly</b> let you know right away.",cn:"如果他早到了，我当然会立刻告诉你。"},
+  {en:"You won't make progress <b>unless</b> you practice speaking every day.",cn:"除非你每天练习口语，否则你不会进步。"},
+  {en:"You can go out with friends <b>as long as</b> you finish all your homework.",cn:"只要你完成所有作业，就可以和朋友出去玩。"},
+  {en:"<b>Suppose</b> it rains tomorrow — what will we do <b>otherwise</b>?",cn:"假如下雨了——否则我们该怎么办？"},
+  {en:"I will definitely join you, <b>provided</b> that I can <b>possibly</b> get off work early.",cn:"只要我有可能早点下班，我绝对会加入你们。"}
+],
+practice:[
+  {prompt:"用 if / unless / as long as 填入:",template:"___ it rains, we'll stay home. You'll fail ___ you work harder. You can borrow my car ___ you drive safely.",words:["If","unless","as long as"]},
+  {prompt:"用 unless 改写:",template:"If you don't hurry, you'll miss the bus. → ___ you hurry, you'll miss the bus.",words:["Unless"]}
+],
+express:{prompt:"用 if/unless/as long as 制定三条班级或家庭规则:",words:["condition","certainly","otherwise","imagine"]}
+},
+
+{title:"让步状语从句",grammar:"虽然他很累但他还是完成了 → 让步状语从句（although/though/even though）<br><small><b>Although</b> he was tired / <b>Even though</b> it rained / <b>Despite</b> the difficulties</small>",grammarLabel:"状语从句④：让步状语从句",
+coreWords:[["exhausted","筋疲力尽的"],["effort","努力"],["determination","决心"],["obstacle","障碍"],["struggle","挣扎"],["overcome","克服"],["achievement","成就"],["despite","尽管"],["challenge","挑战"],["success","成功"]],
+sentences:[
+  {en:"<b>Although</b> he was totally <b>exhausted</b>, he still finished the race.",cn:"虽然他筋疲力尽了，但他还是完成了比赛。"},
+  {en:"She kept studying hard <b>even though</b> the exam was a huge <b>challenge</b>.",cn:"尽管考试是一个巨大的挑战，她仍继续努力学习。"},
+  {en:"<b>Though</b> the task seemed impossible, her <b>determination</b> never faded.",cn:"虽然任务看似不可能，但她的决心从未消退。"},
+  {en:"He never gave up on his dream, <b>despite</b> all the <b>obstacles</b> in his path.",cn:"尽管道路上有各种障碍，他从未放弃梦想。"},
+  {en:"<b>Even though</b> it was pouring rain, they still went hiking in the mountains.",cn:"即使下着倾盆大雨，他们还是去山里远足了。"}
+],
+practice:[
+  {prompt:"用 although / though / even though 填入:",template:"___ it was late, we kept working. ___ he is young, he is very responsible.",words:["Although","Though"]},
+  {prompt:"用 despite 改写（后接名词/动名词）:",template:"Although she was tired, she went to work. → ___ being tired, she went to work.",words:["Despite"]}
+],
+express:{prompt:"用 although/even though 描述你克服过的一个困难:",words:["exhausted","effort","determination","overcome"]}
+},
+
+{title:"结果状语从句",grammar:"这箱子太沉了以至于我搬不动 → 结果状语从句（so…that/such…that）<br><small><b>so</b> heavy <b>that</b> / <b>such</b> a kind person <b>that</b> / <b>so</b> quickly <b>that</b></small>",grammarLabel:"状语从句⑤：结果状语从句",
+coreWords:[["heavy","沉重的"],["suitcase","行李箱"],["enormous","巨大的"],["weight","重量"],["burden","负担"],["lift","举起"],["handle","处理"],["manage","设法"],["extremely","极其"],["incredible","难以置信的"]],
+sentences:[
+  {en:"The box was <b>so</b> <b>heavy</b> that I couldn't even <b>lift</b> it off the ground.",cn:"这箱子太沉了以至于我根本搬不动。"},
+  {en:"She is <b>such</b> a warm and kind person that everyone wants to be her friend.",cn:"她是如此温暖的一个人以至于大家都想和她做朋友。"},
+  {en:"The music was <b>so</b> incredibly loud that I couldn't hear a word you said.",cn:"音乐声太大了以至于我听不到你说的一个字。"},
+  {en:"It was <b>such</b> an <b>incredible</b> trip that I will remember it for the rest of my life.",cn:"这是一次如此不可思议的旅行以至于我将终生难忘。"},
+  {en:"The <b>suitcase</b> was <b>so</b> tightly packed that it wouldn't close at all.",cn:"行李箱塞得太满了以至于完全关不上。"}
+],
+practice:[
+  {prompt:"用 so...that 或 such...that 填入:",template:"The movie was ___ exciting ___ we watched it twice. She is ___ a talented singer ___ everyone loves her voice.",words:["so","that","such","that"]},
+  {prompt:"改写句子:",template:"The bag is so heavy that I can't carry it. → It is such a ___ bag that I can't carry it.",words:["heavy"]}
+],
+express:{prompt:"用 so...that 和 such...that 描述一次让你印象深刻的经历:",words:["heavy","incredible","extremely","manage"]}
+},
+
+{title:"比较状语从句",grammar:"他比我聪明得多 → 比较状语从句（than/as…as/the more…the more）<br><small>more <b>than</b> me / as tall <b>as</b> him / <b>The more</b> you read</small>",grammarLabel:"状语从句⑥：比较状语从句",
+coreWords:[["intelligent","聪明的"],["confident","自信的"],["energetic","精力充沛的"],["generous","慷慨的"],["skillful","熟练的"],["independent","独立的"],["mature","成熟的"],["responsible","负责的"],["creative","有创造力的"],["efficient","高效的"]],
+sentences:[
+  {en:"He is much more <b>intelligent</b> than most people I have met before.",cn:"他比我见过的绝大多数人都要聪明得多。"},
+  {en:"My sister is just as <b>confident</b> and brave as our mother.",cn:"我妹妹和我们的妈妈一样自信和勇敢。"},
+  {en:"<b>The more</b> books you read, <b>the more</b> knowledge you gain.",cn:"你读的书越多，你获得的知识就越多。"},
+  {en:"She has become more <b>independent</b> than I ever expected her to be.",cn:"她变得比我想象的要独立得多。"},
+  {en:"This new method is far more <b>efficient</b> than the traditional approach.",cn:"这个新方法比传统方法高效得多。"}
+],
+practice:[
+  {prompt:"用 than 或 as...as 填入:",template:"She is taller ___ her younger brother. He runs as ___ as a professional athlete.",words:["than","fast"]},
+  {prompt:"用 the more...the more 句型:",template:"___ you practice, ___ you will improve.（越多练习，越多进步）",words:["The more","the more"]}
+],
+express:{prompt:"用比较级 + than 和 as...as 比较你熟悉的两个人:",words:["intelligent","confident","independent","creative"]}
+},
+
+{title:"方式状语从句",grammar:"按照我说的做 → 方式状语从句（as/as if/like/the way）<br><small>Do <b>as</b> I say. / He looks <b>as if</b> he's seen a ghost. / She sings <b>like</b> a professional.</small>",grammarLabel:"状语从句⑦：方式状语从句",
+coreWords:[["instruction","指令"],["behave","表现"],["pretend","假装"],["imitate","模仿"],["gesture","手势"],["manners","礼仪"],["attitude","态度"],["custom","习俗"],["tradition","传统"],["pattern","模式"]],
+sentences:[
+  {en:"Please follow my <b>instruction</b> and do exactly <b>as</b> I show you.",cn:"请按照我的指示做，完全按照我给你展示的方式。"},
+  {en:"He looks <b>as if</b> he has seen a ghost — his face is so pale!",cn:"他看起来好像见了鬼一样——他的脸好苍白！"},
+  {en:"She dances beautifully, just <b>like</b> a professional ballerina would.",cn:"她舞姿优美，就像一位专业的芭蕾舞者一样。"},
+  {en:"He <b>behaves</b> exactly <b>the way</b> his grandfather used to decades ago.",cn:"他的行为举止就像他祖父几十年前那样。"},
+  {en:"Follow the <b>instructions</b> exactly <b>as</b> they are written on the package.",cn:"严格按照包装上写的说明来操作。"}
+],
+practice:[
+  {prompt:"用 as / as if / like 填入:",template:"Do ___ I told you to do. She talks ___ she knows everything about the world.",words:["as","as if"]},
+  {prompt:"用 the way 改写:",template:"She acts like her mother. → She acts ___ ___ her mother does.",words:["the","way"]}
+],
+express:{prompt:"用 as / as if 描述某个人的行为习惯或一个传统习俗:",words:["instruction","behave","pretend","tradition"]}
+},
+
+{title:"地点状语从句与综合复习",grammar:"无论你去哪里我都跟着你 → 地点状语从句 + 状语从句综合复习<br><small><b>Wherever</b> you go / Stay <b>where</b> you are / 综合：时间/原因/条件/让步/比较</small>",grammarLabel:"状语从句⑧：地点状语从句 + 综合复习",
+coreWords:[["wherever","无论哪里"],["destination","目的地"],["journey","旅程"],["accompany","陪伴"],["explore","探索"],["discover","发现"],["adventure","冒险"],["direction","方向"],["route","路线"],["wander","漫游"]],
+sentences:[
+  {en:"<b>Wherever</b> you go, I will <b>accompany</b> you and walk by your side.",cn:"无论你去哪里，我都会陪伴你，走在你身边。"},
+  {en:"You are free to sit <b>wherever</b> you like in the classroom today.",cn:"今天在教室里你可以坐在任何你喜欢的地方。"},
+  {en:"I left my backpack exactly <b>where</b> I had been sitting before lunch.",cn:"我把背包落在了午餐前我一直坐着的那个位置。"},
+  {en:"<b>Wherever</b> she travels, she always manages to <b>discover</b> hidden treasures.",cn:"无论她去哪里旅行，她总能发现隐藏的宝藏。"},
+  {en:"Stay <b>where</b> you are and wait for me — I'll be back in five minutes.",cn:"待在原地等我——我五分钟后就回来。"}
+],
+practice:[
+  {prompt:"用 where / wherever 填入:",template:"Sit ___ you like. I'll meet you at the place ___ we first met.",words:["wherever","where"]},
+  {prompt:"综合判断——选择正确的连词:",template:"___ (Wherever/If) you go, I'll follow. We waited ___ (until/because) he arrived. ___ (Even though/So that) it rained, we went out.",words:["Wherever","until","Even though"]}
+],
+express:{prompt:"用 wherever 和学过的状语从句描述你的旅行梦想:",words:["wherever","journey","explore","adventure"]}
+}];
+
+// ==================== RENDER ====================
+var curTopic = 0;
+
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function renderTopicBar(){
+  var h = '';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic-1+DATA.length)%DATA.length+')" title="上一课">←</button>';
+  h += '<select onchange="pickTopic(parseInt(this.value))">';
+  for(var i=0;i<DATA.length;i++){
+    h += '<option value="'+i+'"'+(i===curTopic?' selected':'')+'>'+(i+1)+'. '+esc(DATA[i].title)+'</option>';
+  }
+  h += '</select>';
+  h += '<button class="nav-btn" onclick="pickTopic('+(curTopic+1)%DATA.length+')" title="下一课">→</button>';
+  h += '<div class="progress" style="display:none"></div>';
+  document.getElementById('topicBar').innerHTML = h;
+}
+
+function pickTopic(i){
+  curTopic = i;
+  renderTopicBar();
+  renderTopic();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window._testMode) startTest();
+}
+
+function renderTopic(){
+  var t = DATA[curTopic];
+  document.getElementById('topicTitle').textContent = (curTopic+1)+'. '+t.title;
+
+  var h = '';
+
+  // Section 1: Core Words
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🧠 核心词汇（10个）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">📖 '+t.grammarLabel+'</div>';
+  h += '<div class="word-grid">';
+  t.coreWords.forEach(function(w){
+    h += '<div class="word-chip"><button class="spk" data-w="'+esc(w[0])+'">🔊</button><span class="en">'+esc(w[0])+'</span><span class="cn">'+esc(w[1])+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 2: Grammar Sentences
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>📝 语法例句（5句）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="grammar-label">'+t.grammar+'</div><div class="sentence-list">';
+  t.sentences.forEach(function(s){
+    h += '<div class="sent">'+s.en+'<span class="cn">'+esc(s.cn)+'</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Section 3: Sentence Practice
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>✏️ 造句练习</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  t.practice.forEach(function(p,pIdx){
+    h += '<div class="practice-item" id="practice-'+pIdx+'">';
+    h += '<div class="prompt">'+esc(p.prompt)+'</div>';
+    var parts = p.template.split('___');
+    var blanks = '<span class="blanks">';
+    for(var pi=0; pi<parts.length; pi++){
+      blanks += esc(parts[pi]);
+      if(pi < parts.length-1){
+        blanks += '<span class="gap" id="gap-'+pIdx+'-'+pi+'" onclick="fillGap('+pIdx+','+pi+')">______</span>';
+      }
+    }
+    blanks += '</span>';
+    h += blanks;
+    h += '<div class="choices" id="choices-'+pIdx+'">';
+    p.words.forEach(function(w){
+      h += '<button id="btn-'+pIdx+'-'+esc(w)+'" onclick="pickWord('+pIdx+',\''+esc(w)+'\')">'+esc(w)+'</button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div></div>';
+
+  // Section 4: Expression Challenge
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🗣️ 表达挑战</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="express-box">';
+  h += '<div class="prompt">'+esc(t.express.prompt)+'</div>';
+  h += '<div class="words-hint">可用词汇：<b>'+t.express.words.map(esc).join(' &nbsp;·&nbsp; ')+'</b></div>';
+  h += '</div></div></div>';
+
+  // Section 5: Flashcard Test
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🎯 闪卡测试（10词）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div id="testArea"><button onclick="startTest()" style="padding:10px 24px;border-radius:20px;border:none;background:#1a6b5a;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">开始测试</button></div></div></div>';
+
+  document.getElementById('main').innerHTML = h;
+
+  // Rebind speak buttons
+  document.querySelectorAll('.spk').forEach(function(b){
+    b.addEventListener('click',function(e){
+      e.stopPropagation();e.preventDefault();
+      var w = this.getAttribute('data-w');
+      if(!w||!window.speechSynthesis)return;
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+      speechSynthesis.speak(u);
+    });
+  });
+}
+
+// ==================== SENTENCE PRACTICE ====================
+function fillGap(pIdx,gIdx){
+  var gap = document.getElementById('gap-'+pIdx+'-'+gIdx);
+  if(!gap||gap.classList.contains('filled'))return;
+}
+
+function pickWord(pIdx,word){
+  var key = pIdx+'-'+word;
+  var btn = document.getElementById('btn-'+key);
+  if(!btn||btn.classList.contains('used'))return;
+
+  var gaps = document.querySelectorAll('[id^="gap-'+pIdx+'-"]');
+  for(var g=0;g<gaps.length;g++){
+    if(!gaps[g].classList.contains('filled')){
+      gaps[g].textContent = word;
+      gaps[g].classList.add('filled');
+      btn.classList.add('used');
+      break;
+    }
+  }
+
+  var allFilled = true;
+  for(var g2=0;g2<gaps.length;g2++){
+    if(!gaps[g2].classList.contains('filled')){allFilled=false;break;}
+  }
+  if(allFilled){
+    var practiceBox = document.getElementById('practice-'+pIdx);
+    if(practiceBox) practiceBox.style.borderColor = '#16a34a';
+  }
+}
+
+// ==================== FLASHCARD TEST ====================
+window._testMode = false;
+var tw=[],ti=0,tok=0,tfail=0,shown=false;
+
+function startTest(){
+  window._testMode = true;
+  tw = DATA[curTopic].coreWords.slice();
+  tw.sort(function(){return Math.random()-0.5});
+  ti=0;tok=0;tfail=0;shown=false;
+  updateTestStats();
+  showCard();
+}
+
+function updateTestStats(){
+  var done = tok+tfail, rem = tw.length-ti;
+  var total = tok+tfail+rem;
+  var h = '<div class="test-stats">';
+  h += '<div class="st"><div class="n">'+rem+'</div><div class="l">剩余</div></div>';
+  h += '<div class="st"><div class="n" style="color:#16a34a">'+tok+'</div><div class="l">✓</div></div>';
+  h += '<div class="st"><div class="n" style="color:#dc2626">'+tfail+'</div><div class="l">✗</div></div>';
+  h += '<div class="st"><div class="n">'+(done?Math.round(done/total*100):0)+'%</div><div class="l">进度</div></div>';
+  h += '</div><div id="cardArea"></div><div class="test-btns" id="testBtns"></div>';
+  document.getElementById('testArea').innerHTML = h;
+}
+
+function showCard(){
+  if(ti>=tw.length){
+    var rate = (tok+tfail)?Math.round(tok/(tok+tfail)*100):0;
+    document.getElementById('cardArea').innerHTML = '<div class="stats-done"><div class="emoji">'+(rate>=80?'🎉':rate>=50?'💪':'📖')+'</div><h3>完成！</h3><div class="rate" style="color:'+(rate>=60?'#16a34a':'#dc2626')+'">'+rate+'%</div><p style="color:#888">正确 '+tok+' / 错误 '+tfail+'</p><button onclick="startTest()" style="margin-top:8px;padding:8px 24px;border-radius:16px;border:none;background:#1a6b5a;color:#fff;font-size:13px;cursor:pointer;font-family:inherit">🔄 再来一轮</button></div>';
+    document.getElementById('testBtns').innerHTML = '';
+    return;
+  }
+  var w = tw[ti];shown=false;
+  document.getElementById('cardArea').innerHTML = '<div class="fc" id="fc" onclick="reveal()"><button class="fc-spk" data-w="'+esc(w[0])+'" onclick="event.stopPropagation();speakWord(\''+esc(w[0])+'\')">🔊</button><div class="ew">'+esc(w[0])+'</div><div class="cn-hidden" id="cnHidden">'+esc(w[1])+'</div><div class="tap">👆 点击查看中文</div></div>';
+  document.getElementById('testBtns').innerHTML = '<button class="btn-no" onclick="mark(false)">不认识</button><button class="btn-yes" onclick="mark(true)">认识</button>';
+}
+
+function reveal(){
+  if(shown)return;shown=true;
+  var cn = document.getElementById('cnHidden');
+  if(cn)cn.style.display='block';
+  var fc = document.getElementById('fc');
+  if(fc)fc.classList.add('reveal');
+}
+
+function mark(ok){
+  if(!shown){reveal();return;}
+  if(ok)tok++;else tfail++;
+  ti++;
+  updateTestStats();
+  showCard();
+}
+
+function speakWord(w){
+  if(!w||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=0.85;
+  speechSynthesis.speak(u);
+}
+
+// ==================== INIT ====================
+renderTopicBar();
+renderTopic();
+</script>
+</body>
+</html>
