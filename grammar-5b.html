@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外研版五年级下册 · 语法练习</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  background: #f0f7f0;
+  color: #333;
+  line-height: 1.7;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1b5e20, #2e7d32, #43a047);
+  color: #fff;
+  text-align: center;
+  padding: 28px 16px 22px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header h1 {
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.header .subtitle {
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  opacity: 0.92;
+  margin-top: 6px;
+}
+
+/* Layout */
+.page-wrapper {
+  display: flex;
+  max-width: 1300px;
+  margin: 0 auto;
+  min-height: calc(100vh - 100px);
+}
+
+/* Sidebar Nav */
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: #fff;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 100px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding: 12px 0;
+  z-index: 50;
+}
+.sidebar-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2e7d32;
+  padding: 8px 16px 10px;
+  border-bottom: 2px solid #e8f5e9;
+  margin-bottom: 4px;
+}
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #555;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+.sidebar a:hover {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-left-color: #2e7d32;
+}
+.sidebar a .nav-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.sidebar a .nav-dot.half { border-color: #ff9800; background: #fff3e0; }
+.sidebar a .nav-dot.done { border-color: #2e7d32; background: #2e7d32; }
+
+/* Mobile nav tabs */
+.mobile-nav {
+  display: none;
+  background: #fff;
+  border-bottom: 2px solid #e8f5e9;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 8px 4px;
+  position: sticky;
+  top: 92px;
+  z-index: 99;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.mobile-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 12px;
+  margin: 0 2px;
+  text-decoration: none;
+  color: #555;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.mobile-nav a:hover, .mobile-nav a:focus { background: #e8f5e9; color: #2e7d32; }
+.mobile-nav a .nav-dot {
+  width: 10px; height: 10px; border-radius: 50%; border: 2px solid #ccc; flex-shrink: 0;
+}
+.mobile-nav a .nav-dot.half { border-color: #ff9800; background: #fff3e0; }
+.mobile-nav a .nav-dot.done { border-color: #2e7d32; background: #2e7d32; }
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 20px 24px 60px;
+  max-width: 900px;
+}
+.module-section {
+  margin-bottom: 36px;
+}
+
+/* Cards */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.card-header {
+  background: #2e7d32;
+  color: #fff;
+  padding: 14px 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.card-body {
+  padding: 18px 20px;
+}
+
+/* Grammar sections */
+.grammar-section {
+  margin-bottom: 16px;
+}
+.grammar-section h4 {
+  color: #2e7d32;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px dashed #c8e6c9;
+}
+.grammar-section p, .grammar-section li {
+  font-size: 0.93rem;
+  margin-bottom: 6px;
+}
+.grammar-section ul {
+  padding-left: 20px;
+}
+
+.example-box {
+  background: #f1f8e9;
+  border-left: 4px solid #2e7d32;
+  padding: 10px 14px;
+  margin: 10px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+}
+.example-box .en { color: #1b5e20; font-weight: 600; }
+.example-box .cn { color: #666; margin-left: 4px; }
+
+.mistake-box {
+  background: #fff3e0;
+  border-left: 4px solid #ff9800;
+  padding: 10px 14px;
+  margin: 10px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+}
+.mistake-box .wrong { color: #d32f2f; text-decoration: line-through; }
+.mistake-box .right { color: #2e7d32; font-weight: 600; }
+
+.tip-box {
+  background: #e3f2fd;
+  border-left: 4px solid #1976d2;
+  padding: 10px 14px;
+  margin: 10px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+}
+
+/* Quiz styles */
+.quiz-question {
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+}
+.quiz-question:last-child { border-bottom: none; }
+.quiz-question .q-num {
+  display: inline-block;
+  background: #2e7d32;
+  color: #fff;
+  width: 26px; height: 26px;
+  text-align: center; line-height: 26px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 8px;
+}
+.quiz-question .q-badge {
+  display: inline-block;
+  font-size: 0.85rem;
+  margin-left: 6px;
+  animation: pop 0.3s ease;
+}
+@keyframes pop { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+.quiz-question .q-stem {
+  display: inline;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.quiz-options {
+  margin-top: 8px;
+  padding-left: 34px;
+}
+.quiz-option {
+  display: inline-block;
+  padding: 6px 14px;
+  margin: 3px 5px 3px 0;
+  border: 2px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  background: #fafafa;
+  user-select: none;
+}
+.quiz-option:hover { border-color: #2e7d32; background: #e8f5e9; }
+.quiz-option.selected {  }
+.quiz-option.correct { border-color: #2e7d32; background: #c8e6c9; color: #1b5e20; font-weight: 700; }
+.quiz-option.wrong { border-color: #d32f2f; background: #ffcdd2; color: #b71c1c; }
+
+.quiz-input {
+  margin-top: 8px;
+  margin-left: 34px;
+}
+.quiz-input input {
+  padding: 7px 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  width: 200px;
+  max-width: 100%;
+  transition: border-color 0.2s;
+}
+.quiz-input input:focus { outline: none; border-color: #2e7d32; }
+.quiz-input input.correct { border-color: #2e7d32; background: #c8e6c9; }
+.quiz-input input.wrong { border-color: #d32f2f; background: #ffcdd2; }
+.quiz-input .submit-btn {
+  padding: 7px 16px;
+  margin-left: 8px;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: background 0.2s;
+}
+.quiz-input .submit-btn:hover { background: #1b5e20; }
+
+.quiz-feedback {
+  margin-top: 6px;
+  margin-left: 34px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.match-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  margin-left: 34px;
+}
+.match-item {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  background: #fafafa;
+  transition: all 0.2s;
+  user-select: none;
+}
+.match-item:hover { border-color: #2e7d32; }
+.match-item.selected-match { border-color: #1976d2; background: #e3f2fd; }
+.match-item.match-correct { border-color: #2e7d32; background: #c8e6c9; }
+.match-item.match-wrong { border-color: #d32f2f; background: #ffcdd2; }
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary { background: #2e7d32; color: #fff; }
+.btn-primary:hover { background: #1b5e20; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(46,125,50,0.3); }
+.btn-outline { background: #fff; color: #2e7d32; border: 2px solid #2e7d32; }
+.btn-outline:hover { background: #e8f5e9; }
+
+/* Score display */
+.score-display {
+  text-align: center;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: #e8f5e9;
+  border-radius: 10px;
+  margin-top: 12px;
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .sidebar { display: none; }
+  .mobile-nav { display: block; }
+  .main-content { padding: 14px 10px 50px; }
+  .card-body { padding: 14px 12px; }
+  .quiz-option { padding: 5px 10px; margin: 2px 3px 2px 0; font-size: 0.83rem; }
+  .header { padding: 18px 10px 14px; }
+  .header h1 { font-size: 1.15rem; }
+}
+
+.footer {
+  text-align: center;
+  padding: 16px;
+  color: #999;
+  font-size: 0.8rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.highlight { color: #2e7d32; font-weight: bold; }
+.red { color: #d32f2f; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📚 外研版五年级下册 · 语法练习</h1>
+  <div class="subtitle">10大模块 | 趣味讲解 | 互动练习 | 每模块10道精选题</div>
+</div>
+
+<div class="mobile-nav" id="mobileNav"></div>
+
+<div class="page-wrapper">
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <main class="main-content" id="mainContent">
+
+    <!-- ==================== MODULE 1 ==================== -->
+    <section class="module-section" id="module1">
+      <div class="card">
+        <div class="card-header">🏠 Module 1: 时光倒流！过去时的魔法 — There be 过去式 &amp; 否定句</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>嘿，小朋友们！今天我们要坐上"时光机"，回到过去看一看！假设你现在站在四年前的家门口——哇，变化好大呀！以前这里<span class="highlight">没有</span>高楼大厦，<span class="highlight">只有</span>一个小房子。用英语怎么说出这种"过去的景象"呢？</p>
+            <p>秘密武器就是 <b>There was</b> 和 <b>There were</b>！把 <b>is</b> 换成 <b>was</b>，把 <b>are</b> 换成 <b>were</b>，就"穿越"成功啦！</p>
+            <p><b>🤔 怎么选 was 还是 were？</b> 超简单！看后面那个名词——如果它是"一个人/一样东西"（单数）或者"数不清的"（不可数），用 <b>was</b>；如果是"好几个"（复数），用 <b>were</b>。</p>
+            <p><b>⚠️ 超级大坑警告！</b> 很多小朋友在写否定句时会栽跟头。记住这个魔法口诀：<b>"didn't 后面用原形，过去式快躲一边去！"</b> 比如：I <span class="red">didn't went</span> ❌ → I <span class="highlight">didn't go</span> ✅。因为 didn't 已经把"过去"的工作做完了，动词就不用再变成过去式啦！这就像妈妈已经帮你把作业交上去了，你就不用再交一遍了，对吧？</p>
+            <p><b>就近原则</b>也是个有趣的小规则：当 There be 后面有好几个东西时，be动词跟紧挨着它的那个"商量"。比如：<b>There <u>was</u> a desk and two chairs.</b>（因为离 be 最近的是 a desk，单身汉，所以用 was。）</p>
+            <p>还有一个小暗号：在否定句里，<b>some 要变成 any</b>，<b>and 要变成 or</b>。就像在否定句的世界里，some 和 and 不受欢迎一样！😄</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">There was a small house four years ago.</span> <span class="cn">（四年前这里有一个小房子。）</span></p>
+              <p><span class="en">There weren't any supermarkets here then.</span> <span class="cn">（那时这里没有任何超市。）</span></p>
+              <p><span class="en">We didn't have enough food.</span> <span class="cn">（我们没有足够的食物。）</span></p>
+              <p><span class="en">She couldn't read or write.</span> <span class="cn">（她不会读也不会写。）</span></p>
+              <p><span class="en">Was there a library in your school?</span> <span class="cn">（你们学校以前有图书馆吗？）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">There were a big tree here.</span> → ✅ <span class="right">There was a big tree here.</span>（a big tree 是单数，要用 was！）</p>
+              <p>❌ <span class="wrong">I didn't went to school yesterday.</span> → ✅ <span class="right">I didn't go to school yesterday.</span>（didn't 后面跟原形！）</p>
+              <p>❌ <span class="wrong">There weren't some people.</span> → ✅ <span class="right">There weren't any people.</span>（否定句some→any！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. 看到 <b>many years ago, last night, yesterday, then</b> 这些词，马上想起过去时！</p>
+              <p>2. <b>didn't + 原形</b> 是考试第一大陷阱，至少会有2-3道题考这个！</p>
+              <p>3. 选择题遇到 There ___ a pen and two books，答案一定是 <b>was</b>（就近原则：a pen 是最近的）。</p>
+              <p>4. 句型转换题：把肯定句变否定时，别忘了把 some→any, and→or。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz1">
+        <div class="card-header">📝 Module 1 闯关练习（10题）</div>
+        <div class="card-body" id="quiz1body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 2 ==================== -->
+    <section class="module-section" id="module2">
+      <div class="card">
+        <div class="card-header">👴 Module 2: 过去问一问，现在正在做！— 过去时疑问句 &amp; 现在进行时</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>小朋友们，今天我们要当"英语小侦探"！你想知道你的好朋友昨天有没有学英语吗？想知道妈妈现在是不是正在做饭吗？那就需要两种"侦探工具"：<b>过去时疑问句</b>和<b>现在进行时</b>！</p>
+            <p><b>🔍 侦察过去</b>：想问别人"过去有没有做某事"，请出我们的好帮手 <b>Did</b>！把它放在句子最前面，后面跟<b>主语 + 动词原形</b>。记住：Did 是个"大力士"，它一来，后面的动词就被打回原形啦！回答时用 <b>Yes, 主语 did.</b> 或 <b>No, 主语 didn't.</b></p>
+            <p><b>📷 拍摄现在</b>：如果想知道某人"此刻正在做什么"，我们切换到"直播模式"——<b>现在进行时</b>！公式：<b>主语 + am/is/are + 动词-ing</b>。当你看到句子里的 <b>now, Look!, Listen!</b> 就像看到了"直播信号灯"🚨，马上用现在进行时！</p>
+            <p><b>不规则动词来报道！</b> 这些"调皮鬼"不按套路出牌，过去式不是加-ed：learn → <b>learnt</b>（学），teach → <b>taught</b>（教），write → <b>wrote</b>（写），study → <b>studied</b>（学习），dance → <b>danced</b>（跳舞，注意去e加d）。多读几遍就记住啦！</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">Did she learn any foreign languages? —Yes, she did.</span> <span class="cn">（她学过外语吗？——是的，她学过。）</span></p>
+              <p><span class="en">He is learning English now.</span> <span class="cn">（他现在正在学英语。）</span></p>
+              <p><span class="en">She was a dancer.</span> <span class="cn">（她曾经是舞蹈演员。）</span></p>
+              <p><span class="en">Li Wei was six then.</span> <span class="cn">（李伟那时六岁。）</span></p>
+              <p><span class="en">My grandpa taught me to write Chinese characters.</span> <span class="cn">（我爷爷教我写汉字。）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">Did she learnt English?</span> → ✅ <span class="right">Did she learn English?</span>（Did后面动词返回原形！）</p>
+              <p>❌ <span class="wrong">He learning English now.</span> → ✅ <span class="right">He is learning English now.</span>（进行时必须有be动词！）</p>
+              <p>❌ <span class="wrong">She is dance now.</span> → ✅ <span class="right">She is dancing now.</span>（动词要加-ing！去e加ing！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. 看时间标志词判断时态：<b>now → 现在进行时</b>，<b>yesterday/last... → 过去时</b>。</p>
+              <p>2. Did 后面的动词<b>绝对不能用过去式</b>，这是出题老师最喜欢挖的坑！</p>
+              <p>3. 不规则动词过去式必须一个一个记，考试至少考3-5个。</p>
+              <p>4. Look! Listen! 开头 = 现在进行时，几乎是必考信号词。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz2">
+        <div class="card-header">📝 Module 2 闯关练习（10题）</div>
+        <div class="card-body" id="quiz2body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 3 ==================== -->
+    <section class="module-section" id="module3">
+      <div class="card">
+        <div class="card-header">🍔 Module 3: 美味时光机！— 三餐 &amp; 饮食表达（过去时）</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>肚子饿了吗？今天我们来聊一聊"吃"的英语！不过我们要聊的是——<b>昨天吃了什么</b>！😋</p>
+            <p><b>🍳 问别人三餐吃了啥</b>，标准句型：<b>What did + 主语 + have for breakfast/lunch/dinner?</b> 回答时说：<b>主语 + had + 食物.</b> 或者更具体地用 <b>ate</b>（吃了）、<b>drank</b>（喝了）。</p>
+            <p><b>🔥 不规则动词大变身</b>：give → <b>gave</b>（给），eat → <b>ate</b>（吃），drink → <b>drank</b>（喝），have → <b>had</b>（吃/有）。这些词就像好朋友换了新衣服，你得认得出来哦！</p>
+            <p><b>📏 复数规则小贴士</b>：以 ch、sh、x、s 结尾的名词，变复数加 <b>-es</b>！sandwich → <b>sandwiches</b>，dish → <b>dishes</b>，box → <b>boxes</b>。想象一下，这些词尾巴太"扎手"了，只加一个 s 不够，得多加一个 e 来缓冲一下！</p>
+            <p><b>🇬🇧 文化小知识</b>：英国传统早餐（English breakfast）可丰富了！有鸡蛋(eggs)、培根(bacon)、香肠(sausages)、豆子(beans)、吐司(toast)和茶(tea)。而我们中国早餐有粥(porridge)、面条(noodles)、饺子(dumplings)和豆浆(soy milk)。是不是很不一样？</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">What did she have for lunch? —She had sandwiches.</span> <span class="cn">（她午饭吃了什么？——她吃了三明治。）</span></p>
+              <p><span class="en">Yesterday she had an English breakfast.</span> <span class="cn">（昨天她吃了一顿英式早餐。）</span></p>
+              <p><span class="en">She gave her hamburger to me.</span> <span class="cn">（她把她的汉堡包给了我。）</span></p>
+              <p><span class="en">I ate two sandwiches and drank some milk.</span> <span class="cn">（我吃了两个三明治，喝了一些牛奶。）</span></p>
+              <p><span class="en">Mum made dumplings for dinner yesterday.</span> <span class="cn">（妈妈昨天晚饭做了饺子。）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">What did she had for lunch?</span> → ✅ <span class="right">What did she have for lunch?</span>（did后面动词用原形！）</p>
+              <p>❌ <span class="wrong">I eated two apples.</span> → ✅ <span class="right">I ate two apples.</span>（eat是不规则动词，过去式是ate！）</p>
+              <p>❌ <span class="wrong">two sandwichs</span> → ✅ <span class="right">two sandwiches</span>（ch结尾加-es！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. <b>What did ... have for ...?</b> 是询问三餐的必考句型，回答必须用 had/ate/drank。</p>
+              <p>2. 不规则过去式 eat→ate, drink→drank, have→had 每学期必考！</p>
+              <p>3. 名词复数加 -es 的四种情况（ch, sh, x, s结尾）常出现在选择和填空中。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz3">
+        <div class="card-header">📝 Module 3 闯关练习（10题）</div>
+        <div class="card-body" id="quiz3body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 4 ==================== -->
+    <section class="module-section" id="module4">
+      <div class="card">
+        <div class="card-header">📚 Module 4: 图书馆大冒险！— Let's 建议句 &amp; 物品位置</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>今天我们要去图书馆探险！假如你想和好朋友一起建一个家庭图书馆，怎么用英语提议呢？大声说：<b>Let's make a home library!</b></p>
+            <p><b>🤝 Let's = 我们一起...吧！</b> 这是英语里最常用的提建议方式。后面<b>必须跟动词原形</b>！Let's go! Let's play! Let's read! 简单又好用！</p>
+            <p><b>📍 书在哪里？</b> 在图书馆找书时，你要学会问：<b>Where are the books about + 类别?</b> 回答：<b>They are on Shelf + 字母.</b> 注意，shelf（书架）的复数是 <b>shelves</b>！以 f/fe 结尾的名词变复数时，f 变 v 再加 es。就像 shelf 脱掉了f外套，换上了ves新装！</p>
+            <p><b>also / too / as well</b> 三兄弟都表示"也"，但站位不同：<b>also</b> 是个"中间派"（be动词后、实义动词前），<b>too</b> 喜欢当"小尾巴"（句末加逗号），<b>as well</b> 也是句末但更口语化、更像英国人说。</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">Let's make a home library.</span> <span class="cn">（我们一起建个家庭图书馆吧。）</span></p>
+              <p><span class="en">Where are the books about sports, please? —They are on Shelf C.</span> <span class="cn">（请问关于体育的书在哪里？——它们在C架上。）</span></p>
+              <p><span class="en">We can find information from books and CDs.</span> <span class="cn">（我们可以从书和光盘中找到信息。）</span></p>
+              <p><span class="en">That's a good idea!</span> <span class="cn">（那是个好主意！）</span></p>
+              <p><span class="en">I like reading too. / I also like reading.</span> <span class="cn">（我也喜欢阅读。）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">Let's making a card.</span> → ✅ <span class="right">Let's make a card.</span>（Let's 后必须用动词原形！）</p>
+              <p>❌ <span class="wrong">Where are the book about animals?</span> → ✅ <span class="right">Where are the books about animals?</span>（问"某类书"要用复数！）</p>
+              <p>❌ <span class="wrong">The books are on Shelf B. These books are on Shelf B also.</span> → ✅ <span class="right">These books are also on Shelf B.</span>（also放be动词后！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. <b>Let's + 动词原形</b> 是固定搭配，选择/填空中看到 Let's 直接找原形！</p>
+              <p>2. <b>shelf → shelves</b> 是典型的 f→ves 变化，考复数时注意。</p>
+              <p>3. also/too/as well 的位置区别是"拔高题"，要弄清各自站位。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz4">
+        <div class="card-header">📝 Module 4 闯关练习（10题）</div>
+        <div class="card-body" id="quiz4body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 5 ==================== -->
+    <section class="module-section" id="module5">
+      <div class="card">
+        <div class="card-header">👜 Module 5: 逛街咯！— 事物特征 &amp; have/has got</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>逛街时间到！今天我们要用英语描述东西长什么样，还要学习英国人最爱说的 <b>have got</b>！🛍️</p>
+            <p><b>👀 描述事物特征</b>：看到一个包包，怎么说？<b>This bag is nice. It's big. It's light.</b> 用 <b>主语 + is + 形容词</b> 这个万能公式！常用形容词：big/small（大/小）、heavy/light（重/轻）、easy/hard（容易/难）、nice/broken（好的/坏的）、new/old（新/旧）。</p>
+            <p><b>🎩 英式英语特色 have/has got</b>：英国人特别喜欢说 have got 来表示"有"。第三人称单数（he/she/it/某人名字）用 <b>has got</b>，其余用 <b>have got</b>。疑问句把 Have/Has 提前：<b>Have you got a pet?</b> 回答：<b>Yes, I have. / No, I haven't.</b></p>
+            <p><b>a 还是 an？</b> 这个简单但有陷阱！记住：看发音不看字母！<b>an umbrella</b>（umbrella 开头发 /ʌ/，元音），<b>an hour</b>（hour 的 h 不发音！开头是 /aʊ/，元音），<b>a university</b>（u 发 /juː/，以辅音 /j/ 开头！）。口诀："<b>看音不看形，元音开头用 an 行！</b>"</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">This black bag is nice. It's got two pockets.</span> <span class="cn">（这个黑色包包很好看。它有两个口袋。）</span></p>
+              <p><span class="en">It's too big for you!</span> <span class="cn">（对你来说太大了！）</span></p>
+              <p><span class="en">Have you got a pet dog? —Yes, I have.</span> <span class="cn">（你养宠物狗吗？——是的，我养。）</span></p>
+              <p><span class="en">It'll be easy for you to carry.</span> <span class="cn">（你拿起来会很容易。）</span></p>
+              <p><span class="en">Has she got a new dress? —No, she hasn't.</span> <span class="cn">（她有新裙子吗？——不，她没有。）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">She have got a cat.</span> → ✅ <span class="right">She has got a cat.</span>（三单用 has got！）</p>
+              <p>❌ <span class="wrong">Do you have got a pen?</span> → ✅ <span class="right">Have you got a pen?</span>（have got 的疑问直接用 Have/Has 开头！）</p>
+              <p>❌ <span class="wrong">a elephant</span> → ✅ <span class="right">an elephant</span>（elephant 以元音开头！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. <b>have got / has got</b> 是英式英语考点，疑问句把 Have/Has 放句首。</p>
+              <p>2. a/an 的判断看的是"发音"不是"字母"，an hour 是经典陷阱题。</p>
+              <p>3. <b>too + 形容词 + for + 宾格</b> 结构要能造句和翻译。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz5">
+        <div class="card-header">📝 Module 5 闯关练习（10题）</div>
+        <div class="card-body" id="quiz5body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 6 ==================== -->
+    <section class="module-section" id="module6">
+      <div class="card">
+        <div class="card-header">🗺️ Module 6: 旅行达人！— 方位描述 &amp; 出行经历</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>背上小书包，我们出发旅行啦！今天我们要学怎么用英语说"某地在哪里"，还有怎么聊"假期的旅行经历"。🗺️</p>
+            <p><b>🧭 方位表达</b>：中国好大呀！北京在<b>北方</b>(north)，上海在<b>东方</b>(east)，海南在<b>南方</b>(south)，新疆在<b>西方</b>(west)。句型：<b>It's in the + 方位 + of China.</b></p>
+            <p><b>✈️ 聊聊假期旅行</b>：想问别人假期去了哪里，用：<b>Where did you go for the holidays?</b> 回答：<b>I went to + 地点.</b> 如果玩得很开心，就说：<b>I had a lovely/good/great time!</b></p>
+            <p><b>📋 动词过去式规则变化四大规律</b>：① 直接加 -ed（play→played）；② 以 e 结尾加 -d（like→liked）；③ 辅音+y 结尾，y 变 i 加 -ed（carry→carried）；④ 重读闭音节双写尾字母加 -ed（stop→stopped）。口诀："<b>直去双改，四招搞定！</b>"</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">It's in the west of China.</span> <span class="cn">（它在中国的西部。）</span></p>
+              <p><span class="en">Where did you go for the holidays? —I went to Yinchuan.</span> <span class="cn">（假期你去了哪里？——我去了银川。）</span></p>
+              <p><span class="en">She had a lovely time there.</span> <span class="cn">（她在那里玩得很开心。）</span></p>
+              <p><span class="en">Did you go with your parents? —Yes, I did.</span> <span class="cn">（你和父母一起去的吗？——是的。）</span></p>
+              <p><span class="en">We travelled to Hainan last summer.</span> <span class="cn">（去年夏天我们去了海南旅行。）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">Where did you went?</span> → ✅ <span class="right">Where did you go?</span>（did后面动词用原形！）</p>
+              <p>❌ <span class="wrong">carryed</span> → ✅ <span class="right">carried</span>（辅音+y，y变i加ed！）</p>
+              <p>❌ <span class="wrong">It's in north of China.</span> → ✅ <span class="right">It's in the north of China.</span>（方位前要加 the！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. 方位词前要加 <b>the</b>：in the north / south / east / west。</p>
+              <p>2. 过去式四种规则变化必须会，尤其是 y→ied 和双写+ed 常考。</p>
+              <p>3. <b>have a ... time</b> 是高频短语，中间可加 lovely/good/great/wonderful。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz6">
+        <div class="card-header">📝 Module 6 闯关练习（10题）</div>
+        <div class="card-body" id="quiz6body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 7 ==================== -->
+    <section class="module-section" id="module7">
+      <div class="card">
+        <div class="card-header">👮 Module 7: 我是小大人！— 职业 &amp; 时间表达法</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>长大了你想做什么？警察？老师？医生？今天我们来聊聊<b>职业</b>和<b>时间</b>！这可是两个"重量级"话题哦！</p>
+            <p><b>👔 问职业</b>：问别人做什么工作，最礼貌的方式是：<b>What do you do?</b>（你做什么工作？）。问第三个人（他/她）做什么，加上 <b>does</b>：<b>What does he/she do?</b> 因为三单（第三人称单数）需要 does！回答：<b>He's a policeman. / She's a nurse.</b></p>
+            <p><b>⏰ 时间表达法大全</b>（这是本模块的重头戏！）：</p>
+            <p><b>整点</b>：直接说数字 + o'clock → ten o'clock（10点）。</p>
+            <p><b>顺读法</b>：直接读数字 → one fifty-eight（1:58）。最简单！</p>
+            <p><b>逆读法</b>（需要练！）：分三种情况——</p>
+            <p>① 分钟 &lt; 30：<b>分钟 + past + 小时</b> → ten past seven（7:10），想象"10分钟跑过了7点"。</p>
+            <p>② 分钟 = 30：<b>half past + 小时</b> → half past nine（9:30），half = 一半。</p>
+            <p>③ 分钟 &gt; 30：<b>(60-分钟) + to + (小时+1)</b> → twenty to ten（9:40），因为"差20分钟到10点"。</p>
+            <p>④ 分钟 = 15：<b>a quarter past/to</b> → a quarter past six（6:15），quarter = 一刻钟(15分钟)。</p>
+            <p>口诀："<b>分在前，点在后，past过半to不够！half一半quarter一刻！</b>"</p>
+            <p>具体时刻前用介词 <b>at</b>：at seven o'clock, at half past three。</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">What does he do? —He's a policeman.</span> <span class="cn">（他是做什么的？——他是一名警察。）</span></p>
+              <p><span class="en">My father goes to work at eight o'clock every morning.</span> <span class="cn">（我爸爸每天早上八点上班。）</span></p>
+              <p><span class="en">What time will you be home? —I'll be home at seven o'clock.</span> <span class="cn">（你什么时候回家？——我七点到家。）</span></p>
+              <p><span class="en">The film starts at a quarter to eight.</span> <span class="cn">（电影7:45开始。）</span></p>
+              <p><span class="en">Don't worry!</span> <span class="cn">（别担心！）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">What do he do?</span> → ✅ <span class="right">What does he do?</span>（三单用does！）</p>
+              <p>❌ <span class="wrong">ten past seven = 7:50</span> → ✅ <span class="right">ten past seven = 7:10</span>（past是"过"，to才是"差"！）</p>
+              <p>❌ <span class="wrong">in seven o'clock</span> → ✅ <span class="right">at seven o'clock</span>（具体时间点用 at！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. 时间逆读法是每年必考的难点，尤其是 <b>past vs to</b> 的判断。</p>
+              <p>2. <b>quarter = 15分钟，half = 30分钟</b>，这两个词是时间表达的核心。</p>
+              <p>3. 职业问答中，<b>What does he/she do?</b> 千万别写成 What do he/she do?。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz7">
+        <div class="card-header">📝 Module 7 闯关练习（10题）</div>
+        <div class="card-body" id="quiz7body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 8 ==================== -->
+    <section class="module-section" id="module8">
+      <div class="card">
+        <div class="card-header">🪁 Module 8: 三重火力！— will将来时 &amp; 比较级 &amp; 提建议</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>这一课是"三合一战斗机"！一口气学三个重要语法：<b>will将来时</b>、<b>比较级</b>和<b>提建议</b>。准备好了吗？🚀</p>
+            <p><b>🔮 will 将来时</b>：想表达"将要发生的事情"，用 <b>will + 动词原形</b>。will = 将/会，它后面的动词不许变形！否定用 <b>won't</b> (= will not)，疑问把 Will 提前。看到 <b>tomorrow, next week/month/year, soon</b> 这些"未来信号"，马上用 will！</p>
+            <p><b>📏 比较级</b>：两个人或物比一比谁更……，用比较级！一般情况：形容词 + <b>-er</b>（tall→taller）。特别情况：以 e 结尾 + <b>-r</b>（nice→nicer），重读闭音节<b>双写</b>尾字母 + er（big→bigger），辅音+y 结尾 y→<b>i</b> + er（heavy→heavier）。不规则的要硬记：<b>good→better, bad→worse, many/much→more</b>。句型：<b>A + is/are + 比较级 + than + B.</b></p>
+            <p><b>💬 提建议三种方式</b>：① <b>What about + 名词/V-ing...?</b> ② <b>How about + 名词/V-ing...?</b> ③ <b>Why don't you + 动词原形...?</b> 三种都表示"……怎么样？/为什么不……呢？"</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">I'll make a kite.</span> <span class="cn">（我将做一个风筝。）</span></p>
+              <p><span class="en">Will you wear a coat tomorrow?</span> <span class="cn">（你明天会穿外套吗？）</span></p>
+              <p><span class="en">What about a toy panda?</span> <span class="cn">（一个玩具熊猫怎么样？）</span></p>
+              <p><span class="en">She is taller than me.</span> <span class="cn">（她比我高。）</span></p>
+              <p><span class="en">Why don't you give him a kite?</span> <span class="cn">（你为什么不给他一个风筝呢？）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">She will goes tomorrow.</span> → ✅ <span class="right">She will go tomorrow.</span>（will后动词原形！）</p>
+              <p>❌ <span class="wrong">more taller</span> → ✅ <span class="right">taller</span>（比较级不能和 more 重复使用！）</p>
+              <p>❌ <span class="wrong">Why don't you going?</span> → ✅ <span class="right">Why don't you go?</span>（Why don't you + 原形！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. will/won't + 原形 是铁律，选择题直接排除后面不是原形的选项。</p>
+              <p>2. <b>good→better, bad→worse</b> 是不规则比较级，必须死记。</p>
+              <p>3. What about / How about 后面跟 <b>名词或 V-ing</b>，Why don't you 后面跟 <b>原形</b>，千万不要搞混！</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz8">
+        <div class="card-header">📝 Module 8 闯关练习（10题）</div>
+        <div class="card-body" id="quiz8body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 9 ==================== -->
+    <section class="module-section" id="module9">
+      <div class="card">
+        <div class="card-header">👗 Module 9: 谁的漂亮裙子？— 名词所有格 &amp; 三时态大PK</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>今天这节课超重量级！我们要学两个重要内容：<b>谁的东西</b>怎么表达 + <b>三种时态</b>互相对比。学完这节课，你就掌握了五年级最核心的语法！💪</p>
+            <p><b>🎀 名词所有格</b>：表达"谁的东西"，有三种方式——</p>
+            <p>① <b>'s 所有格</b>：在人名或单数名词后面加 <b>'s</b> → <b>Amy's dress</b>（Amy的裙子），<b>Tom's book</b>（Tom的书）。</p>
+            <p>② <b>复数名词加 '</b>：如果名词已经以 s 结尾（复数），只加一个撇号 <b>'</b> → <b>teachers' office</b>（老师们的办公室），<b>students' books</b>（学生们的书）。</p>
+            <p>③ <b>名词性物主代词</b>：mine（我的东西），yours（你的东西），his/hers/its（他的/她的/它的东西），ours（我们的东西），theirs（他们的东西）。问"谁的"用 <b>Whose</b>：<b>Whose T-shirt is it? —It's mine.</b></p>
+            <p><b>⚡ 三大时态对比</b>（本册终极大BOSS！）：</p>
+            <p>🔴 <b>过去时</b>：主语 + 动词过去式（标志词：yesterday, last..., ...ago, then）→ He <b>bought</b> some books.（他买了一些书。）</p>
+            <p>🟡 <b>现在进行时</b>：主语 + be + V-ing（标志词：now, Look!, Listen!）→ She <b>is having</b> English class now.（她现在在上英语课。）</p>
+            <p>🟢 <b>将来时</b>：主语 + be going to + V原（标志词：tomorrow, next..., soon, in + 时间段）→ We <b>are going to see</b> you in three weeks.（三周后我们去看你。）</p>
+            <p><b>⚠️ in + 时间段 = ...之后</b>（用于将来时），不是"在...之内"！in three weeks = 三周后！</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">He bought some books.</span> <span class="cn">（他买了一些书。）——过去时</span></p>
+              <p><span class="en">She is having English class now.</span> <span class="cn">（她现在正在上英语课。）——现在进行时</span></p>
+              <p><span class="en">We are going to see you in three weeks.</span> <span class="cn">（三周后我们会去看你。）——将来时</span></p>
+              <p><span class="en">Whose T-shirt is it? —It's mine.</span> <span class="cn">（这是谁的T恤？——是我的。）</span></p>
+              <p><span class="en">The teachers' office is on the second floor.</span> <span class="cn">（老师们的办公室在二楼。）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">Amy dress</span> → ✅ <span class="right">Amy's dress</span>（所有格要加 's！）</p>
+              <p>❌ <span class="wrong">teachers's office</span> → ✅ <span class="right">teachers' office</span>（复数以s结尾只加撇号！）</p>
+              <p>❌ <span class="wrong">He is go to school now.</span> → ✅ <span class="right">He is going to school now.</span>（进行时动词要加-ing！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. 做时态题第一步：<b>找时间标志词</b>！标志词决定时态！</p>
+              <p>2. <b>'s vs s'</b>：单数加's，复数s结尾加'，这是常考的细节题。</p>
+              <p>3. <b>in + 时间段 = ...之后</b> 是翻译题最爱的陷阱，不要把 in 翻成"在...里"。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz9">
+        <div class="card-header">📝 Module 9 闯关练习（10题）</div>
+        <div class="card-body" id="quiz9body"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MODULE 10 ==================== -->
+    <section class="module-section" id="module10">
+      <div class="card">
+        <div class="card-header">✈️ Module 10: 飞向未来！— be going to &amp; 特殊疑问词总动员</div>
+        <div class="card-body">
+          <div class="grammar-section">
+            <h4>📖 语法小课堂</h4>
+            <p>最后一课啦！我们要学<b>be going to</b>（另一种将来时），还要把<b>所有特殊疑问词</b>来个大盘点。学完这一课，你就拿到了五年级的"语法毕业证书"！🎓</p>
+            <p><b>🎯 be going to 表将来</b>（计划/打算做某事）：公式：<b>主语 + am/is/are going to + 动词原形</b>。三单用 is，其余用 am/are。否定在 be 后面加 not：<b>主语 + am/is/are not going to + V原</b>。疑问把 Be 提前：<b>Are you going to visit the zoo?</b></p>
+            <p><b>will vs be going to</b> 简单区分：<b>will</b> 偏向"临时决定、预测"（Oh, it's raining. I'll take an umbrella.），<b>be going to</b> 偏向"早就计划好的"（I'm going to visit my grandma this weekend.）。但小学阶段两者经常可以互换，不用太纠结！</p>
+            <p><b>🌟 特殊疑问词大总结</b>（英语的"八大金刚"）：<b>what</b>（什么/内容），<b>where</b>（哪里/地点），<b>when</b>（什么时候），<b>who</b>（谁/人），<b>what time</b>（具体几点），<b>how</b>（怎样/方式），<b>whose</b>（谁的），<b>why</b>（为什么/原因）。碰到问句，先想清楚"它在问什么"，再选疑问词！</p>
+            <p><b>🚗 交通方式</b>：by plane/bus/car/train/taxi（坐飞机/公交/汽车/火车/出租车），on foot（步行）。</p>
+          </div>
+          <div class="grammar-section">
+            <h4>💡 重点例句</h4>
+            <div class="example-box">
+              <p><span class="en">Where are you going? —I'm going to the airport.</span> <span class="cn">（你要去哪里？——我要去机场。）</span></p>
+              <p><span class="en">Who is going to the zoo?</span> <span class="cn">（谁要去动物园？）</span></p>
+              <p><span class="en">I'm going to visit my grandma.</span> <span class="cn">（我打算去看我奶奶。）</span></p>
+              <p><span class="en">What time is the plane going to leave?</span> <span class="cn">（飞机几点起飞？）</span></p>
+              <p><span class="en">I will make Chinese food for you.</span> <span class="cn">（我会为你做中国菜。）</span></p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>⚠️ 常见错误</h4>
+            <div class="mistake-box">
+              <p>❌ <span class="wrong">I going to visit my grandma.</span> → ✅ <span class="right">I'm going to visit my grandma.</span>（be going to 不能丢be动词！）</p>
+              <p>❌ <span class="wrong">I'm going to visiting...</span> → ✅ <span class="right">I'm going to visit...</span>（going to + 原形，不是-ing！）</p>
+              <p>❌ <span class="wrong">by foot</span> → ✅ <span class="right">on foot</span>（步行是 on foot，不是 by foot！）</p>
+            </div>
+          </div>
+          <div class="grammar-section">
+            <h4>🎯 考点提示</h4>
+            <div class="tip-box">
+              <p>1. <b>be going to + 原形</b>，中间绝不能插入 -ing 形式！</p>
+              <p>2. 特殊疑问词选择是必考题：先读懂答句，再反推应该用什么疑问词。</p>
+              <p>3. <b>on foot</b> 是固定搭配，必须用 on 不是 by！</p>
+              <p>4. <b>whose</b> 问"谁的"，回答会出现 's / mine / yours 等所有格形式。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="quiz10">
+        <div class="card-header">📝 Module 10 闯关练习（10题）</div>
+        <div class="card-body" id="quiz10body"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="footer">外研版五年级下册 · 语法练习 | 祝小朋友们学习进步！🌟</div>
+
+<script>
+// ==== NAVIGATION ====
+const moduleNames = [
+  '🏠 M1 过去时',
+  '👴 M2 疑问&进行',
+  '🍔 M3 三餐饮食',
+  '📚 M4 图书馆',
+  '👜 M5 购物',
+  '🗺️ M6 旅行',
+  '👮 M7 职业&时间',
+  '🪁 M8 will&比较级',
+  '👗 M9 所有格&三时态',
+  '✈️ M10 be going to'
+];
+
+const sidebar = document.getElementById('sidebar');
+const mobileNav = document.getElementById('mobileNav');
+
+let sidebarHTML = '<div class="sidebar-title">📋 模块导航</div>';
+let mobileHTML = '';
+for (let i = 1; i <= 10; i++) {
+  sidebarHTML += `<a href="#module${i}" onclick="scrollToModule(${i})"><span class="nav-dot" id="navDot${i}"></span> Module ${i}</a>`;
+  mobileHTML += `<a href="#module${i}" onclick="scrollToModule(${i})"><span class="nav-dot" id="mNavDot${i}"></span> M${i}</a>`;
+}
+sidebar.innerHTML = sidebarHTML;
+mobileNav.innerHTML = mobileHTML;
+
+function scrollToModule(n) {
+  document.getElementById('module'+n).scrollIntoView({behavior:'smooth'});
+}
+
+// ==== SCORE TRACKING ====
+let moduleScores = {};
+for (let i = 1; i <= 10; i++) {
+  moduleScores[i] = { correct: 0, answered: 0, completed: false, firstTryCorrect: 0 };
+}
+
+function updateNavDots(modNum) {
+  const s = moduleScores[modNum];
+  const total = 10;
+  const answered = s.answered;
+  const dotS = document.getElementById('navDot'+modNum);
+  const dotM = document.getElementById('mNavDot'+modNum);
+  if (answered === 0) {
+    dotS.className = 'nav-dot';
+    dotM.className = 'nav-dot';
+  } else if (answered < total) {
+    dotS.className = 'nav-dot half';
+    dotM.className = 'nav-dot half';
+  } else {
+    dotS.className = 'nav-dot done';
+    dotM.className = 'nav-dot done';
+  }
+}
+
+function showModuleScore(modNum) {
+  const s = moduleScores[modNum];
+  let msg = '';
+  if (s.correct === 10) msg = '太棒了！🌟 满分！你是语法小天才！';
+  else if (s.correct >= 8) msg = '很好！👍 再练练就满分啦！';
+  else if (s.correct >= 6) msg = '不错！💪 继续加油！';
+  else msg = '别灰心！📚 再复习一下语法讲解吧！';
+  s.completed = true;
+  updateNavDots(modNum);
+
+  let scoreDiv = document.getElementById('scoreDisplay'+modNum);
+  if (!scoreDiv) {
+    scoreDiv = document.createElement('div');
+    scoreDiv.id = 'scoreDisplay'+modNum;
+    scoreDiv.className = 'score-display';
+    const quizCard = document.getElementById('quiz'+modNum);
+    quizCard.querySelector('.card-body').appendChild(scoreDiv);
+  }
+  scoreDiv.style.display = 'block';
+  scoreDiv.innerHTML = `🎯 成绩：<span style="font-size:1.4rem;color:#2e7d32;">${s.correct}/10</span><br>${msg}`;
+}
+
+// ==== ANSWER CHECKING ====
+function checkMC(modNum, qNum, correctIdx, clickedEl) {
+  const key = modNum + '_' + qNum;
+  if (clickedEl.parentElement.dataset.answered === 'true') return;
+  clickedEl.parentElement.dataset.answered = 'true';
+
+  const allOpts = clickedEl.parentElement.querySelectorAll('.quiz-option');
+  moduleScores[modNum].answered++;
+
+  if (clickedEl.dataset.idx == correctIdx) {
+    clickedEl.classList.add('correct');
+    moduleScores[modNum].correct++;
+    moduleScores[modNum].firstTryCorrect++;
+    const badge = document.createElement('span');
+    badge.className = 'q-badge';
+    badge.textContent = '✅';
+    const stem = clickedEl.parentElement.previousElementSibling || clickedEl.parentElement.parentElement.querySelector('.q-stem');
+    const numSpan = clickedEl.parentElement.parentElement.querySelector('.q-num');
+    if (numSpan) numSpan.after(badge);
+  } else {
+    clickedEl.classList.add('wrong');
+    allOpts.forEach(o => { if (o.dataset.idx == correctIdx) o.classList.add('correct'); });
+    const fb = document.createElement('div');
+    fb.className = 'quiz-feedback';
+    fb.style.color = '#d32f2f';
+    const correctText = allOpts[correctIdx] ? allOpts[correctIdx].textContent.trim() : '';
+    fb.textContent = '❌ 正确答案是：' + correctText;
+    clickedEl.parentElement.appendChild(fb);
+  }
+  updateNavDots(modNum);
+}
+
+function checkFill(modNum, qNum, correctAnswers, inputEl) {
+  const key = modNum + '_' + qNum;
+  if (inputEl.dataset.answered === 'true') return;
+  const userAnswer = inputEl.value.trim();
+  const correctArr = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
+  const isCorrect = correctArr.some(a => userAnswer.toLowerCase() === a.toLowerCase());
+
+  inputEl.dataset.answered = 'true';
+  moduleScores[modNum].answered++;
+
+  if (isCorrect) {
+    inputEl.classList.add('correct');
+    moduleScores[modNum].correct++;
+    moduleScores[modNum].firstTryCorrect++;
+    const badge = document.createElement('span');
+    badge.className = 'q-badge';
+    badge.textContent = '✅';
+    inputEl.parentElement.parentElement.querySelector('.q-num').after(badge);
+  } else {
+    inputEl.classList.add('wrong');
+    const fb = document.createElement('div');
+    fb.className = 'quiz-feedback';
+    fb.style.color = '#d32f2f';
+    fb.textContent = '❌ 正确答案是：' + correctArr[0];
+    inputEl.parentElement.appendChild(fb);
+  }
+  updateNavDots(modNum);
+}
+
+function resetModule(modNum) {
+  const quizBody = document.getElementById('quiz'+modNum+'body');
+  moduleScores[modNum] = { correct: 0, answered: 0, completed: false, firstTryCorrect: 0 };
+  updateNavDots(modNum);
+  const scoreDiv = document.getElementById('scoreDisplay'+modNum);
+  if (scoreDiv) scoreDiv.style.display = 'none';
+  renderQuiz(modNum, quizBody);
+}
+
+// ==== RENDER ALL QUIZZES ====
+function renderQuiz(modNum, container) {
+  let html = '';
+  const qs = quizData[modNum];
+  for (let i = 0; i < qs.length; i++) {
+    const q = qs[i];
+    html += '<div class="quiz-question">';
+    html += '<span class="q-num">' + (i+1) + '</span>';
+    html += '<span class="q-stem">' + q.stem + '</span>';
+
+    if (q.type === 'mc') {
+      html += '<div class="quiz-options">';
+      for (let j = 0; j < q.options.length; j++) {
+        html += '<span class="quiz-option" data-idx="' + j + '" onclick="checkMC(' + modNum + ',' + (i+1) + ',' + q.correct + ', this)">' + q.options[j] + '</span>';
+      }
+      html += '</div>';
+    } else if (q.type === 'fill') {
+      html += '<div class="quiz-input">';
+      html += '<input type="text" placeholder="' + (q.placeholder || '请输入答案') + '" onkeydown="if(event.key===\'Enter\')checkFill(' + modNum + ',' + (i+1) + ',' + JSON.stringify(q.correct) + ', this)" />';
+      html += '<button class="submit-btn" onclick="checkFill(' + modNum + ',' + (i+1) + ',' + JSON.stringify(q.correct) + ', this.previousElementSibling)">确定</button>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  html += '<div class="btn-row">';
+  html += '<button class="btn btn-primary" onclick="showModuleScore(' + modNum + ')">📊 查看成绩</button>';
+  html += '<button class="btn btn-outline" onclick="resetModule(' + modNum + ')">🔄 全部重置</button>';
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ==== QUIZ DATA ====
+const quizData = {};
+
+// --- MODULE 1 QUIZ ---
+quizData[1] = [
+  { stem: 'Choose: There ___ a big tree and some flowers in the garden ten years ago.', type:'mc', options: ['A. is', 'B. was', 'C. were', 'D. are'], correct:1 },
+  { stem: 'Fill in: There ___ (be) some apples on the table yesterday.', type:'fill', correct:['were'], placeholder:'was/were'},
+  { stem: 'Choose: We ___ have a computer last year.', type:'mc', options: ['A. don\'t', 'B. doesn\'t', 'C. didn\'t', 'D. wasn\'t'], correct:2 },
+  { stem: 'Correct the error: "I didn\'t went to the park last Sunday." Write the correct sentence:', type:'fill', correct:['I didn\'t go to the park last Sunday.','I didn\'t go to the park last Sunday'], placeholder:'写完整句子'},
+  { stem: 'Choose: There weren\'t ___ buses on the road many years ago.', type:'mc', options: ['A. some', 'B. any', 'C. a', 'D. much'], correct:1 },
+  { stem: 'Fill in: She couldn\'t read ___ (and/or) write.', type:'fill', correct:['or'], placeholder:'and or or?'},
+  { stem: 'Choose: —Was there a hospital near your home? —Yes, ___.', type:'mc', options: ['A. there is', 'B. there was', 'C. there were', 'D. it was'], correct:1 },
+  { stem: 'Change to negative: "There was a park here before." →', type:'fill', correct:['There wasn\'t a park here before.','There wasn\'t a park here before','There was not a park here before.'], placeholder:'写完整否定句'},
+  { stem: 'Choose: 哪个句子是正确的？', type:'mc', options: ['A. There were a desk here.', 'B. There was two dogs.', 'C. There was some water.', 'D. There were a child.'], correct:2 },
+  { stem: 'Fill in: He ___ (not have) any toys when he was young.', type:'fill', correct:['didn\'t have','did not have'], placeholder:'didn\'t + 原形'}
+];
+
+// --- MODULE 2 QUIZ ---
+quizData[2] = [
+  { stem: 'Choose: —___ she learn any foreign languages? —Yes, she did.', type:'mc', options: ['A. Do', 'B. Does', 'C. Was', 'D. Did'], correct:3 },
+  { stem: 'Fill in: Look! The cat ___ (climb) the tree.', type:'fill', correct:['is climbing'], placeholder:'现在进行时'},
+  { stem: 'Choose: He ___ English now.', type:'mc', options: ['A. learns', 'B. is learning', 'C. learnt', 'D. learning'], correct:1 },
+  { stem: 'Fill in the past tense: teach → ___ , write → ___', type:'fill', correct:['taught, wrote','taught wrote','taught,wrote'], placeholder:'taught, wrote'},
+  { stem: 'Choose: 哪个句子是过去时？', type:'mc', options: ['A. She is dancing.', 'B. She dances every day.', 'C. She danced yesterday.', 'D. She is going to dance.'], correct:2 },
+  { stem: 'Fill in: —Did you ___ (see) the film? —No, I ___.', type:'fill', correct:['see, didn\'t','see, did not','see didn\'t'], placeholder:'see, didn\'t'},
+  { stem: 'Choose: My grandpa ___ me to write last year.', type:'mc', options: ['A. teach', 'B. teaches', 'C. taught', 'D. teaching'], correct:2 },
+  { stem: 'Correct the error: "Did she learnt to dance?" Write the correct sentence:', type:'fill', correct:['Did she learn to dance?','Did she learn to dance'], placeholder:'写完整问句'},
+  { stem: 'Choose: She ___ a nurse ten years ago. Now she ___ a doctor.', type:'mc', options: ['A. is / was', 'B. was / is', 'C. was / was', 'D. is / is'], correct:1 },
+  { stem: 'Fill in: Listen! Who ___ (sing) in the next room?', type:'fill', correct:['is singing'], placeholder:'现在进行时'}
+];
+
+// --- MODULE 3 QUIZ ---
+quizData[3] = [
+  { stem: 'Choose: —What did you have for breakfast? —I ___ some noodles.', type:'mc', options: ['A. have', 'B. had', 'C. has', 'D. having'], correct:1 },
+  { stem: 'Fill in: She ___ (eat) two sandwiches and ___ (drink) some milk yesterday.', type:'fill', correct:['ate, drank','ate drank','ate,drank'], placeholder:'ate, drank'},
+  { stem: 'Choose: What did she have ___ lunch?', type:'mc', options: ['A. in', 'B. at', 'C. for', 'D. on'], correct:2 },
+  { stem: 'Fill in the past tense: give → ___ , have → ___', type:'fill', correct:['gave, had','gave had','gave,had'], placeholder:'gave, had'},
+  { stem: 'Choose: 复数形式选择：two ___ and three ___', type:'mc', options: ['A. sandwichs / dishs', 'B. sandwiches / dishes', 'C. sandwich / dish', 'D. sandwichs / dishes'], correct:1 },
+  { stem: 'Fill in: Mum ___ (make) dumplings for us last night.', type:'fill', correct:['made'], placeholder:'过去式'},
+  { stem: 'Choose: Yesterday she ___ an English breakfast.', type:'mc', options: ['A. has', 'B. have', 'C. had', 'D. having'], correct:2 },
+  { stem: 'Correct the error: "What did she had for dinner?"', type:'fill', correct:['What did she have for dinner?','What did she have for dinner'], placeholder:'写完整问句'},
+  { stem: 'Choose: 哪个词的过去式是不规则的？', type:'mc', options: ['A. play → played', 'B. drink → drank', 'C. look → looked', 'D. want → wanted'], correct:1 },
+  { stem: 'Write the question: 她午饭吃了什么？（用所学的句型）', type:'fill', correct:['What did she have for lunch?','What did she have for lunch'], placeholder:'写英文问句'}
+];
+
+// --- MODULE 4 QUIZ ---
+quizData[4] = [
+  { stem: 'Choose: —___ make a home library! —That\'s a good idea!', type:'mc', options: ['A. Let', 'B. Let\'s', 'C. Lets', 'D. We'], correct:1 },
+  { stem: 'Fill in: Let\'s ___ (go) to the park together.', type:'fill', correct:['go'], placeholder:'go/going/to go?'},
+  { stem: 'Choose: —Where are the books ___ animals, please? —They are ___ Shelf B.', type:'mc', options: ['A. about / in', 'B. of / on', 'C. about / on', 'D. for / at'], correct:2 },
+  { stem: 'Fill in the plural: one shelf → two ___', type:'fill', correct:['shelves'], placeholder:'复数形式'},
+  { stem: 'Choose: 哪个句子里 "also" 的位置是正确的？', type:'mc', options: ['A. I also can swim.', 'B. I can also swim.', 'C. Also I can swim.', 'D. I can swim also.'], correct:1 },
+  { stem: 'Fill in: We can find information ___ (从) books and CDs.', type:'fill', correct:['from'], placeholder:'介词'},
+  { stem: 'Choose: —I like reading. —I like reading ___.', type:'mc', options: ['A. also', 'B. too', 'C. either', 'D. as'], correct:1 },
+  { stem: 'Correct the error: "Let\'s making a birthday card."', type:'fill', correct:['Let\'s make a birthday card.','Let\'s make a birthday card'], placeholder:'写完整句子'},
+  { stem: 'Choose: —Where can I find a dictionary? —You can find it ___.', type:'mc', options: ['A. on Shelf A', 'B. in Shelf A', 'C. at Shelf A', 'D. by Shelf A'], correct:0 },
+  { stem: 'Fill in: Let\'s ___ (put) these books on the shelf.', type:'fill', correct:['put'], placeholder:'put/putting?'}
+];
+
+// --- MODULE 5 QUIZ ---
+quizData[5] = [
+  { stem: 'Choose: She ___ got a new red dress.', type:'mc', options: ['A. have', 'B. is', 'C. has', 'D. are'], correct:2 },
+  { stem: 'Fill in: —___ you got a pet dog? —Yes, I ___.', type:'fill', correct:['Have, have','Have have','Have,have'], placeholder:'Have, have'},
+  { stem: 'Choose: Choose the correct one:', type:'mc', options: ['A. a apple', 'B. an apple', 'C. a hour', 'D. an university'], correct:1 },
+  { stem: 'Fill in: This bag is too big ___ (for/to) me.', type:'fill', correct:['for'], placeholder:'for or to?'},
+  { stem: 'Choose: It\'s got two ___.', type:'mc', options: ['A. pocket', 'B. pocket\'s', 'C. pockets', 'D. pocketes'], correct:2 },
+  { stem: 'Fill in: —Has he got a bike? —No, he ___.', type:'fill', correct:['hasn\'t','has not'], placeholder:'hasn\'t'},
+  { stem: 'Choose: 哪个句子的描述是正确的？', type:'mc', options: ['A. The bag is heavy. It\'s easy to carry.', 'B. The bag is light. It\'s easy to carry.', 'C. The bag is light. It\'s hard to carry.', 'D. The bag is broken. It\'s nice.'], correct:1 },
+  { stem: 'Fill in: It\'ll be easy ___ (for/with) you to carry.', type:'fill', correct:['for'], placeholder:'for or with?'},
+  { stem: 'Choose: ___ you got any oranges?', type:'mc', options: ['A. Have', 'B. Has', 'C. Do', 'D. Are'], correct:0 },
+  { stem: 'Fill in: This black bag is nice. ___ got two pockets.（填It\'s / Its）', type:'fill', correct:['It\'s','It is'], placeholder:'It\'s or Its?'}
+];
+
+// --- MODULE 6 QUIZ ---
+quizData[6] = [
+  { stem: 'Choose: Shanghai is ___ the east of China.', type:'mc', options: ['A. in', 'B. on', 'C. at', 'D. to'], correct:0 },
+  { stem: 'Fill in: Xinjiang is in the ___ (west/east) of China.', type:'fill', correct:['west'], placeholder:'west or east?'},
+  { stem: 'Choose: —Where ___ you go for the holidays? —I ___ to Yinchuan.', type:'mc', options: ['A. do / go', 'B. did / went', 'C. did / go', 'D. do / went'], correct:1 },
+  { stem: 'Fill in the past tense: carry → ___ , stop → ___', type:'fill', correct:['carried, stopped','carried stopped','carried,stopped'], placeholder:'carried, stopped'},
+  { stem: 'Choose: She ___ a lovely time there.', type:'mc', options: ['A. has', 'B. had', 'C. have', 'D. having'], correct:1 },
+  { stem: 'Fill in: —Did you go with your parents? —Yes, I ___.', type:'fill', correct:['did'], placeholder:'did/didn\'t?'},
+  { stem: 'Choose: Hainan is in the ___ of China.', type:'mc', options: ['A. north', 'B. south', 'C. east', 'D. west'], correct:1 },
+  { stem: 'Fill in the past tense: get → ___ , travel → ___ (英式)', type:'fill', correct:['got, travelled','got travelled','got,travelled'], placeholder:'got, travelled'},
+  { stem: 'Choose: 哪个词的过去式变化规则与其余三个不同？', type:'mc', options: ['A. played', 'B. stayed', 'C. went', 'D. visited'], correct:2 },
+  { stem: 'Fill in: We ___ (have) a wonderful time in Beijing last summer.', type:'fill', correct:['had'], placeholder:'过去式'}
+];
+
+// --- MODULE 7 QUIZ ---
+quizData[7] = [
+  { stem: 'Choose: —What ___ he do? —He\'s a policeman.', type:'mc', options: ['A. do', 'B. does', 'C. is', 'D. are'], correct:1 },
+  { stem: 'Fill in: My father ___ (go) to work at eight o\'clock every morning.', type:'fill', correct:['goes'], placeholder:'go/goes?'},
+  { stem: 'Choose: 6:15 用英语逆读法表达是：', type:'mc', options: ['A. quarter to six', 'B. quarter past six', 'C. half past six', 'D. six quarter'], correct:1 },
+  { stem: 'Fill in: 9:40 → twenty ___ ten（用 to 或 past）', type:'fill', correct:['to'], placeholder:'to or past?'},
+  { stem: 'Choose: 7:10 用逆读法表达是：', type:'mc', options: ['A. ten past seven', 'B. ten to seven', 'C. half past seven', 'D. seven ten'], correct:0 },
+  { stem: 'Fill in: half past nine = ___（写数字时间，如 9:30）', type:'fill', correct:['9:30','9.30'], placeholder:'如 9:30'},
+  { stem: 'Choose: I will be home ___ seven o\'clock.', type:'mc', options: ['A. in', 'B. on', 'C. at', 'D. for'], correct:2 },
+  { stem: 'Fill in: —What does your mother do? —She ___ (be) a nurse.', type:'fill', correct:['is'], placeholder:'is/was?'},
+  { stem: 'Choose: 哪个时间表达是正确的？', type:'mc', options: ['A. a quarter past twelve = 12:15', 'B. a quarter to twelve = 12:15', 'C. half past twelve = 12:00', 'D. five past twelve = 11:55'], correct:0 },
+  { stem: 'Fill in: Don\'t ___ (worry)! I\'ll help you.', type:'fill', correct:['worry'], placeholder:'worry/worried?'}
+];
+
+// --- MODULE 8 QUIZ ---
+quizData[8] = [
+  { stem: 'Choose: I ___ make a kite tomorrow.', type:'mc', options: ['A. am', 'B. will', 'C. was', 'D. do'], correct:1 },
+  { stem: 'Fill in: She ___ (will/won\'t) go to school tomorrow because she is ill.', type:'fill', correct:['won\'t','will not'], placeholder:'will not 的缩写'},
+  { stem: 'Choose: Tom is ___ than Jack.', type:'mc', options: ['A. tall', 'B. taller', 'C. tallest', 'D. more tall'], correct:1 },
+  { stem: 'Fill in the comparative: big → ___ , heavy → ___', type:'fill', correct:['bigger, heavier','bigger heavier','bigger,heavier'], placeholder:'bigger, heavier'},
+  { stem: 'Choose: ___ about a toy panda?', type:'mc', options: ['A. How', 'B. Why', 'C. Where', 'D. Who'], correct:0 },
+  { stem: 'Fill in: Why don\'t you ___ (give) him a kite?', type:'fill', correct:['give'], placeholder:'give/giving?'},
+  { stem: 'Choose: This book is ___ than that one.（good 的比较级）', type:'mc', options: ['A. gooder', 'B. better', 'C. more good', 'D. best'], correct:1 },
+  { stem: 'Fill in: What about ___ (go) swimming?', type:'fill', correct:['going'], placeholder:'go/going?'},
+  { stem: 'Choose: 哪个句子是正确的将来时？', type:'mc', options: ['A. She will went to the park.', 'B. She will goes to the park.', 'C. She will go to the park.', 'D. She will going to the park.'], correct:2 },
+  { stem: 'Fill in the comparative: bad → ___ , many → ___', type:'fill', correct:['worse, more','worse more','worse,more'], placeholder:'worse, more'}
+];
+
+// --- MODULE 9 QUIZ ---
+quizData[9] = [
+  { stem: 'Choose: This is ___ blue dress.', type:'mc', options: ['A. Amy', 'B. Amys', 'C. Amy\'s', 'D. Amys\''], correct:2 },
+  { stem: 'Fill in: The ___ (teacher) office is on the second floor.（老师们共用的办公室）', type:'fill', correct:['teachers\''], placeholder:'teacher\'s or teachers\'?'},
+  { stem: 'Choose: —Whose bag is it? —It\'s ___.', type:'mc', options: ['A. me', 'B. my', 'C. mine', 'D. I'], correct:2 },
+  { stem: 'Fill in: He ___ (buy) some books yesterday. (buy 的过去式)', type:'fill', correct:['bought'], placeholder:'过去式'},
+  { stem: 'Choose: We are going to see you ___ three weeks.', type:'mc', options: ['A. on', 'B. at', 'C. in', 'D. after'], correct:2 },
+  { stem: 'Fill in: She ___ (have) English class now. (现在进行时)', type:'fill', correct:['is having'], placeholder:'is having / has?'},
+  { stem: 'Choose: 哪个句子是将来时？', type:'mc', options: ['A. He bought some books.', 'B. She is reading now.', 'C. We are going to the zoo tomorrow.', 'D. They play football every day.'], correct:2 },
+  { stem: 'Fill in: ___ T-shirt is it? —It\'s his.', type:'fill', correct:['Whose'], placeholder:'Who/Whose/Who\'s?'},
+  { stem: 'Choose: She ___ a red dress at the party last night. (wear的过去式)', type:'mc', options: ['A. wear', 'B. wears', 'C. wore', 'D. wearing'], correct:2 },
+  { stem: 'Fill in: Tell me what you did. (tell 的过去式) → He ___ me a story last night.', type:'fill', correct:['told'], placeholder:'过去式'}
+];
+
+// --- MODULE 10 QUIZ ---
+quizData[10] = [
+  { stem: 'Choose: —Where are you going? —I\'m going to ___ airport.', type:'mc', options: ['A. a', 'B. an', 'C. the', 'D. /'], correct:2 },
+  { stem: 'Fill in: I ___ (be) going to visit my grandma this weekend.', type:'fill', correct:['am'], placeholder:'am/is/are'},
+  { stem: 'Choose: ___ is going to the zoo with you? —My parents.', type:'mc', options: ['A. What', 'B. Where', 'C. Who', 'D. When'], correct:2 },
+  { stem: 'Fill in: —___ time is the plane going to leave? —At 3:30.', type:'fill', correct:['What'], placeholder:'What/When/How?'},
+  { stem: 'Choose: I go to school ___ bus every day.', type:'mc', options: ['A. in', 'B. on', 'C. at', 'D. by'], correct:3 },
+  { stem: 'Fill in: I go to school ___ foot because I live near the school.', type:'fill', correct:['on'], placeholder:'on or by?'},
+  { stem: 'Choose: —___ are you going this summer? —I\'m going to Kunming.', type:'mc', options: ['A. What', 'B. Where', 'C. When', 'D. Who'], correct:1 },
+  { stem: 'Fill in: She ___ (be) not going to watch TV tonight.', type:'fill', correct:['is'], placeholder:'is/am/are'},
+  { stem: 'Choose: —___ do you like apples? —Because they are sweet.', type:'mc', options: ['A. What', 'B. How', 'C. Why', 'D. When'], correct:2 },
+  { stem: 'Fill in: I will ___ (make) Chinese food for you.', type:'fill', correct:['make'], placeholder:'make/making?'}
+];
+
+// ==== INIT ====
+for (let i = 1; i <= 10; i++) {
+  const container = document.getElementById('quiz'+i+'body');
+  renderQuiz(i, container);
+}
+</script>
+
+</body>
+</html>
