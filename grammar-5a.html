@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外研版五年级上册 · 语法练习</title>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Segoe UI','Microsoft YaHei','PingFang SC',sans-serif;background:linear-gradient(135deg,#e8f5e9 0%,#c8e6c9 50%,#a5d6a7 100%);min-height:100vh;color:#333;line-height:1.6}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#e8f5e9}
+::-webkit-scrollbar-thumb{background:#2e7d32;border-radius:4px}
+
+/* ===== CONTAINER ===== */
+.container{max-width:900px;margin:0 auto;padding:12px}
+
+/* ===== HEADER ===== */
+.header{background:linear-gradient(135deg,#1b5e20,#2e7d32,#388e3c);color:#fff;text-align:center;padding:24px 16px 20px;border-radius:0 0 24px 24px;box-shadow:0 4px 20px rgba(46,125,50,0.35);position:relative;margin-bottom:16px}
+.header h1{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:800;letter-spacing:1px}
+.header .subtitle{font-size:0.9rem;opacity:0.9;margin-top:4px;font-weight:400}
+.header .decor{position:absolute;font-size:2rem;opacity:0.2}
+.header .decor.left{left:12px;top:50%;transform:translateY(-50%)}
+.header .decor.right{right:12px;top:50%;transform:translateY(-50%)}
+
+/* ===== MODULE NAV ===== */
+.module-nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:16px;position:sticky;top:8px;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);padding:10px 8px;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.module-nav button{background:#fff;border:2px solid #2e7d32;color:#2e7d32;padding:7px 11px;border-radius:20px;cursor:pointer;font-size:0.82rem;font-weight:600;transition:all 0.25s;white-space:nowrap;font-family:inherit}
+.module-nav button:hover{background:#2e7d32;color:#fff;transform:translateY(-2px);box-shadow:0 3px 10px rgba(46,125,50,0.3)}
+.module-nav button.active{background:#2e7d32;color:#fff;box-shadow:0 3px 12px rgba(46,125,50,0.4)}
+.module-nav button.completed{background:#c8e6c9;border-color:#4caf50;color:#1b5e20}
+.module-nav button .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:4px;vertical-align:middle}
+.module-nav button .dot.green{background:#4caf50}
+.module-nav button .dot.yellow{background:#ffc107}
+.module-nav button .dot.gray{background:#bbb}
+
+/* ===== SECTION ===== */
+.module-section{display:none;animation:fadeSlide 0.4s ease}
+.module-section.active{display:block}
+
+/* ===== CARDS ===== */
+.card{background:#fff;border-radius:16px;padding:20px 18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:5px solid #2e7d32;transition:all 0.3s}
+.card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.1);transform:translateY(-1px)}
+.card.grammar{border-left-color:#2e7d32}
+.card.quiz{border-left-color:#ff9800}
+.card.score-card{border-left-color:#4caf50;text-align:center}
+
+.card h2{font-size:1.2rem;color:#2e7d32;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h2 .emoji{font-size:1.5rem}
+.card h3{font-size:1.05rem;color:#1b5e20;margin:14px 0 8px;padding-bottom:4px;border-bottom:2px dashed #c8e6c9}
+.card .subtitle-text{color:#666;font-size:0.85rem;margin-bottom:8px}
+
+/* Grammar explanation styles */
+.grammar-box{background:#f1f8e9;border-radius:12px;padding:14px 16px;margin:10px 0;border:1px solid #c8e6c9}
+.grammar-box p{margin:6px 0;font-size:0.92rem}
+.grammar-box .highlight{background:#fff9c4;padding:1px 4px;border-radius:3px;font-weight:600;color:#e65100}
+.grammar-box .en{color:#2e7d32;font-weight:600;font-style:italic}
+.example-list{list-style:none;padding:0}
+.example-list li{background:#fff;margin:5px 0;padding:8px 12px;border-radius:8px;border-left:3px solid #66bb6a;font-size:0.9rem}
+.example-list li .en-text{color:#2e7d32;font-weight:600}
+.example-list li .cn-text{color:#888;font-size:0.82rem;margin-left:8px}
+.mistake-box{background:#fff3e0;border-radius:12px;padding:12px 16px;margin:10px 0;border:1px solid #ffe0b2}
+.mistake-box p{margin:4px 0;font-size:0.9rem}
+.mistake-box .wrong{color:#c62828;text-decoration:line-through}
+.mistake-box .right{color:#2e7d32;font-weight:600}
+.tip-box{background:#e3f2fd;border-radius:12px;padding:12px 16px;margin:10px 0;border:1px solid #bbdefb}
+.tip-box p{margin:4px 0;font-size:0.9rem;color:#0d47a1}
+.rhyme-box{background:linear-gradient(135deg,#fff9c4,#fff176);border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-weight:700;color:#e65100;font-size:0.95rem;border:2px dashed #ffcc02}
+
+/* ===== QUIZ QUESTIONS ===== */
+.question-block{background:#fafafa;border-radius:12px;padding:14px 16px;margin:10px 0;border:2px solid #e0e0e0;transition:all 0.3s}
+.question-block.correct{border-color:#4caf50;background:#e8f5e9;animation:correctPulse 0.5s}
+.question-block.wrong{border-color:#f44336;background:#ffebee;animation:shake 0.5s}
+.question-block .q-num{display:inline-block;background:#2e7d32;color:#fff;width:26px;height:26px;border-radius:50%;text-align:center;line-height:26px;font-size:0.8rem;font-weight:700;margin-right:8px}
+.question-block .q-text{font-size:0.95rem;font-weight:500;margin-bottom:8px;display:inline}
+.question-block .q-status{float:right;font-size:1.2rem}
+.question-block .q-type-label{font-size:0.75rem;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+
+.options{margin-left:8px}
+.option-btn{display:block;width:100%;text-align:left;padding:9px 14px;margin:4px 0;border:2px solid #ddd;border-radius:10px;background:#fff;cursor:pointer;font-size:0.9rem;transition:all 0.2s;font-family:inherit}
+.option-btn:hover{border-color:#2e7d32;background:#f1f8e9}
+.option-btn.chosen-correct{border-color:#4caf50;background:#c8e6c9;font-weight:600}
+.option-btn.chosen-wrong{border-color:#f44336;background:#ffcdd2;font-weight:600}
+.option-btn.show-correct{border-color:#4caf50;background:#e8f5e9}
+.option-btn:disabled{cursor:default;opacity:0.85}
+.option-btn .letter{display:inline-block;width:24px;height:24px;border-radius:50%;background:#e8e8e8;text-align:center;line-height:24px;font-weight:700;margin-right:8px;font-size:0.82rem}
+
+.fill-input{padding:9px 12px;border:2px solid #ddd;border-radius:10px;font-size:0.9rem;width:100%;max-width:300px;transition:all 0.2s;font-family:inherit}
+.fill-input:focus{outline:none;border-color:#2e7d32;box-shadow:0 0 0 3px rgba(46,125,50,0.15)}
+.fill-input.correct{border-color:#4caf50;background:#e8f5e9}
+.fill-input.wrong{border-color:#f44336;background:#ffebee}
+
+.feedback{font-size:0.85rem;margin-top:6px;padding:6px 10px;border-radius:8px;display:none}
+.feedback.show{display:block;animation:fadeIn 0.3s}
+.feedback.correct-msg{background:#e8f5e9;color:#2e7d32;font-weight:600}
+.feedback.wrong-msg{background:#ffebee;color:#c62828;font-weight:600}
+
+.submit-btn{background:#2e7d32;color:#fff;border:none;padding:8px 20px;border-radius:20px;cursor:pointer;font-weight:600;font-size:0.88rem;transition:all 0.25s;font-family:inherit}
+.submit-btn:hover{background:#1b5e20;transform:translateY(-1px);box-shadow:0 3px 10px rgba(46,125,50,0.3)}
+.submit-btn:disabled{background:#bbb;cursor:default;transform:none;box-shadow:none}
+
+/* ===== SCORE CARD ===== */
+.score-display{font-size:3rem;font-weight:800;color:#2e7d32;margin:10px 0}
+.score-stars{font-size:1.8rem;margin:8px 0}
+.score-msg{font-size:1rem;color:#666}
+.reset-btn{background:#ff9800;color:#fff;border:none;padding:10px 24px;border-radius:20px;cursor:pointer;font-weight:600;font-size:0.9rem;transition:all 0.25s;font-family:inherit;margin-top:10px}
+.reset-btn:hover{background:#f57c00;transform:translateY(-1px);box-shadow:0 3px 10px rgba(255,152,0,0.3)}
+.reset-all-btn{background:#f44336;color:#fff;border:none;padding:10px 24px;border-radius:20px;cursor:pointer;font-weight:600;font-size:0.9rem;transition:all 0.25s;font-family:inherit;margin-top:10px;margin-left:8px}
+.reset-all-btn:hover{background:#d32f2f;transform:translateY(-1px);box-shadow:0 3px 10px rgba(244,67,54,0.3)}
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar-outer{background:#e0e0e0;border-radius:10px;height:12px;margin:10px 0;overflow:hidden}
+.progress-bar-inner{height:100%;border-radius:10px;transition:width 0.5s ease;background:linear-gradient(90deg,#4caf50,#2e7d32)}
+.progress-text{font-size:0.82rem;color:#666;text-align:center;margin:4px 0}
+
+/* ===== TABS/FILTER ===== */
+.tab-row{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:8px 0}
+.tab-btn{padding:6px 12px;border-radius:14px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:0.78rem;transition:all 0.2s;font-family:inherit}
+.tab-btn.active{background:#2e7d32;color:#fff;border-color:#2e7d32}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:16px;color:#999;font-size:0.78rem}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes correctPulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  .container{padding:6px}
+  .header{padding:16px 10px 14px;border-radius:0 0 18px 18px}
+  .header h1{font-size:1.15rem}
+  .card{padding:14px 12px;border-radius:12px}
+  .module-nav button{padding:5px 8px;font-size:0.72rem;border-radius:16px}
+  .card h2{font-size:1.05rem}
+  .grammar-box{padding:10px 12px}
+  .option-btn{padding:7px 10px;font-size:0.85rem}
+  .fill-input{max-width:100%}
+  .score-display{font-size:2.2rem}
+}
+
+@media(max-width:400px){
+  .header h1{font-size:1rem}
+  .module-nav{gap:3px;padding:6px 4px}
+  .module-nav button{padding:4px 6px;font-size:0.68rem;border-radius:14px}
+  .card{padding:10px 8px}
+  .grammar-box p{font-size:0.82rem}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <span class="decor left">📚</span>
+  <h1>外研版五年级上册 · 语法练习</h1>
+  <p class="subtitle">小学英语语法闯关训练 | 10大语法专题 | 每模块10道精选题</p>
+  <span class="decor right">✏️</span>
+</header>
+
+<!-- ===== MODULE NAVIGATION ===== -->
+<nav class="module-nav" id="moduleNav"></nav>
+
+<!-- ===== PROGRESS OVERVIEW ===== -->
+<div class="card" style="text-align:center;margin-bottom:14px">
+  <div style="font-size:0.9rem;color:#666;margin-bottom:4px">📊 学习进度</div>
+  <div class="progress-bar-outer" style="max-width:500px;margin:0 auto">
+    <div class="progress-bar-inner" id="overallProgressBar" style="width:0%"></div>
+  </div>
+  <div class="progress-text" id="overallProgressText">已完成 0 / 10 个模块</div>
+</div>
+
+<!-- ===== MODULE SECTIONS (generated by JS) ===== -->
+<div id="moduleSections"></div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p>💚 坚持练习，英语语法一定越来越棒！Fighting! 💚</p>
+  <button class="reset-all-btn" onclick="resetAll()" style="margin-top:8px">🔄 全部重置</button>
+</footer>
+
+</div><!-- /container -->
+
+<script>
+// ===== MODULE DATA =====
+const modules = [
+  // ========== MODULE 1 ==========
+  {
+    id: 1,
+    emoji: "🕐",
+    title: "一般过去时（一）",
+    grammar: {
+      title: "🕐 一般过去时 — 回到过去的故事时间！",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们好！今天我们来学习<b>一般过去时</b>。想象一下，你有一台时光机，要讲一件<b>已经发生过</b>的事情，这时候就要用到过去时啦！</p>
+          <p>🎯 <b>什么时候用过去时？</b>只要是<em>过去</em>发生的动作或状态 — 昨天的事、上周的事、去年的事，全部都用过去时！</p>
+          <p>⏰ <b>时间信号词（看到它们就要用过去时）：</b></p>
+          <p><span class="highlight">yesterday</span>（昨天）、<span class="highlight">last Sunday/week/year</span>（上周日/上周/去年）、<span class="highlight">...ago</span>（...以前，如two days ago两天前）、<span class="highlight">then</span>（那时）</p>
+        </div>
+
+        <h3>🔧 动词过去式怎么变？</h3>
+        <div class="grammar-box">
+          <p><b>规则变化（有规律可循）：</b></p>
+          <p>1️⃣ 一般动词直接 +<b>ed</b>：work → work<span class="highlight">ed</span>, play → play<span class="highlight">ed</span></p>
+          <p>2️⃣ 以e结尾 +<b>d</b>：like → lik<span class="highlight">ed</span>, dance → danc<span class="highlight">ed</span></p>
+          <p>3️⃣ 辅音+y 结尾，变y为i +<b>ed</b>：study → stud<span class="highlight">ied</span>, carry → carr<span class="highlight">ied</span></p>
+          <p>4️⃣ 重读闭音节，双写尾字母 +<b>ed</b>：stop → stop<span class="highlight">ped</span>, drop → drop<span class="highlight">ped</span></p>
+        </div>
+
+        <div class="grammar-box">
+          <p><b>不规则变化（需要特别记住！）</b>— 这些是"调皮鬼"，不按规矩来：</p>
+          <p>go → <span class="highlight">went</span> | meet → <span class="highlight">met</span> | come → <span class="highlight">came</span> | buy → <span class="highlight">bought</span></p>
+          <p>run → <span class="highlight">ran</span> | see → <span class="highlight">saw</span> | do → <span class="highlight">did</span> | have → <span class="highlight">had</span></p>
+          <p>eat → <span class="highlight">ate</span> | drink → <span class="highlight">drank</span> | drop → <span class="highlight">dropped</span></p>
+          <p>be动词：am/is → <span class="highlight">was</span> | are → <span class="highlight">were</span></p>
+        </div>
+
+        <h3>📝 句型公式</h3>
+        <div class="grammar-box">
+          <p>✅ <b>肯定句：</b>主语 + 动词过去式<br><span class="en">I played football yesterday. 我昨天踢了足球。</span></p>
+          <p>❌ <b>否定句：</b>主语 + <span class="highlight">didn't</span> + <b>动词原形</b>（⚠️ 千万别用过去式！）<br><span class="en">I <b>didn't play</b> football. ❌ 不能说 I didn't played!</span></p>
+          <p>❓ <b>一般疑问句：</b>Did + 主语 + <b>动词原形</b>？<br><span class="en"><b>Did</b> you <b>play</b> football? — Yes, I did. / No, I didn't.</span></p>
+          <p>🔷 <b>含be动词疑问句：</b>Was/Were + 主语 + 其他？<br><span class="en"><b>Was</b> he happy? <b>Were</b> they at home?</span></p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>记忆口诀：</b>"did出现，动词现原形；didn't后面，也用原形！" — 记住：did和过去式是"死对头"，有did就没过去式！
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">Did you come back yesterday?</span><span class="cn-text">你昨天回来的吗？</span></li>
+          <li><span class="en-text">I dropped my ice cream.</span><span class="cn-text">我把我的冰淇淋弄掉了。</span></li>
+          <li><span class="en-text">We bought ice creams.</span><span class="cn-text">我们买了冰淇淋。</span></li>
+          <li><span class="en-text">I went to the park with Sam.</span><span class="cn-text">我和Sam去了公园。</span></li>
+          <li><span class="en-text">She didn't have breakfast this morning.</span><span class="cn-text">她今天早上没吃早饭。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">I didn't went to school.</span> → ✅ <span class="right">I didn't go to school.</span></p>
+          <p>❌ <span class="wrong">Did you played football?</span> → ✅ <span class="right">Did you play football?</span></p>
+          <p>❌ <span class="wrong">He goed to the park.</span> → ✅ <span class="right">He went to the park.</span></p>
+          <p>❌ <span class="wrong">She was play yesterday.</span> → ✅ <span class="right">She played yesterday.</span></p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>考试最爱考"didn't + 动词原形"这个陷阱！看到did/didn't，后面动词一定用原形！还有不规则动词过去式，至少要把课文里出现的记熟哦～</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"— ______ you come back yesterday? — Yes, I ______.",opts:["Do / do","Did / did","Did / do","Do / did"],ans:1,explain:"问昨天的事要用Did提问，回答用did。记住：yesterday = 过去时 = did！"},
+      {type:"choice",q:"I ______ my ice cream on the ground.",opts:["drop","drops","dropped","dropping"],ans:2,explain:"drop的过去式是dropped（重读闭音节，双写p+ed）。事情已经发生了，用过去式！"},
+      {type:"choice",q:"We didn't ______ any bananas yesterday.",opts:["bought","buy","buys","buyed"],ans:1,explain:"口诀：didn't后面用原形！didn't buy是正确的。❌ didn't bought是错的！"},
+      {type:"choice",q:"选出正确的一句：",opts:["He went to school yesterday.","He goes to school yesterday.","He didn't went to school.","Did he went to school?"],ans:0,explain:"yesterday提示过去时，go→went。B用了一般现在时，C&D都违反了'did/didn't+原形'规则。"},
+      {type:"fill",q:"She ______ (have) a good time last Sunday.",ans:"had",explain:"last Sunday提示过去时，have的过去式是had（不规则变化）。"},
+      {type:"fill",q:"They ______ (be) very happy to see us.",ans:"were",explain:"They对应的be动词过去式是were。口诀：I/he/she/it用was，you/we/they用were。"},
+      {type:"choice",q:"— What did you ______ for lunch? — I ______ noodles.",opts:["eat / eat","ate / ate","eat / ate","ate / eat"],ans:2,explain:"问句：What did you + 原形 → eat。答句：过去式 → ate。did和过去式不共存！"},
+      {type:"choice",q:"我昨天没看到Sam。选出正确翻译：",opts:["I don't see Sam yesterday.","I didn't saw Sam yesterday.","I didn't see Sam yesterday.","I not see Sam yesterday."],ans:2,explain:"yesterday→过去时，否定用didn't+原形see。❌ didn't saw错在用了过去式saw！"},
+      {type:"fill",q:"写出go的过去式：______",ans:"went",explain:"go→went 是最常用的不规则动词之一，必须记住！"},
+      {type:"choice",q:"— Was Amy at home? — No, she ______.",opts:["isn't","wasn't","didn't","weren't"],ans:1,explain:"问句用Was开头，回答也要用was/wasn't。Amy是第三人称单数，用wasn't。"}
+    ]
+  },
+
+  // ========== MODULE 2 ==========
+  {
+    id: 2,
+    emoji: "🔢",
+    title: "How many / How much 辨析",
+    grammar: {
+      title: "🔢 How many vs How much — 数得清还是数不清？",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，今天我们要学会问"有多少"。但英语里有个秘密：问数量要看东西是<b>可数</b>还是<b>不可数</b>！</p>
+          <p>🎯 <b>核心规则：</b></p>
+          <p>🔹 <span class="highlight">How many + 可数名词复数</span> → 问"多少个"（可以一个一个数的）</p>
+          <p>🔹 <span class="highlight">How much + 不可数名词</span> → 问"多少"（数不清的）</p>
+          <p>🔹 <span class="highlight">How much is/are...?</span> → 问价格（多少钱）</p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>口诀：</b>"many后面加s（复数），东西能数用many；much后面不拆开，数不清的用much。问价格也用much，How much is it记得住！"
+        </div>
+
+        <h3>🍎 常见的可数 vs 不可数名词</h3>
+        <div class="grammar-box">
+          <p>✅ <b>可数（能数）：</b>apple🍎, banana🍌, book📖, pen🖊, egg🥚, orange🍊, pupil👦, crayon🖍</p>
+          <p>🚫 <b>不可数（数不清）：</b>milk🥛, water💧, rice🍚, cheese🧀, juice🧃, bread🍞, meat🥩, time⏰</p>
+          <p>💡 <b>小技巧：</b>想想这个东西能不能说"一个、两个、三个"？能 → 可数！不能 → 不可数！</p>
+        </div>
+
+        <h3>📝 some 和 any 怎么选？</h3>
+        <div class="grammar-box">
+          <p>🔹 <span class="highlight">some</span> → 用于<b>肯定句</b>：<span class="en">I bought <b>some</b> apples.</span></p>
+          <p>🔹 <span class="highlight">any</span> → 用于<b>否定句和疑问句</b>：<span class="en">I didn't buy <b>any</b> bananas. / Did you buy <b>any</b> milk?</span></p>
+          <p>💡 简单记：肯定some否定any，疑问一般用any～</p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">How many apples did your mum say?</span><span class="cn-text">你妈妈说多少个苹果？</span></li>
+          <li><span class="en-text">How much cheese did you buy?</span><span class="cn-text">你买了多少奶酪？</span></li>
+          <li><span class="en-text">We didn't buy any bananas.</span><span class="cn-text">我们没有买香蕉。</span></li>
+          <li><span class="en-text">How much is this book?</span><span class="cn-text">这本书多少钱？</span></li>
+          <li><span class="en-text">I bought some milk yesterday.</span><span class="cn-text">我昨天买了一些牛奶。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">How many milk do you want?</span> → ✅ <span class="right">How much milk do you want?</span>（milk不可数！）</p>
+          <p>❌ <span class="wrong">I didn't buy some bananas.</span> → ✅ <span class="right">I didn't buy any bananas.</span>（否定句用any！）</p>
+          <p>❌ <span class="wrong">How many apple?</span> → ✅ <span class="right">How many apples?</span>（可数复数要加s！）</p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>考试经常把how many和不可数名词搭配来坑人！看到how many后面一定是复数名词。How much有两个意思（问数量/问价格），要看上下文判断～</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"______ apples did your mum say?",opts:["How many","How much","How old","What"],ans:0,explain:"apples是可数名词复数，用How many。How much + 不可数名词。"},
+      {type:"choice",q:"______ cheese did you buy?",opts:["How many","How much","How many of","What many"],ans:1,explain:"cheese🧀是不可数名词（不能说一个奶酪两个奶酪），用How much。"},
+      {type:"choice",q:"We didn't buy ______ bananas.",opts:["some","any","a","much"],ans:1,explain:"否定句要用any！口诀：肯定some否定any。"},
+      {type:"choice",q:"选出可数名词：",opts:["milk","rice","water","banana"],ans:3,explain:"banana🍌可以数（一根香蕉、两根香蕉），其他都是数不清的液体/颗粒类。"},
+      {type:"choice",q:"— How much ______ the shoes? — They're 50 yuan.",opts:["is","are","do","does"],ans:1,explain:"shoes是复数，问价格用How much are...? 单数用How much is...?"},
+      {type:"fill",q:"— ______ ______ (多少) water is there in the bottle? — Only a little.",ans:"How much",explain:"water是不可数名词，问多少用How much。"},
+      {type:"choice",q:"There are ______ eggs in the fridge.",opts:["any","some","much","a little"],ans:1,explain:"肯定句用some。eggs是可数复数，不能用much或a little。"},
+      {type:"choice",q:"I bought ______ milk but I didn't buy ______ juice.",opts:["some / some","any / any","some / any","any / some"],ans:2,explain:"肯定句用some，否定句用any。→ bought some milk, didn't buy any juice。"},
+      {type:"fill",q:"— ______ ______ (多少) books do you have? — I have ten.",ans:"How many",explain:"books是可数名词复数，问数量用How many。"},
+      {type:"choice",q:"选出正确的一句：",opts:["How many rice do you want?","I want some rices.","How much is this pen?","I don't have some apples."],ans:2,explain:"A错:rice不可数→应用How much；B错:rice不可数不加s；D错:否定句应用any。C正确：问价格用How much is...?"}
+    ]
+  },
+
+  // ========== MODULE 3 ==========
+  {
+    id: 3,
+    emoji: "❓",
+    title: "一般过去时特殊疑问句",
+    grammar: {
+      title: "❓ 一般过去时特殊疑问句 — 打破砂锅问到底！",
+      body: `
+        <div class="grammar-box">
+          <p>👋 上次我们学了一般过去时的肯定句和一般疑问句。这次我们要学会<b>"追问细节"</b>— 用特殊疑问句！</p>
+          <p>🎯 <b>公式：特殊疑问词 + did + 主语 + 动词原形？</b></p>
+          <p>⚠️ 看到did，后面动词还是用<b>原形</b>！老规矩不能忘！</p>
+        </div>
+
+        <h3>❓ 常用疑问词家族</h3>
+        <div class="grammar-box">
+          <p>🔹 <span class="highlight">What</span>（什么）→ 问事物/动作：<span class="en">What did you do? 你做了什么？</span></p>
+          <p>🔹 <span class="highlight">Who</span>（谁）→ 问人：<span class="en">Who did you meet? 你遇见了谁？</span></p>
+          <p>🔹 <span class="highlight">Where</span>（哪里）→ 问地点：<span class="en">Where did you go? 你去了哪里？</span></p>
+          <p>🔹 <span class="highlight">When</span>（什么时候）→ 问时间：<span class="en">When did you arrive? 你什么时候到的？</span></p>
+          <p>🔹 <span class="highlight">How</span>（怎样）→ 问方式：<span class="en">How did you go? 你怎么去的？</span></p>
+          <p>🔹 <span class="highlight">Why</span>（为什么）→ 问原因：<span class="en">Why did you cry? 你为什么哭？</span></p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>口诀：</b>"What什么Where哪里，When何时How怎样，Why为什么Who谁 — 疑问词打头，did跟在后，动词用原形，答句过去式！"
+        </div>
+
+        <h3>📝 问&答配对</h3>
+        <div class="grammar-box">
+          <p>❓ <span class="en">Where did you go?</span> → ✅ <span class="en">We <b>went</b> to the British Museum.</span>（答句用过去式！）</p>
+          <p>❓ <span class="en">How did you go to these places?</span> → ✅ <span class="en">We <b>went</b> by bus.</span></p>
+          <p>❓ <span class="en">What did you do at the weekend?</span> → ✅ <span class="en">I <b>visited</b> my grandma.</span></p>
+          <p>❓ <span class="en">Who did you meet?</span> → ✅ <span class="en">I <b>met</b> Daming.</span></p>
+          <p>❓ <span class="en">When did you come back?</span> → ✅ <span class="en">I <b>came</b> back yesterday.</span></p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">Where did you go? — We went to the British Museum.</span><span class="cn-text">你们去哪了？— 我们去了大英博物馆。</span></li>
+          <li><span class="en-text">How did you go to these places? — We went by bus.</span><span class="cn-text">你们怎么去这些地方的？— 我们坐公交去的。</span></li>
+          <li><span class="en-text">What did you do at the weekend?</span><span class="cn-text">你周末做了什么？</span></li>
+          <li><span class="en-text">Who did you go with?</span><span class="cn-text">你和谁一起去的？</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">Where did you went?</span> → ✅ <span class="right">Where did you go?</span>（did后必须原形！）</p>
+          <p>❌ <span class="wrong">What you did do?</span> → ✅ <span class="right">What did you do?</span>（疑问词后紧跟did！）</p>
+          <p>❌ <span class="wrong">How did you went there?</span> → ✅ <span class="right">How did you go there?</span></p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>特殊疑问句 = 疑问词 + did + 主语 + 动词原形。记住这个公式，无论疑问词怎么变，did后面的动词永远用原形！</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"— ______ did you go yesterday? — I went to the zoo.",opts:["What","Where","When","How"],ans:1,explain:"回答是地点(zoo)，问地点用Where。"},
+      {type:"choice",q:"— ______ did you go to school? — By bus.",opts:["What","Where","When","How"],ans:3,explain:"回答是交通方式(by bus)，问方式用How。"},
+      {type:"choice",q:"选出语法正确的一句：",opts:["Where did you went?","What did you saw?","How did you go?","When did you came?"],ans:2,explain:"How did you go?正确。其他三句都违反了'did+原形'规则。"},
+      {type:"fill",q:"— ______ (什么) did you do last Sunday? — I visited my grandma.",ans:"What",explain:"问'做了什么'用What。What did you do? 是最常用的特殊疑问句之一。"},
+      {type:"choice",q:"— Who ______ you meet at the park? — I met Daming.",opts:["do","did","does","were"],ans:1,explain:"问的是过去的事(回答met)，疑问词后用did。"},
+      {type:"fill",q:"— ______ (什么时候) did you arrive? — At 8 o'clock.",ans:"When",explain:"回答是时间(at 8 o'clock)，问时间用When。"},
+      {type:"choice",q:"配对：Where did you go? → ______",opts:["We went by bus.","We went to the museum.","We ate lunch.","We met Daming."],ans:1,explain:"Where问地点，所以要回答地点(museum)。A回答方式，C回答做了什么，D回答见了谁。"},
+      {type:"choice",q:"连词成句：did / what / see / you / ?",opts:["What you did see?","What did you see?","What see you did?","Did what you see?"],ans:1,explain:"特殊疑问句公式：疑问词(What) + did + 主语(you) + 动词原形(see)？"},
+      {type:"fill",q:"— ______ (为什么) did you cry? — Because I lost my pen.",ans:"Why",explain:"回答是Because...说明问原因是'为什么'，用Why。"},
+      {type:"choice",q:"— What did you eat for breakfast? — I ______ some bread.",opts:["eat","eats","ate","eated"],ans:2,explain:"问句用did+原形eat，但答句没有did，要用过去式ate。eat→ate是不规则变化。"}
+    ]
+  },
+
+  // ========== MODULE 4 ==========
+  {
+    id: 4,
+    emoji: "🎒",
+    title: "物主代词 & 名词所有格",
+    grammar: {
+      title: "🎒 物主代词 & 名词所有格 — 这个东西是谁的？",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，今天我们要学会<b>"认领东西"</b>！"我的""你的""他的"，这些叫<b>物主代词</b>。英语里物主代词分两种，非常重要哦！</p>
+        </div>
+
+        <h3>📋 两类物主代词对比</h3>
+        <div class="grammar-box">
+          <p><b>🔹 形容词性物主代词（必须带名词，像形容词一样修饰名词）：</b></p>
+          <p>my（我的）| our（我们的）| your（你的/你们的）| his（他的）| her（她的）| its（它的）| their（他们的）</p>
+          <p>例：<span class="en"><b>My</b> bag is red.</span>（my后面有bag）</p>
+          <p style="margin-top:8px"><b>🔹 名词性物主代词（独立使用，后面不加名词！）：</b></p>
+          <p>mine（我的）| ours（我们的）| yours（你的/你们的）| his（他的）| hers（她的）| its（它的）| theirs（他们的）</p>
+          <p>例：<span class="en">This bag is <b>mine</b>.</span>（mine后面没有名词）</p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>转换口诀：</b>"my变mine，your变yours，her变hers，our变ours，their变theirs — <b>his和its不变化</b>，这俩是个'懒家伙'！"
+        </div>
+
+        <h3>🏷️ 名词所有格 — "某某的"</h3>
+        <div class="grammar-box">
+          <p>🔹 <b>人名's + 名词</b>：<span class="en"><b>Tom's</b> book</span>（Tom的书）、<span class="en"><b>Sam's</b> bag</span>（Sam的包）</p>
+          <p>🔹 <b>以s结尾的复数名词 + '</b>：<span class="en"><b>teachers'</b> office</span>（老师们的办公室）</p>
+          <p>🔹 Whose + 名词 + is this? → 回答用<b>名词性物主代词</b>：<span class="en">Whose bag is this? — It's <b>mine</b>.</span></p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">Whose bag is this? — It's mine.</span><span class="cn-text">这是谁的包？— 是我的。</span></li>
+          <li><span class="en-text">Mum bought a new T-shirt for me.</span><span class="cn-text">妈妈给我买了一件新T恤。</span></li>
+          <li><span class="en-text">What's the matter? — I lost my cap.</span><span class="cn-text">怎么了？— 我丢了我的帽子。</span></li>
+          <li><span class="en-text">This is Tom's pencil. It's his.</span><span class="cn-text">这是Tom的铅笔。是他的。</span></li>
+          <li><span class="en-text">Their classroom is big. Ours is small.</span><span class="cn-text">他们的教室很大。我们的小。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">This book is my.</span> → ✅ <span class="right">This book is mine.</span>（句尾无名词，用名代mine！）</p>
+          <p>❌ <span class="wrong">It's mine book.</span> → ✅ <span class="right">It's my book.</span>（后面有book，用形代my！）</p>
+          <p>❌ <span class="wrong">This is Toms book.</span> → ✅ <span class="right">This is Tom's book.</span>（所有格要加's！）</p>
+          <p>❌ <span class="wrong">Whose pen is this? — It's her.</span> → ✅ <span class="right">It's hers.</span>（独立用hers，不是her！）</p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>判断用形代还是名代，就看<b>后面有没有名词</b>！有名词→形代(my/your/her)，没名词→名代(mine/yours/hers)。Whose问句回答一定用名代！</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"Whose bag is this? — It's ______.",opts:["my","me","mine","I"],ans:2,explain:"句尾没有名词，要用名词性物主代词mine。my是形代，后面必须跟名词。"},
+      {type:"choice",q:"This is ______ book. (我的)",opts:["mine","my","me","I"],ans:1,explain:"book是名词，前面用形容词性物主代词my。my book = 我的书。"},
+      {type:"choice",q:"That pencil is ______. (她的)",opts:["her","she","hers","his"],ans:2,explain:"句尾无名词，用名词性物主代词hers。her是形代(后面要跟名词)。"},
+      {type:"fill",q:"This is ______ (Tom) pen. It's ______ (he).",ans:"Tom's, his",explain:"Tom's pen = Tom的笔（所有格）。It's his = 是他的（his既是形代也是名代，不变化）。"},
+      {type:"choice",q:"— Is this ______ cap? — No, it's ______.",opts:["your / mine","yours / my","your / my","yours / mine"],ans:0,explain:"cap前用形代your；句尾无名词用名代mine。your cap? → mine."},
+      {type:"choice",q:"选出正确的一句：",opts:["This is mine pen.","That book is my.","Whose ruler is this?","It is her bag. Hers is red."],ans:3,explain:"D正确：her bag（形代+名词），Hers（名代独立用）。A:mine pen错→my pen；B:is my错→is mine；C:正确但不是考物主代词。"},
+      {type:"fill",q:"Mum bought a new T-shirt for ______ (我).",ans:"me",explain:"for是介词，介词后面用宾格me。for me = 给我。不是my也不是mine！"},
+      {type:"choice",q:"That is the ______ office. (老师们的)",opts:["teacher's","teachers","teachers'","teacher"],ans:2,explain:"teachers以s结尾的复数，所有格只加撇号(apostrophe)：teachers' office。"},
+      {type:"choice",q:"What's ______ matter? — I lost ______ cap.",opts:["a / my","the / mine","the / my","a / mine"],ans:2,explain:"What's the matter? 是固定搭配(the不能换)。cap前用形代my。my cap = 我的帽子。"},
+      {type:"choice",q:"These are ______ books. ______ are over there.",opts:["our / Yours","ours / Your","our / Your","ours / Yours"],ans:0,explain:"books前用形代our；句首无名词用名代Yours。our books / Yours are..."}
+    ]
+  },
+
+  // ========== MODULE 5 ==========
+  {
+    id: 5,
+    emoji: "📦",
+    title: "There be 句型 & 数词",
+    grammar: {
+      title: "📦 There be 句型 & 数字 — 哪里有什么？有多少？",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，今天学两个重要内容：<b>There be句型</b>（"某地有某物"）和<b>数字的拼写</b>！</p>
+          <p>🎯 <b>There be = "有"（表示存在）</b></p>
+          <p>🔹 <span class="highlight">There is + 单数/不可数 + 地点</span>：<span class="en">There <b>is</b> a book on the desk.</span></p>
+          <p>🔹 <span class="highlight">There are + 复数 + 地点</span>：<span class="en">There <b>are</b> two books on the desk.</span></p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>就近原则口诀：</b>"There be 像个墙头草，离谁近就跟谁跑。单数近就用is，复数近就用are！"<br>
+          例：<span class="en">There <b>is</b> a book and two pens.</span>（book近→is）<br>
+          例：<span class="en">There <b>are</b> two pens and a book.</span>（pens近→are）
+        </div>
+
+        <h3>🔢 数字拼写（这些极易拼错！）</h3>
+        <div class="grammar-box">
+          <p>13 thirteen | 14 fourteen | 15 <b>fifteen</b>（⚠️不是fiveteen!）</p>
+          <p>16 sixteen | 17 seventeen | 18 <b>eighteen</b>（⚠️只加een, 不是eightteen!）</p>
+          <p>19 nineteen | 20 twenty | 30 thirty</p>
+          <p>40 <b>forty</b>（⚠️不是fourty! 少了u!）| 50 <b>fifty</b>（⚠️不是fivety!）</p>
+          <p>60 sixty | 70 seventy | 80 eighty | 90 <b>ninety</b>（⚠️不是ninty!）</p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>数字拼写口诀：</b>"forty没有u，fifty没有ve；eighteen少个t，fifteen fiveteen要分清！"
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">There are only nineteen crayons.</span><span class="cn-text">只有十九支蜡笔。</span></li>
+          <li><span class="en-text">How many pupils are there in your class? — There are fourteen.</span><span class="cn-text">你们班有多少学生？— 有十四个。</span></li>
+          <li><span class="en-text">There is some water in the bottle.</span><span class="cn-text">瓶子里有一些水。</span></li>
+          <li><span class="en-text">There is a pencil and two rulers in the box.</span><span class="cn-text">盒子里有一支铅笔和两把尺子。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">There have a book on the desk.</span> → ✅ <span class="right">There is a book on the desk.</span>（There be不是There have!）</p>
+          <p>❌ <span class="wrong">There are a pen and two books.</span> → ✅ <span class="right">There is a pen and two books.</span>（就近原则：a pen近→is）</p>
+          <p>❌ <span class="wrong">fourty</span> → ✅ <span class="right">forty</span>（没有u！）</p>
+          <p>❌ <span class="wrong">fiveteen</span> → ✅ <span class="right">fifteen</span>（fif + teen！）</p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>There be的be动词由最近的名词决定（就近原则），这个必考！数字拼写中forty/fifteen/eighteen最容易拼错，一定要默写！</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"There ______ only nineteen crayons.",opts:["is","are","be","have"],ans:1,explain:"crayons是复数，用There are。There be句型不能用have！"},
+      {type:"choice",q:"There ______ a book and two pens on the desk.",opts:["is","are","be","have"],ans:0,explain:"就近原则！离be动词最近的是a book（单数），所以用is。"},
+      {type:"choice",q:"There ______ two pens and a book on the desk.",opts:["is","are","be","have"],ans:1,explain:"就近原则！离be动词最近的是two pens（复数），所以用are。"},
+      {type:"fill",q:"40的英文拼写是：______ (提示：不是fourty!)",ans:"forty",explain:"40的正确拼写是forty，没有字母u！很多人错写成fourty。"},
+      {type:"choice",q:"选出拼写正确的数字：",opts:["fiveteen","fourty","ninety","fifty"],ans:3,explain:"fifty正确。其他：fifteen(不是fiveteen), forty(不是fourty), ninety(不是ninty)。"},
+      {type:"fill",q:"— How many pupils ______ (be) there in your class? — There ______ (be) fourteen.",ans:"are, are",explain:"pupils复数用are。How many ... are there? 是固定句型。"},
+      {type:"choice",q:"There ______ some water in the glass.",opts:["is","are","be","have"],ans:0,explain:"water是不可数名词，不可数名词用There is。"},
+      {type:"choice",q:"15的正确拼写是：",opts:["fiveteen","fifteen","fiften","fiveten"],ans:1,explain:"15=fifteen (fif+teen)。注意是fif不是five！"},
+      {type:"fill",q:"18的英文拼写是：______",ans:"eighteen",explain:"18=eighteen。注意eight+een，只保留一个t，不是eightteen！"},
+      {type:"choice",q:"选出正确的一句：",opts:["There have many books.","There is twenty crayons.","There are only nineteen.","There are a cat under the tree."],ans:2,explain:"C正确省略了crayons。A错:There be不用have；B错:crayons复数应用are；D错:a cat单数应用is。"}
+    ]
+  },
+
+  // ========== MODULE 6 ==========
+  {
+    id: 6,
+    emoji: "💪",
+    title: "情态动词 can",
+    grammar: {
+      title: "💪 情态动词 can — 我能行！你会吗？",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，<b>can</b> 是一个超级好用的词！它表示<b>"能/会/可以"</b>。而且它有个最大的特点——<b>后面永远跟动词原形！</b></p>
+          <p>🎯 <b>can的两种含义：</b></p>
+          <p>🔹 表<b>能力</b>（会做某事）：<span class="en">I <b>can</b> swim. 我会游泳。</span></p>
+          <p>🔹 表<b>许可</b>（可以做某事）：<span class="en">You <b>can</b> go now. 你现在可以走了。</span></p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>口诀：</b>"can是情态动词乖宝宝，后面永远跟原形；否定can't说不能，疑问Can提前问。can永远不穿to的鞋！"
+        </div>
+
+        <h3>📝 句型公式</h3>
+        <div class="grammar-box">
+          <p>✅ <b>肯定句：</b>主语 + can + V原 → <span class="en">I <b>can</b> run fast.</span></p>
+          <p>❌ <b>否定句：</b>主语 + can't (cannot) + V原 → <span class="en">He <b>can't</b> swim.</span></p>
+          <p>❓ <b>疑问句：</b>Can + 主语 + V原？ → <span class="en"><b>Can</b> you play football?</span></p>
+          <p>💬 <b>回答：</b>Yes, 主语 can. / No, 主语 can't.</p>
+        </div>
+
+        <h3>🏃 实用短语</h3>
+        <div class="grammar-box">
+          <p>🔹 <span class="highlight">be good at + 名词/V-ing</span> = 擅长：<span class="en">I'm good at <b>running</b>.</span></p>
+          <p>🔹 pass the ball well（传球传得好）| run fast（跑得快）</p>
+          <p>🔹 jump high（跳得高）| play football well（踢足球踢得好）</p>
+          <p>⚠️ in the past + 过去时：<span class="en">In the past, he <b>ran</b> very fast.</span>（现在可能不行了）</p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">Can you run fast? — Yes, I can.</span><span class="cn-text">你能跑得快吗？— 是的，我能。</span></li>
+          <li><span class="en-text">You can play football well.</span><span class="cn-text">你足球踢得很好。</span></li>
+          <li><span class="en-text">In the past, he ran very fast.</span><span class="cn-text">过去他跑得非常快。</span></li>
+          <li><span class="en-text">I can't carry this bag. It's too heavy.</span><span class="cn-text">我拿不动这个包，它太重了。</span></li>
+          <li><span class="en-text">She is good at singing.</span><span class="cn-text">她擅长唱歌。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">I can to swim.</span> → ✅ <span class="right">I can swim.</span>（can后绝对不能加to！）</p>
+          <p>❌ <span class="wrong">He cans run fast.</span> → ✅ <span class="right">He can run fast.</span>（can没有三单变化！不能加s！）</p>
+          <p>❌ <span class="wrong">Do you can swim?</span> → ✅ <span class="right">Can you swim?</span>（can自己就能提问，不需要Do帮忙！）</p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>can的三个"不"：不加to、不加s、不用do/does帮助提问。can永远跟动词原形！be good at后面动词要加ing！</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"— Can you run fast? — Yes, I ______.",opts:["do","can","am","can't"],ans:1,explain:"Can提问，用can/can't回答。Yes, I can. / No, I can't."},
+      {type:"choice",q:"He ______ play football well.",opts:["can to","cans","can","can't to"],ans:2,explain:"can后跟动词原形，不加to不加s。He can play...正确。"},
+      {type:"choice",q:"选出正确的一句：",opts:["I can to swim.","Do you can dance?","She can speaks English.","They can't jump high."],ans:3,explain:"D正确：can't + 原形jump。A:can to错；B:应用Can you；C:can speaks错→can speak。"},
+      {type:"fill",q:"She is good at ______ (sing). She sings very well.",ans:"singing",explain:"be good at + V-ing。good at singing = 擅长唱歌。注意双写？不，sing不是重读闭音节，直接+ing。"},
+      {type:"choice",q:"In the past, he ______ very fast. But now he ______.",opts:["runs / can't","ran / can't","run / can't","ran / can"],ans:1,explain:"In the past提示过去时→ran。But now he can't（现在不能了）。前后对比。"},
+      {type:"fill",q:"— ______ (can) Lingling pass the ball well? — Yes, she can.",ans:"Can",explain:"Can开头疑问句。Can Lingling...? 注意Can大写开头。"},
+      {type:"choice",q:"— I'm tired. I ______ carry this heavy bag. — Let me help you.",opts:["can","can't","am not","don't"],ans:1,explain:"太累了所以'不能'搬重袋子→can't。Let me help you说明他搬不动。"},
+      {type:"choice",q:"连词成句：well / can / football / you / play / ?",opts:["Can you play football well?","You can play football well?","Play football well can you?","Can play you football well?"],ans:0,explain:"Can开头+主语you+动词原形play+宾语+副词well=标准can疑问句。"},
+      {type:"choice",q:"下面哪个是表'许可'（允许做某事）？",opts:["I can swim.","Can I go out to play?","She can dance.","Birds can fly."],ans:1,explain:"Can I go out to play? = 我可以出去玩吗？（请求许可）。其他三个都表能力。"},
+      {type:"fill",q:"He ______ (can / not) speak English. He only speaks Chinese.",ans:"can't",explain:"只会中文说明'不会'说英语→can't。cannot缩写成can't。"}
+    ]
+  },
+
+  // ========== MODULE 7 ==========
+  {
+    id: 7,
+    emoji: "🐕",
+    title: "代词宾格 & 帮助他人",
+    grammar: {
+      title: "🐕 代词宾格 — 帮帮他们吧！",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，代词在句子中<b>站在不同位置要穿不同的衣服</b>！做主语时用<b>主格</b>，做宾语时用<b>宾格</b>。今天还要学怎么"帮助别人"！</p>
+        </div>
+
+        <h3>📋 主格 vs 宾格对照表</h3>
+        <div class="grammar-box">
+          <table style="width:100%;text-align:center;border-collapse:collapse;font-size:0.9rem">
+            <tr style="background:#c8e6c9"><th style="padding:6px">主格（主语位置）</th><th>I</th><th>we</th><th>you</th><th>he</th><th>she</th><th>it</th><th>they</th></tr>
+            <tr><td style="padding:6px;font-weight:700;background:#f1f8e9">宾格（动词/介词后）</td><td><b>me</b></td><td><b>us</b></td><td><b>you</b></td><td><b>him</b></td><td><b>her</b></td><td><b>it</b></td><td><b>them</b></td></tr>
+          </table>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>口诀：</b>"I变me，we变us，he变him，she变her，they变them — <b>you和it不变身</b>，这俩是个'孙大圣'！"
+        </div>
+
+        <h3>🤝 帮助他人的表达</h3>
+        <div class="grammar-box">
+          <p>🔹 <span class="highlight">help + 人 + (to) do</span> = 帮助某人做某事：<span class="en">This dog <b>helps him</b> (to) walk.</span></p>
+          <p>🔹 <span class="highlight">can't + V原</span> = 不能：<span class="en">He <b>can't see</b>. 他看不见。</span></p>
+          <p>🔹 描述需要帮助的人：<span class="en"><b>blind</b> 盲的 | <b>deaf</b> 聋的 | This little girl <b>can't walk</b>.</span></p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">This man is blind. He can't see. This dog helps him.</span><span class="cn-text">这位男士是盲人。他看不见。这只狗帮助他。</span></li>
+          <li><span class="en-text">This little girl can't walk. Her father helps her.</span><span class="cn-text">这个小女孩不能走路。她爸爸帮助她。</span></li>
+          <li><span class="en-text">Can we help you?</span><span class="cn-text">我们能帮你吗？</span></li>
+          <li><span class="en-text">She helps me with my English.</span><span class="cn-text">她帮我学英语。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">This dog helps he.</span> → ✅ <span class="right">This dog helps him.</span>（helps是动词，后面用宾格him！）</p>
+          <p>❌ <span class="wrong">Her father helps she.</span> → ✅ <span class="right">Her father helps her.</span>（she的宾格是her！）</p>
+          <p>❌ <span class="wrong">Me can swim.</span> → ✅ <span class="right">I can swim.</span>（主语位置用主格I！）</p>
+          <p>❌ <span class="wrong">Give I a book.</span> → ✅ <span class="right">Give me a book.</span>（动词后宾格me！）</p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>判断用主格还是宾格，看代词在动词<b>前面</b>还是<b>后面</b>！动词前→主格，动词后→宾格。介词（to/for/with）后面也用宾格！</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"This man is blind. He can't see. This dog helps ______.",opts:["he","him","his","she"],ans:1,explain:"helps是动词，后面用宾格。he的宾格是him。"},
+      {type:"choice",q:"This little girl can't walk. Her father helps ______.",opts:["she","her","hers","him"],ans:1,explain:"helps是动词+宾格。she的宾格是her。注意her既是形代又是宾格！"},
+      {type:"choice",q:"______ can't swim. Please help ______.",opts:["I / me","Me / I","I / I","Me / me"],ans:0,explain:"主语位置→主格I；help动词后→宾格me。I can't swim. Help me."},
+      {type:"fill",q:"These dogs are very clever. They help ______ (we) a lot.",ans:"us",explain:"help动词后+宾格。we的宾格是us。"},
+      {type:"choice",q:"— Can you help ______ (他) with his homework? — Sure.",opts:["he","him","his","her"],ans:1,explain:"help动词后+宾格him。with his homework=辅导他的作业。"},
+      {type:"choice",q:"选出正确的一句：",opts:["Her helps he.","She helps him.","Him helps she.","He helps her's."],ans:1,explain:"She(主格) helps him(宾格)。A:Her不能做主语；C:语序错；D:her's不存在。"},
+      {type:"fill",q:"This old man is ______ (聋的). He can't hear.",ans:"deaf",explain:"deaf = 聋的。blind=盲的。这两个词经常成对出现。"},
+      {type:"choice",q:"Let ______ help you carry the box.",opts:["I","me","my","mine"],ans:1,explain:"Let是动词，后面+宾格。let me = 让我。Let me help you."},
+      {type:"choice",q:"______ are good friends. Let's help ______.",opts:["They / they","Them / them","They / them","Them / they"],ans:2,explain:"主语用主格They；help后+宾格them。They(主格) help them(宾格)。"},
+      {type:"fill",q:"Sam, can you help ______ (I) find my bag?",ans:"me",explain:"help动词后+宾格。help me = 帮我。I的宾格是me。"}
+    ]
+  },
+
+  // ========== MODULE 8 ==========
+  {
+    id: 8,
+    emoji: "⏰",
+    title: "一般现在时 & 时间表达",
+    grammar: {
+      title: "⏰ 一般现在时 & 时间 — 几点啦？别迟到！",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，<b>一般现在时</b>用来描述<b>经常发生</b>的事情或<b>常态</b>。比如"我每天7点起床"，这就是一般现在时！</p>
+          <p>⏰ <b>标志词：</b><span class="highlight">every day</span>（每天）、<span class="highlight">always</span>（总是）、<span class="highlight">usually</span>（通常）、<span class="highlight">often</span>（经常）、<span class="highlight">sometimes</span>（有时）</p>
+        </div>
+
+        <h3>🔧 三单动词变化规则</h3>
+        <div class="grammar-box">
+          <p>当主语是<b>he/she/it/人名</b>（第三人称单数），动词要变身：</p>
+          <p>1️⃣ 一般动词直接 +<b>s</b>：play→play<b>s</b>, like→like<b>s</b></p>
+          <p>2️⃣ 以o/s/x/sh/ch结尾 +<b>es</b>：go→go<b>es</b>, watch→watch<b>es</b>, wash→wash<b>es</b></p>
+          <p>3️⃣ 辅音+y结尾，变y为i +<b>es</b>：study→stud<b>ies</b>, fly→fl<b>ies</b></p>
+          <p>4️⃣ <span class="highlight">have → has</span>（特殊变化！）：<span class="en">She <b>has</b> a book. ❌She haves.</span></p>
+        </div>
+
+        <div class="rhyme-box">
+          🎵 <b>三单口诀：</b>"不是你也不是我，单个的他她它，动词后面要变化；一般加s，o/sh/ch加es，y变i加es，have变成has！"
+        </div>
+
+        <h3>🕐 时间表达</h3>
+        <div class="grammar-box">
+          <p>🔹 <b>整点：</b>...o'clock → <span class="en">nine <b>o'clock</b> 九点</span></p>
+          <p>🔹 <b>半点：</b>half past... → <span class="en"><b>half past</b> eight 八点半</span></p>
+          <p>🔹 问时间：<span class="en"><b>What time is it?</b> — It's half past eight.</span></p>
+          <p>🔹 问作息：<span class="en"><b>What time do/does</b> + 主语 + V原？（⚠️三单用does！）</span></p>
+          <p>🔹 回答：<span class="en">主语 + V/V三单 + <b>at</b> + 时间。</span></p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">What time does your school start? — My school starts at nine o'clock.</span><span class="cn-text">你们学校几点开始上课？— 我们学校九点开始。</span></li>
+          <li><span class="en-text">I get up at half past seven.</span><span class="cn-text">我七点半起床。</span></li>
+          <li><span class="en-text">I don't want to be late.</span><span class="cn-text">我不想迟到。</span></li>
+          <li><span class="en-text">She always goes to school at eight o'clock.</span><span class="cn-text">她总是八点去上学。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">She go to school at eight.</span> → ✅ <span class="right">She goes to school at eight.</span>（三单要加es！）</p>
+          <p>❌ <span class="wrong">He haves a book.</span> → ✅ <span class="right">He has a book.</span>（have→has，不是haves！）</p>
+          <p>❌ <span class="wrong">What time do your school start?</span> → ✅ <span class="right">What time does your school start?</span>（school是三单用does！）</p>
+          <p>❌ <span class="wrong">I gets up at seven.</span> → ✅ <span class="right">I get up at seven.</span>（I不是三单，不加s！）</p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>三单变化是最容易出错的地方！做题前先看主语是不是he/she/it/人名！问句里does后面动词一定用原形（和did同理）！</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"What time ______ your school start?",opts:["do","does","is","are"],ans:1,explain:"your school是三单（it），用does。does后面动词用原形start。"},
+      {type:"choice",q:"My school ______ at nine o'clock.",opts:["start","starts","starting","to start"],ans:1,explain:"My school是三单(it)，动词加s→starts。三单要变身！"},
+      {type:"choice",q:"I ______ up at half past seven every day.",opts:["get","gets","getting","got"],ans:0,explain:"I不是三单，动词用原形get。every day提示一般现在时。"},
+      {type:"fill",q:"She ______ (have) lunch at twelve o'clock.",ans:"has",explain:"She是三单，have→has。have的三单是has，不是haves！"},
+      {type:"choice",q:"— What time is it? — It's ______. (8:30)",opts:["eight thirty","half past eight","eight half","half to eight"],ans:1,explain:"8:30 = half past eight（八点过半=八点半）。half past + 小时。"},
+      {type:"fill",q:"He always ______ (go) to bed at nine o'clock.",ans:"goes",explain:"He是三单，go以o结尾加es→goes。always提示一般现在时。"},
+      {type:"choice",q:"选出三单变化正确的一句：",opts:["She study English every day.","He watchs TV at night.","Tom goes to school by bus.","It rain a lot here."],ans:2,explain:"Tom(三单)+goes正确。A:study→studies；B:watch→watches；D:rain→rains。"},
+      {type:"fill",q:"I don't ______ (want) to be late for school.",ans:"want",explain:"don't后面+动词原形。don't want = 不想。和didn't道理一样！"},
+      {type:"choice",q:"______ your father usually go to work at eight?",opts:["Do","Does","Is","Are"],ans:1,explain:"your father是三单(he)，疑问句用Does+主语+原形→Does your father go...?"},
+      {type:"choice",q:"选出正确的一句：",opts:["She don't like apples.","He doesn't likes apples.","They doesn't like apples.","He doesn't like apples."],ans:3,explain:"He是三单：doesn't + 原形like。A:She→doesn't；B:doesn't likes错→doesn't like；C:They→don't。"}
+    ]
+  },
+
+  // ========== MODULE 9 ==========
+  {
+    id: 9,
+    emoji: "😊",
+    title: "感受表达",
+    grammar: {
+      title: "😊 感受表达 — 你今天感觉怎么样？",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，学会表达自己的感受非常重要！开心、难过、饿了、累了……这些感受用英语怎么说呢？</p>
+        </div>
+
+        <h3>😊😢 感受形容词大全</h3>
+        <div class="grammar-box">
+          <p>😊 <span class="highlight">happy</span> 开心的 | 😢 <span class="highlight">sad</span> 难过的</p>
+          <p>😴 <span class="highlight">bored</span> 无聊的 | 😡 <span class="highlight">angry</span> 生气的</p>
+          <p>😫 <span class="highlight">tired</span> 累的 | 🍔 <span class="highlight">hungry</span> 饿的</p>
+          <p>🥤 <span class="highlight">thirsty</span> 渴的 | 🎉 <span class="highlight">excited</span> 兴奋的</p>
+        </div>
+
+        <h3>📝 三种表达方式</h3>
+        <div class="grammar-box">
+          <p>方式1️⃣ <b>Sb + be + feeling + adj.</b>（某人正在感觉...）</p>
+          <p><span class="en"><b>Are you feeling</b> sad? — Yes, I am.</span></p>
+          <p>方式2️⃣ <b>Sb + be + adj.</b>（某人是...的）</p>
+          <p><span class="en">I <b>am happy</b>. He <b>is tired</b>.</span></p>
+          <p>方式3️⃣ <b>Sb + feel/feels + adj.</b>（某人感觉...）</p>
+          <p><span class="en">I <b>feel happy</b>. He <b>feels hungry</b>.</span>（⚠️三单feels！）</p>
+        </div>
+
+        <h3>❓ 问感受</h3>
+        <div class="grammar-box">
+          <p>🔹 <span class="en"><b>How do/does + 主语 + feel?</b></span> → 回答：主语 + feel/feels + adj.</p>
+          <p>🔹 <span class="en"><b>What's the matter?</b> = 怎么了？</span> | <b>Nothing.</b> = 没事。</p>
+          <p>🔹 三单用does：<span class="en">How <b>does</b> he feel? — He <b>feels</b> hungry.</span></p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">Are you feeling sad? — Yes, I am.</span><span class="cn-text">你感觉难过吗？— 是的。</span></li>
+          <li><span class="en-text">How does he feel? — He feels hungry.</span><span class="cn-text">他感觉怎么样？— 他感觉饿了。</span></li>
+          <li><span class="en-text">I won a chess game last week. Now I feel happy.</span><span class="cn-text">我上周赢了一盘棋。现在我感觉很开心。</span></li>
+          <li><span class="en-text">What's the matter? — Nothing. I'm just tired.</span><span class="cn-text">怎么了？— 没事。我只是累了。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">How does he feels?</span> → ✅ <span class="right">How does he feel?</span>（does后动词原形！）</p>
+          <p>❌ <span class="wrong">He feel hungry.</span> → ✅ <span class="right">He feels hungry.</span>（三单要加s！）</p>
+          <p>❌ <span class="wrong">Are you feel sad?</span> → ✅ <span class="right">Are you feeling sad?</span> / <span class="right">Do you feel sad?</span></p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>feel在一般现在时里，三单要加s→feels。但用does提问时，feel要还原为原形！bored(无聊)和boring(令人无聊的)不要搞混——I'm bored = 我感到无聊。</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"— Are you feeling sad? — Yes, ______.",opts:["I'm","I am","I do","I feel"],ans:1,explain:"Are you...提问，回答用I am。Yes, I am. 不能缩写成Yes, I'm."},
+      {type:"choice",q:"— How ______ he feel? — He ______ hungry.",opts:["do / feel","does / feels","does / feel","do / feels"],ans:1,explain:"问句：How does he feel?（does+原形feel）。答句：He feels hungry（三单feels）。"},
+      {type:"choice",q:"I won a chess game last week. Now I feel ______.",opts:["sad","angry","happy","tired"],ans:2,explain:"赢了一盘棋→应该感到开心happy。winner feels happy!"},
+      {type:"fill",q:"He is very ______ (累的) after running 1000 metres.",ans:"tired",explain:"跑了1000米后感到tired（累的）。tired = 感到疲惫的。"},
+      {type:"choice",q:"选出正确的一句：",opts:["How does she feels?","She feel tired.","Are you feeling bored?","He feeling hungry."],ans:2,explain:"C正确：Are you feeling + adj.? A:does+feel原形→How does she feel?；B:三单→She feels；D:缺be动词→He is feeling."},
+      {type:"fill",q:"I didn't have breakfast. Now I feel very ______ (饿的).",ans:"hungry",explain:"没吃早饭→感到hungry（饿的）。angry是生气的，不要搞混哦！"},
+      {type:"choice",q:"— What's the matter? — ______. I'm just a bit tired.",opts:["I'm happy","Nothing","I'm hungry","Yes"],ans:1,explain:"What's the matter? = 怎么了？Nothing = 没事。后面说'只是有点累'说明没什么大事。"},
+      {type:"choice",q:"He ______ very excited about the trip.",opts:["feel","feels","feeling","to feel"],ans:1,explain:"He三单+feels。He feels excited. = 他感到兴奋。一般现在时，三单加s。"},
+      {type:"fill",q:"She didn't drink any water. She feels ______ (渴的).",ans:"thirsty",explain:"没喝水→感到thirsty（渴的）。thirsty和thirty(30)拼写很像，别搞混！"},
+      {type:"choice",q:"— How do you feel today? — I ______ great!",opts:["feels","feeling","feel","am feel"],ans:2,explain:"问句用do→答句I feel(原形)。I不是三单，feel不加s。I feel great!"}
+    ]
+  },
+
+  // ========== MODULE 10 ==========
+  {
+    id: 10,
+    emoji: "🚫",
+    title: "祈使句 & 地点介词",
+    grammar: {
+      title: "🚫 祈使句 & 地点介词 — 别踩草地！他在哪？",
+      body: `
+        <div class="grammar-box">
+          <p>👋 小朋友们，<b>祈使句</b>就是用来<b>命令、请求、建议</b>别人的句子。比如老师说"Stand up!"（起立！），妈妈说"Don't run!"（别跑！），都是祈使句！</p>
+        </div>
+
+        <h3>📝 祈使句公式</h3>
+        <div class="grammar-box">
+          <p>✅ <b>肯定祈使句：</b>动词原形开头！（没有主语！）</p>
+          <p><span class="en"><b>Stand</b> up. 起立。|<b>Sit</b> down. 坐下。|<b>Open</b> the door. 开门。</span></p>
+          <p>❌ <b>否定祈使句：</b>Don't + 动词原形！</p>
+          <p><span class="en"><b>Don't run</b>! 别跑！|<b>Don't walk</b> on the grass! 别在草地上走！</span></p>
+          <p>🤝 <b>Let's + 动词原形</b> = 让我们...吧</p>
+          <p><span class="en"><b>Let's go</b>! 我们走吧！|<b>Let's play</b> football! 我们去踢足球吧！</span></p>
+          <p>🔓 <b>You can + 动词原形</b> = 你可以...（表允许）</p>
+          <p><span class="en"><b>You can</b> sit here. 你可以坐这。</span></p>
+        </div>
+
+        <h3>📍 地点介词</h3>
+        <div class="grammar-box">
+          <p>🔹 <span class="highlight">in</span> 在...里面：<span class="en">in the bedroom 在卧室里</span></p>
+          <p>🔹 <span class="highlight">on</span> 在...上面（接触）：<span class="en">on the desk 在书桌上</span></p>
+          <p>🔹 <span class="highlight">under</span> 在...下面：<span class="en">under the tree 在树下</span></p>
+        </div>
+
+        <h3>🏠 常见地点词</h3>
+        <div class="grammar-box">
+          <p>kitchen 厨房 | bedroom 卧室 | toilet 厕所</p>
+          <p>living room 客厅 | grass 草地 | zoo 动物园</p>
+        </div>
+
+        <h3>💡 重点例句</h3>
+        <ul class="example-list">
+          <li><span class="en-text">Don't walk on the grass!</span><span class="cn-text">不要在草地上走！</span></li>
+          <li><span class="en-text">Don't climb the tree!</span><span class="cn-text">不要爬树！</span></li>
+          <li><span class="en-text">Let's go.</span><span class="cn-text">我们走吧。</span></li>
+          <li><span class="en-text">Where is Sam? — He is in the bedroom.</span><span class="cn-text">Sam在哪？— 他在卧室里。</span></li>
+          <li><span class="en-text">You can play in the garden.</span><span class="cn-text">你可以在花园里玩。</span></li>
+        </ul>
+
+        <h3>⚠️ 常见错误</h3>
+        <div class="mistake-box">
+          <p>❌ <span class="wrong">Not run!</span> → ✅ <span class="right">Don't run!</span>（否定祈使句用Don't开头！）</p>
+          <p>❌ <span class="wrong">Let's to go.</span> → ✅ <span class="right">Let's go.</span>（Let's直接+动词原形，不加to！）</p>
+          <p>❌ <span class="wrong">Don't walks on the grass.</span> → ✅ <span class="right">Don't walk on the grass.</span>（Don't后动词原形！）</p>
+          <p>❌ <span class="wrong">He is in the tree climbing.</span> → ✅ <span class="right">He is climbing the tree.</span>（in the tree是在树里面！）</p>
+        </div>
+
+        <div class="tip-box">
+          <p>🎯 <b>考点提示：</b>祈使句没有主语！直接动词原形开头。Don't/Let's后面都是动词原形。in/on/under区别：in是里面，on是上面接触，under是下面。climb the tree是指爬上树（在树枝上），不是in the tree哦～</p>
+        </div>
+      `
+    },
+    questions: [
+      {type:"choice",q:"______ walk on the grass!",opts:["Not","No","Don't","Can't"],ans:2,explain:"否定祈使句用Don't开头。Don't walk on the grass! = 不要在草地上走！"},
+      {type:"choice",q:"______ go to the park together!",opts:["Let's","Let","Don't","Can"],ans:0,explain:"Let's + 动词原形 = 让我们...。Let's go! = 我们走吧！"},
+      {type:"choice",q:"Where is Sam? — He is ______ the bedroom.",opts:["on","in","under","at"],ans:1,explain:"在卧室里面用in。in the bedroom = 在卧室里。on是在上面，under是在下面。"},
+      {type:"fill",q:"______ (不要) climb the tree! It's dangerous!",ans:"Don't",explain:"否定祈使句用Don't开头。Don't climb the tree! = 不要爬树！"},
+      {type:"choice",q:"选出正确的一句：",opts:["Not run in the classroom!","Don't run in the classroom!","You not run in the classroom!","Run not in the classroom!"],ans:1,explain:"Don't + 动词原形 = 否定祈使句。A:Not不能直接开头；C:缺少don't；D:语序错。"},
+      {type:"fill",q:"The cat is ______ (在...下面) the table.",ans:"under",explain:"在桌子下面用under。under = 在...正下方。The cat is under the table."},
+      {type:"choice",q:"Let's ______ football after school!",opts:["to play","playing","plays","play"],ans:3,explain:"Let's + 动词原形play。Let's后面不加to不加ing不加s！"},
+      {type:"choice",q:"You ______ sit here. This seat is free.",opts:["can","can't","don't","not"],ans:0,explain:"座位空着→你可以坐这→You can sit here. can表许可。"},
+      {type:"fill",q:"把肯定祈使句变成否定：Stand up. → ______ stand up.",ans:"Don't",explain:"肯定祈使句变否定：前面加Don't。Don't stand up. = 别站起来。"},
+      {type:"choice",q:"选出介词使用正确的一句：",opts:["The book is in the desk.","The pen is on the desk.","The ball is on the bed(在里面).","The cat is in the tree(在树枝上攀爬)."],ans:1,explain:"B正确：on the desk(在书桌上面接触)。A:in→on(书在桌上不是里面)；C:on→under或in(看语境)；D:in→climbing(在树上爬)。"}
+    ]
+  }
+];
+
+// ===== STATE =====
+let moduleScores = {};
+let currentModule = 1;
+
+// Initialize from localStorage
+try {
+  const saved = localStorage.getItem('grammar5_scores');
+  if (saved) moduleScores = JSON.parse(saved);
+} catch(e) {}
+
+function saveScores() {
+  try { localStorage.setItem('grammar5_scores', JSON.stringify(moduleScores)); } catch(e) {}
+}
+
+// ===== BUILD NAV =====
+function buildNav() {
+  const nav = document.getElementById('moduleNav');
+  nav.innerHTML = modules.map(m => {
+    const score = moduleScores[m.id];
+    let dotClass = 'gray';
+    let completedClass = '';
+    if (score && score.total > 0) {
+      const allAnswered = score.answered && score.answered.length === 10;
+      if (allAnswered && score.correct === 10) { dotClass = 'green'; completedClass = ' completed'; }
+      else if (allAnswered) { dotClass = 'yellow'; }
+    }
+    return `<button class="mod-nav-btn${completedClass}" data-mod="${m.id}" onclick="switchModule(${m.id})">
+      ${m.emoji} ${m.title}<span class="dot ${dotClass}"></span>
+    </button>`;
+  }).join('');
+}
+
+// ===== BUILD SECTIONS =====
+function buildSections() {
+  const container = document.getElementById('moduleSections');
+  container.innerHTML = modules.map(m => buildModuleHTML(m)).join('');
+}
+
+function buildModuleHTML(m) {
+  const score = moduleScores[m.id];
+  const answeredSet = score && score.answered ? new Set(score.answered) : new Set();
+
+  let questionsHTML = m.questions.map((q, qi) => {
+    const qId = `${m.id}-${qi}`;
+    const answered = answeredSet.has(qi);
+    const isCorrect = answered && score.answers && score.answers[qi] === true;
+    let statusIcon = '';
+    if (answered) statusIcon = isCorrect ? ' ✅' : ' ❌';
+    let qBlockClass = '';
+    if (answered) qBlockClass = isCorrect ? ' correct' : ' wrong';
+
+    let inputHTML = '';
+    if (q.type === 'choice') {
+      const letters = ['A','B','C','D'];
+      inputHTML = `<div class="options">` + q.opts.map((opt, oi) => {
+        let btnClass = '';
+        if (answered) {
+          if (oi === q.ans) btnClass = ' show-correct';
+          if (oi === score.answers && score.answers[qi] === true && oi === q.ans) btnClass = ' chosen-correct';
+          else if (oi === score.answers && score.answers[qi] === false && oi !== q.ans) btnClass = ' chosen-wrong';
+          // Track what user chose
+          if (score.chosen && score.chosen[qi] === oi) {
+            if (oi === q.ans) btnClass = ' chosen-correct';
+            else btnClass = ' chosen-wrong';
+          }
+        }
+        return `<button class="option-btn${btnClass}" data-mod="${m.id}" data-q="${qi}" data-opt="${oi}" onclick="checkChoice(${m.id},${qi},${oi},this)" ${answered ? 'disabled' : ''}><span class="letter">${letters[oi]}</span>${opt}</button>`;
+      }).join('') + `</div>`;
+    } else if (q.type === 'fill') {
+      const val = answered && score.userAnswers && score.userAnswers[qi] ? score.userAnswers[qi] : '';
+      const icls = answered ? (isCorrect ? 'correct' : 'wrong') : '';
+      inputHTML = `<input type="text" class="fill-input ${icls}" id="fill-${m.id}-${qi}" placeholder="输入你的答案..." value="${escapeHtml(val)}" ${answered ? 'disabled' : ''}>
+        <button class="submit-btn" onclick="checkFill(${m.id},${qi})" ${answered ? 'disabled' : ''}>提交</button>`;
+    }
+
+    const typeLabel = q.type === 'choice' ? '选择题' : '填空题';
+    let feedbackHTML = '';
+    if (answered) {
+      const fbClass = isCorrect ? 'correct-msg' : 'wrong-msg';
+      const fbText = isCorrect ? '✅ 太棒了！回答正确！' : `❌ 答错了！正确答案是：<b>${q.ans}</b>。${q.explain || ''}`;
+      feedbackHTML = `<div class="feedback ${fbClass} show">${fbText}</div>`;
+    } else {
+      feedbackHTML = `<div class="feedback" id="fb-${m.id}-${qi}"></div>`;
+    }
+
+    return `<div class="question-block${qBlockClass}" id="qb-${m.id}-${qi}">
+      <div class="q-type-label">${typeLabel} ${qi+1}/10</div>
+      <span class="q-num">${qi+1}</span><span class="q-text">${q.q}</span><span class="q-status">${statusIcon}</span>
+      ${inputHTML}
+      ${feedbackHTML}
+    </div>`;
+  }).join('');
+
+  return `<section class="module-section${currentModule === m.id ? ' active' : ''}" id="modSec-${m.id}">
+    <div class="card grammar">
+      <h2><span class="emoji">${m.emoji}</span> Module ${m.id}：${m.title}</h2>
+      <p class="subtitle-text">📖 语法小课堂 — 认真学完再做题哦！</p>
+      ${m.grammar.body}
+    </div>
+    <div class="card quiz" id="quizCard-${m.id}">
+      <h2><span class="emoji">📝</span> Module ${m.id} 语法闯关（10题）</h2>
+      ${questionsHTML}
+      <div style="text-align:center;margin-top:16px">
+        <button class="submit-btn" onclick="showModuleScore(${m.id})" style="font-size:1rem;padding:10px 28px">📊 查看成绩</button>
+        <button class="reset-btn" onclick="resetModule(${m.id})">🔄 重做本模块</button>
+      </div>
+      <div id="scoreDisplay-${m.id}" style="text-align:center;margin-top:14px;display:none"></div>
+    </div>
+  </section>`;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ===== SWITCH MODULE =====
+function switchModule(modNum) {
+  currentModule = modNum;
+  document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById('modSec-' + modNum);
+  if (sec) sec.classList.add('active');
+  document.querySelectorAll('.mod-nav-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.mod-nav-btn[data-mod="${modNum}"]`);
+  if (btn) btn.classList.add('active');
+  document.getElementById('modSec-' + modNum).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ===== CHECK CHOICE =====
+function checkChoice(modNum, qNum, chosen, el) {
+  const mod = modules.find(m => m.id === modNum);
+  if (!mod) return;
+  const q = mod.questions[qNum];
+  const correct = q.ans;
+  const isCorrect = (chosen === correct);
+
+  // Initialize score tracking
+  if (!moduleScores[modNum]) moduleScores[modNum] = {correct:0,total:10,answered:[],answers:{},chosen:{},userAnswers:{}};
+  if (!moduleScores[modNum].chosen) moduleScores[modNum].chosen = {};
+  if (!moduleScores[modNum].answers) moduleScores[modNum].answers = {};
+  if (!moduleScores[modNum].userAnswers) moduleScores[modNum].userAnswers = {};
+
+  if (moduleScores[modNum].answered.includes(qNum)) return; // already answered
+  moduleScores[modNum].answered.push(qNum);
+  moduleScores[modNum].chosen[qNum] = chosen;
+  moduleScores[modNum].answers[qNum] = isCorrect;
+  if (isCorrect) moduleScores[modNum].correct++;
+  saveScores();
+  updateProgress();
+
+  // Disable all option buttons in this question
+  const qb = el.closest('.question-block');
+  qb.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+  // Highlight correct and wrong
+  const allBtns = qb.querySelectorAll('.option-btn');
+  allBtns.forEach(b => {
+    const optIdx = parseInt(b.dataset.opt);
+    if (optIdx === correct) b.classList.add('show-correct');
+  });
+  if (isCorrect) {
+    el.classList.add('chosen-correct');
+    qb.classList.add('correct');
+    qb.querySelector('.q-status').textContent = ' ✅';
+  } else {
+    el.classList.add('chosen-wrong');
+    qb.classList.add('wrong');
+    qb.querySelector('.q-status').textContent = ' ❌';
+  }
+
+  // Show feedback
+  const fb = qb.querySelector('.feedback');
+  if (fb) {
+    fb.classList.add('show');
+    if (isCorrect) {
+      fb.classList.add('correct-msg');
+      fb.innerHTML = '✅ 太棒了！回答正确！' + (q.explain ? ' ' + q.explain : '');
+    } else {
+      fb.classList.add('wrong-msg');
+      fb.innerHTML = `❌ 答错了！正确答案是：<b>${q.opts[correct]}</b>。${q.explain || ''}`;
+    }
+  }
+
+  // Auto-show score if all answered
+  if (moduleScores[modNum].answered.length === 10) {
+    setTimeout(() => showModuleScore(modNum), 600);
+  }
+}
+
+// ===== CHECK FILL =====
+function checkFill(modNum, qNum) {
+  const input = document.getElementById('fill-' + modNum + '-' + qNum);
+  if (!input) return;
+  const userAnswer = input.value.trim();
+  if (!userAnswer) return;
+
+  const mod = modules.find(m => m.id === modNum);
+  if (!mod) return;
+  const q = mod.questions[qNum];
+
+  // Initialize
+  if (!moduleScores[modNum]) moduleScores[modNum] = {correct:0,total:10,answered:[],answers:{},chosen:{},userAnswers:{}};
+  if (!moduleScores[modNum].answers) moduleScores[modNum].answers = {};
+  if (!moduleScores[modNum].userAnswers) moduleScores[modNum].userAnswers = {};
+
+  if (moduleScores[modNum].answered.includes(qNum)) return;
+  moduleScores[modNum].answered.push(qNum);
+  moduleScores[modNum].userAnswers[qNum] = userAnswer;
+
+  // Compare answers (case insensitive, trim)
+  const correctAns = q.ans.toLowerCase().trim();
+  const userAns = userAnswer.toLowerCase().trim();
+  let isCorrect = false;
+
+  // Handle multi-answer (comma separated correct answers)
+  const correctParts = correctAns.split(',').map(s => s.trim());
+  for (const part of correctParts) {
+    if (userAns === part) { isCorrect = true; break; }
+    // Check if user's answer contains all expected parts
+  }
+  // Also check if answer contains all comma-separated parts
+  if (!isCorrect && correctParts.length > 1) {
+    const userParts = userAns.split(/[,，]/).map(s => s.trim());
+    isCorrect = correctParts.every(cp => userParts.some(up => up === cp));
+  }
+
+  moduleScores[modNum].answers[qNum] = isCorrect;
+  if (isCorrect) moduleScores[modNum].correct++;
+  saveScores();
+  updateProgress();
+
+  const qb = document.getElementById('qb-' + modNum + '-' + qNum);
+  const submitBtn = qb.querySelector('.submit-btn');
+  if (submitBtn) submitBtn.disabled = true;
+  input.disabled = true;
+
+  if (isCorrect) {
+    input.classList.add('correct');
+    qb.classList.add('correct');
+    qb.querySelector('.q-status').textContent = ' ✅';
+  } else {
+    input.classList.add('wrong');
+    qb.classList.add('wrong');
+    qb.querySelector('.q-status').textContent = ' ❌';
+  }
+
+  const fb = qb.querySelector('.feedback');
+  if (fb) {
+    fb.classList.add('show');
+    if (isCorrect) {
+      fb.classList.add('correct-msg');
+      fb.innerHTML = '✅ 太棒了！回答正确！' + (q.explain ? ' ' + q.explain : '');
+    } else {
+      fb.classList.add('wrong-msg');
+      fb.innerHTML = `❌ 答错了！正确答案是：<b>${q.ans}</b>。${q.explain || ''}`;
+    }
+  }
+
+  if (moduleScores[modNum].answered.length === 10) {
+    setTimeout(() => showModuleScore(modNum), 600);
+  }
+}
+
+// Also allow Enter key on fill inputs
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    const target = e.target;
+    if (target.classList.contains('fill-input')) {
+      const idParts = target.id.split('-');
+      if (idParts.length >= 3) {
+        const modNum = parseInt(idParts[1]);
+        const qNum = parseInt(idParts[2]);
+        checkFill(modNum, qNum);
+      }
+    }
+  }
+});
+
+// ===== SHOW MODULE SCORE =====
+function showModuleScore(modNum) {
+  const score = moduleScores[modNum];
+  const display = document.getElementById('scoreDisplay-' + modNum);
+  if (!display) return;
+
+  const answered = score ? score.answered.length : 0;
+  const correct = score ? score.correct : 0;
+  let stars = '';
+  if (correct === 10) stars = '🌟🌟🌟🌟🌟';
+  else if (correct >= 8) stars = '🌟🌟🌟🌟';
+  else if (correct >= 6) stars = '🌟🌟🌟';
+  else if (correct >= 4) stars = '🌟🌟';
+  else stars = '🌟';
+
+  let msg = '';
+  if (answered === 0) msg = '你还没开始做题哦！快来做题吧～';
+  else if (answered < 10) msg = `你已经做了 ${answered} 题，还有 ${10-answered} 题没做呢！加油！`;
+  else if (correct === 10) msg = '🎉 完美！满分通关！你太厉害了！';
+  else if (correct >= 8) msg = '👏 非常棒！继续加油，差一点就满分了！';
+  else if (correct >= 6) msg = '👍 不错哦！再复习一下语法点，争取更高分！';
+  else msg = '💪 需要多复习一下哦！重新看看语法讲解，再来挑战！';
+
+  display.style.display = 'block';
+  display.innerHTML = `
+    <div class="score-display">${correct} / 10</div>
+    <div class="score-stars">${stars}</div>
+    <div class="score-msg">${msg}</div>
+    ${answered < 10 ? `<p style="font-size:0.85rem;color:#888;margin-top:6px">⚠️ 你还有 ${10-answered} 道题没有回答</p>` : ''}
+  `;
+  display.scrollIntoView({behavior:'smooth',block:'center'});
+  updateProgress();
+}
+
+// ===== RESET MODULE =====
+function resetModule(modNum) {
+  if (moduleScores[modNum]) {
+    delete moduleScores[modNum];
+    saveScores();
+  }
+  // Hide score display
+  const display = document.getElementById('scoreDisplay-' + modNum);
+  if (display) display.style.display = 'none';
+  // Rebuild sections
+  buildSections();
+  switchModule(modNum);
+  updateProgress();
+  document.getElementById('modSec-' + modNum).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ===== RESET ALL =====
+function resetAll() {
+  if (confirm('确定要重置所有模块的答案吗？这个操作不能撤销哦！')) {
+    moduleScores = {};
+    saveScores();
+    buildSections();
+    buildNav();
+    switchModule(1);
+    updateProgress();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+// ===== UPDATE PROGRESS =====
+function updateProgress() {
+  const totalModules = modules.length;
+  let completedModules = 0;
+  modules.forEach(m => {
+    const score = moduleScores[m.id];
+    if (score && score.answered && score.answered.length === 10) {
+      completedModules++;
+    }
+  });
+  const pct = Math.round((completedModules / totalModules) * 100);
+  document.getElementById('overallProgressBar').style.width = pct + '%';
+  document.getElementById('overallProgressText').textContent = `已完成 ${completedModules} / ${totalModules} 个模块 (${pct}%)`;
+  buildNav();
+  // Re-highlight current module in nav
+  const btn = document.querySelector(`.mod-nav-btn[data-mod="${currentModule}"]`);
+  if (btn) btn.classList.add('active');
+}
+
+// ===== INIT =====
+function init() {
+  buildNav();
+  buildSections();
+  switchModule(1);
+  updateProgress();
+
+  // Pre-highlight any previously answered questions
+  modules.forEach(m => {
+    const score = moduleScores[m.id];
+    if (score && score.answered) {
+      score.answered.forEach(qNum => {
+        const qb = document.getElementById('qb-' + m.id + '-' + qNum);
+        if (!qb) return;
+        const isCorrect = score.answers && score.answers[qNum] === true;
+        if (isCorrect) {
+          qb.classList.add('correct');
+          qb.querySelector('.q-status').textContent = ' ✅';
+        } else {
+          qb.classList.add('wrong');
+          qb.querySelector('.q-status').textContent = ' ❌';
+        }
+        // Disable inputs
+        qb.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        qb.querySelectorAll('.fill-input').forEach(i => i.disabled = true);
+        qb.querySelectorAll('.submit-btn').forEach(b => b.disabled = true);
+        if (isCorrect) {
+          qb.querySelectorAll('.option-btn').forEach(b => {
+            if (parseInt(b.dataset.opt) === m.questions[qNum].ans) b.classList.add('show-correct');
+          });
+        }
+        // Restore chosen state
+        if (score.chosen && score.chosen[qNum] !== undefined) {
+          const chosen = score.chosen[qNum];
+          const correctAns = m.questions[qNum].ans;
+          qb.querySelectorAll('.option-btn').forEach(b => {
+            const optIdx = parseInt(b.dataset.opt);
+            if (optIdx === correctAns) b.classList.add('show-correct');
+            if (optIdx === chosen) {
+              b.classList.add(chosen === correctAns ? 'chosen-correct' : 'chosen-wrong');
+            }
+          });
+        }
+        if (score.userAnswers && score.userAnswers[qNum]) {
+          const input = document.getElementById('fill-' + m.id + '-' + qNum);
+          if (input) {
+            input.value = score.userAnswers[qNum];
+            if (isCorrect) input.classList.add('correct');
+            else input.classList.add('wrong');
+          }
+        }
+      });
+    }
+    // Show score display if module was partially/fully done
+    const score2 = moduleScores[m.id];
+    if (score2 && score2.answered && score2.answered.length > 0) {
+      showModuleScore(m.id);
+    }
+  });
+}
+
+// Start the app
+init();
+</script>
+
+</body>
+</html>
