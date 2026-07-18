@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>自然拼读 5 阶段阅读 — Jerry英语</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f6f7f9;color:#1e293b;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#1a2332,#1e3a5f);color:#fff;padding:14px;position:sticky;top:0;z-index:20;text-align:center}
+.header .badge{font-size:10px;letter-spacing:3px;color:#f0d78c}
+.header h1{font-size:16px;margin:3px 0;font-weight:700}
+.header .info{font-size:10px;opacity:.6}
+.stage-bar{position:sticky;top:78px;z-index:10;background:#fff;border-bottom:1px solid #e5e7eb;padding:8px 10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.stage-bar .nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid #e5e7eb;background:#fff;font-size:16px;cursor:pointer;color:#555;font-family:inherit;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.stage-bar .nav-btn:active{background:#c8963e;color:#fff;border-color:#c8963e}
+.stage-bar select{flex:1;max-width:320px;padding:8px 12px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fff;font-size:13px;font-weight:600;color:#c8963e;cursor:pointer;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c8963e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+.main{max-width:700px;margin:0 auto;padding:14px}
+.sec{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.sec .hd{cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;user-select:none;background:#fafcfb;border-bottom:1px solid #f0f0f0}
+.sec .hd h3{font-size:14px;display:flex;align-items:center;gap:6px}
+.sec .hd .arrow{font-size:11px;color:#aaa;transition:transform .2s}
+.sec.open .hd .arrow{transform:rotate(180deg)}
+.sec .bd{display:none;padding:14px}
+.sec.open .bd{display:block}
+
+/* Phonics focus */
+.phonics-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.phonics-tags span{display:inline-block;padding:4px 10px;border-radius:10px;font-size:11px;font-weight:600}
+.phonics-tags .rule{background:#fef3c7;color:#92400e}
+.phonics-tags .words{background:#e8f5f0;color:#1a6b5a}
+.phonics-tags .sight{background:#e0e7ff;color:#3730a3}
+
+/* Article */
+.article{padding:18px;background:linear-gradient(135deg,#fffbeb,#fefce8);border-radius:10px;border:1.5px solid #fde68a;margin-bottom:14px}
+.article h4{font-size:16px;color:#92400e;margin-bottom:12px;text-align:center}
+.article .text{font-family:Georgia,'Times New Roman',serif;font-size:18px;line-height:2;color:#1e293b;text-align:left}
+.article .text .hl{color:#c8963e;font-weight:600;border-bottom:2px solid #fde68a;padding:0 2px;cursor:pointer}
+.article .text .hl:hover{background:#fef3c7}
+.article .text .cn-line{display:block;font-size:12px;color:#999;margin-top:2px;font-family:'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.5}
+.article .audio-row{margin-top:10px;text-align:center}
+.article .audio-row button{padding:6px 16px;border-radius:14px;border:1.5px solid #c8963e;background:#fff;color:#c8963e;font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s}
+.article .audio-row button:active{background:#c8963e;color:#fff}
+
+/* Word bank */
+.word-bank{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;margin-top:8px}
+.word-chip{padding:6px 10px;background:#f8fafc;border-radius:8px;font-size:11px;text-align:center;cursor:pointer;transition:all .12s;border:1.5px solid transparent}
+.word-chip:hover{border-color:#c8963e;background:#fffbeb}
+.word-chip .en{font-weight:600;color:#c8963e;font-size:13px}
+.word-chip .cn{color:#888;font-size:10px;display:block}
+
+/* Reading practice */
+.practice{padding:10px 14px;margin:8px 0;background:#f0fdf4;border-radius:8px;border-left:3px solid #16a34a}
+.practice .prompt{font-size:13px;color:#555;margin-bottom:6px}
+.practice .gap{display:inline-block;min-width:60px;border-bottom:2px dashed #16a34a;margin:0 6px;padding:2px 4px;color:#16a34a;font-weight:600;cursor:pointer}
+.practice .gap:hover{background:#dcfce7}
+.practice .gap.filled{background:#dcfce7;border-bottom-style:solid}
+.practice .choices{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.practice .choices button{padding:4px 10px;border-radius:10px;border:1.5px solid #16a34a;background:#fff;color:#16a34a;font-size:11px;cursor:pointer;font-family:inherit;transition:all .12s}
+.practice .choices button:hover{background:#16a34a;color:#fff}
+.practice .choices button.used{opacity:.3;pointer-events:none}
+
+@media(max-width:480px){
+  .article .text{font-size:16px;line-height:1.8}
+  .word-bank{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">Jerry英语 · 自然拼读阅读</div>
+  <h1 id="title">Phonics Reading</h1>
+  <div class="info">5 阶段渐进 · 拼读规则标注 · 词库 · 朗读练习</div>
+</div>
+
+<div class="stage-bar">
+  <button class="nav-btn" onclick="prevStage()">←</button>
+  <select id="stageSelect" onchange="pickStage(parseInt(this.value))"></select>
+  <button class="nav-btn" onclick="nextStage()">→</button>
+</div>
+<div class="main" id="main"></div>
+
+<script>
+function esc(s){ var d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+
+var STAGES = [
+{
+  title:"A Cat and a Rat",
+  subtitle:"短元音 · CVC 结构 · 基础辅音",
+  level:"阶段 1：短元音 Short Vowels",
+  phonicsRules:["短 a /æ/","短 e /e/","短 i /ɪ/","短 o /ɒ/","短 u /ʌ/"],
+  focusWords:["cat","rat","hat","bed","red","sit","big","dog","log","cup","sun","run","map","pen","pig","box","bus","bug","net","fun"],
+  sightWords:["the","on","a","in","is","and","has","not","to"],
+  text:[
+    {en:"A <span class='hl'>c-a-t</span> <span class='hl'>s-a-t</span> on a <span class='hl'>m-a-t</span>.",cn:"一只猫蹲在垫子上。"},
+    {en:"A <span class='hl'>r-a-t</span> <span class='hl'>r-a-n</span> to the <span class='hl'>c-a-t</span>.",cn:"一只老鼠跑向猫。"},
+    {en:"The <span class='hl'>c-a-t</span> is <span class='hl'>b-i-g</span> and <span class='hl'>f-a-t</span>.",cn:"猫又大又肥。"},
+    {en:"The <span class='hl'>r-a-t</span> is <span class='hl'>n-o-t</span> <span class='hl'>b-i-g</span>.",cn:"老鼠不大。"},
+    {en:"Can a <span class='hl'>c-a-t</span> and a <span class='hl'>r-a-t</span> <span class='hl'>s-i-t</span>?",cn:"猫和老鼠能坐在一起吗？"},
+    {en:"<span class='hl'>Y-e-s</span>! They <span class='hl'>s-i-t</span> in the <span class='hl'>s-u-n</span>.",cn:"能的！它们一起坐在阳光下。"},
+    {en:"A <span class='hl'>b-u-g</span> is on the <span class='hl'>r-u-g</span>.",cn:"地毯上有一只虫子。"},
+    {en:"The <span class='hl'>c-a-t</span> and <span class='hl'>r-a-t</span> <span class='hl'>h-o-p</span> up!",cn:"猫和老鼠跳了起来！"},
+    {en:"The <span class='hl'>b-u-g</span> <span class='hl'>r-u-n-s</span>. It is <span class='hl'>f-u-n</span>!",cn:"虫子跑了。真好玩！"}
+  ],
+  practice:[
+    {prompt:"填入正确的短元音（a/e/i/o/u）：",template:"c ___ t → cat | d ___ g → dog | r ___ n → run | b ___ d → bed",words:["a","o","u","e"]},
+    {prompt:"填入合适的词：",template:"The ___ sat on a ___.",words:["cat","mat"]}
+  ]
+},
+{
+  title:"The Ship and the Fish",
+  subtitle:"辅音组合 · 二合元音 · 词尾变化",
+  level:"阶段 2：辅音组合 Blends & Digraphs",
+  phonicsRules:["sh /ʃ/","ch /tʃ/","th /θ/ /ð/","wh /w/","ck /k/","ng /ŋ/"],
+  focusWords:["ship","fish","shop","chip","chop","thin","thick","bath","path","whale","when","back","duck","kick","sing","ring","king","long","drum","flag"],
+  sightWords:["the","in","a","is","on","go","to","with","see","look"],
+  text:[
+    {en:"A <span class='hl'>sh-i-p</span> is on the <span class='hl'>sh-i-ny</span> sea.",cn:"一艘船在闪闪发光的海上。"},
+    {en:"A big <span class='hl'>f-i-sh</span> <span class='hl'>sw-i-m-s</span> with the <span class='hl'>sh-i-p</span>.",cn:"一条大鱼跟着船游。"},
+    {en:"The <span class='hl'>f-i-sh</span> has a <span class='hl'>th-i-n</span> tail and <span class='hl'>th-i-ck</span> lips.",cn:"鱼有一条细尾巴和厚嘴唇。"},
+    {en:"<span class='hl'>Ch-i-p</span> the dog is on the <span class='hl'>sh-i-p</span> too!",cn:"小狗 Chip 也在船上！"},
+    {en:"He likes to <span class='hl'>ch-a-se</span> the <span class='hl'>f-i-sh</span>. What fun!",cn:"他喜欢追鱼。真有趣！"},
+    {en:"The <span class='hl'>sh-i-p</span> goes <span class='hl'>b-a-ck</span> to the dock.",cn:"船返回码头。"},
+    {en:"A <span class='hl'>d-u-ck</span> and a <span class='hl'>ch-i-ck</span> sit on the dock.",cn:"一只鸭子和一只小鸡坐在码头上。"},
+    {en:"They <span class='hl'>s-i-ng</span> a <span class='hl'>s-o-ng</span>. <span class='hl'>R-i-ng</span>! <span class='hl'>R-i-ng</span>!",cn:"它们唱了一首歌。叮！叮！"},
+    {en:"The <span class='hl'>f-i-sh</span> <span class='hl'>spl-a-sh-es</span> and the <span class='hl'>sh-i-p</span> stops.",cn:"鱼溅起水花，船停了下来。"}
+  ],
+  practice:[
+    {prompt:"填入正确的辅音组合（sh/ch/th/ck）：",template:"fi ___ → fish | du ___ → duck | ___ ip → chip | pa ___ → path",words:["sh","ck","ch","th"]},
+    {prompt:"完成句子：",template:"The ___ swims with the ___.",words:["fish","ship"]}
+  ]
+},
+{
+  title:"The Brave Kite",
+  subtitle:"长元音 · Magic E · 元音组合",
+  level:"阶段 3：长元音 Long Vowels & Silent E",
+  phonicsRules:["a_e /eɪ/","i_e /aɪ/","o_e /əʊ/","u_e /juː/","ai /eɪ/","ee /iː/","oa /əʊ/","ea /iː/"],
+  focusWords:["kite","lake","bike","cake","rope","home","cute","mule","rain","train","tree","green","boat","goat","road","seat","read","dream","stone","brave"],
+  sightWords:["the","up","high","in","a","to","with","goes","over","into"],
+  text:[
+    {en:"Jake has a <span class='hl'>k-i-te</span>. It is <span class='hl'>wh-i-te</span> and <span class='hl'>r-e-d</span>.",cn:"Jake 有一只风筝。它是白色和红色的。"},
+    {en:"He takes his <span class='hl'>k-i-te</span> to the <span class='hl'>l-a-ke</span>.",cn:"他带着风筝去湖边。"},
+    {en:"The wind <span class='hl'>bl-o-ws</span>. The <span class='hl'>k-i-te</span> flies up <span class='hl'>h-i-gh</span>!",cn:"风吹起来了。风筝飞得很高！"},
+    {en:"A <span class='hl'>b-ir-d</span> sits in a <span class='hl'>gr-ee-n</span> <span class='hl'>tr-ee</span>.",cn:"一只鸟栖在一棵绿树上。"},
+    {en:"It sees the <span class='hl'>k-i-te</span> in the sky. \"<span class='hl'>T-w-ee-t</span>!\"",cn:"它看到了天空中的风筝。\"啾！\""},
+    {en:"Jake runs down the <span class='hl'>r-oa-d</span> with his <span class='hl'>k-i-te</span>.",cn:"Jake 带着风筝沿路跑。"},
+    {en:"A <span class='hl'>g-oa-t</span> by the <span class='hl'>l-a-ke</span> looks up. What is that?",cn:"湖边的山羊抬头看。那是什么？"},
+    {en:"Jake sits on a <span class='hl'>st-o-ne</span> to <span class='hl'>r-ea-d</span> his book.",cn:"Jake 坐在一块石头上读书。"},
+    {en:"His <span class='hl'>k-i-te</span> floats in the sky like a <span class='hl'>br-a-ve</span> bird.",cn:"他的风筝像一只勇敢的鸟，在天空翱翔。"},
+    {en:"What a <span class='hl'>n-i-ce</span> day at the <span class='hl'>l-a-ke</span>!",cn:"在湖边度过了多么美好的一天！"}
+  ],
+  practice:[
+    {prompt:"填入 Magic E 使短元音变长元音：",template:"kit → kit ___ = kite | hop → hop ___ = hope | cut → cut ___ = cute",words:["e","e","e"]},
+    {prompt:"完成句子：",template:"Jake flies his ___ by the ___.",words:["kite","lake"]}
+  ]
+},
+{
+  title:"The Stormy Morning",
+  subtitle:"R控元音 · 双元音 · 多音节入门",
+  level:"阶段 4：R控元音 R-Controlled & Diphthongs",
+  phonicsRules:["ar /ɑː/","or /ɔː/","er/ir/ur /ɜː/","oi/oy /ɔɪ/","ou/ow /aʊ/","oo /uː/"],
+  focusWords:["storm","park","dark","horse","north","fork","bird","turn","fur","flower","coin","toy","loud","cloud","round","house","mouse","food","moon","soon"],
+  sightWords:["the","there","was","a","in","with","out","of","over","under"],
+  text:[
+    {en:"A <span class='hl'>st-or-m</span> came to the <span class='hl'>p-ar-k</span> this <span class='hl'>m-or-ning</span>.",cn:"今天早上，一场暴风雨来到公园。"},
+    {en:"The sky turned <span class='hl'>d-ar-k</span>. The <span class='hl'>b-ir-ds</span> flew away.",cn:"天空变暗了。鸟儿飞走了。"},
+    {en:"A brown <span class='hl'>h-or-se</span> ran to the <span class='hl'>b-ar-n</span>.",cn:"一匹棕马跑回谷仓。"},
+    {en:"<span class='hl'>L-ou-d</span> thunder went <span class='hl'>r-ou-nd</span> and <span class='hl'>r-ou-nd</span>!",cn:"响雷声一圈一圈地回荡！"},
+    {en:"I saw a <span class='hl'>m-ou-se</span> run into its <span class='hl'>h-ou-se</span>.",cn:"我看见一只老鼠跑进它的房子。"},
+    {en:"The <span class='hl'>fl-ow-er</span> in the garden lost a <span class='hl'>p-e-t-al</span>.",cn:"花园里的花掉了一片花瓣。"},
+    {en:"A <span class='hl'>b-oy</span> with a <span class='hl'>t-oy</span> <span class='hl'>c-oi-n</span> ran home.",cn:"一个拿着玩具硬币的男孩跑回了家。"},
+    {en:"After the <span class='hl'>st-or-m</span>, the <span class='hl'>m-oo-n</span> came out.",cn:"暴风雨过后，月亮出来了。"},
+    {en:"<span class='hl'>S-oo-n</span> everything was quiet again in the <span class='hl'>p-ar-k</span>.",cn:"很快，公园里的一切又安静了下来。"}
+  ],
+  practice:[
+    {prompt:"填入正确的 R 控元音（ar/or/ir/ur/er）：",template:"st ___ m → storm | b ___ d → bird | f ___ k → fork | n ___ se → nurse",words:["or","ir","or","ur"]},
+    {prompt:"完成句子：",template:"The ___ ran into its ___ before the storm.",words:["mouse","house"]}
+  ]
+},
+{
+  title:"The Magician's Secret",
+  subtitle:"多音节 · 复杂拼读 · 非重读元音",
+  level:"阶段 5：复杂模式 Advanced Patterns",
+  phonicsRules:["tion /ʃən/","ture /tʃə/","sure /ʒə/","ph /f/","gh /f/ or silent","ough 多发音","le 词尾 /əl/","dge /dʒ/"],
+  focusWords:["magician","station","picture","nature","treasure","elephant","phone","enough","laugh","through","bottle","little","bridge","judge","knight","write","island","castle","adventure","action"],
+  sightWords:["the","of","in","to","with","a","on","behind","through","once"],
+  text:[
+    {en:"Once there was a <span class='hl'>ma-gi-cian</span> at the <span class='hl'>sta-tion</span>.",cn:"从前，车站里有一位魔术师。"},
+    {en:"He had a <span class='hl'>pic-ture</span> of an <span class='hl'>e-le-phant</span> in his hand.",cn:"他手里拿着一张大象的图片。"},
+    {en:"\"This <span class='hl'>trea-sure</span> is hidden in an old <span class='hl'>cas-tle</span>,\" he said.",cn:"他说：\"这个宝藏藏在一座古老的城堡里。\""},
+    {en:"A brave <span class='hl'>knight</span> with a <span class='hl'>sword</span> stood up.",cn:"一位勇敢的骑士拿着剑站了起来。"},
+    {en:"\"I will cross the <span class='hl'>bri-dge</span> and find the <span class='hl'>trea-sure</span>!\"",cn:"\"我要过桥找到宝藏！\""},
+    {en:"The <span class='hl'>knight</span> walked <span class='hl'>through</span> the dark forest.",cn:"骑士穿过黑暗的森林。"},
+    {en:"He found a <span class='hl'>bot-tle</span> with a <span class='hl'>lit-tle</span> note inside.",cn:"他找到了一个瓶子，里面有一张小纸条。"},
+    {en:"The note said: \"<span class='hl'>Laugh</span> and the door will open.\"",cn:"纸条上写着：\"笑一笑，门就会打开。\""},
+    {en:"The <span class='hl'>knight</span> <span class='hl'>laugh-ed</span>. The <span class='hl'>cas-tle</span> door opened!",cn:"骑士笑了。城堡的门打开了！"},
+    {en:"Inside was the greatest <span class='hl'>trea-sure</span> — a book of <span class='hl'>ac-tion</span> stories!",cn:"里面是最棒的宝藏——一本冒险故事书！"},
+    {en:"\"What a wonderful <span class='hl'>ad-ven-ture</span>!\" said the <span class='hl'>ma-gi-cian</span>.",cn:"魔术师说：\"多么奇妙的冒险啊！\""}
+  ],
+  practice:[
+    {prompt:"填入正确的复杂拼读模式（tion/sure/ture/ph/ough）：",template:"sta ___ → station | trea ___ → treasure | pic ___ → picture | ele ___ ant → elephant | en ___ → enough",words:["tion","sure","ture","ph","ough"]},
+    {prompt:"完成句子：",template:"The ___ found a ___ in the old castle.",words:["knight","treasure"]}
+  ]
+}
+];
+
+var curStage = 0;
+
+function prevStage(){ pickStage((curStage-1+STAGES.length)%STAGES.length); }
+function nextStage(){ pickStage((curStage+1)%STAGES.length); }
+
+function pickStage(i){
+  curStage = i;
+  var sel = document.getElementById('stageSelect');
+  sel.value = i;
+  renderStage();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderStageBar(){
+  var h = '';
+  for(var i=0; i<STAGES.length; i++){
+    h += '<option value="'+i+'"'+(i===curStage?' selected':'')+'>阶段'+(i+1)+'：'+esc(STAGES[i].title)+'</option>';
+  }
+  document.getElementById('stageSelect').innerHTML = h;
+}
+
+function renderStage(){
+  var s = STAGES[curStage];
+  document.getElementById('title').textContent = s.title + ' — ' + s.subtitle;
+
+  var h = '';
+
+  // Phonics Rules
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>📖 拼读规则</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  h += '<div class="phonics-tags">';
+  s.phonicsRules.forEach(function(r){ h += '<span class="rule">'+esc(r)+'</span>'; });
+  h += '</div><div class="phonics-tags">';
+  s.sightWords.forEach(function(w){ h += '<span class="sight">Sight: '+esc(w)+'</span>'; });
+  h += '</div></div></div>';
+
+  // Article
+  h += '<div class="sec open">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>📝 '+esc(s.level)+'</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  h += '<div class="article"><h4>'+esc(s.title)+'</h4>';
+  h += '<div class="text">';
+  s.text.forEach(function(line,i){
+    h += '<p style="margin-bottom:6px">'+line.en+'<span class="cn-line">'+esc(line.cn)+'</span></p>';
+  });
+  h += '</div>';
+  h += '<div class="audio-row"><button onclick="readArticle('+curStage+')">🔊 朗读全文</button></div>';
+  h += '</div></div></div>';
+
+  // Word Bank
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>🔤 核心词库（'+s.focusWords.length+'词）</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd"><div class="word-bank">';
+  s.focusWords.forEach(function(w){
+    h += '<div class="word-chip" onclick="speakWord(\''+esc(w)+'\')"><span class="en">'+esc(w)+'</span><span class="cn">🔊 点击发音</span></div>';
+  });
+  h += '</div></div></div>';
+
+  // Practice
+  h += '<div class="sec">';
+  h += '<div class="hd" onclick="this.parentElement.classList.toggle(\'open\')"><h3>✏️ 拼读练习</h3><span class="arrow">▼</span></div>';
+  h += '<div class="bd">';
+  s.practice.forEach(function(p,pIdx){
+    h += '<div class="practice" id="practice-'+pIdx+'">';
+    h += '<div class="prompt">'+esc(p.prompt)+'</div>';
+    var parts = p.template.split('___');
+    var blanks = '<span class="blanks" style="font-size:14px">';
+    for(var pi=0; pi<parts.length; pi++){
+      blanks += esc(parts[pi]);
+      if(pi < parts.length-1){
+        blanks += '<span class="gap" id="gap-'+pIdx+'-'+pi+'">______</span>';
+      }
+    }
+    blanks += '</span>';
+    h += blanks;
+    h += '<div class="choices" id="choices-'+pIdx+'">';
+    p.words.forEach(function(w){
+      h += '<button id="btn-'+pIdx+'-'+esc(w)+'" onclick="pickWord('+pIdx+',\''+esc(w)+'\')">'+esc(w)+'</button>';
+    });
+    h += '</div></div>';
+  });
+  h += '</div></div>';
+
+  document.getElementById('main').innerHTML = h;
+}
+
+function pickWord(pIdx,word){
+  var btn = document.getElementById('btn-'+pIdx+'-'+esc(word));
+  if(!btn||btn.classList.contains('used'))return;
+  var gaps = document.querySelectorAll('[id^="gap-'+pIdx+'-"]');
+  for(var g=0;g<gaps.length;g++){
+    if(!gaps[g].classList.contains('filled')){
+      gaps[g].textContent = word;
+      gaps[g].classList.add('filled');
+      btn.classList.add('used');
+      var allFilled = true;
+      for(var g2=0;g2<gaps.length;g2++){ if(!gaps[g2].classList.contains('filled')){allFilled=false;break;} }
+      if(allFilled){
+        var box = document.getElementById('practice-'+pIdx);
+        if(box) box.style.borderColor = '#16a34a';
+      }
+      break;
+    }
+  }
+}
+
+function speakWord(w){
+  if(!w||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(w); u.lang='en-US'; u.rate=0.8;
+  speechSynthesis.speak(u);
+}
+
+function readArticle(idx){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  var s = STAGES[idx];
+  var text = s.title + '. ' + s.text.map(function(l){ return l.en.replace(/<[^>]+>/g,''); }).join(' ');
+  // Split into chunks for better playback
+  var sentences = text.split('. ');
+  function speakNext(i){
+    if(i >= sentences.length) return;
+    var u = new SpeechSynthesisUtterance(sentences[i] + '.');
+    u.lang = 'en-US';
+    u.rate = 0.75;
+    u.onend = function(){ speakNext(i+1); };
+    speechSynthesis.speak(u);
+  }
+  speakNext(0);
+}
+
+renderStageBar();
+renderStage();
+</script>
+</body>
+</html>
